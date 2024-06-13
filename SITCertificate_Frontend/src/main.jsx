@@ -6,6 +6,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Student_Homepage from './pages/Student_Homepage';
 import Student_SignInPage from './pages/Student_SignInPage';
 import Admin_SignUpPage from './pages/Admin_SignUpPage';
+import Admin_SignInPage from './pages/Admin_SignInPage';
+import Prof_SignInPage from './pages/Prof_SignInPage';
+import Prof_SignUpPage from './pages/Prof_SignUpPage';
 
 const theme = extendTheme({
   fonts: {
@@ -24,8 +27,20 @@ const router = createBrowserRouter([
 		element: <Student_SignInPage/>,
 	},
   {
-		path: '/admin/signup',
+		path: '/admin/register',
 		element: <Admin_SignUpPage/>,
+	},
+  {
+		path: '/admin/login',
+		element: <Admin_SignInPage/>,
+	},
+  {
+		path: '/professor/register',
+		element: <Prof_SignUpPage/>,
+	},
+  {
+		path: '/professor/login',
+		element: <Prof_SignInPage/>,
 	},
   // {
 	// 	path: '/admin/login',
