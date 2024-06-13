@@ -4,6 +4,8 @@ import * as ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Student_Homepage from './pages/Student_Homepage';
+import Student_SignInPage from './pages/Student_SignInPage';
+import Admin_SignUpPage from './pages/Admin_SignUpPage';
 
 const theme = extendTheme({
   fonts: {
@@ -17,6 +19,34 @@ const router = createBrowserRouter([
 		path: '/',
 		element: <Student_Homepage/>,
 	},
+  {
+		path: '/student/login',
+		element: <Student_SignInPage/>,
+	},
+  {
+		path: '/admin/signup',
+		element: <Admin_SignUpPage/>,
+	},
+  // {
+	// 	path: '/admin/login',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/admin/register',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/admin/login',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/professer/register',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/professer/login',
+	// 	element: <Student_Homepage/>,
+	// },
 ]);
 
 const rootElement = document.getElementById('root')
