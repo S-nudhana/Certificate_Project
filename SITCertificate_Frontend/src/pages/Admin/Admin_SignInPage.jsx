@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/logo-flat-blk.png";
-
 export default function Admin_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
