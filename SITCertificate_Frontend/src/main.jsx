@@ -17,6 +17,26 @@ const router = createBrowserRouter([
 		path: '/',
 		element: <Student_Homepage/>,
 	},
+  // {
+	// 	path: '/admin/login',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/admin/register',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/admin/login',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/professer/register',
+	// 	element: <Student_Homepage/>,
+	// },
+  // {
+	// 	path: '/professer/login',
+	// 	element: <Student_Homepage/>,
+	// },
 ]);
 
 const rootElement = document.getElementById('root')
