@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button, Heading, Text, useColorModeValue } from "@chakra-ui/react";
-import Building from "../assets/img/SIT_Building.png";
-import Logo from "../assets/img/logo-flat-blk.png";
+import Building from "../../assets/img/SIT_Building.png";
+import Logo from "../../assets/img/logo-flat-blk.png";
 
-export default function Prof_SignUpPage() {
+export default function Prof_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +20,7 @@ export default function Prof_SignUpPage() {
               "3xl", // Medium devices
               "3xl", // Large devices
             ]}>
-              ลงทะเบียนสำหรับอาจารย์
+             เข้าสู่ระบบสำหรับอาจารย์
             </Heading>
             <Text fontSize={["sm", "lg", "lg"]} color="gray.600" display="flex">
               ยินดีต้อนรับเข้าสู่&nbsp;
@@ -56,13 +56,13 @@ export default function Prof_SignUpPage() {
                 fontSize={["sm", "lg", "lg"]}
                 isDisabled={!isFormFilled()} 
               >
-                ลงทะเบียน
+                เข้าสู่ระบบ
               </Button>
             </Stack>
           </Stack>
           <Stack pt={6}>
               <Text align={'center'}>
-                มีบัญชีผู้ใช้อยู่แล้ว? <Link color={'#3399cc'}>เข้าสู่ระบบ</Link>
+              ยังไม่มีบัญชีผู้ใช้? <Link color={'#3399cc'}>สมัครเลย</Link>
               </Text>
             </Stack>
         </Box>
