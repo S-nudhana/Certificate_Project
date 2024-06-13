@@ -29,7 +29,7 @@ const router = createBrowserRouter([
 		element: <Student_Detail />,
 	},
 	{
-		path: 'bra',
+		path: '/certificate/:id',
 		element: <Student_CertificateExample />,
 	},
 	{

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Text, Image, Card, Button } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, ScrollRestoration } from 'react-router-dom';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -47,6 +47,7 @@ export default function Student_Homepage() {
   const navigate = useNavigate();
   return (
     <>
+    <ScrollRestoration />
       <Navbar />
       <Box pt='60px'>
         <Text fontSize='28px' fontWeight='bold' textDecoration='underline' textUnderlineOffset='2px' pt='50px' pl={{ base: '40px', md: '100px' }}>

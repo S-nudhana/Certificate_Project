@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom'
 import { Box, Button, Text, Image } from '@chakra-ui/react'
 import img from '../../assets/img/SIT_Building.png'
 
@@ -11,6 +11,7 @@ export default function Student_CertificateExample() {
     const navigate = useNavigate();
     return (
         <>
+        <ScrollRestoration />
             <Navbar />
             <Box pt='80px' display='flex' flexDirection='column' alignItems='center'>
                 <Text fontSize='32px' fontWeight='bold' py='40px'>ตัวอย่างใบประกาศนียบัตร</Text>

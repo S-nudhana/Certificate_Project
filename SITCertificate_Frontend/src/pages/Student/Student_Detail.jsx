@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Image, Text, Button, FormControl, FormLabel, Input } from '@chakra-ui/react'
-import { useParams, useNavigate } from 'react-router-dom';
-
+import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import BackBTN from '../../components/BackBTN'
@@ -18,6 +17,7 @@ export default function Student_Detail() {
     const isFormFilled = () => name.trim() !== '' && surname.trim() !== '' && email.trim() !== '';
     return (
         <>
+        <ScrollRestoration />
             <Navbar />
             <Box display={{ base: 'block', lg: 'flex' }} pt='80px'>
                 <Image src={event.img} width={{ base: '100%', lg: '35%' }} height={{ base: 'auto', lg: "100vh" }} objectFit='cover'></Image>
