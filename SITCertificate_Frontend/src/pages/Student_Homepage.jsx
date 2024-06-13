@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar'
 export default function Student_Homepage() {
   return (
     <>
-        <Navbar></Navbar>
+        <Navbar/>
     </>
   )
 }
