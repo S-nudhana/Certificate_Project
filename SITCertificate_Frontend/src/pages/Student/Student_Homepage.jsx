@@ -2,8 +2,8 @@ import React from 'react';
 import { Box, Text, Image, Card, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 const data = [
   {
@@ -68,7 +68,7 @@ export default function Student_Homepage() {
           </Box>
         </Box>
       </Box>
-      <Footer/>
+      <Footer />
     </>
   );
 }
