@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Text, IconButton } from '@chakra-ui/react';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
