@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import * as ReactDOM from 'react-dom/client'
-
+  
 import App from './App';
 
 const theme = extendTheme({
