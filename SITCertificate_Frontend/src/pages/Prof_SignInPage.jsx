@@ -3,7 +3,7 @@ import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button
 import Building from "../assets/img/SIT_Building.png";
 import Logo from "../assets/img/logo-flat-blk.png";
 
-export default function Admin_SignUpPage() {
+export default function Prof_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,14 +13,14 @@ export default function Admin_SignUpPage() {
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>
         <Box borderRadius="20px" bg={useColorModeValue("white", "gray.700")} boxShadow="lg" p={8} px={10}>
-          <Stack align="center" spacing={5} py={5} px={8}>
+          <Stack align="center" spacing={5} py={5} px={1}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
             <Heading fontSize={[ // Array for different screen sizes
-               "2xl", // Up to small devices
-               "3xl", // Medium devices
-               "3xl", // Large devices
+              "2xl", // Up to small devices
+              "3xl", // Medium devices
+              "3xl", // Large devices
             ]}>
-              ลงทะเบียนสำหรับ Admin
+             เข้าสู่ระบบสำหรับอาจารย์
             </Heading>
             <Text fontSize={["sm", "lg", "lg"]} color="gray.600" display="flex">
               ยินดีต้อนรับเข้าสู่&nbsp;
@@ -56,13 +56,13 @@ export default function Admin_SignUpPage() {
                 fontSize={["sm", "lg", "lg"]}
                 isDisabled={!isFormFilled()} 
               >
-                ลงทะเบียน
+                เข้าสู่ระบบ
               </Button>
             </Stack>
           </Stack>
           <Stack pt={6}>
               <Text align={'center'}>
-                มีบัญชีผู้ใช้อยู่แล้ว? <Link color={'#3399cc'}>เข้าสู่ระบบ</Link>
+              ยังไม่มีบัญชีผู้ใช้? <Link color={'#3399cc'}>สมัครเลย</Link>
               </Text>
             </Stack>
         </Box>
