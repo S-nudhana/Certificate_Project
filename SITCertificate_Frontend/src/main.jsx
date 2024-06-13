@@ -9,6 +9,8 @@ import Admin_SignUpPage from './pages/Admin/Admin_SignUpPage';
 import Admin_SignInPage from './pages/Admin/Admin_SignInPage';
 import Prof_SignInPage from './pages/Prof/Prof_SignInPage';
 import Prof_SignUpPage from './pages/Prof/Prof_SignUpPage';
+import Student_Detail from './pages/Student/Student_Detail';
+import Student_CertificateExample from './pages/Student/Student_CertificateExample';
 
 const theme = extendTheme({
 	fonts: {
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Student_Homepage />,
+	},
+	{
+		path: '/detail/:id',
+		element: <Student_Detail />,
+	},
+	{
+		path: '/certificate/:id',
+		element: <Student_CertificateExample />,
 	},
 	{
 		path: '/student/login',
