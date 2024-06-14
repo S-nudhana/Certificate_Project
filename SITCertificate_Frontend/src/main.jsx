@@ -15,6 +15,7 @@ import Admin_CreateEvent from './pages/Admin/Admin_CreateEvent';
 import Student_CertificateDownload from './pages/Student/Student_CertificateDownload';
 import Admin_Homepage from './pages/Admin/Admin_Homepage';
 import Admin_EditEvent from './pages/Admin/Admin_EditEvent';
+import Admin_Detail from './pages/Admin/Admin_Detail';
 
 const theme = extendTheme({
 	fonts: {
@@ -57,11 +58,15 @@ const router = createBrowserRouter([
 		element: <Admin_Homepage />,
 	},
 	{
-		path: '/admin/create-event',
+		path: '/admin/detail/:id',
+		element: <Admin_Detail />,
+	},
+	{
+		path: '/admin/createEvent',
 		element: <Admin_CreateEvent />,
 	},
 	{
-		path: '/admin/edit-event',
+		path: '/admin/editEvent/:id',
 		element: <Admin_EditEvent />,
 	},
 	{
