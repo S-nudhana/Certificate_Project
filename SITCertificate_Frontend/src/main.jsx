@@ -2,7 +2,7 @@ import * as React from 'react'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import * as ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import './index.css';
 import Student_Homepage from './pages/Student/Student_Homepage';
 import Student_SignInPage from './pages/Student/Student_SignInPage';
 import Admin_SignUpPage from './pages/Admin/Admin_SignUpPage';
@@ -14,6 +14,7 @@ import Student_CertificateExample from './pages/Student/Student_CertificateExamp
 import Admin_CreateEvent from './pages/Admin/Admin_CreateEvent';
 import Student_CertificateDownload from './pages/Student/Student_CertificateDownload';
 import Admin_Homepage from './pages/Admin/Admin_Homepage';
+import Admin_EditEvent from './pages/Admin/Admin_EditEvent';
 
 const theme = extendTheme({
 	fonts: {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
 	{
 		path: '/admin/create-event',
 		element: <Admin_CreateEvent />,
+	},
+	{
+		path: '/admin/edit-event',
+		element: <Admin_EditEvent />,
 	},
 	{
 		path: '/professor/register',
