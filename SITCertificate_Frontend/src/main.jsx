@@ -11,6 +11,7 @@ import Prof_SignInPage from './pages/Prof/Prof_SignInPage';
 import Prof_SignUpPage from './pages/Prof/Prof_SignUpPage';
 import Student_Detail from './pages/Student/Student_Detail';
 import Student_CertificateExample from './pages/Student/Student_CertificateExample';
+import Admin_CreateEvent from './pages/Admin/Admin_CreateEvent';
 import Student_CertificateDownload from './pages/Student/Student_CertificateDownload';
 
 const theme = extendTheme({
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
 	{
 		path: '/admin/login',
 		element: <Admin_SignInPage />,
+	},
+	{
+		path: '/admin/create-event',
+		element: <Admin_CreateEvent />,
 	},
 	{
 		path: '/professor/register',
