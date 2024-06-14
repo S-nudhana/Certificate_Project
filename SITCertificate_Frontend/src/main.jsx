@@ -14,6 +14,7 @@ import Student_CertificateExample from './pages/Student/Student_CertificateExamp
 import Admin_CreateEvent from './pages/Admin/Admin_CreateEvent';
 import Student_CertificateDownload from './pages/Student/Student_CertificateDownload';
 import Admin_EditEvent from './pages/Admin/Admin_EditEvent';
+import Prof_EventDetail from './pages/Prof/Prof_EventDetail';
 const theme = extendTheme({
 	fonts: {
 		heading: `'Noto Sans Thai', sans-serif`,
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
 	{
 		path: '/admin/edit-event',
 		element: <Admin_EditEvent />,
+	},
+	{
+		path: '/professor/eventDetail/:id',
+		element: <Prof_EventDetail />,
 	},
 	{
 		path: '/professor/register',
