@@ -41,6 +41,26 @@ export default function Navbar() {
     };
   }, [lastScrollTop]);
 
+  const tokenCheck = () => {
+    if (Cookies.get("token") !== undefined) {
+      return 'token';
+    } else if (Cookies.get("profToken") !== undefined) {
+      return 'profToken';
+    } else {
+      return 'adminToken';
+    }
+  }
+
+  const LogoutCheck = () => {
+    if (Cookies.get("token") !== undefined) {
+      return import.meta.env.VITE_STUDENT_PATH_LOGIN;
+    } else if (Cookies.get("profToken") !== undefined) {
+      return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
+    } else {
+      return import.meta.env.VITE_ADMIN_PATH_LOGIN;
+    }
+  };
+
   return (
     <Box
       bgColor="#0c2d4e"
@@ -110,9 +130,9 @@ export default function Navbar() {
                 borderRadius={"30"}
                 _hover={{ bgColor: "#1f568c" }}
                 onClick={() => {
-                    Cookies.remove("token");
-                    navigate("/");
-                  }}
+                  Cookies.remove(tokenCheck());
+                  navigate(LogoutCheck());
+                }}
               >
                 ตกลง
               </Button>

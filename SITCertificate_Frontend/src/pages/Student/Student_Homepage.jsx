@@ -47,7 +47,7 @@ export default function Student_Homepage() {
   const navigate = useNavigate();
   return (
     <>
-    <ScrollRestoration />
+      <ScrollRestoration />
       <Navbar />
       <Box pt='60px'>
         <Text fontSize='28px' fontWeight='bold' textDecoration='underline' textUnderlineOffset='2px' pt='50px' pl={{ base: '40px', md: '100px' }}>
@@ -59,7 +59,7 @@ export default function Student_Homepage() {
               return (
                 <Card key={index} width='300px' height='auto' bgColor='white' borderRadius='30px' boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)">
                   <Image src={item.img} objectFit='cover' borderTopLeftRadius='30px' borderTopRightRadius='30px' width="100%" />
-                  <Box p='20px'>
+                  <Box p='30px'>
                     <Text fontSize='28px' fontWeight='bold' pb='5px'>{item.title}</Text>
                     <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                     <Text pb='5px'>{item.StartDownload} ถึง {item.EndedDownload}</Text>

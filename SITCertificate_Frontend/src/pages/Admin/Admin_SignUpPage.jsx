@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/logo-flat-blk.png";
+import { useNavigate } from 'react-router-dom';
 
 export default function Admin_SignUpPage() {
   const [email, setEmail] = useState('');
@@ -9,16 +10,17 @@ export default function Admin_SignUpPage() {
 
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
 
+  const navigate = useNavigate();
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>
         <Box borderRadius="20px" bg={useColorModeValue("white", "gray.700")} boxShadow="lg" p={8} px={10}>
-          <Stack align="center" spacing={5} py={5} px={8}>
+          <Stack align="center" spacing={5} py={5} px={1}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
-            <Heading fontSize={[ // Array for different screen sizes
-               "2xl", // Up to small devices
-               "3xl", // Medium devices
-               "3xl", // Large devices
+            <Heading fontSize={[
+              "2xl",
+              "3xl",
+              "3xl",
             ]}>
               ลงทะเบียนสำหรับ Admin
             </Heading>
@@ -54,17 +56,19 @@ export default function Admin_SignUpPage() {
                 color="white"
                 _hover={{ bg: "#1F568C" }}
                 fontSize={["sm", "lg", "lg"]}
-                isDisabled={!isFormFilled()} 
+                isDisabled={!isFormFilled()}
               >
                 ลงทะเบียน
               </Button>
             </Stack>
           </Stack>
           <Stack pt={6}>
-              <Text align={'center'}>
-                มีบัญชีผู้ใช้อยู่แล้ว? <Link color={'#3399cc'}>เข้าสู่ระบบ</Link>
-              </Text>
-            </Stack>
+            <Text align={'center'} onClick={() => {
+              navigate(import.meta.env.VITE_ADMIN_PATH_LOGIN)
+            }}>
+              มีบัญชีผู้ใช้อยู่แล้ว? <Link color={'#3399cc'}>เข้าสู่ระบบ</Link>
+            </Text>
+          </Stack>
         </Box>
       </Stack>
     </Flex>

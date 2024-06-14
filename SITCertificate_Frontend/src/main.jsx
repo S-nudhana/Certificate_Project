@@ -33,7 +33,7 @@ const router = createBrowserRouter([
 		element: <Student_CertificateExample />,
 	},
 	{
-		path: '/student/login',
+		path: '/login',
 		element: <Student_SignInPage />,
 	},
 	{
@@ -53,7 +53,6 @@ const router = createBrowserRouter([
 		element: <Prof_SignInPage />,
 	},
 ]);
-
 const rootElement = document.getElementById('root')
 ReactDOM.createRoot(rootElement).render(
 	<React.StrictMode>
