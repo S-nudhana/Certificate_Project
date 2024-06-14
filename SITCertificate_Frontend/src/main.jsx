@@ -11,6 +11,7 @@ import Prof_SignInPage from './pages/Prof/Prof_SignInPage';
 import Prof_SignUpPage from './pages/Prof/Prof_SignUpPage';
 import Student_Detail from './pages/Student/Student_Detail';
 import Student_CertificateExample from './pages/Student/Student_CertificateExample';
+import Student_CertificateDownload from './pages/Student/Student_CertificateDownload';
 
 const theme = extendTheme({
 	fonts: {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
 	{
 		path: '/certificate/:id',
 		element: <Student_CertificateExample />,
+	},
+	{
+		path: '/download/:id',
+		element: <Student_CertificateDownload />,
 	},
 	{
 		path: '/login',
