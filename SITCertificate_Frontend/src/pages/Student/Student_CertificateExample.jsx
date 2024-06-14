@@ -1,7 +1,7 @@
-import React from 'react'
-import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom'
-import { Box, Button, Text, Image, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure } from '@chakra-ui/react'
-import img from '../../assets/img/SIT_Building.png'
+import React from 'react';
+import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
+import { Box, Button, Text, Image, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure } from '@chakra-ui/react';
+import img from '../../assets/img/SIT_Building.png';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -17,27 +17,23 @@ export default function Student_CertificateExample() {
             <Navbar />
             <Box pt='80px' display='flex' flexDirection='column' alignItems='center' justifyContent={'center'}>
                 <Text fontSize='32px' fontWeight='bold' py='40px'>ตัวอย่างใบประกาศนียบัตร</Text>
-                <Box position="relative" display="flex" pb='40px' justifyContent={'center'} >
-                    <Image width='60%' src={img} boxShadow='xl'></Image>
-                    <Box
-                        width={'60%'}
-                        display={'flex'}
-                        flexDirection={'column'}
-                        alugnItems={'center'}
-                        justifyContent={'center'}
-                        textAlign={'center'}
-                        position="absolute"
-                        color="white"
-                        fontSize={{ base: '32px', md: "62px", lg: '112.5px' }}
-                        fontWeight="bold"
-                        opacity={0.6}
-                    >
-                        <Text>SITCertificate</Text>
-                        <Text>SITCertificate</Text>
-                        <Text>SITCertificate</Text>
-                    </Box>
-                </Box>
-                <Box width='80%' display='flex' justifyContent='space-between' pb='40px'>
+                <Text
+                    bgImage={`url(${img})`}
+                    backgroundSize="103% auto"
+                    backgroundPosition="center"
+                    color="rgba(255, 255, 255, 0.5)"
+                    textAlign="center"
+                    fontSize={{ base: '30px', md: "59px", lg: '110px' }}
+                    fontWeight="bold"
+                    display="inline-block"
+                    width="60%"
+                    height="auto"
+                >
+                    SITCertificate
+                    SITCertificate
+                    SITCertificate
+                </Text>
+                <Box width='80%' display='flex' justifyContent='space-between' py='40px'>
                     <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
                         navigate(-1)
                     }}>ย้อนกลับ</Button>
@@ -83,5 +79,5 @@ export default function Student_CertificateExample() {
             </Modal>
             <Footer />
         </>
-    )
+    );
 }
