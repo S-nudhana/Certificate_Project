@@ -17,7 +17,7 @@ export default function Student_Detail() {
     const isFormFilled = () => name.trim() !== '' && surname.trim() !== '' && email.trim() !== '';
     return (
         <>
-        <ScrollRestoration />
+            <ScrollRestoration />
             <Navbar />
             <Box display={{ base: 'block', lg: 'flex' }} pt='80px'>
                 <Image src={event.img} width={{ base: '100%', lg: '35%' }} height={{ base: 'auto', lg: "100vh" }} objectFit='cover'></Image>
@@ -25,7 +25,7 @@ export default function Student_Detail() {
                     <BackBTN />
                     <Text fontSize='32px' fontWeight='bold' pt='20px'>{event.title}</Text>
                     <Text pt='10px' pb='20px'>เปิดให้ดาว์นโหลดตั้งแต่  {event.StartDownload}  ถึง  {event.EndedDownload}</Text>
-                    <Box border='.5px solid #919191' borderRadius='25px' p='30px' fontWeight='bold' fontSize='20px'>
+                    <Box border='.7px solid #919191' borderRadius='25px' p='30px' fontWeight='bold' fontSize='20px'>
                         <Text pb='20px'>กรอกข้อมูลในใบประกาศนียบัตร</Text>
                         <FormControl id="name" pb='20px'>
                             <FormLabel fontSize={["sm", "lg", "lg"]} fontWeight='bold'>ชื่อ</FormLabel>

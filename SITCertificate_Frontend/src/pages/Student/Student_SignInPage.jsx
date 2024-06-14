@@ -15,10 +15,10 @@ export default function Student_SignInPage() {
         <Box borderRadius="20px" bg={useColorModeValue("white", "gray.700")} boxShadow="lg" p={8} px={10}>
           <Stack align="center" spacing={5} py={5} px={8}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
-            <Heading fontSize={[ // Array for different screen sizes
-              "3xl", // Up to small devices
-              "4xl", // Medium devices
-              "4xl", // Large devices
+            <Heading fontSize={[
+              "3xl",
+              "4xl",
+
             ]}>
               เข้าสู่ระบบ
             </Heading>
