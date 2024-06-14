@@ -19,7 +19,7 @@ import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import BackBTN from "../../components/BackBTN";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-export default function Admin_CreateEvent() {
+export default function Admin_EditEvent() {
   const [thumbnail, setThumbnail] = useState();
   const [template, setTemplate] = useState();
   function handleThumbnail(e) {
@@ -54,7 +54,7 @@ export default function Admin_CreateEvent() {
             >
               <Stack align={"center"} pb={5}>
                 <Heading fontSize={["2xl", "3xl", "3xl"]} textAlign={"center"}>
-                  สร้างกิจกรรม
+                  แก้ไขกิจกรรม
                 </Heading>
               </Stack>
               <Stack spacing={4}>
@@ -132,7 +132,7 @@ export default function Admin_CreateEvent() {
                     _hover={{ bg: "#1F568C" }}
                     fontSize={["sm", "lg", "lg"]}
                   >
-                    สร้างกิจกรรม
+                    บันทึก
                   </Button>
                 </Stack>
               </Stack>
