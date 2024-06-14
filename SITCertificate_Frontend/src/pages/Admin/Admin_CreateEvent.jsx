@@ -100,7 +100,7 @@ export default function Admin_CreateEvent() {
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
-                    alignItems="end"
+                    alignItems="center"
                   >
                     อัปโหลดรูปปก
                     <Text color="red" ml={1} fontSize="xs">
@@ -114,7 +114,7 @@ export default function Admin_CreateEvent() {
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
-                    alignItems="end"
+                    alignItems="center"
                   >
                     อัปโหลดเท็มเพลทใบประกาศนียบัตร
                     <Text color="red" ml={1} fontSize="xs">
