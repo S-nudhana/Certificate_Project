@@ -11,7 +11,8 @@ import {
   Stack,
   Image,
   Box,
-  Text
+  Text,
+  Textarea
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
 import Navbar from '../../components/Navbar'
@@ -31,11 +32,11 @@ export default function Admin_EventDetail() {
   return (
     <>
       <Navbar />
-      <Box pt={"120px"} ml={["10%","10%","80px"]}>
+      <Box pt={"120px"} ml={["10%","10%","5%"]}>
         <BackBTN />
       </Box>
       <Stack minH={"80vh"} direction={[ "column" , "column" ,"row"]} mb={"50px"}>
-        <Flex flex={1}  direction={"column"} ml={["10%","10%","80px"]}>
+        <Flex flex={1}  direction={"column"} ml={["10%","10%","5%"]} >
           <Text fontSize="32px" fontWeight="bold" pt="20px">
             {event.title}
           </Text>
@@ -58,19 +59,20 @@ export default function Admin_EventDetail() {
             ></Image>
           </Box>
         </Flex>
-        <Flex flex={1} ml={["10%","10%","100px"]}> 
+        <Flex flex={1} ml={["10%","10%","0%"]}> 
           <Stack spacing={5} w={"full"} pr={"10%"}>
             <Heading fontSize={"2xl"} pt="20px">Comment</Heading>
             <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <FormLabel>Old comment</FormLabel>
+              <Input type="text" />
+              {/* //card */}
             </FormControl>
             <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
+              <FormLabel>New Comment</FormLabel>
+              <Textarea placeholder='Here is a sample placeholder' />
             </FormControl>
             <Stack spacing={6} align={"end"}>
-              <Button colorScheme={"blue"} variant={"solid"} w='40%'>
+              <Button colorScheme={"blue"} variant={"solid"} padding={"20px"} bgColor='#3399cc' color='white' fontSize={{ base: '14px', md: '16px' }} borderRadius='40px' _hover={{ bgColor: '#297AA3' }}> 
                เพิ่ม Comment
               </Button>
             </Stack>
