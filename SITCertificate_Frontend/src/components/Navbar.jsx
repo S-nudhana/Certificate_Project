@@ -85,7 +85,6 @@ export default function Navbar() {
         color="white"
         size="md"
         display={{ base: "none", md: "flex" }}
-        C
         variant="solid"
         onClick={onOpen}
         _hover={{ bgColor: "#1f568c" }}
@@ -113,18 +112,8 @@ export default function Navbar() {
           <ModalHeader textAlign={"center"}>ยืนยันที่จะออกจากระบบ?</ModalHeader>
           <ModalBody>
             <Flex justifyContent="center">
-              <Box mr={3}>
-                <Button
-                  color="white"
-                  backgroundColor={"#AD3D3B"}
-                  _hover={{ bgColor: "#A80324" }}
-                  borderRadius={"30"}
-                  onClick={onClose}
-                >
-                  ยกเลิก
-                </Button>
-              </Box>
               <Button
+                mr={3}
                 color="white"
                 backgroundColor={"#336699"}
                 borderRadius={"30"}
@@ -135,6 +124,15 @@ export default function Navbar() {
                 }}
               >
                 ตกลง
+              </Button>
+              <Button
+                color="white"
+                backgroundColor={"#AD3D3B"}
+                _hover={{ bgColor: "#A80324" }}
+                borderRadius={"30"}
+                onClick={onClose}
+              >
+                ยกเลิก
               </Button>
             </Flex>
           </ModalBody>
