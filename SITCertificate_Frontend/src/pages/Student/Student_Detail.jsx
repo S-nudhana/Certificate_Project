@@ -43,7 +43,7 @@ export default function Student_Detail() {
                                 onChange={(e) => setSurname(e.target.value)}
                             />
                         </FormControl>
-                        <Text fontSize={["sm", "lg", "lg"]} pb='20px'>อีเมลล์<span style={{ fontWeight: 'normal' }}> (ใช้ในการส่งใบประกาศนียบัตร)</span></Text>
+                        <Text fontSize={["sm", "lg", "lg"]} pb='20px'>อีเมล<span style={{ fontWeight: 'normal' }}> (ใช้ในการส่งใบประกาศนียบัตร)</span></Text>
                         <FormControl id="email" pb='30px'>
                             <Input
                                 type="email"
