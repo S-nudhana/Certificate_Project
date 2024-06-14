@@ -15,6 +15,7 @@ import Admin_CreateEvent from './pages/Admin/Admin_CreateEvent';
 import Student_CertificateDownload from './pages/Student/Student_CertificateDownload';
 import Admin_Homepage from './pages/Admin/Admin_Homepage';
 import Admin_EditEvent from './pages/Admin/Admin_EditEvent';
+import Prof_EventDetail from './pages/Prof/Prof_EventDetail';
 
 const theme = extendTheme({
 	fonts: {
@@ -56,10 +57,6 @@ const router = createBrowserRouter([
 		path: '/admin/',
 		element: <Admin_Homepage />,
 	},
-	// {
-	// 	path: '/admin/detail/:id',
-	// 	element: <Admin_Detail />,
-	// },
 	{
 		path: '/admin/createEvent',
 		element: <Admin_CreateEvent />,
@@ -67,6 +64,10 @@ const router = createBrowserRouter([
 	{
 		path: '/admin/editEvent/:id',
 		element: <Admin_EditEvent />,
+	},
+	{
+		path: '/professor/eventDetail/:id',
+		element: <Prof_EventDetail />,
 	},
 	{
 		path: '/professor/register',
