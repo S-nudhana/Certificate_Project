@@ -34,7 +34,7 @@ export default function Admin_SignUpPage() {
               <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อผู้ใช้</FormLabel>
               <Input
                 type="email"
-                placeholder="อีเมลล์"
+                placeholder="อีเมล"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />

@@ -33,7 +33,7 @@ const router = createBrowserRouter([
 		element: <Student_CertificateExample />,
 	},
 	{
-		path: '/student/login',
+		path: '/login',
 		element: <Student_SignInPage />,
 	},
 	{
