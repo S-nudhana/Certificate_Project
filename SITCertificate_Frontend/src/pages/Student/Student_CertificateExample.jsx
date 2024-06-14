@@ -15,9 +15,28 @@ export default function Student_CertificateExample() {
         <>
             <ScrollRestoration />
             <Navbar />
-            <Box pt='80px' display='flex' flexDirection='column' alignItems='center'>
+            <Box pt='80px' display='flex' flexDirection='column' alignItems='center' justifyContent={'center'}>
                 <Text fontSize='32px' fontWeight='bold' py='40px'>ตัวอย่างใบประกาศนียบัตร</Text>
-                <Image width='60%' pb='40px' src={img}></Image>
+                <Box position="relative" display="flex" pb='40px' justifyContent={'center'} >
+                    <Image width='60%' src={img} boxShadow='xl'></Image>
+                    <Box
+                        width={'60%'}
+                        display={'flex'}
+                        flexDirection={'column'}
+                        alugnItems={'center'}
+                        justifyContent={'center'}
+                        textAlign={'center'}
+                        position="absolute"
+                        color="white"
+                        fontSize={{ base: '32px', md: "62px", lg: '112.5px' }}
+                        fontWeight="bold"
+                        opacity={0.6}
+                    >
+                        <Text>SITCertificate</Text>
+                        <Text>SITCertificate</Text>
+                        <Text>SITCertificate</Text>
+                    </Box>
+                </Box>
                 <Box width='80%' display='flex' justifyContent='space-between' pb='40px'>
                     <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
                         navigate(-1)
@@ -44,7 +63,7 @@ export default function Student_CertificateExample() {
                                 borderRadius={"30"}
                                 _hover={{ bgColor: "#1f568c" }}
                                 onClick={() => {
-                                    navigate('/');
+                                    navigate(`/download/${id}`);
                                 }}
                             >
                                 ตกลง
