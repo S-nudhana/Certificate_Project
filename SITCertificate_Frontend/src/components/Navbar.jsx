@@ -52,12 +52,12 @@ export default function Navbar() {
   }
 
   const LogoutCheck = () => {
-    if (Cookies.get("token") !== undefined) {
-      return '/login';
-    } else if (Cookies.get("profToken") !== undefined) {
+    if (Cookies.get("profToken") !== undefined) {
       return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
-    } else {
+    } else if(Cookies.get("adminToken") !== undefined){
       return import.meta.env.VITE_ADMIN_PATH_LOGIN;
+    }else {
+      return '/login';
     }
   };
 
