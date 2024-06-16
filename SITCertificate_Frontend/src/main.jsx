@@ -32,6 +32,10 @@ const router = createBrowserRouter([
 		element: <Student_Homepage />,
 	},
 	{
+		path: '/login',
+		element: <Student_SignInPage />,
+	},
+	{
 		path: '/detail/:id',
 		element: <Student_Detail />,
 	},
@@ -43,45 +47,41 @@ const router = createBrowserRouter([
 		path: '/download/:id',
 		element: <Student_CertificateDownload />,
 	},
+	
 	{
-		path: '/login',
-		element: <Student_SignInPage />,
-	},
-	{
-		path: '/admin/register',
+		path: import.meta.env.VITE_ADMIN_PATH_REGISTER,
 		element: <Admin_SignUpPage />,
 	},
 	{
-		path: '/admin/login',
+		path: import.meta.env.VITE_ADMIN_PATH_LOGIN,
 		element: <Admin_SignInPage />,
 	},
 	{
-		path: '/admin/',
+		path: import.meta.env.VITE_ADMIN_PATH_HOMEPAGE,
 		element: <Admin_Homepage />,
 	},
 	{
-		path: '/admin/createEvent',
+		path: import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT,
 		element: <Admin_CreateEvent />,
 	},
 	{
-		path: '/admin/editEvent/:id',
+		path: import.meta.env.VITE_ADMIN_PATH_EDIT_EVENT,
 		element: <Admin_EditEvent />,
 	},
-
 	{
-		path: '/professor/register',
+		path: import.meta.env.VITE_PROFESSOR_PATH_REGISTER,
 		element: <Prof_SignUpPage />,
 	},
 	{
-		path: '/professor/login',
+		path: import.meta.env.VITE_PROFESSOR_PATH_LOGIN,
 		element: <Prof_SignInPage />,
 	},
 	{
-		path: '/professor/',
+		path: import.meta.env.VITE_PROFESSOR_PATH_HOMEPAGE,
 		element: <Prof_Homepage />,
 	},
 	{
-		path: '/professor/detail/:id',
+		path: import.meta.env.VITE_PROFESSOR_PATH_DETAIL,
 		element: <Prof_EventDetail />,
 	},
 ]);

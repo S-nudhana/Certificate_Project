@@ -53,7 +53,7 @@ export default function Navbar() {
 
   const LogoutCheck = () => {
     if (Cookies.get("token") !== undefined) {
-      return import.meta.env.VITE_STUDENT_PATH_LOGIN;
+      return '/login';
     } else if (Cookies.get("profToken") !== undefined) {
       return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
     } else {

@@ -18,7 +18,7 @@ export default function Student_Detail() {
     const isFormFilled = () => name.trim() !== '' && surname.trim() !== '' && email.trim() !== '';
 
     const aleadyGenerate = () => {
-        if (false) {
+        if (true) {
             return (
                 <Box display={{ base: 'block', lg: 'flex' }} pt='80px'>
                     <Image src={event.img} width={{ base: '100%', lg: '35%' }} height={{ base: 'auto', lg: "100vh" }} objectFit='cover'></Image>
@@ -70,7 +70,7 @@ export default function Student_Detail() {
                         <Text fontSize='32px' fontWeight='bold' pt='20px'>{event.title}</Text>
                         <Text pt='10px' pb='20px'>เปิดให้ดาว์นโหลดตั้งแต่  {event.StartDownload}  ถึง  {event.EndedDownload}</Text>
                         <Text fontSize='18px' fontWeight={'bold'}>ใบประกาศนียบัตร</Text>
-                        <Box display='flex' justifyContent={{base: 'center', lg: 'flex-start'}}>
+                        <Box display='flex' justifyContent={{ base: 'center', lg: 'flex-start' }}>
                             <Image width='90%' height={'auto'} src={img} my={'20px'} boxShadow={'lg'}></Image>
                         </Box>
                         <Box display='flex' justifyContent={{ base: 'center', lg: 'flex-start' }} gap={"20px"}>
