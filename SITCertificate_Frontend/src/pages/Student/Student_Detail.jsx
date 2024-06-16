@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Box, Image, Text, Button, FormControl, FormLabel, Input, Center } from '@chakra-ui/react'
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
+
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import BackBTN from '../../components/BackBTN'
 import { data } from '../Student/Student_Homepage'
 import img from '../../assets/img/SIT_Building.png'
+import authMiddleware from "../../utils/authMiddleware";
 
-export default function Student_Detail() {
+function Student_Detail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const event = data.find(item => item.id === id);
@@ -92,3 +94,4 @@ export default function Student_Detail() {
         </>
     )
 }
+export default authMiddleware(Student_Detail);

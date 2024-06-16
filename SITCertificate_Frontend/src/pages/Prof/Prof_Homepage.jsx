@@ -1,13 +1,13 @@
 import React from 'react'
 import { Box, Text, Image, Card, Button } from '@chakra-ui/react';
 import { useNavigate, ScrollRestoration } from 'react-router-dom';
-import { FaPlus } from "react-icons/fa6";
 
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { data } from '../Student/Student_Homepage';
+import authMiddleware from "../../utils/authMiddleware";
 
-export default function Prof_Homepage() {
+function Prof_Homepage() {
     const navigate = useNavigate();
     return (
         <>
@@ -43,3 +43,4 @@ export default function Prof_Homepage() {
         </>
     )
 }
+export default authMiddleware(Prof_Homepage);

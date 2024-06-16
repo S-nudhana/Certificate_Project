@@ -5,8 +5,9 @@ import img from '../../assets/img/SIT_Building.png';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import authMiddleware from "../../utils/authMiddleware";
 
-export default function Student_CertificateExample() {
+function Student_CertificateExample() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -81,3 +82,4 @@ export default function Student_CertificateExample() {
         </>
     );
 }
+export default authMiddleware(Student_CertificateExample);

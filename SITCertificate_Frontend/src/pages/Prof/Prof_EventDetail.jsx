@@ -15,28 +15,30 @@ import {
   Textarea
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
+
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import BackBTN from '../../components/BackBTN'
 import { data } from '../Student/Student_Homepage'
 import img from '../../assets/img/SIT_Building.png'
+import authMiddleware from "../../utils/authMiddleware";
 
-export default function Admin_EventDetail() {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const event = data.find(item => item.id === id);
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [email, setEmail] = useState('');
+function Prof_EventDetail() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const event = data.find(item => item.id === id);
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
     <>
       <Navbar />
-      <Box pt={"120px"} ml={["10%","10%","5%"]}>
+      <Box pt={"120px"} ml={["10%", "10%", "5%"]}>
         <BackBTN />
       </Box>
-      <Stack minH={"80vh"} direction={[ "column" , "column" ,"row"]} mb={"50px"}>
-        <Flex flex={1}  direction={"column"} ml={["10%","10%","5%"]} >
+      <Stack minH={"80vh"} direction={["column", "column", "row"]} mb={"50px"}>
+        <Flex flex={1} direction={"column"} ml={["10%", "10%", "5%"]} >
           <Text fontSize="32px" fontWeight="bold" pt="20px">
             {event.title}
           </Text>
@@ -47,19 +49,15 @@ export default function Admin_EventDetail() {
           <Text fontSize="18px" fontWeight={"bold"}>
             ใบประกาศนียบัตร
           </Text>
-          <Box
-         
-          >
-            <Image
-              width="90%"
-              height={"auto"}
-              src={img}
-              my={"20px"}
-              boxShadow={"lg"}
-            ></Image>
-          </Box>
+          <Image
+            width="90%"
+            height={"auto"}
+            src={img}
+            my={"20px"}
+            boxShadow={"lg"}
+          ></Image>
         </Flex>
-        <Flex flex={1} ml={["10%","10%","0%"]}> 
+        <Flex flex={1} ml={["10%", "10%", "0%"]}>
           <Stack spacing={5} w={"full"} pr={"10%"}>
             <Heading fontSize={"2xl"} pt="20px">Comment</Heading>
             <FormControl id="email">
@@ -72,8 +70,8 @@ export default function Admin_EventDetail() {
               <Textarea placeholder='Here is a sample placeholder' />
             </FormControl>
             <Stack spacing={6} align={"end"}>
-              <Button colorScheme={"blue"} variant={"solid"} padding={"20px"} bgColor='#3399cc' color='white' fontSize={{ base: '14px', md: '16px' }} borderRadius='40px' _hover={{ bgColor: '#297AA3' }}> 
-               เพิ่ม Comment
+              <Button colorScheme={"blue"} variant={"solid"} padding={"20px"} bgColor='#3399cc' color='white' fontSize={{ base: '14px', md: '16px' }} borderRadius='40px' _hover={{ bgColor: '#297AA3' }}>
+                เพิ่ม Comment
               </Button>
             </Stack>
           </Stack>
@@ -83,3 +81,4 @@ export default function Admin_EventDetail() {
     </>
   );
 }
+export default authMiddleware(Prof_EventDetail);

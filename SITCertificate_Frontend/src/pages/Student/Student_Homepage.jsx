@@ -4,6 +4,7 @@ import { useNavigate, ScrollRestoration } from 'react-router-dom';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import authMiddleware from "../../utils/authMiddleware";
 
 export const data = [
   {
@@ -43,7 +44,7 @@ export const data = [
   },
 ];
 
-export default function Student_Homepage() {
+function Student_Homepage() {
   const navigate = useNavigate();
   return (
     <>
@@ -78,3 +79,4 @@ export default function Student_Homepage() {
     </>
   );
 }
+export default authMiddleware(Student_Homepage);
