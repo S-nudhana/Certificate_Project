@@ -47,7 +47,6 @@ const router = createBrowserRouter([
 		path: '/download/:id',
 		element: <Student_CertificateDownload />,
 	},
-	
 	{
 		path: import.meta.env.VITE_ADMIN_PATH_REGISTER,
 		element: <Admin_SignUpPage />,
