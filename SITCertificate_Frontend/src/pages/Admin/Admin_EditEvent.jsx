@@ -16,10 +16,14 @@ import {
   Img,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import Navbar from "../../components/Navbar";
-import BackBTN from "../../components/BackBTN";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-export default function Admin_EditEvent() {
+
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import BackBTN from "../../components/BackBTN";
+import authMiddleware from "../../utils/authMiddleware";
+
+function Admin_EditEvent() {
   const [thumbnail, setThumbnail] = useState();
   const [template, setTemplate] = useState();
   function handleThumbnail(e) {
@@ -140,6 +144,8 @@ export default function Admin_EditEvent() {
           </Stack>
         </Flex>
       </Box>
+      <Footer/>
     </>
   );
 }
+export default authMiddleware(Admin_EditEvent);

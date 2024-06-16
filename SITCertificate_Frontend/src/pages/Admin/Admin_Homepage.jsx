@@ -6,8 +6,9 @@ import { FaPlus } from "react-icons/fa6";
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { data } from '../Student/Student_Homepage';
+import authMiddleware from "../../utils/authMiddleware";
 
-export default function Admin_Homepage() {
+function Admin_Homepage() {
     const navigate = useNavigate();
     return (
         <>
@@ -58,3 +59,4 @@ export default function Admin_Homepage() {
         </>
     )
 }
+export default authMiddleware(Admin_Homepage);

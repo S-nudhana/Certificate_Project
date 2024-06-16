@@ -5,8 +5,9 @@ import img from '../../assets/img/SIT_Building.png'
 
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import authMiddleware from "../../utils/authMiddleware";
 
-export default function Student_CertificateDownload() {
+function Student_CertificateDownload() {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -31,3 +32,4 @@ export default function Student_CertificateDownload() {
         </>
     )
 }
+export default authMiddleware(Student_CertificateDownload);
