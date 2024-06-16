@@ -29,7 +29,7 @@ export default function Prof_Homepage() {
                                         <Text pb='5px'>{item.StartDownload} ถึง {item.EndedDownload}</Text>
                                         <Button width='130px' borderRadius='40px' bgColor='#3399cc' color='white' _hover={{ bgColor: '#297AA3' }}
                                             onClick={() => {
-                                                navigate(`/professor/detail/${item.id}`);
+                                                navigate(import.meta.env.VITE_PROFESSOR_PATH_DETAILS + `${item.id}`);
                                             }}>ดูข้อมูลกิจกรรม
                                         </Button>
                                     </Box>

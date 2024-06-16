@@ -20,7 +20,7 @@ export default function Admin_Homepage() {
                 <Box>
                     <Box display='flex' flexWrap='wrap' justifyContent={{ base: 'center', lg: 'flex-start' }} gap='30px' py='30px' maxWidth='1300px' mx='auto'>
                         <Card width='300px' height='auto' bgColor='#336699' borderRadius='30px' boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)" color={'white'} border={'5px solid transparent'} transition={'.2s ease-in'} cursor={'pointer'} _hover={{ bgColor: 'white', borderColor: '#336699', color: '#336699' }} onClick={() => {
-                            navigate(`/admin/createEvent`)
+                            navigate(import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT)
                         }}>
                             <Box height={'100%'} p={'30px'} display={'flex'} flexDirection={'column'} alignItems='center' justifyContent={'center'}>
                                 <Text fontWeight={'bold'} fontSize={'40px'}>
@@ -39,12 +39,12 @@ export default function Admin_Homepage() {
                                         <Text pb='5px'>{item.StartDownload} ถึง {item.EndedDownload}</Text>
                                         <Button width='90px' borderRadius='40px' bgColor='#336699' color='white' _hover={{ bgColor: '#1f568c' }}
                                             onClick={() => {
-                                                navigate(`/admin/editEvent/${item.id}`);
+                                                navigate(import.meta.env.VITE_ADMIN_PATH_EDIT_EVENTS + `${item.id}`);
                                             }}>แก้ไข
                                         </Button>
                                         <Button ml={'15px'} width='130px' borderRadius='40px' bgColor='#3399cc' color='white' _hover={{ bgColor: '#297AA3' }}
                                             onClick={() => {
-                                                navigate(`/admin/detail/${item.id}`);
+                                                navigate(import.meta.env.VITE_ADMIN_PATH_DETAILS + `${item.id}`);
                                             }}>ดูข้อมูลกิจกรรม
                                         </Button>
                                     </Box>
