@@ -4,19 +4,15 @@ import {
   FormControl,
   FormLabel,
   Input,
-  InputGroup,
   HStack,
-  InputRightElement,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
-  Link,
   Img,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -26,13 +22,15 @@ import authMiddleware from "../../utils/authMiddleware";
 function Admin_EditEvent() {
   const [thumbnail, setThumbnail] = useState();
   const [template, setTemplate] = useState();
+  const [Excel, setExcel] = useState();
   function handleThumbnail(e) {
-    console.log(e.target.files);
     setThumbnail(URL.createObjectURL(e.target.files[0]));
   }
   function handleTemplate(e) {
-    console.log(e.target.files);
     setTemplate(URL.createObjectURL(e.target.files[0]));
+  }
+  function handleExcel(e) {
+    setExcel(URL.createObjectURL(e.target.files[0]));
   }
 
   return (
@@ -62,7 +60,7 @@ function Admin_EditEvent() {
                 </Heading>
               </Stack>
               <Stack spacing={4}>
-                <FormControl id="">
+                <FormControl>
                   <FormLabel fontSize={["sm", "md", "md"]}>
                     ชื่อกิจกรรม
                   </FormLabel>
@@ -75,7 +73,7 @@ function Admin_EditEvent() {
 
                 <HStack w="full">
                   <Box w={"50%"}>
-                    <FormControl id="">
+                    <FormControl>
                       <FormLabel fontSize={["sm", "md", "md"]}>
                         เปิดให้เริ่มดาวน์โหลด
                       </FormLabel>
@@ -87,7 +85,7 @@ function Admin_EditEvent() {
                     </FormControl>
                   </Box>
                   <Box w={"50%"}>
-                    <FormControl id="">
+                    <FormControl>
                       <FormLabel fontSize={["sm", "md", "md"]}>
                         สิ้นสุดการดาวน์โหลด
                       </FormLabel>
@@ -100,7 +98,7 @@ function Admin_EditEvent() {
                   </Box>
                 </HStack>
 
-                <FormControl id="">
+                <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
@@ -114,7 +112,7 @@ function Admin_EditEvent() {
                   <input type="file" onChange={handleThumbnail} />
                   <Img src={thumbnail} pt={2} />
                 </FormControl>
-                <FormControl id="">
+                <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
@@ -126,6 +124,19 @@ function Admin_EditEvent() {
                     </Text>
                   </FormLabel>
                   <input type="file" onChange={handleTemplate} />
+                </FormControl>
+                <FormControl>
+                  <FormLabel
+                    fontSize={["sm", "md", "md"]}
+                    display="flex"
+                    alignItems="center"
+                  >
+                    อัปโหลดรายชื่อผู้เข้าร่วม
+                    <Text color="#D2042D" ml={1} fontSize="xs">
+                      (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
+                    </Text>
+                  </FormLabel>
+                  <input type="file" onChange={handleExcel} />
                 </FormControl>
                 <Stack spacing={10} pt={2}>
                   <Button
@@ -144,7 +155,7 @@ function Admin_EditEvent() {
           </Stack>
         </Flex>
       </Box>
-      <Footer/>
+      <Footer />
     </>
   );
 }
