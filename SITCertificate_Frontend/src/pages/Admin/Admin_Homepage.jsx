@@ -20,7 +20,7 @@ function Admin_Homepage() {
                 </Text>
                 <Box>
                     <Box display='flex' flexWrap='wrap' justifyContent={{ base: 'center', lg: 'flex-start' }} gap='30px' py='30px' maxWidth='1300px' mx='auto'>
-                        <Card width='300px' height='auto' bgColor='#336699' borderRadius='30px' boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)" color={'white'} border={'5px solid transparent'} transition={'.2s ease-in'} cursor={'pointer'} _hover={{ bgColor: 'white', borderColor: '#336699', color: '#336699' }} onClick={() => {
+                        <Card width='300px' height='auto' bgColor='#3399cc' borderRadius='30px' boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)" color={'white'} transition={'.2s ease-in'} cursor={'pointer'} _hover={{ bgColor: '#297AA3' }} onClick={() => {
                             navigate(import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT)
                         }}>
                             <Box height={'100%'} p={'30px'} display={'flex'} flexDirection={'column'} alignItems='center' justifyContent={'center'}>
@@ -60,3 +60,20 @@ function Admin_Homepage() {
     )
 }
 export default authMiddleware(Admin_Homepage);
+
+// create new btn
+// w="300px"
+// h="auto"
+// bg="linear-gradient(90deg, rgba(51,153,204,1) 0%, rgba(51,102,153,1) 55%, rgba(31,86,140,1) 100%)"
+// borderRadius="30px"
+// boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
+// color="white"
+// transition=".2s ease-in"
+// cursor="pointer"
+// _hover={{
+//     boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)', // increase box-shadow on hover
+//     transform: 'scale(1.01)',
+// }}
+// onClick={() => {
+//     navigate(import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT);
+// }}

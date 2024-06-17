@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
+import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, Stack, Link, Button, IconButton, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
 import Building from "../../assets/img/SIT_Building.png";
-import Logo from "../../assets/img/logo-flat-blk.png";
+import Logo from "../../assets/img/SIT_Icon.png";
 import { useNavigate } from 'react-router-dom';
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 export default function Admin_SignInPage() {
   const [email, setEmail] = useState('');
@@ -13,6 +14,8 @@ export default function Admin_SignInPage() {
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
   const navigate = useNavigate();
   const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false)
+  const handleClickShowPassword = () => setShowPassword(!showPassword)
 
   const handleSignIn = () => {
     if (!emailRegex.test(email)) {
@@ -33,7 +36,7 @@ export default function Admin_SignInPage() {
           title: 'Username or Password is invalid.',
           description: "โปรดตรวจสอบชื่อผู้ใช้หรือรหัสผ่านของคุณ",
           status: 'error',
-          duration: 3000,
+          duration: 2000,
           isClosable: true,
         })
       );
@@ -74,12 +77,17 @@ export default function Admin_SignInPage() {
             </FormControl>
             <FormControl id="password">
               <FormLabel fontSize={["sm", "lg", "lg"]}>รหัสผ่าน</FormLabel>
-              <Input
-                type="password"
-                placeholder="เบอร์โทรศัพท์"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <InputGroup size='md'>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="รหัสผ่าน"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement>
+                  <IconButton variant={'ghost'} borderLeftRadius={'0'} _hover={{ backgroundColor: 'transparent' }} icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />} onClick={handleClickShowPassword} />
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
             <Stack pt={"3"}>
               <Button
