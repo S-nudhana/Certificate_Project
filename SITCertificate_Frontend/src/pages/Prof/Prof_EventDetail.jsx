@@ -7,14 +7,16 @@ import {
   FormLabel,
   Heading,
   Input,
-  Link,
+  IconButton,
   Stack,
   Image,
   Box,
   Text,
-  Textarea
+  Textarea,
+  Card
 } from "@chakra-ui/react";
-import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
+import { useParams, ScrollRestoration } from 'react-router-dom';
+import { FaCheck } from "react-icons/fa6";
 
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
@@ -23,16 +25,34 @@ import { data } from '../Student/Student_Homepage'
 import img from '../../assets/img/SIT_Building.png'
 import authMiddleware from "../../utils/authMiddleware";
 
+export const comment = [
+  {
+    id: 1,
+    username: "John Doe",
+    Detail: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    completed: true
+  },
+  {
+    id: 2,
+    username: "Jane Doe",
+    Detail: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nobis aut possimus ex labore porro cumque illo assumenda praesentium laboriosam unde suscipit eos, expedita iste aliquid tempora nemo modi doloremque cupiditate ullam, dignissimos dolores, sit sapiente!.",
+    completed: false
+  },
+  {
+    id: 3,
+    username: "Jack Doe",
+    Detail: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nobis aut possimus ex labore porro cumque illo assumenda praesentium laboriosam unde suscipit eos, expedita iste aliquid tempora nemo modi doloremque cupiditate ullam, dignissimos dolores, sit sapiente! Esse facilis odio debitis animi consequuntur alias, veniam ullam blanditiis praesentium, cupiditate eius nesciunt.",
+    completed: false
+  },
+]
+
 function Prof_EventDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const event = data.find(item => item.id === id);
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [email, setEmail] = useState('');
 
   return (
     <>
+      <ScrollRestoration />
       <Navbar />
       <Box pt={"120px"} ml={["10%", "10%", "5%"]}>
         <BackBTN />
@@ -43,8 +63,7 @@ function Prof_EventDetail() {
             {event.title}
           </Text>
           <Text pt="10px" pb="20px">
-            เปิดให้ดาว์นโหลดตั้งแต่ {event.StartDownload} ถึง{" "}
-            {event.EndedDownload}
+            เปิดให้ดาว์นโหลดตั้งแต่ {event.StartDownload} ถึง {event.EndedDownload}
           </Text>
           <Text fontSize="18px" fontWeight={"bold"}>
             ใบประกาศนียบัตร
@@ -60,14 +79,28 @@ function Prof_EventDetail() {
         <Flex flex={1} ml={["10%", "10%", "0%"]}>
           <Stack spacing={5} w={"full"} pr={"10%"}>
             <Heading fontSize={"2xl"} pt="20px">Comment</Heading>
-            <FormControl id="email">
-              <FormLabel>Old comment</FormLabel>
-              <Input type="text" />
-              {/* //card */}
-            </FormControl>
-            <FormControl id="password">
+            <Box width={'100%'}>
+              {comment.map((item) => {
+                return (
+                  <Card p={'20px'} mb={'20px'} variant={'outline'}>
+                    <Flex alignItems={'center'} justifyContent={'space-between'} gap={'10px'}>
+                      <Text fontWeight={'bold'}>{item.username}</Text>
+                      <IconButton
+                        isRound={true}
+                        icon={<FaCheck />}
+                        colorScheme={item.completed ? 'green' : 'gray'}
+                        aria-label='Done'
+                      />
+                    </Flex>
+                    <Text>{item.Detail}</Text>
+                  </Card>
+                )
+              })}
+            </Box>
+            <FormControl id="comment">
               <FormLabel>New Comment</FormLabel>
-              <Textarea placeholder='Here is a sample placeholder' />
+              <Input mb={'10px'} placeholder='ชื่อของท่าน' />
+              <Textarea placeholder='เพิ่ม comment ที่นี่' />
             </FormControl>
             <Stack spacing={6} align={"end"}>
               <Button colorScheme={"blue"} variant={"solid"} padding={"20px"} bgColor='#3399cc' color='white' fontSize={{ base: '14px', md: '16px' }} borderRadius='40px' _hover={{ bgColor: '#297AA3' }}>

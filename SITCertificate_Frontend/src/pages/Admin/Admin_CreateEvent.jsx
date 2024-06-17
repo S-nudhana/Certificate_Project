@@ -107,7 +107,7 @@ function Admin_CreateEvent() {
                     alignItems="center"
                   >
                     อัปโหลดรูปปก
-                    <Text color="red" ml={1} fontSize="xs">
+                    <Text color="#D2042D" ml={1} fontSize="xs">
                       (อัปโหลดได้เฉพาะ .png หรือ .jpg เท่านั้น)
                     </Text>
                   </FormLabel>
@@ -121,7 +121,7 @@ function Admin_CreateEvent() {
                     alignItems="center"
                   >
                     อัปโหลดเท็มเพลทใบประกาศนียบัตร
-                    <Text color="red" ml={1} fontSize="xs">
+                    <Text color="#D2042D" ml={1} fontSize="xs">
                       (อัปโหลดได้เฉพาะ .pdf เท่านั้น)
                     </Text>
                   </FormLabel>

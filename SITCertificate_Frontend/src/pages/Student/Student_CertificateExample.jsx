@@ -34,7 +34,7 @@ function Student_CertificateExample() {
                     SITCertificate
                     SITCertificate
                 </Text>
-                <Box width='80%' display='flex' justifyContent='space-between' py='40px'>
+                <Box width='70%' display='flex' justifyContent='space-between' py='40px'>
                     <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
                         navigate(-1)
                     }}>ย้อนกลับ</Button>
@@ -50,8 +50,8 @@ function Student_CertificateExample() {
                 <ModalOverlay />
                 <ModalContent py={["5", "7", "7"]}>
                     <ModalHeader textAlign={"center"} fontWeight={"bold"} fontSize={{ base: "16px", md: '20px' }}>ยืนยันที่จะพิมพ์ใบประกาศนียบัตรหรือไม่?</ModalHeader>
-                    <ModalBody>
-                        <Text pb={'7'} fontSize={{ base: "14px", md: '16px' }}>กรุณาตรวจสอบชื่อจริงและนามสกุลของท่าน เมื่อกดยืนยันแล้วจะไม่สามารถกลับมาแก้ไขได้</Text>
+                    <ModalBody textAlign={"center"}>
+                        <Text pb={'7'} fontSize={{ base: "14px", md: '16px' }}>กรุณาตรวจสอบชื่อจริงและนามสกุลของท่าน <br/> เมื่อกดยืนยันแล้วจะไม่สามารถกลับมาแก้ไขได้</Text>
                         <Flex justifyContent="center">
                             <Button
                                 mr={3}
