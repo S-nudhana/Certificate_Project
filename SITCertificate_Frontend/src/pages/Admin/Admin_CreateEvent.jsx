@@ -4,19 +4,15 @@ import {
   FormControl,
   FormLabel,
   Input,
-  InputGroup,
   HStack,
-  InputRightElement,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
-  Link,
   Img,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -26,6 +22,8 @@ import authMiddleware from "../../utils/authMiddleware";
 function Admin_CreateEvent() {
   const [thumbnail, setThumbnail] = useState();
   const [template, setTemplate] = useState();
+  const [Excel, setExcel] = useState();
+
   function handleThumbnail(e) {
     console.log(e.target.files);
     setThumbnail(URL.createObjectURL(e.target.files[0]));
@@ -33,6 +31,9 @@ function Admin_CreateEvent() {
   function handleTemplate(e) {
     console.log(e.target.files);
     setTemplate(URL.createObjectURL(e.target.files[0]));
+  }
+  function handleExcel(e) {
+    setExcel(URL.createObjectURL(e.target.files[0]));
   }
 
   return (
@@ -126,6 +127,19 @@ function Admin_CreateEvent() {
                     </Text>
                   </FormLabel>
                   <input type="file" onChange={handleTemplate} />
+                </FormControl>
+                <FormControl>
+                  <FormLabel
+                    fontSize={["sm", "md", "md"]}
+                    display="flex"
+                    alignItems="center"
+                  >
+                    อัปโหลดรายชื่อผู้เข้าร่วม
+                    <Text color="#D2042D" ml={1} fontSize="xs">
+                      (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
+                    </Text>
+                  </FormLabel>
+                  <input type="file" onChange={handleExcel} />
                 </FormControl>
                 <Stack spacing={10} pt={2}>
                   <Button

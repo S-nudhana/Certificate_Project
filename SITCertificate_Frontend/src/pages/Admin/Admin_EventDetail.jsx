@@ -8,7 +8,6 @@ import {
     Text,
     Card,
     IconButton,
-    useToast
 } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
