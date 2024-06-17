@@ -1,14 +1,44 @@
 import React, { useState } from 'react';
-import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button, Heading, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Box, FormControl, FormLabel, Input, Checkbox, Stack, Link, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
 import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/logo-flat-blk.png";
+import { useNavigate } from 'react-router-dom';
 
 export default function Student_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
+  const navigate = useNavigate();
+  const toast = useToast();
 
+  const handleSignIn = () => {
+    if (!emailRegex.test(email)) {
+      setEmailError('Invalid email address');
+      setEmail('')
+      return;
+    } else {
+      setEmailError('');
+    }
+
+    if (true) {
+      return (
+        navigate('/')
+      );
+    } else {
+      return (
+        toast({
+          title: 'Username or Password is invalid.',
+          description: "โปรดตรวจสอบชื่อผู้ใช้หรือรหัสผ่านของคุณ",
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+      );
+    }
+  }
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>
@@ -30,14 +60,16 @@ export default function Student_SignInPage() {
             </Text>
           </Stack>
           <Stack spacing={4}>
-            <FormControl id="email">
+            <FormControl id="email" isInvalid={emailError}>
               <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อผู้ใช้</FormLabel>
               <Input
                 type="email"
                 placeholder="อีเมล"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                borderColor={emailError ? '#D2042D' : 'gray.200'}
               />
+              <FormErrorMessage>{emailError}</FormErrorMessage>
             </FormControl>
             <FormControl id="password">
               <FormLabel fontSize={["sm", "lg", "lg"]}>รหัสผ่าน</FormLabel>
@@ -54,7 +86,10 @@ export default function Student_SignInPage() {
                 color="white"
                 _hover={{ bg: "#1F568C" }}
                 fontSize={["sm", "lg", "lg"]}
-                isDisabled={!isFormFilled()} 
+                isDisabled={!isFormFilled()}
+                onClick={() => {
+                  handleSignIn();
+                }}
               >
                 เข้าสู่ระบบ
               </Button>

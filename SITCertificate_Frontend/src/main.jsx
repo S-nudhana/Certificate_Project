@@ -17,6 +17,7 @@ import Admin_Homepage from './pages/Admin/Admin_Homepage';
 import Admin_EditEvent from './pages/Admin/Admin_EditEvent';
 import Prof_EventDetail from './pages/Prof/Prof_EventDetail';
 import Prof_Homepage from './pages/Prof/Prof_Homepage';
+import Admin_EventDetail from './pages/Admin/Admin_EventDetail';
 
 
 const theme = extendTheme({
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
 	{
 		path: import.meta.env.VITE_ADMIN_PATH_EDIT_EVENT,
 		element: <Admin_EditEvent />,
+	},
+	{
+		path: import.meta.env.VITE_ADMIN_PATH_DETAIL,
+		element: <Admin_EventDetail />,
 	},
 	{
 		path: import.meta.env.VITE_PROFESSOR_PATH_REGISTER,

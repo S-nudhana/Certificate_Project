@@ -12,7 +12,7 @@ import {
   useDisclosure,
   Flex,
 } from "@chakra-ui/react";
-import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -80,7 +80,7 @@ export default function Navbar() {
         SITCertificate
       </Text>
       <Button
-        leftIcon={<FaArrowRight />}
+        leftIcon={<FaArrowRightFromBracket />}
         bgColor="#336699"
         color="white"
         size="md"
@@ -97,7 +97,7 @@ export default function Navbar() {
         color="white"
         display={{ base: "flex", md: "none" }}
         _hover={{ bgColor: "#1f568c" }}
-        icon={<FaArrowRight />}
+        icon={<FaArrowRightFromBracket />}
         onClick={onOpen}
 
       />
