@@ -14,9 +14,10 @@ import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import { data } from "../Student/Student_Homepage";
+import { data } from "../../utils/mockUpData";
 import img from "../../assets/img/SIT_Building.png";
 import authMiddleware from "../../utils/authMiddleware";
+import { dateCheck, dateFormatChange } from "../../utils/function";
 
 function Student_Detail() {
   const { id } = useParams();
@@ -47,8 +48,7 @@ function Student_Detail() {
               {event.title}
             </Text>
             <Text pt="10px" pb="20px">
-              เปิดให้ดาว์นโหลดตั้งแต่ {event.StartDownload} ถึง{" "}
-              {event.EndedDownload}
+              เปิดให้ดาว์นโหลดตั้งแต่  {dateFormatChange(event.StartDownload)} ถึง {dateFormatChange(event.EndedDownload)}
             </Text>
             <Box
               border=".7px solid #919191"

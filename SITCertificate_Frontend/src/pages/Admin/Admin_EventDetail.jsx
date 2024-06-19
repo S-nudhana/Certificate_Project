@@ -9,13 +9,13 @@ import {
     Card,
     IconButton,
 } from "@chakra-ui/react";
-import { useParams } from 'react-router-dom';
+import { useParams, ScrollRestoration } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import BackBTN from '../../components/BackBTN';
-import { data } from '../Student/Student_Homepage';
+import { data } from "../../utils/mockUpData";
 import img from '../../assets/img/SIT_Building.png';
 import { comment } from '../Prof/Prof_EventDetail';
 import authMiddleware from "../../utils/authMiddleware";
@@ -35,6 +35,7 @@ function Admin_EventDetail() {
 
     return (
         <>
+        <ScrollRestoration/>
             <Navbar />
             <Box pt={"120px"} ml={["10%", "10%", "5%"]}>
                 <BackBTN />

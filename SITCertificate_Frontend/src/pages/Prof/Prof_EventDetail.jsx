@@ -21,7 +21,7 @@ import { FaCheck } from "react-icons/fa6";
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import BackBTN from '../../components/BackBTN'
-import { data } from '../Student/Student_Homepage'
+import { data } from "../../utils/mockUpData";
 import img from '../../assets/img/SIT_Building.png'
 import authMiddleware from "../../utils/authMiddleware";
 

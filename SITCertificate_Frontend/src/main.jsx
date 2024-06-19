@@ -3,6 +3,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import * as ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
+
 import Student_Homepage from './pages/Student/Student_Homepage';
 import Student_SignInPage from './pages/Student/Student_SignInPage';
 import Admin_SignUpPage from './pages/Admin/Admin_SignUpPage';
@@ -18,6 +19,8 @@ import Admin_EditEvent from './pages/Admin/Admin_EditEvent';
 import Prof_EventDetail from './pages/Prof/Prof_EventDetail';
 import Prof_Homepage from './pages/Prof/Prof_Homepage';
 import Admin_EventDetail from './pages/Admin/Admin_EventDetail';
+import Admin_History from './pages/Admin/Admin_History';
+import Prof_History from './pages/Prof/Prof_History';
 
 
 const theme = extendTheme({
@@ -59,6 +62,12 @@ const router = createBrowserRouter([
 	{
 		path: import.meta.env.VITE_ADMIN_PATH_HOMEPAGE,
 		element: <Admin_Homepage />,
+		children: [
+			{
+				path: '',
+				element: <Admin_History />
+			}
+		]
 	},
 	{
 		path: import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT,
@@ -83,6 +92,12 @@ const router = createBrowserRouter([
 	{
 		path: import.meta.env.VITE_PROFESSOR_PATH_HOMEPAGE,
 		element: <Prof_Homepage />,
+		children: [
+			{
+				path: '',
+				element: <Prof_History />
+			}
+		]
 	},
 	{
 		path: import.meta.env.VITE_PROFESSOR_PATH_DETAIL,
