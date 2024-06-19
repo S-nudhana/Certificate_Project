@@ -17,7 +17,7 @@ import BackBTN from "../../components/BackBTN";
 import { data } from "../../utils/mockUpData";
 import img from "../../assets/img/SIT_Building.png";
 import authMiddleware from "../../utils/authMiddleware";
-import { dateCheck, dateFormatChange } from "../../utils/function";
+import { dateFormatChange } from "../../utils/function";
 
 function Student_Detail() {
   const { id } = useParams();
