@@ -13,6 +13,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { FaHistory } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -43,23 +44,37 @@ export default function Navbar() {
 
   const tokenCheck = () => {
     if (Cookies.get("token") !== undefined) {
-      return 'token';
+      return "token";
     } else if (Cookies.get("profToken") !== undefined) {
-      return 'profToken';
+      return "profToken";
     } else {
-      return 'adminToken';
+      return "adminToken";
     }
-  }
+  };
 
   const LogoutCheck = () => {
     if (Cookies.get("profToken") !== undefined) {
       return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
-    } else if(Cookies.get("adminToken") !== undefined){
+    } else if (Cookies.get("adminToken") !== undefined) {
       return import.meta.env.VITE_ADMIN_PATH_LOGIN;
-    }else {
-      return '/login';
+    } else {
+      return "/login";
     }
   };
+  const historyAcess = () => {
+    if (Cookies.get("profToken") !== undefined) {
+      return import.meta.env.VITE_PROFESSOR_PATH_HISTORY;
+    } else if (Cookies.get("adminToken") !== undefined) {
+      return import.meta.env.VITE_ADMIN_PATH_HISTORY;
+    } else {
+      return 0;
+    }
+  };
+  const btnHistory =
+    Cookies.get("profToken") !== undefined ||
+    Cookies.get("adminToken") !== undefined
+      ? "flex"
+      : "none";
 
   return (
     <Box
@@ -79,28 +94,53 @@ export default function Navbar() {
       <Text color="white" fontWeight="bold" fontSize="24">
         SITCertificate
       </Text>
-      <Button
-        leftIcon={<FaArrowRightFromBracket />}
-        bgColor="#336699"
-        color="white"
-        size="md"
-        display={{ base: "none", md: "flex" }}
-        variant="solid"
-        onClick={onOpen}
-        _hover={{ bgColor: "#1f568c" }}
-      >
-        ออกจากระบบ
-      </Button>
-      <IconButton
-        justifyContent="center"
-        bgColor="#336699"
-        color="white"
-        display={{ base: "flex", md: "none" }}
-        _hover={{ bgColor: "#1f568c" }}
-        icon={<FaArrowRightFromBracket />}
-        onClick={onOpen}
-
-      />
+      <Flex gap={{base: '10px', md:"30px"}}>
+        <Button
+          variant="link"
+          display={{ base: "none", md: "flex" }}
+          color={"#E5E4E2"}
+          _hover={{ color: "white" , textDecoration: 'underline', textUnderlineOffset: '2px'}}
+          onClick={() => {
+            // navigate(historyAcess());
+            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
+          }}
+        >
+          ประวัติกิจกรรม
+        </Button>
+        <IconButton
+          justifyContent="center"
+          bgColor="#3399cc"
+          color="white"
+          display={{ base: "flex", md: "none" }}
+          _hover={{ bgColor: "#297AA3" }}
+          icon={<FaHistory />}
+          onClick={() => {
+            // navigate(historyAcess());
+            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
+          }}
+        />
+        <Button
+          leftIcon={<FaArrowRightFromBracket />}
+          bgColor="#336699"
+          color="white"
+          size="md"
+          display={{ base: "none", md: "flex" }}
+          variant="solid"
+          onClick={onOpen}
+          _hover={{ bgColor: "#1f568c" }}
+        >
+          ออกจากระบบ
+        </Button>
+        <IconButton
+          justifyContent="center"
+          bgColor="#336699"
+          color="white"
+          display={{ base: "flex", md: "none" }}
+          _hover={{ bgColor: "#1f568c" }}
+          icon={<FaArrowRightFromBracket />}
+          onClick={onOpen}
+        />
+      </Flex>
       <Modal
         isOpen={isOpen}
         onClose={onClose}

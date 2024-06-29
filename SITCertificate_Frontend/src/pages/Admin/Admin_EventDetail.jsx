@@ -19,6 +19,7 @@ import { data } from "../../utils/mockUpData";
 import img from '../../assets/img/SIT_Building.png';
 import { comment } from '../Prof/Prof_EventDetail';
 import authMiddleware from "../../utils/authMiddleware";
+import { dateFormatChange } from '../../utils/function';
 
 function Admin_EventDetail() {
     const { id } = useParams();
@@ -45,8 +46,11 @@ function Admin_EventDetail() {
                     <Text fontSize="32px" fontWeight="bold" pt="20px">
                         {event.title}
                     </Text>
-                    <Text pt="10px" pb="20px">
-                        เปิดให้ดาว์นโหลดตั้งแต่ {event.StartDownload} ถึง {event.EndedDownload}
+                    <Text pt="10px" pb="10px">
+                        เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(event.StartDownload)} ถึง {dateFormatChange(event.EndedDownload)}
+                    </Text>
+                    <Text pb="20px" color={event.approve? "green" : "red"}>
+                        สถานะ : {event.approve ? "อนุมัติ" : "รอการอนุมัติ"}
                     </Text>
                     <Text fontSize="18px" fontWeight={"bold"}>
                         ใบประกาศนียบัตร

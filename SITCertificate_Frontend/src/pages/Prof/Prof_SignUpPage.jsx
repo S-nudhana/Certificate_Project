@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 export default function Prof_SignUpPage() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  const isFormFilled = () => email.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '';
+  const isFormFilled = () => username.trim() !== '' && email.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '';
   const navigate = useNavigate();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false)
@@ -75,8 +76,18 @@ export default function Prof_SignUpPage() {
             </Text>
           </Stack>
           <Stack spacing={4}>
-            <FormControl id="email" isInvalid={emailError}>
+          <FormControl id="Text">
               <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อผู้ใช้</FormLabel>
+              <Input
+                type="text"
+                placeholder="ชื่อผู้ใช้"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <FormErrorMessage>{emailError}</FormErrorMessage>
+            </FormControl>
+            <FormControl id="email" isInvalid={emailError}>
+              <FormLabel fontSize={["sm", "lg", "lg"]}>อีเมล</FormLabel>
               <Input
                 type="email"
                 placeholder="อีเมล"

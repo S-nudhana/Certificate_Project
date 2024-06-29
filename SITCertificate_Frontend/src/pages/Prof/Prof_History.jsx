@@ -1,29 +1,70 @@
 import React, { useState } from "react";
-import { Box, Text, Image, Card, Button, Flex } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { data } from "../../utils/mockUpData";
 import {
-  dateCheck,
-  dateFormatChange,
-  dateOverThirty,
-} from "../../utils/function";
+  Box,
+  Text,
+  Image,
+  Card,
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightAddon,
+} from "@chakra-ui/react";
+import { ScrollRestoration, useNavigate } from "react-router-dom";
+import { data } from "../../utils/mockUpData";
+import { dateCheck, dateFormatChange } from "../../utils/function";
+import { FaSearch } from "react-icons/fa";
+
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import BackBTN from "../../components/BackBTN";
 
 export default function Admin_History() {
   const navigate = useNavigate();
   var amount = 0;
   return (
     <>
-      <Flex alignItems={'center'} pt="50px" pl={["40px", "40px", "100px", "100px", "100px", "300px"]}>
+      <ScrollRestoration />
+      <Navbar />
+      <Box
+        pt={"120px"}
+        pb={"20px"}
+        pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+      >
+        <BackBTN />
+      </Box>
+      <Box
+        width={"100%"}
+        display={{base: 'block',md: "flex"}}
+        justifyContent={"space-between"}
+        pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+      >
         <Text
           fontSize="28px"
           fontWeight="bold"
           textDecoration="underline"
           textUnderlineOffset="2px"
+          pb={{base: "20px", md: "0"}}
         >
           ประวัติกิจกรรม
         </Text>
-        <Text pl={"5px"} fontSize={'20px'}>(30 วันที่ผ่านมา)</Text>
-      </Flex>
+        <InputGroup width={{base: "90%", md: '50%', lg: '500px'}} mr={["40px", "40px", "100px", "100px", "100px", "300px"]}>
+          <InputLeftElement pointerEvents="none">
+            <FaSearch color="gray.300" />
+          </InputLeftElement>
+          <Input
+            borderRadius={"10px"}
+            type="text"
+            placeholder="ค้นหากิจกรรม"
+          ></Input>
+          <InputRightAddon p={'0'} border="none">
+            <Button bgColor={"#3399cc"} color={'white'} borderLeftRadius={"0"} borderRightRadius={'10px'} transition={".3s"} _hover={{bgColor: '#297AA3'}}>
+              Search
+            </Button>
+          </InputRightAddon>
+        </InputGroup>
+      </Box>
       <Box pb={"20px"}>
         <Box
           display="flex"
@@ -35,10 +76,7 @@ export default function Admin_History() {
           mx="auto"
         >
           {data.map((item, key) => {
-            if (
-              !dateCheck(item.EndedDownload) &&
-              !dateOverThirty(item.EndedDownload)
-            ) {
+            if (!dateCheck(item.EndedDownload)) {
               amount = key;
               return (
                 <Card
@@ -97,10 +135,11 @@ export default function Admin_History() {
             display={amount === 0 ? "flex" : "none"}
             justifyContent={"center"}
           >
-            <Text>ไม่มีกิจกรรมใน 30 วันที่ผ่านมา</Text>
+            <Text>ไม่มีกิจกรรม</Text>
           </Box>
         </Box>
       </Box>
+      <Footer />
     </>
   );
 }
