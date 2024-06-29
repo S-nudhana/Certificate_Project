@@ -1,4 +1,3 @@
-import React from 'react'
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom'
 import { Box, Text, Button, Image } from '@chakra-ui/react'
 import img from '../../assets/img/SIT_Building.png'

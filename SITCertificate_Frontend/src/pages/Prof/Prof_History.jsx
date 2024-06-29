@@ -1,11 +1,9 @@
-import React, { useState } from "react";
 import {
   Box,
   Text,
   Image,
   Card,
   Button,
-  Flex,
   Input,
   InputGroup,
   InputLeftElement,

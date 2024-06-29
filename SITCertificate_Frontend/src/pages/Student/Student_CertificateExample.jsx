@@ -1,6 +1,5 @@
-import React from 'react';
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
-import { Box, Button, Text, Image, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Text, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure } from '@chakra-ui/react';
 import img from '../../assets/img/SIT_Building.png';
 
 import Navbar from '../../components/Navbar';
