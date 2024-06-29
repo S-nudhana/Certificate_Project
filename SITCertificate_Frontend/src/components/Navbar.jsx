@@ -99,7 +99,7 @@ export default function Navbar() {
           variant="link"
           display={{ base: "none", md: "flex" }}
           color={"#E5E4E2"}
-          _hover={{ color: "white" , textDecoration: 'underline', textUnderlineOffset: '2px'}}
+          _hover={{ color: "white" }}
           onClick={() => {
             // navigate(historyAcess());
             navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
