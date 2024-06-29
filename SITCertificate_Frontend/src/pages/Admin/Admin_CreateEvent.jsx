@@ -73,7 +73,16 @@ function Admin_CreateEvent() {
                     placeholder="กรอกชื่อกิจกรรม"
                   />
                 </FormControl>
-
+                <FormControl id="">
+                  <FormLabel fontSize={["sm", "md", "md"]}>
+                    ชื่อผู้จัดกิจกรรม
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    size={["sm", "md", "md"]}
+                    placeholder="กรอกชื่อผู้จัดกิจกรรม"
+                  />
+                </FormControl>
                 <HStack w="full">
                   <Box w={"50%"}>
                     <FormControl id="">
