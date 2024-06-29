@@ -1,12 +1,12 @@
-import React from "react";
 import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
-import { useNavigate, ScrollRestoration, Outlet } from "react-router-dom";
+import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { dateCheck, dateFormatChange } from "../../utils/function";
+import { data } from "../../utils/mockUpData";
+import authMiddleware from "../../utils/authMiddleware";
+import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { data } from "../../utils/mockUpData";
-import authMiddleware from "../../utils/authMiddleware";
 
 function Prof_Homepage() {
   const navigate = useNavigate();
@@ -15,6 +15,22 @@ function Prof_Homepage() {
       <ScrollRestoration />
       <Navbar />
       <Box pt="100px" pb={"40px"}>
+      <Button
+          leftIcon={<FaHistory />}
+          ml={["40px", "40px", "100px", "100px", "100px", "300px"]}
+          cursor="pointer"
+          bgColor={"#3399cc"}
+          color={"white"}
+          fontSize={"medium"}
+          height={"47px"}
+          transition={".2s"}
+          _hover={{ bgColor: "#297AA3" }}
+          onClick={() => {
+            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
+          }}
+        >
+          ประวัติกิจกรรม
+        </Button>
         <Text
           fontSize="28px"
           fontWeight="bold"
@@ -73,7 +89,7 @@ function Prof_Homepage() {
                         _hover={{ bgColor: "#297AA3" }}
                         onClick={() => {
                           navigate(
-                            import.meta.env.VITE_ADMIN_PATH_DETAILS +
+                            import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
                               `${item.id}`
                           );
                         }}
@@ -145,7 +161,7 @@ function Prof_Homepage() {
                         _hover={{ bgColor: "#297AA3" }}
                         onClick={() => {
                           navigate(
-                            import.meta.env.VITE_ADMIN_PATH_DETAILS +
+                            import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
                               `${item.id}`
                           );
                         }}

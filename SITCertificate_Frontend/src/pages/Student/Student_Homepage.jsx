@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 

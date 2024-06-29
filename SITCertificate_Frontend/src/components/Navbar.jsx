@@ -13,7 +13,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { FaHistory } from "react-icons/fa";
+// import { FaHistory } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -95,7 +95,7 @@ export default function Navbar() {
         SITCertificate
       </Text>
       <Flex gap={{base: '10px', md:"30px"}}>
-        <Button
+        {/* <Button
           variant="link"
           display={{ base: "none", md: "flex" }}
           color={"#E5E4E2"}
@@ -118,7 +118,7 @@ export default function Navbar() {
             // navigate(historyAcess());
             navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
           }}
-        />
+        /> */}
         <Button
           leftIcon={<FaArrowRightFromBracket />}
           bgColor="#336699"

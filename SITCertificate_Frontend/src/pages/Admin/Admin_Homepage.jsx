@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Box, Text, Image, Card, Button, Flex } from "@chakra-ui/react";
-import { useNavigate, ScrollRestoration, Outlet } from "react-router-dom";
+import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
+import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
+import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -24,13 +24,29 @@ function Admin_Homepage() {
           color={"white"}
           fontSize={"medium"}
           height={"47px"}
-          transition={".2s ease-in"}
+          transition={".2s"}
           _hover={{ bgColor: "#1f568c" }}
           onClick={() => {
             navigate(import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT);
           }}
         >
           เพิ่มกิจกรรม
+        </Button>
+        <Button
+          leftIcon={<FaHistory />}
+          ml={'20px'}
+          cursor="pointer"
+          bgColor={"#3399cc"}
+          color={"white"}
+          fontSize={"medium"}
+          height={"47px"}
+          transition={".2s"}
+          _hover={{ bgColor: "#297AA3" }}
+          onClick={() => {
+            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
+          }}
+        >
+          ประวัติกิจกรรม
         </Button>
         <Text
           fontSize="28px"
@@ -214,20 +230,3 @@ function Admin_Homepage() {
   );
 }
 export default authMiddleware(Admin_Homepage);
-
-// create new btn
-// w="300px"
-// h="auto"
-// bg="linear-gradient(90deg, rgba(51,153,204,1) 0%, rgba(51,102,153,1) 55%, rgba(31,86,140,1) 100%)"
-// borderRadius="30px"
-// boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-// color="white"
-// transition=".2s ease-in"
-// cursor="pointer"
-// _hover={{
-//     boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)', // increase box-shadow on hover
-//     transform: 'scale(1.01)',
-// }}
-// onClick={() => {
-//     navigate(import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT);
-// }}

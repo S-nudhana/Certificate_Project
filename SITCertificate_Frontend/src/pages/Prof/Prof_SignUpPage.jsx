@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, IconButton, Stack, Link, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
 import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/SIT_Icon.png";

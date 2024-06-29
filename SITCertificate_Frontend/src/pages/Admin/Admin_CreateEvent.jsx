@@ -20,7 +20,11 @@ import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 
 function Admin_CreateEvent() {
+  const [activityName, setActivityName] = useState();
+  const [activityOwnerName, setActivityOwnerName] = useState();
   const [thumbnail, setThumbnail] = useState();
+  const [openDate, setOpenDate] = useState();
+  const [closeDate, setCloseDate] = useState();
   const [template, setTemplate] = useState();
   const [Excel, setExcel] = useState();
 
@@ -71,6 +75,8 @@ function Admin_CreateEvent() {
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อกิจกรรม"
+                    value={activityName}
+                    onChange={(e) => setActivityName(e.target.value)}
                   />
                 </FormControl>
                 <FormControl id="">
@@ -81,6 +87,8 @@ function Admin_CreateEvent() {
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อผู้จัดกิจกรรม"
+                    value={activityOwnerName}
+                    onChange={(e) => setActivityOwnerName(e.target.value)}
                   />
                 </FormControl>
                 <HStack w="full">
@@ -93,6 +101,8 @@ function Admin_CreateEvent() {
                         placeholder="Select Date and Time"
                         size={["sm", "md", "md"]}
                         type="date"
+                        value={openDate}
+                        onChange={(e) => setOpenDate(e.target.value)}
                       />
                     </FormControl>
                   </Box>
@@ -105,6 +115,8 @@ function Admin_CreateEvent() {
                         placeholder="Select Date and Time"
                         size={["sm", "md", "md"]}
                         type="date"
+                        value={closeDate}
+                        onChange={(e) => setCloseDate(e.target.value)}
                       />
                     </FormControl>
                   </Box>

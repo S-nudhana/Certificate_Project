@@ -1,11 +1,9 @@
-import React from "react";
 import {
   Box,
   Text,
   Image,
   Card,
   Button,
-  Flex,
   Input,
   InputGroup,
   InputLeftElement,
@@ -16,7 +14,6 @@ import { data } from "../../utils/mockUpData";
 import {
   dateCheck,
   dateFormatChange,
-  dateOverThirty,
 } from "../../utils/function";
 import { FaSearch } from "react-icons/fa";
 
