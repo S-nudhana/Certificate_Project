@@ -1,9 +1,11 @@
 import express from "express";
 import setEvent from "../controller/admin/setEvent.js";
-import CreateAdmin from "../controller/admin/creatAdmin.js";
+import createAdmin from "../controller/admin/creatAdmin.js";
+import getAllInProgressEvent from "../controller/admin/getAllInProgressEvent.js";
 const adminRouter = express.Router();
 
 adminRouter.post("/createEvent", setEvent);
-adminRouter.post("/register", CreateAdmin);
+adminRouter.post("/register", createAdmin);
+adminRouter.get("/allEvent", getAllInProgressEvent);
 
 export default adminRouter;

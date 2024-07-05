@@ -20,7 +20,9 @@ const SignInProf = async (req, res) => {
     res.cookie("userToken", signedToken, {
       httpOnly: true,
     });
-    return res.status(201).json({ message: "Login Successful", isCustomer: user[0][0].isCustomer });
+    return res
+      .status(201)
+      .json({ message: "Login Successful", isCustomer: user[0][0].isCustomer });
   } catch (e) {
     return res.status(500).json({ message: e });
   }
