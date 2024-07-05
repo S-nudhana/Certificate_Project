@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import connection from "../../db/connection.js";
 
-const CreateAdmin = async (req, res) => {
+const createAdmin = async (req, res) => {
   try {
     const { username,email, password } = req.body;
     if (!username || !email || !password) {
@@ -35,4 +35,4 @@ const CreateAdmin = async (req, res) => {
   }
 };
 
-export default CreateAdmin;
+export default createAdmin;
