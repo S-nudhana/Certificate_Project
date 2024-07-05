@@ -64,7 +64,7 @@ export default function Student_SignInPage() {
           </Stack>
           <Stack spacing={4}>
             <FormControl id="email" isInvalid={emailError}>
-              <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อผู้ใช้</FormLabel>
+              <FormLabel fontSize={["sm", "lg", "lg"]}>อีเมล</FormLabel>
               <Input
                 type="email"
                 placeholder="อีเมล"
@@ -79,7 +79,7 @@ export default function Student_SignInPage() {
               <InputGroup size='md'>
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="รหัสผ่าน"
+                  placeholder="หมายเลขโทรศัพท์"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

@@ -65,7 +65,7 @@ export default function Admin_SignInPage() {
           </Stack>
           <Stack spacing={4}>
             <FormControl id="email" isInvalid={emailError}>
-              <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อผู้ใช้</FormLabel>
+              <FormLabel fontSize={["sm", "lg", "lg"]}>อีเมล</FormLabel>
               <Input
                 type="email"
                 placeholder="อีเมล"

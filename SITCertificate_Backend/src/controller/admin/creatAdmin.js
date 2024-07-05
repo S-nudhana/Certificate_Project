@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import connection from "../../db/connection.js";
 
-const CreateProf = async (req, res) => {
+const CreateAdmin = async (req, res) => {
   try {
     const { username,email, password } = req.body;
     if (!username || !email || !password) {
@@ -12,7 +12,7 @@ const CreateProf = async (req, res) => {
 
     const users = await connection
       .promise()
-      .query(`SELECT professor_email from professor where professor_email = ?`, [email]);
+      .query(`SELECT admin_email from admin where admin_email = ?`, [email]);
 
     if (users[0].length > 0) {
       return res.status(400).json({
@@ -24,7 +24,7 @@ const CreateProf = async (req, res) => {
     const hashed_password = bcrypt.hashSync(password, salt);
 
     const query =
-      "INSERT INTO professor (professor_userName, professor_email ,professor_password) VALUES (?, ?, ?)";
+      "INSERT INTO admin (admin_userName, admin_email ,admin_password) VALUES (?, ?, ?)";
 
     const values = [username, email, hashed_password];
 
@@ -35,4 +35,4 @@ const CreateProf = async (req, res) => {
   }
 };
 
-export default CreateProf;
+export default CreateAdmin;

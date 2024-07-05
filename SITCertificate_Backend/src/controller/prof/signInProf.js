@@ -1,6 +1,6 @@
-const connection = require("../../db/connection");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import connection from "../../database.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const SignInProf = async (req, res) => {
   try {
@@ -26,4 +26,4 @@ const SignInProf = async (req, res) => {
   }
 };
 
-module.exports = SignIn;
+export default SignInProf;

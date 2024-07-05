@@ -1,8 +1,8 @@
-const express = require("express");
-const CreateProf = require("../controller/prof/createProf");
+import express from "express";
+import CreateProf from "../controller/prof/createProf.js";
 
 const profRouter = express.Router();
 
 profRouter.post("/register", CreateProf);
 
-module.exports = profRouter;
+export default profRouter;
