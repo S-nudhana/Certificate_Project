@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
@@ -8,9 +9,20 @@ import Footer from "../../components/Footer";
 import { data } from "../../utils/mockUpData";
 import authMiddleware from "../../utils/authMiddleware";
 import { dateCheck, dateFormatChange } from "../../utils/function";
+import axiosInstance from '../../utils/axiosInstance';
+import axios from 'axios';
 
 function Admin_Homepage() {
   const navigate = useNavigate();
+  const [eventData, setEventData] = useState();
+  const getEventData = async () => {
+    const response = await axiosInstance.get(`/admin/allEvent`);
+    setEventData(response.data.data);
+  };
+  useEffect(() => {
+    getEventData();
+  }, []);
+  console.log(eventData)
   return (
     <>
       <ScrollRestoration />
@@ -68,8 +80,8 @@ function Admin_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {data.map((item) => {
-              if (!item.approve && dateCheck(item.EndedDownload)) {
+            {eventData && eventData.map((item) => {
+              if (!item.event_approve && dateCheck(item.event_endDate)) {
                 return (
                   <Card
                     width="300px"
@@ -84,7 +96,7 @@ function Admin_Homepage() {
                     }}
                   >
                     <Image
-                      src={item.img}
+                      src={item.event_thumbnail}
                       objectFit="cover"
                       borderTopLeftRadius="30px"
                       borderTopRightRadius="30px"
@@ -92,11 +104,11 @@ function Admin_Homepage() {
                     />
                     <Box p="30px">
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
-                        {item.title}
+                        {item.event_name}
                       </Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px">
-                        {dateFormatChange(item.StartDownload)} ถึง {dateFormatChange(item.EndedDownload)}
+                        {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
                       </Text>
                       <Button
                         width="90px"
@@ -107,7 +119,7 @@ function Admin_Homepage() {
                         onClick={() => {
                           navigate(
                             import.meta.env.VITE_ADMIN_PATH_EDIT_EVENTS +
-                              `${item.id}`
+                            `${item.event_Id}`
                           );
                         }}
                       >
@@ -123,7 +135,7 @@ function Admin_Homepage() {
                         onClick={() => {
                           navigate(
                             import.meta.env.VITE_ADMIN_PATH_DETAILS +
-                              `${item.id}`
+                            `${item.event_Id}`
                           );
                         }}
                       >
@@ -211,7 +223,7 @@ function Admin_Homepage() {
                         onClick={() => {
                           navigate(
                             import.meta.env.VITE_ADMIN_PATH_DETAILS +
-                              `${item.id}`
+                            `${item.id}`
                           );
                         }}
                       >

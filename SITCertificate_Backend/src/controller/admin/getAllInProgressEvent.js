@@ -1,16 +1,15 @@
-import connection from "../../db/connect.js";
+import db from "../../db/connection.js";
 
-export const getAllInProgressEvent = async (res) => {
+const getAllInProgressEvent = async (req,res) => {
+  console.log("first")
   try {
-    const dataQuery = await connection.promise().query(`SELECT * FROM  event WHERE DATE(event_stopDate) <= CURDATE()  ORDER BY event_startDate DESC`);
+    const dataQuery = await db
+      .promise()
+      .query(
+        `SELECT * FROM event`
+      );
     const data = dataQuery[0];
-    if (!data) {
-      return res.status(404).json({
-        success: false,
-        data: null,
-        error: "Id not found",
-      });
-    }
+    console.log(data);
     return res.json({
       success: true,
       data: data,
@@ -25,3 +24,4 @@ export const getAllInProgressEvent = async (res) => {
     });
   }
 };
+export default getAllInProgressEvent;

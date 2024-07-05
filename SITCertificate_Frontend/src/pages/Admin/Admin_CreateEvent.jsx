@@ -13,17 +13,19 @@ import {
   Img,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 import axiosInstance from "../../utils/axiosInstance";
-import axios from "axios";
+
 
 function Admin_CreateEvent() {
-  const [eventName, seteventName] = useState();
-  const [eventOwnerName, seteventOwnerName] = useState();
+  const navigate = useNavigate();
+  const [eventName, seteventName] = useState('');
+  const [eventOwnerName, seteventOwnerName] = useState('');
   const [thumbnail, setThumbnail] = useState();
   const [openDate, setOpenDate] = useState();
   const [closeDate, setCloseDate] = useState();
@@ -44,19 +46,17 @@ function Admin_CreateEvent() {
 
   const handlesubmit = async () => {
     try {
-      // const response = await axiosInstance.post("/admin/createEvent", {
-      const response = await axios.post("http://localhost:3000/admin/createEvent", {
+      console.log(eventName)
+      console.log(thumbnail)
+      const response = await axiosInstance.post("/admin/createEvent", {
         eventName: eventName,
         eventOwner: eventOwnerName,
-        // eventStartDate: openDate,
-        // eventStopDate: closeDate,
-        // email: form.email,
+        openDate: openDate,
+        closeDate: closeDate,
+        thumbnail: thumbnail,
       });
       if (response.status === 200) {
-        setOpenSuccessDialog(true);
-        setTimeout(() => {
-          navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
-        }, 2000);
+        navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
       }
     } catch (error) {
       console.error("Error creating evnet:", error);
@@ -192,9 +192,7 @@ function Admin_CreateEvent() {
                     color="white"
                     _hover={{ bg: "#1F568C" }}
                     fontSize={["sm", "lg", "lg"]}
-                    onClick={() => {
-                      handlesubmit();
-                    }}
+                    onClick={handlesubmit}
                   >
                     สร้างกิจกรรม
                   </Button>
