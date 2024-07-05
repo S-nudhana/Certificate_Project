@@ -18,10 +18,12 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
+import axiosInstance from "../../utils/axiosInstance";
+import axios from "axios";
 
 function Admin_CreateEvent() {
-  const [activityName, setActivityName] = useState();
-  const [activityOwnerName, setActivityOwnerName] = useState();
+  const [eventName, seteventName] = useState();
+  const [eventOwnerName, seteventOwnerName] = useState();
   const [thumbnail, setThumbnail] = useState();
   const [openDate, setOpenDate] = useState();
   const [closeDate, setCloseDate] = useState();
@@ -40,6 +42,26 @@ function Admin_CreateEvent() {
     setExcel(URL.createObjectURL(e.target.files[0]));
   }
 
+  const handlesubmit = async () => {
+    try {
+      // const response = await axiosInstance.post("/admin/createEvent", {
+      const response = await axios.post("http://localhost:3000/admin/createEvent", {
+        eventName: eventName,
+        eventOwner: eventOwnerName,
+        // eventStartDate: openDate,
+        // eventStopDate: closeDate,
+        // email: form.email,
+      });
+      if (response.status === 200) {
+        setOpenSuccessDialog(true);
+        setTimeout(() => {
+          navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error creating evnet:", error);
+    }
+  }
   return (
     <>
       <Navbar />
@@ -75,8 +97,8 @@ function Admin_CreateEvent() {
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อกิจกรรม"
-                    value={activityName}
-                    onChange={(e) => setActivityName(e.target.value)}
+                    value={eventName}
+                    onChange={(e) => seteventName(e.target.value)}
                   />
                 </FormControl>
                 <FormControl id="">
@@ -87,8 +109,8 @@ function Admin_CreateEvent() {
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อผู้จัดกิจกรรม"
-                    value={activityOwnerName}
-                    onChange={(e) => setActivityOwnerName(e.target.value)}
+                    value={eventOwnerName}
+                    onChange={(e) => seteventOwnerName(e.target.value)}
                   />
                 </FormControl>
                 <HStack w="full">
@@ -170,6 +192,9 @@ function Admin_CreateEvent() {
                     color="white"
                     _hover={{ bg: "#1F568C" }}
                     fontSize={["sm", "lg", "lg"]}
+                    onClick={() => {
+                      handlesubmit();
+                    }}
                   >
                     สร้างกิจกรรม
                   </Button>
