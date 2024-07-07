@@ -3,14 +3,13 @@ import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
+import {data} from "../../utils/mockUpData";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { data } from "../../utils/mockUpData";
 import authMiddleware from "../../utils/authMiddleware";
 import { dateCheck, dateFormatChange } from "../../utils/function";
 import axiosInstance from '../../utils/axiosInstance';
-import axios from 'axios';
 
 function Admin_Homepage() {
   const navigate = useNavigate();
@@ -22,7 +21,6 @@ function Admin_Homepage() {
   useEffect(() => {
     getEventData();
   }, []);
-  console.log(eventData)
   return (
     <>
       <ScrollRestoration />
@@ -55,7 +53,7 @@ function Admin_Homepage() {
           transition={".2s"}
           _hover={{ bgColor: "#297AA3" }}
           onClick={() => {
-            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
+            navigate(import.meta.env.VITE_ADMIN_PATH_HISTORY);
           }}
         >
           ประวัติกิจกรรม
