@@ -12,16 +12,21 @@ import {
   useColorModeValue,
   Img,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
+import axiosInstance from "../../utils/axiosInstance";
+import { formatDate } from "../../utils/function";
 
 function Admin_EditEvent() {
-  const [activityName, setActivityName] = useState();
-  const [activityOwnerName, setActivityOwnerName] = useState();
+  const id = useParams();
+  const navigate = useNavigate();
+  const [eventName, setEventName] = useState();
+  const [eventOwnerName, setEventOwnerName] = useState();
   const [thumbnail, setThumbnail] = useState();
   const [openDate, setOpenDate] = useState();
   const [closeDate, setCloseDate] = useState();
@@ -36,6 +41,32 @@ function Admin_EditEvent() {
   function handleExcel(e) {
     setExcel(URL.createObjectURL(e.target.files[0]));
   }
+  const getEventData = async () => {
+    const response = await axiosInstance.get(`/admin/event?id=${id.id}`);
+    setEventName(response.data.data[0].event_name);
+    setEventOwnerName(response.data.data[0].event_owner);
+    setThumbnail(response.data.data[0].event_thumbnail);
+    setOpenDate(formatDate(response.data.data[0].event_startDate));
+    setCloseDate(formatDate(response.data.data[0].event_endDate));
+  };
+  const updateEventData = async () => {
+    try {
+      await axiosInstance.put(`/admin/updateEvent`, {
+        eventName: eventName,
+        eventOwner: eventOwnerName,
+        openDate: openDate,
+        closeDate: closeDate,
+        thumbnail: thumbnail,
+        eventId: id.id
+      });
+      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+    } catch (error) {
+      console.error('Error updating event data:', error);
+    }
+  };
+  useEffect(() => {
+    getEventData();
+  }, []);
 
   return (
     <>
@@ -72,8 +103,8 @@ function Admin_EditEvent() {
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อกิจกรรม"
-                    value={activityName}
-                    onChange={(e) => setActivityName(e.target.value)}
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
                   />
                 </FormControl>
                 <FormControl id="">
@@ -84,8 +115,8 @@ function Admin_EditEvent() {
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อผู้จัดกิจกรรม"
-                    value={activityOwnerName}
-                    onChange={(e) => setActivityOwnerName(e.target.value)}
+                    value={eventOwnerName}
+                    onChange={(e) => setEventOwnerName(e.target.value)}
                   />
                 </FormControl>
                 <HStack w="full">
@@ -168,6 +199,9 @@ function Admin_EditEvent() {
                     color="white"
                     _hover={{ bg: "#1F568C" }}
                     fontSize={["sm", "lg", "lg"]}
+                    onClick={() => {
+                      updateEventData();
+                    }}
                   >
                     บันทึก
                   </Button>

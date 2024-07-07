@@ -12,6 +12,14 @@ export const dateFormatChange = (date) => {
   return `${day}/${month}/${year}`;
 };
 
+export const formatDate = (date) => {
+  const dateChange = new Date(date);
+  const year = dateChange.getFullYear();
+  const month = String(dateChange.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const day = String(dateChange.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const dateOverSeven = (date) => {
     const inputDate = new Date(date);
     const currentDate = new Date();

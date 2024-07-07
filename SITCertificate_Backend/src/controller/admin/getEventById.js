@@ -1,12 +1,11 @@
 import db from "../../db/connection.js";
 
-const getAllInProgressEvent = async (req,res) => {
+const getEventById = async (req, res) => {
+  const id = req.query.id;
   try {
     const dataQuery = await db
       .promise()
-      .query(
-        `SELECT * FROM event WHERE event_endDate > NOW() ORDER BY event_startDate DESC`
-      );
+      .query(`SELECT * FROM event WHERE event_Id = ?`, [id]);
     const data = dataQuery[0];
     return res.json({
       success: true,
@@ -22,4 +21,4 @@ const getAllInProgressEvent = async (req,res) => {
     });
   }
 };
-export default getAllInProgressEvent;
+export default getEventById;
