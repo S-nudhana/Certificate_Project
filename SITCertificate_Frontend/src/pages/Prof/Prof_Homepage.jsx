@@ -1,21 +1,33 @@
+import { useState, useEffect } from 'react'
 import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
-import { dateCheck, dateFormatChange } from "../../utils/function";
-import { data } from "../../utils/mockUpData";
-import authMiddleware from "../../utils/authMiddleware";
 import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import axiosInstance from '../../utils/axiosInstance';
+import { dateCheck, dateFormatChange } from "../../utils/function";
+import authMiddleware from "../../utils/authMiddleware";
 
 function Prof_Homepage() {
   const navigate = useNavigate();
+  const [eventData, setEventData] = useState();
+  var pendingAmount = 0;
+  var approvedAmount = 0;
+  const getEventData = async () => {
+    const response = await axiosInstance.get(`/user/allEvent`);
+    setEventData(response.data.data);
+    console.log(response.data.data)
+  };
+  useEffect(() => {
+    getEventData();
+  }, []);
   return (
     <>
       <ScrollRestoration />
       <Navbar />
       <Box pt="100px" pb={"40px"}>
-      <Button
+        <Button
           leftIcon={<FaHistory />}
           ml={["40px", "40px", "100px", "100px", "100px", "300px"]}
           cursor="pointer"
@@ -51,8 +63,9 @@ function Prof_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {data.map((item) => {
-              if (!item.approve && dateCheck(item.EndedDownload)) {
+            {eventData && eventData.map((item, key) => {
+              pendingAmount = key + 1;
+              if (!item.event_approve && dateCheck(item.event_endDate)) {
                 return (
                   <Card
                     width="300px"
@@ -67,7 +80,7 @@ function Prof_Homepage() {
                     }}
                   >
                     <Image
-                      src={item.img}
+                      src={item.event_thumbnail}
                       objectFit="cover"
                       borderTopLeftRadius="30px"
                       borderTopRightRadius="30px"
@@ -75,11 +88,11 @@ function Prof_Homepage() {
                     />
                     <Box p="30px">
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
-                        {item.title}
+                        {item.event_name}
                       </Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px">
-                        {dateFormatChange(item.StartDownload)} ถึง {dateFormatChange(item.EndedDownload)}
+                        {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
                       </Text>
                       <Button
                         width="130px"
@@ -90,7 +103,7 @@ function Prof_Homepage() {
                         onClick={() => {
                           navigate(
                             import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
-                              `${item.id}`
+                            `${item.event_Id}`
                           );
                         }}
                       >
@@ -101,6 +114,16 @@ function Prof_Homepage() {
                 );
               }
             })}
+          </Box>
+          <Box
+            display={pendingAmount === 0 ? "flex" : "none"}
+            alignItems={'center'}
+            textAlign={'center'}
+            width={"100%"}
+            height={"15vh"}
+            justifyContent={"center"}
+          >
+            <Text>ไม่พบกิจกรรมที่รอการอนุมัติ</Text>
           </Box>
         </Box>
         <Text
@@ -123,8 +146,9 @@ function Prof_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {data.map((item) => {
-              if (item.approve && dateCheck(item.EndedDownload)) {
+            {eventData && eventData.map((item, key) => {
+              approvedAmount = key + 1;
+              if (item.event_approve && dateCheck(item.event_endDate)) {
                 return (
                   <Card
                     width="300px"
@@ -139,7 +163,7 @@ function Prof_Homepage() {
                     }}
                   >
                     <Image
-                      src={item.img}
+                      src={item.event_thumbnail}
                       objectFit="cover"
                       borderTopLeftRadius="30px"
                       borderTopRightRadius="30px"
@@ -147,11 +171,11 @@ function Prof_Homepage() {
                     />
                     <Box p="30px">
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
-                        {item.title}
+                        {item.event_name}
                       </Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px">
-                        {dateFormatChange(item.StartDownload)} ถึง {dateFormatChange(item.EndedDownload)}
+                        {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
                       </Text>
                       <Button
                         width="130px"
@@ -162,7 +186,7 @@ function Prof_Homepage() {
                         onClick={() => {
                           navigate(
                             import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
-                              `${item.id}`
+                            `${item.event_Id}`
                           );
                         }}
                       >
@@ -173,6 +197,16 @@ function Prof_Homepage() {
                 );
               }
             })}
+          </Box>
+          <Box
+            display={approvedAmount === 0 ? "flex" : "none"}
+            alignItems={'center'}
+            textAlign={'center'}
+            width={"100%"}
+            height={"15vh"}
+            justifyContent={"center"}
+          >
+            <Text>ไม่พบกิจกรรมที่ได้รับการอนุมัติ</Text>
           </Box>
         </Box>
       </Box>

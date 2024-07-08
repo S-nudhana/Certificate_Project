@@ -47,7 +47,7 @@ export default function Admin_SignUpPage() {
         duration: 2000,
         isClosable: true,
       });
-      navigate(import.meta.env.VITE_PROFESSOR_PATH_LOGIN);
+      navigate(import.meta.env.VITE_ADMIN_PATH_LOGIN);
     } else {
       toast({
         title: 'Account has been used.',

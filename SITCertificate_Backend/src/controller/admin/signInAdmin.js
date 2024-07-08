@@ -16,7 +16,7 @@ const SignInAdmin = async (req, res) => {
       admin_id: user[0][0].admin_id,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
-    res.cookie("userToken", signedToken, {
+    res.cookie("adminToken", signedToken, {
       httpOnly: true,
     });
     return res

@@ -42,12 +42,12 @@ function Admin_EditEvent() {
     setExcel(URL.createObjectURL(e.target.files[0]));
   }
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/admin/event?id=${id.id}`);
-    setEventName(response.data.data[0].event_name);
-    setEventOwnerName(response.data.data[0].event_owner);
-    setThumbnail(response.data.data[0].event_thumbnail);
-    setOpenDate(formatDate(response.data.data[0].event_startDate));
-    setCloseDate(formatDate(response.data.data[0].event_endDate));
+    const response = await axiosInstance.get(`/user/event?id=${id.id}`);
+    setEventName(response.data.data.event_name);
+    setEventOwnerName(response.data.data.event_owner);
+    setThumbnail(response.data.data.event_thumbnail);
+    setOpenDate(formatDate(response.data.data.event_startDate));
+    setCloseDate(formatDate(response.data.data.event_endDate));
   };
   const updateEventData = async () => {
     try {

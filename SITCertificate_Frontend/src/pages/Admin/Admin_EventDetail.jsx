@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Flex,
     Heading,
@@ -15,42 +15,38 @@ import { FaCheck } from "react-icons/fa6";
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import BackBTN from '../../components/BackBTN';
-import { data } from "../../utils/mockUpData";
-import img from '../../assets/img/SIT_Building.png';
-import { comment } from '../Prof/Prof_EventDetail';
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
+import axiosInstance from '../../utils/axiosInstance';
 
 function Admin_EventDetail() {
     const { id } = useParams();
-    const event = data.find(item => item.id === id);
-    const [comments, setComments] = useState(comment);
-
-    const toggleCommentCompletion = (commentId) => {
-        setComments(comments.map(comment =>
-            comment.id === commentId
-                ? { ...comment, completed: !comment.completed }
-                : comment
-        ));
+    const [eventData, setEventData] = useState();
+    const getEventData = async () => {
+        const response = await axiosInstance.get(`/user/event?id=${id}`);
+        setEventData(response.data.data);
     };
-
+    useEffect(() => {
+        getEventData()
+    }, []);
     return (
         <>
-        <ScrollRestoration/>
+            <ScrollRestoration />
             <Navbar />
             <Box pt={"120px"} ml={["10%", "10%", "5%"]}>
                 <BackBTN />
             </Box>
-            <Stack minH={"80vh"} direction={["column", "column", "row"]} mb={"50px"}>
+            {eventData && (
+                <Stack minH={"80vh"} direction={["column", "column", "row"]} mb={"50px"}>
                 <Flex flex={1} direction={"column"} ml={["10%", "10%", "5%"]} >
                     <Text fontSize="32px" fontWeight="bold" pt="20px">
-                        {event.title}
+                        {eventData.event_name}
                     </Text>
                     <Text pt="10px" pb="10px">
-                        เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(event.StartDownload)} ถึง {dateFormatChange(event.EndedDownload)}
+                        เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
                     </Text>
-                    <Text pb="20px" color={event.approve? "green" : "red"}>
-                        สถานะ : {event.approve ? "อนุมัติ" : "รอการอนุมัติ"}
+                    <Text pb="20px" color={eventData.event_approve ? "green" : "red"}>
+                        สถานะ : {eventData.event_approve ? "อนุมัติ" : "รอการอนุมัติ"}
                     </Text>
                     <Text fontSize="18px" fontWeight={"bold"}>
                         ใบประกาศนียบัตร
@@ -58,7 +54,7 @@ function Admin_EventDetail() {
                     <Image
                         width="90%"
                         height={"auto"}
-                        src={img}
+                        src={eventData.thumbnail}
                         my={"20px"}
                         boxShadow={"lg"}
                     ></Image>
@@ -67,7 +63,7 @@ function Admin_EventDetail() {
                     <Stack spacing={5} w={"full"} pr={"10%"}>
                         <Heading fontSize={"2xl"} pt="20px">Comment</Heading>
                         <Box width={'100%'}>
-                            {comments.map((item) => (
+                            {/* {comments.map((item) => (
                                 <Card p={'20px'} mb={'20px'} variant={'outline'} key={item.id}>
                                     <Flex alignItems={'center'} justifyContent={'space-between'} gap={'10px'}>
                                         <Text fontWeight={'bold'}>{item.username}</Text>
@@ -83,11 +79,12 @@ function Admin_EventDetail() {
                                     </Flex>
                                     <Text>{item.Detail}</Text>
                                 </Card>
-                            ))}
+                            ))} */}
                         </Box>
                     </Stack>
                 </Flex>
             </Stack>
+            )}
             <Footer />
         </>
     );

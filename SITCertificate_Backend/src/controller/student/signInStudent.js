@@ -21,7 +21,7 @@ const SignInStudent = async (req, res) => {
       student_id: user[0][0].student_id,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
-    res.cookie("userToken", signedToken, {
+    res.cookie("token", signedToken, {
       httpOnly: true,
     });
     return res.status(201).json({ message: "Login Successful" });
