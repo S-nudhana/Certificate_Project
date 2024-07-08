@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
+import { Box, Text, Image, Card, Button, Flex } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaHistory } from "react-icons/fa";
 
@@ -17,7 +17,6 @@ function Prof_Homepage() {
   const getEventData = async () => {
     const response = await axiosInstance.get(`/user/allEvent`);
     setEventData(response.data.data);
-    console.log(response.data.data)
   };
   useEffect(() => {
     getEventData();
@@ -43,16 +42,19 @@ function Prof_Homepage() {
         >
           ประวัติกิจกรรม
         </Button>
-        <Text
-          fontSize="28px"
-          fontWeight="bold"
-          textDecoration="underline"
-          textUnderlineOffset="2px"
-          pt="20px"
-          pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
-        >
-          กิจกรรมที่รอการอนุมัติ
-        </Text>
+        <Box display={{ base: 'block', md: 'flex' }} alignItems={{base:'end', md: 'center'}} pt="20px">
+          <Text
+            fontSize="28px"
+            fontWeight="bold"
+            textDecoration="underline"
+            textUnderlineOffset="2px"
+            pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+            pr={'10px'}
+          >
+            กิจกรรมที่รอการอนุมัติ
+          </Text>
+          <Text color={'red'} fontSize={'14px'} pl={{base: '40px', md: '0'}}>*โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน</Text>
+        </Box>
         <Box>
           <Box
             display="flex"
@@ -85,6 +87,7 @@ function Prof_Homepage() {
                       borderTopLeftRadius="30px"
                       borderTopRightRadius="30px"
                       width="100%"
+                      height={'250px'}
                     />
                     <Box p="30px">
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
@@ -168,6 +171,7 @@ function Prof_Homepage() {
                       borderTopLeftRadius="30px"
                       borderTopRightRadius="30px"
                       width="100%"
+                      height={'250px'}
                     />
                     <Box p="30px">
                       <Text fontSize="28px" fontWeight="bold" pb="5px">

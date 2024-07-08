@@ -51,7 +51,6 @@ export default function Navbar() {
       return "adminToken";
     }
   };
-
   const LogoutCheck = () => {
     if (Cookies.get("profToken") !== undefined) {
       return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
@@ -61,21 +60,6 @@ export default function Navbar() {
       return "/login";
     }
   };
-  const historyAcess = () => {
-    if (Cookies.get("profToken") !== undefined) {
-      return import.meta.env.VITE_PROFESSOR_PATH_HISTORY;
-    } else if (Cookies.get("adminToken") !== undefined) {
-      return import.meta.env.VITE_ADMIN_PATH_HISTORY;
-    } else {
-      return 0;
-    }
-  };
-  const btnHistory =
-    Cookies.get("profToken") !== undefined ||
-    Cookies.get("adminToken") !== undefined
-      ? "flex"
-      : "none";
-
   return (
     <Box
       bgColor="#0c2d4e"
@@ -95,30 +79,6 @@ export default function Navbar() {
         SITCertificate
       </Text>
       <Flex gap={{base: '10px', md:"30px"}}>
-        {/* <Button
-          variant="link"
-          display={{ base: "none", md: "flex" }}
-          color={"#E5E4E2"}
-          _hover={{ color: "white" }}
-          onClick={() => {
-            // navigate(historyAcess());
-            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
-          }}
-        >
-          ประวัติกิจกรรม
-        </Button>
-        <IconButton
-          justifyContent="center"
-          bgColor="#3399cc"
-          color="white"
-          display={{ base: "flex", md: "none" }}
-          _hover={{ bgColor: "#297AA3" }}
-          icon={<FaHistory />}
-          onClick={() => {
-            // navigate(historyAcess());
-            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
-          }}
-        /> */}
         <Button
           leftIcon={<FaArrowRightFromBracket />}
           bgColor="#336699"

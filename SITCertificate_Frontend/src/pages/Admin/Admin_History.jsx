@@ -128,6 +128,7 @@ export default function Admin_History() {
                     borderTopLeftRadius="30px"
                     borderTopRightRadius="30px"
                     width="100%"
+                    height={'250px'}
                   />
                   <Box p="30px">
                     <Text fontSize="28px" fontWeight="bold" pb="5px">

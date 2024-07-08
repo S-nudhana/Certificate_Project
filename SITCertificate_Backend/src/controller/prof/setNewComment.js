@@ -2,7 +2,6 @@ import db from "../../db/connection.js";
 const setNewComment = async (req, res) => {
   try {
     const {eventId, username, detail} = req.body;
-    console.log(detail)
     const data = [eventId, username, detail, 0];
     await db
       .promise()

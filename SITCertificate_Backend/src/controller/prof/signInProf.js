@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 const SignInProf = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
     if (!email || !password) throw "Missing Required Fields";
     const query = "select * from professor where professor_email = ?";
     const value = [email];
