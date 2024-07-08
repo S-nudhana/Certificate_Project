@@ -17,7 +17,7 @@ const SignInProf = async (req, res) => {
       professor_id: user[0][0].professor_id,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
-    res.cookie("userToken", signedToken, {
+    res.cookie("profToken", signedToken, {
       httpOnly: true,
     });
     return res

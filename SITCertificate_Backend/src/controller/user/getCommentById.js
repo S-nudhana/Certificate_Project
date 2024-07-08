@@ -1,12 +1,12 @@
 import db from "../../db/connection.js";
 
-const getEventById = async (req, res) => {
+const getCommentById = async (req, res) => {
   const id = req.query.id;
   try {
     const dataQuery = await db
       .promise()
-      .query(`SELECT * FROM event WHERE event_Id = ?`, [id]);
-    const data = dataQuery[0];
+      .query(`SELECT * FROM comment WHERE event_Id = ?`, [id]);
+    const data = dataQuery[0]
     return res.json({
       success: true,
       data: data,
@@ -21,4 +21,4 @@ const getEventById = async (req, res) => {
     });
   }
 };
-export default getEventById;
+export default getCommentById;

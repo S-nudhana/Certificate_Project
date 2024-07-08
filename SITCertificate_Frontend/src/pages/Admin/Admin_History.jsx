@@ -27,11 +27,11 @@ export default function Admin_History() {
   const [historyData, setHistoryData] = useState();
   const [search, setSearch] = useState("");
   const getHistoryData = async () => {
-    const response = await axiosInstance.get(`/admin/history`);
+    const response = await axiosInstance.get(`/user/history`);
     setHistoryData(response.data.data);
   }
   const searchEvent = async () => {
-    const response = await axiosInstance.get(`/admin/searchEvent?eventName=${search}`);
+    const response = await axiosInstance.get(`/user/searchEvent?eventName=${search}`);
     setHistoryData(response.data.data);
   }
   useEffect(() => {

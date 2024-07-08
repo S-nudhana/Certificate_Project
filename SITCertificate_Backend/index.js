@@ -2,9 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import db from "../SITCertificate_Backend/src/db/connection.js";
-import adminRouter from "../SITCertificate_Backend/src/router/admin.js";
-import profRouter from "../SITCertificate_Backend/src/router/prof.js";
- import studentRouter from "../SITCertificate_Backend/src/router/student.js";
+import adminRouter from "./src/router/admin.js";
+import profRouter from "./src/router/prof.js";
+import studentRouter from "./src/router/student.js";
+import userRouter from "./src/router/user.js";
 
 const app = express();
 const port = 3000;
@@ -23,6 +24,7 @@ db.connect((err) => {
 app.use("/admin/", adminRouter);
 app.use("/prof/", profRouter);
 app.use("/student/", studentRouter);
+app.use("/user/", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
