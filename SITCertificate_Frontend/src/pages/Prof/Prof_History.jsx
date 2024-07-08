@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -10,16 +11,30 @@ import {
   InputRightAddon,
 } from "@chakra-ui/react";
 import { ScrollRestoration, useNavigate } from "react-router-dom";
-import { data } from "../../utils/mockUpData";
 import { dateCheck, dateFormatChange } from "../../utils/function";
 import { FaSearch } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
+import axiosInstance from "../../utils/axiosInstance";
 
 export default function Admin_History() {
   const navigate = useNavigate();
+  const [historyData, setHistoryData] = useState();
+  const [search, setSearch] = useState("");
+  const getHistoryData = async () => {
+    const response = await axiosInstance.get(`/user/history`);
+    setHistoryData(response.data.data);
+  }
+  const searchEvent = async () => {
+    const response = await axiosInstance.get(`/user/searchEvent?eventName=${search}`);
+    setHistoryData(response.data.data);
+  }
+  useEffect(() => {
+    setSearch("");
+    getHistoryData();
+  }, []);
   var amount = 0;
   return (
     <>
@@ -34,7 +49,7 @@ export default function Admin_History() {
       </Box>
       <Box
         width={"100%"}
-        display={{base: 'block',md: "flex"}}
+        display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}
         pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
       >
@@ -43,11 +58,14 @@ export default function Admin_History() {
           fontWeight="bold"
           textDecoration="underline"
           textUnderlineOffset="2px"
-          pb={{base: "20px", md: "0"}}
+          pb={{ base: "20px", md: "0" }}
         >
           ประวัติกิจกรรม
         </Text>
-        <InputGroup width={{base: "90%", md: '50%', lg: '500px'}} mr={["40px", "40px", "100px", "100px", "100px", "300px"]}>
+        <InputGroup
+          width={{ base: "90%", md: "50%", lg: "500px" }}
+          mr={["40px", "40px", "100px", "100px", "100px", "300px"]}
+        >
           <InputLeftElement pointerEvents="none">
             <FaSearch color="gray.300" />
           </InputLeftElement>
@@ -55,9 +73,21 @@ export default function Admin_History() {
             borderRadius={"10px"}
             type="text"
             placeholder="ค้นหากิจกรรม"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           ></Input>
-          <InputRightAddon p={'0'} border="none">
-            <Button bgColor={"#3399cc"} color={'white'} borderLeftRadius={"0"} borderRightRadius={'10px'} transition={".3s"} _hover={{bgColor: '#297AA3'}}>
+          <InputRightAddon p={"0"} border="none">
+            <Button
+              bgColor={"#3399cc"}
+              color={"white"}
+              borderLeftRadius={"0"}
+              borderRightRadius={"10px"}
+              transition={".3s"}
+              _hover={{ bgColor: "#297AA3" }}
+              onClick={() => {
+                searchEvent();
+              }}
+            >
               Search
             </Button>
           </InputRightAddon>
@@ -73,9 +103,9 @@ export default function Admin_History() {
           maxWidth="1300px"
           mx="auto"
         >
-          {data.map((item, key) => {
-            if (!dateCheck(item.EndedDownload)) {
-              amount = key;
+          {historyData && historyData.map((item, key) => {
+            if (!dateCheck(item.event_endDate)) {
+              amount = key + 1;
               return (
                 <Card
                   width="300px"
@@ -90,23 +120,23 @@ export default function Admin_History() {
                   }}
                 >
                   <Image
-                    src={item.img}
+                    src={item.event_thumbnail}
                     objectFit="cover"
                     borderTopLeftRadius="30px"
                     borderTopRightRadius="30px"
                     width="100%"
+                    height={'250px'}
                   />
                   <Box p="30px">
                     <Text fontSize="28px" fontWeight="bold" pb="5px">
-                      {item.title}
+                      {item.event_name}
                     </Text>
                     <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                     <Text
                       pb="5px"
-                      color={dateCheck(item.EndedDownload) ? "black" : "red"}
+                      color={dateCheck(item.event_endDate) ? "black" : "red"}
                     >
-                      {dateFormatChange(item.StartDownload)} ถึง{" "}
-                      {dateFormatChange(item.EndedDownload)}
+                      {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
                     </Text>
                     <Button
                       width="130px"
@@ -116,8 +146,7 @@ export default function Admin_History() {
                       _hover={{ bgColor: "#297AA3" }}
                       onClick={() => {
                         navigate(
-                          import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
-                            `${item.id}`
+                          import.meta.env.VITE_PROFESSOR_PATH_DETAILS + `${item.event_Id}`
                         );
                       }}
                     >
@@ -128,13 +157,14 @@ export default function Admin_History() {
               );
             }
           })}
-          <Box
-            width={"100%"}
-            display={amount === 0 ? "flex" : "none"}
-            justifyContent={"center"}
-          >
-            <Text>ไม่มีกิจกรรม</Text>
-          </Box>
+        </Box>
+        <Box
+          display={amount === 0 ? "flex" : "none"}
+          width={"100%"}
+          height={"40vh"}
+          justifyContent={"center"}
+        >
+          <Text>ไม่พบกิจกรรม</Text>
         </Box>
       </Box>
       <Footer />

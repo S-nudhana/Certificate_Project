@@ -10,7 +10,6 @@ const getSearchEvent = async (req, res) => {
         [`%${eventName}%`]
       );
     const data = dataQuery[0];
-    console.log(data);
     return res.json({
       success: true,
       data: data,

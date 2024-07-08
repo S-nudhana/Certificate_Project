@@ -46,8 +46,6 @@ function Admin_CreateEvent() {
 
   const handlesubmit = async () => {
     try {
-      console.log(eventName)
-      console.log(thumbnail)
       const response = await axiosInstance.post("/admin/createEvent", {
         eventName: eventName,
         eventOwner: eventOwnerName,

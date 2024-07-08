@@ -1,14 +1,23 @@
+import { useState, useEffect } from 'react'
 import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
-import { data } from "../../utils/mockUpData";
 import { dateCheck, dateFormatChange, dateOverSeven } from "../../utils/function";
+import axiosInstance from '../../utils/axiosInstance';
 
 function Student_Homepage() {
   const navigate = useNavigate();
+  const [eventData, setEventData] = useState();
+  const getEventData = async () => {
+    const response = await axiosInstance.get(`/user/allEvent`);
+    setEventData(response.data.data);
+  };
+  useEffect(() => {
+    getEventData();
+  }, []);
   return (
     <>
       <ScrollRestoration />
@@ -34,11 +43,10 @@ function Student_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {data.map((item, index) => {
-              if(!dateOverSeven(item.EndedDownload)){
+            {eventData && eventData.map ((item) => {
+              if(!dateOverSeven(item.event_endDate) && item.event_approve === 1){
                 return (
                   <Card
-                    key={index}
                     width="300px"
                     height="auto"
                     bgColor="white"
@@ -51,19 +59,20 @@ function Student_Homepage() {
                     }}
                   >
                     <Image
-                      src={item.img}
+                      src={item.event_thumbnail}
                       objectFit="cover"
                       borderTopLeftRadius="30px"
                       borderTopRightRadius="30px"
                       width="100%"
+                      height={'250px'}
                     />
                     <Box p="30px">
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
-                        {item.title}
+                        {item.event_name}
                       </Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                      <Text pb="5px" color={dateCheck(item.EndedDownload) ? "black" : 'red'}>
-                        {dateFormatChange(item.StartDownload)} ถึง {dateFormatChange(item.EndedDownload)}
+                      <Text pb="5px" color={dateCheck(item.event_endDate) ? "black" : 'red'}>
+                        {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
                       </Text>
                       <Button
                         width="170px"
@@ -71,9 +80,9 @@ function Student_Homepage() {
                         bgColor="#336699"
                         color="white"
                         _hover={{ bgColor: "#1f568c" }}
-                        isDisabled={!dateCheck(item.EndedDownload)}
+                        isDisabled={!dateCheck(item.event_endDate)}
                         onClick={() => {
-                          navigate(`/detail/${item.id}`);
+                          navigate(`/detail/${item.event_Id}`);
                         }}
                       >
                         รับประกาศนียบัตร
