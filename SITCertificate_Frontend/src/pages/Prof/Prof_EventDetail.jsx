@@ -57,9 +57,9 @@ function Prof_EventDetail() {
       setNewCommentDetail("");
     }
   }
-  const approveEvent = async (eventId) => {
+  const approveEvent = async () => {
     const response = await axiosInstance.put(`/prof/approveEvent`, {
-      eventId: eventId,
+      eventId: id,
     });
     if (response.data.success) {
       getEventData();
@@ -83,6 +83,9 @@ function Prof_EventDetail() {
             <Text fontSize="32px" fontWeight="bold" pt="20px">
               {eventData.event_name}
             </Text>
+            <Text fontSize="18px" fontWeight="bold">
+              {eventData.event_owner}
+            </Text>
             <Text pt="10px" pb="10px">
               เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
             </Text>
@@ -104,7 +107,7 @@ function Prof_EventDetail() {
           <Flex flex={1} ml={["10%", "10%", "0%"]} width={'50%'}>
             <Stack spacing={5} w={"full"} pr={"10%"}>
               <Heading fontSize={"2xl"} pt="20px">
-                Comment
+                ความคิดเห็น
               </Heading>
               <Box width={"100%"}>
                 {comments.map((item) => {
@@ -130,9 +133,9 @@ function Prof_EventDetail() {
                 })}
               </Box>
               <FormControl id="comment">
-                <FormLabel>New Comment</FormLabel>
+                <FormLabel>ความคิดเห็นใหม่</FormLabel>
                 <Input mb={"10px"} placeholder="ชื่อของท่าน" value={newCommentBy} isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)} onChange={(e) => setNewCommentBy(e.target.value)} />
-                <Textarea placeholder="เพิ่ม comment ที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)} onChange={(e) => setNewCommentDetail(e.target.value)} />
+                <Textarea placeholder="เพิ่มความคิดเห็นที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)} onChange={(e) => setNewCommentDetail(e.target.value)} />
               </FormControl>
               <Stack spacing={6} align={"end"}>
                 <Button
@@ -147,7 +150,7 @@ function Prof_EventDetail() {
                   _hover={{ bgColor: "#297AA3" }}
                   onClick={postComment}
                 >
-                  เพิ่ม Comment
+                  เพิ่มความคิดเห็น
                 </Button>
               </Stack>
             </Stack>
@@ -173,7 +176,7 @@ function Prof_EventDetail() {
                 _hover={{ bgColor: "#1f568c" }}
                 onClick={() => {
                   onClose();
-                  approveEvent(eventData.event_Id);
+                  approveEvent();
                 }}
               >
                 ยืนยัน

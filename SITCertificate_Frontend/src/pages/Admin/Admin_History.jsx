@@ -91,7 +91,7 @@ export default function Admin_History() {
                 searchEvent();
               }}
             >
-              Search
+              ค้นหา
             </Button>
           </InputRightAddon>
         </InputGroup>
@@ -131,9 +131,10 @@ export default function Admin_History() {
                     height={'250px'}
                   />
                   <Box p="30px">
-                    <Text fontSize="28px" fontWeight="bold" pb="5px">
+                    <Text fontSize="28px" fontWeight="bold">
                       {item.event_name}
                     </Text>
+                    <Text fontWeight="bold">{item.event_owner}</Text>
                     <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                     <Text
                       pb="5px"

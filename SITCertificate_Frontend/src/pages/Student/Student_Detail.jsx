@@ -143,7 +143,7 @@ function Student_Detail() {
                   {eventData.event_name}
                 </Text>
                 <Text pt="10px" pb="20px">
-                  เปิดให้ดาว์นโหลดตั้งแต่ {eventData.event_startDate} ถึง {eventData.event_endDate}
+                  เปิดให้ดาว์นโหลดตั้งแต่  {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
                 </Text>
                 <Text fontSize="18px" fontWeight={"bold"}>
                   ใบประกาศนียบัตร
