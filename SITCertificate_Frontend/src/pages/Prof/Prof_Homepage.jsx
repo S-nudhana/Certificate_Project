@@ -42,7 +42,7 @@ function Prof_Homepage() {
         >
           ประวัติกิจกรรม
         </Button>
-        <Box display={{ base: 'block', md: 'flex' }} alignItems={{base:'end', md: 'center'}} pt="20px">
+        <Box display={{ base: 'block', md: 'flex' }} alignItems={{ base: 'end', md: 'center' }} pt="20px">
           <Text
             fontSize="28px"
             fontWeight="bold"
@@ -53,7 +53,7 @@ function Prof_Homepage() {
           >
             กิจกรรมที่รอการอนุมัติ
           </Text>
-          <Text color={'red'} fontSize={'14px'} pl={{base: '40px', md: '0'}}>*โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน</Text>
+          <Text color={'red'} fontSize={'14px'} pl={{ base: '40px', md: '0' }}>*โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน</Text>
         </Box>
         <Box>
           <Box
@@ -90,9 +90,10 @@ function Prof_Homepage() {
                       height={'250px'}
                     />
                     <Box p="30px">
-                      <Text fontSize="28px" fontWeight="bold" pb="5px">
+                      <Text fontSize="28px" fontWeight="bold">
                         {item.event_name}
                       </Text>
+                      <Text fontWeight="bold">{item.event_owner}</Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px">
                         {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
@@ -174,9 +175,10 @@ function Prof_Homepage() {
                       height={'250px'}
                     />
                     <Box p="30px">
-                      <Text fontSize="28px" fontWeight="bold" pb="5px">
+                      <Text fontSize="28px" fontWeight="bold">
                         {item.event_name}
                       </Text>
+                      <Text fontWeight="bold">{item.event_owner}</Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px">
                         {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}

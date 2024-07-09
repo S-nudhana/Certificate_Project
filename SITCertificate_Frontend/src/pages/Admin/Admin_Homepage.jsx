@@ -111,6 +111,7 @@ function Admin_Homepage() {
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
                         {item.event_name}
                       </Text>
+                      <Text fontWeight="bold">{item.event_owner}</Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px" color={dateCheck(item.event_endDate) ? "black" : 'red'}>
                         {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
@@ -211,6 +212,7 @@ function Admin_Homepage() {
                       <Text fontSize="28px" fontWeight="bold" pb="5px">
                         {item.event_name}
                       </Text>
+                      <Text fontWeight="bold">{item.event_owner}</Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
                       <Text pb="5px">
                         {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}

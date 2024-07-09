@@ -56,6 +56,9 @@ function Admin_EventDetail() {
                         <Text fontSize="32px" fontWeight="bold" pt="20px">
                             {eventData.event_name}
                         </Text>
+                        <Text fontSize="18px" fontWeight="bold">
+                            {eventData.event_owner}
+                        </Text>
                         <Text pt="10px" pb="10px">
                             เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
                         </Text>
@@ -75,7 +78,7 @@ function Admin_EventDetail() {
                     </Flex>
                     <Flex flex={1} ml={["10%", "10%", "0%"]} width={'50%'}>
                         <Stack spacing={5} w={"full"} pr={"10%"}>
-                            <Heading fontSize={"2xl"} pt="20px">Comment</Heading>
+                            <Heading fontSize={"2xl"} pt="20px">ความคิดเห็น</Heading>
                             <Box width={'100%'}>
                                 {comments.map((item) => (
                                     <Card p={'20px'} mb={'20px'} variant={'outline'} key={item.id}>
