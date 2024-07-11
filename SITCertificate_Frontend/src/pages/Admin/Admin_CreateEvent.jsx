@@ -33,11 +33,9 @@ function Admin_CreateEvent() {
   const [Excel, setExcel] = useState();
 
   function handleThumbnail(e) {
-    console.log(e.target.files);
     setThumbnail(URL.createObjectURL(e.target.files[0]));
   }
   function handleTemplate(e) {
-    console.log(e.target.files);
     setTemplate(URL.createObjectURL(e.target.files[0]));
   }
   function handleExcel(e) {
@@ -52,6 +50,7 @@ function Admin_CreateEvent() {
         openDate: openDate,
         closeDate: closeDate,
         thumbnail: thumbnail,
+        template: template,
       });
       if (response.status === 200) {
         navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
@@ -204,4 +203,4 @@ function Admin_CreateEvent() {
     </>
   );
 }
-export default Admin_CreateEvent;
+export default authMiddleware(Admin_CreateEvent);

@@ -3,7 +3,7 @@ import {
     Flex,
     Heading,
     Stack,
-    Image,
+    Button,
     Box,
     Text,
     Card,
@@ -15,9 +15,11 @@ import { FaCheck } from "react-icons/fa6";
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import BackBTN from '../../components/BackBTN';
+import PdfViewer from '../../components/PdfViewer';
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
 import axiosInstance from '../../utils/axiosInstance';
+import certificate from '../../assets/note.pdf'
 
 function Admin_EventDetail() {
     const { id } = useParams();
@@ -37,6 +39,7 @@ function Admin_EventDetail() {
         });
         if (response.data.success) {
             getComment();
+            sendEmail();
         }
     }
     useEffect(() => {
@@ -51,9 +54,9 @@ function Admin_EventDetail() {
                 <BackBTN />
             </Box>
             {eventData && comments && (
-                <Stack minH={"80vh"} direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'}>
+                <Stack direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'} pt="20px">
                     <Flex flex={1} direction={"column"} ml={["10%", "10%", "5%"]} >
-                        <Text fontSize="32px" fontWeight="bold" pt="20px">
+                        <Text fontSize="32px" fontWeight="bold" >
                             {eventData.event_name}
                         </Text>
                         <Text fontSize="18px" fontWeight="bold">
@@ -68,17 +71,14 @@ function Admin_EventDetail() {
                         <Text fontSize="18px" fontWeight={"bold"}>
                             ใบประกาศนียบัตร
                         </Text>
-                        <Image
-                            width="90%"
-                            height={"auto"}
-                            src={eventData.thumbnail}
-                            my={"20px"}
-                            boxShadow={"lg"}
-                        ></Image>
+                        <PdfViewer fileUrl={certificate} />
+                        <Button mt={'15px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} width={'200px'} as="a" href={certificate} download={`${eventData.event_name}certificate.pdf`}>
+                            ดาวน์โหลดเทมเพลท PDF
+                        </Button>
                     </Flex>
                     <Flex flex={1} ml={["10%", "10%", "0%"]} width={'50%'}>
                         <Stack spacing={5} w={"full"} pr={"10%"}>
-                            <Heading fontSize={"2xl"} pt="20px">ความคิดเห็น</Heading>
+                            <Heading fontSize={"2xl"} pt={{ base: '20px', md: '0' }}>ความคิดเห็น</Heading>
                             <Box width={'100%'}>
                                 {comments.map((item) => (
                                     <Card p={'20px'} mb={'20px'} variant={'outline'} key={item.id}>
