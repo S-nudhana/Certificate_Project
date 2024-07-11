@@ -204,4 +204,4 @@ function Admin_CreateEvent() {
     </>
   );
 }
-export default authMiddleware(Admin_CreateEvent);
+export default Admin_CreateEvent;

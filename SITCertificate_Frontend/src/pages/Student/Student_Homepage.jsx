@@ -12,7 +12,7 @@ function Student_Homepage() {
   const navigate = useNavigate();
   const [eventData, setEventData] = useState();
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/allEvent`);
+    const response = await axiosInstance.get(`/student/event`);
     setEventData(response.data.data);
   };
   useEffect(() => {
