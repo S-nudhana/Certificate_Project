@@ -41,22 +41,15 @@ export default function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollTop]);
-
-  const tokenCheck = () => {
-    if (Cookies.get("token") !== undefined) {
-      return "token";
-    } else if (Cookies.get("profToken") !== undefined) {
-      return "profToken";
-    } else {
-      return "adminToken";
-    }
-  };
   const LogoutCheck = () => {
     if (Cookies.get("profToken") !== undefined) {
+      Cookies.remove("profToken");
       return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
     } else if (Cookies.get("adminToken") !== undefined) {
+      Cookies.remove("adminToken");
       return import.meta.env.VITE_ADMIN_PATH_LOGIN;
     } else {
+      Cookies.remove("token");
       return "/login";
     }
   };
@@ -119,7 +112,6 @@ export default function Navbar() {
                 borderRadius={"30"}
                 _hover={{ bgColor: "#1f568c" }}
                 onClick={() => {
-                  Cookies.remove(tokenCheck());
                   navigate(LogoutCheck());
                 }}
               >

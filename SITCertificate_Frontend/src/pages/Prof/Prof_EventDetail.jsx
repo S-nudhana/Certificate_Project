@@ -35,7 +35,6 @@ function Prof_EventDetail() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [eventData, setEventData] = useState();
   const [comments, setComments] = useState();
-  const [newCommentBy, setNewCommentBy] = useState();
   const [newCommentDetail, setNewCommentDetail] = useState();
   const getEventData = async () => {
     const response = await axiosInstance.get(`/user/event?id=${id}`);
@@ -48,7 +47,6 @@ function Prof_EventDetail() {
   const postComment = async () => {
     const response = await axiosInstance.post(`/prof/newComment`, {
       eventId: id,
-      username: newCommentBy,
       detail: newCommentDetail,
     });
     if (response.data.success) {
@@ -104,7 +102,7 @@ function Prof_EventDetail() {
             ></Image>
             <Button isDisabled={eventData.event_approve === 1} width={'130px'} padding={"20px"} color={'white'} bgColor={'#336699'} borderRadius={'40px'} _hover={{ bgColor: '#1f568c' }} onClick={onOpen}>อนุมัติกิจกรรม</Button>
           </Flex>
-          <Flex flex={1} ml={["10%", "10%", "0%"]} width={'50%'}>
+          <Flex flex={1} ml={["10%", "10%", "0%"]} width={{base: '90%', md:'50%'}}>
             <Stack spacing={5} w={"full"} pr={"10%"}>
               <Heading fontSize={"2xl"} pt="20px">
                 ความคิดเห็น
@@ -134,7 +132,6 @@ function Prof_EventDetail() {
               </Box>
               <FormControl id="comment">
                 <FormLabel>ความคิดเห็นใหม่</FormLabel>
-                <Input mb={"10px"} placeholder="ชื่อของท่าน" value={newCommentBy} isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)} onChange={(e) => setNewCommentBy(e.target.value)} />
                 <Textarea placeholder="เพิ่มความคิดเห็นที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)} onChange={(e) => setNewCommentDetail(e.target.value)} />
               </FormControl>
               <Stack spacing={6} align={"end"}>
