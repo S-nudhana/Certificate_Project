@@ -4,7 +4,7 @@ import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/SIT_Icon.png";
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-
+import adminSignIn from "../../api/admin/adminSignIn";
 export default function Admin_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,31 +17,30 @@ export default function Admin_SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!emailRegex.test(email)) {
-      setEmailError('Invalid email address');
+      setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
       setEmail('')
       return;
     } else {
       setEmailError('');
     }
 
-    if (true) {
-      return (
-        navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE)
-      );
+    const res = await adminSignIn(email, password);
+    // console.log(res);
+    if (res.status === 201) {
+      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
     } else {
-      return (
-        toast({
-          title: 'Username or Password is invalid.',
-          description: "โปรดตรวจสอบชื่อผู้ใช้หรือรหัสผ่านของคุณ",
-          status: 'error',
-          duration: 2000,
-          isClosable: true,
-        })
-      );
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: res.response.data.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     }
-  }
+  };
+
 
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">

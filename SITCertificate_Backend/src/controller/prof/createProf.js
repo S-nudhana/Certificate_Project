@@ -7,7 +7,7 @@ const CreateProf = async (req, res) => {
     if (!username || !email || !password) {
       return res
         .status(400)
-        .json({ message: "Please provide all required fields" });
+        .json({ message: "กรุณากรอกข้อมูลให้ครบทุกช่อง" });
     }
 
     const users = await connection
@@ -16,7 +16,7 @@ const CreateProf = async (req, res) => {
 
     if (users[0].length > 0) {
       return res.status(400).json({
-        message: "User with this email is already existed",
+        message: "อีเมลนี้มีผู้ใช้งานแล้ว",
       });
     }
 

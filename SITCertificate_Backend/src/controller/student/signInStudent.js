@@ -9,13 +9,13 @@ const SignInStudent = async (req, res) => {
     const query = "select * from student where student_email = ?";
     const value = [email];
     const user = await connection.promise().query(query, value);
-    if (user[0].length != 1) throw "This User Doesn't existed";
+    if (user[0].length != 1) throw "ไม่พบบัญชีนี้ในระบบ";
     function compared(password, storedPassword) {
       return password === storedPassword;
     }
     const storedPassword = user[0][0].student_password;
     if (!compared(password, storedPassword)) {
-      throw "Password Doesn't Match";
+      throw "รหัสผ่านไม่ถูกต้อง";
     }
     const tokenData = {
       student_id: user[0][0].student_id,

@@ -3,22 +3,23 @@ import connection from "../../db/connection.js";
 
 const createAdmin = async (req, res) => {
   try {
-    const { username,email, password } = req.body;
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res
         .status(400)
-        .json({ message: "Please provide all required fields" });
+        .json({ message: "กรุณากรอกข้อมูลให้ครบทุกช่อง" });
     }
 
-    const users = await connection
+    const [users] = await connection
       .promise()
       .query(`SELECT admin_email from admin where admin_email = ?`, [email]);
 
-    if (users[0].length > 0) {
-      return res.status(400).json({
-        message: "User with this email is already existed",
-      });
+      if (users.length > 0) {
+        return res.status(400).json({
+            message: "อีเมลนี้มีผู้ใช้งานแล้ว",
+        });
     }
+    
 
     const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
     const hashed_password = bcrypt.hashSync(password, salt);
@@ -31,6 +32,7 @@ const createAdmin = async (req, res) => {
     await connection.promise().query(query, values);
     return res.status(201).json({ message: "User created successfully" });
   } catch (e) {
+    console.error(e);
     return res.status(500).json({ message: e.message });
   }
 };

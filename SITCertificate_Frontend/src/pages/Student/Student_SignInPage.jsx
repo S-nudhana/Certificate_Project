@@ -4,7 +4,7 @@ import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/SIT_Icon.png";
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-
+import studentSignIn from '../../api/student/studentSignIn';
 export default function Student_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,31 +17,28 @@ export default function Student_SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!emailRegex.test(email)) {
-      setEmailError('Invalid email address');
+      setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
       setEmail('')
       return;
     } else {
       setEmailError('');
     }
 
-    if (true) {
-      return (
-        navigate('/')
-      );
+    const res = await studentSignIn(email, password);
+    if (res.status === 201) {
+      navigate('/');
     } else {
-      return (
-        toast({
-          title: 'Username or Password is invalid.',
-          description: "โปรดตรวจสอบชื่อผู้ใช้หรือรหัสผ่านของคุณ",
-          status: 'error',
-          duration: 2000,
-          isClosable: true,
-        })
-      );
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: res.response.data.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     }
-  }
+  };
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>
