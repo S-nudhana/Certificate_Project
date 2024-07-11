@@ -22,10 +22,12 @@ import {
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration } from "react-router-dom";
 import { FaCheck } from "react-icons/fa6";
+import certificate from '../../assets/note.pdf'
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
+import PdfViewer from '../../components/PdfViewer';
 import authMiddleware from "../../utils/authMiddleware";
 import axiosInstance from "../../utils/axiosInstance";
 import { dateFormatChange, dateCheck } from '../../utils/function';
@@ -51,7 +53,6 @@ function Prof_EventDetail() {
     });
     if (response.data.success) {
       getComment();
-      setNewCommentBy("");
       setNewCommentDetail("");
     }
   }
@@ -76,7 +77,7 @@ function Prof_EventDetail() {
         <BackBTN />
       </Box>
       {eventData && comments && (
-        <Stack minH={"80vh"} direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'}>
+        <Stack direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'}>
           <Flex flex={1} direction={"column"} ml={["10%", "10%", "5%"]} >
             <Text fontSize="32px" fontWeight="bold" pt="20px">
               {eventData.event_name}
@@ -93,16 +94,13 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <Image
-              width="90%"
-              height={"auto"}
-              src={eventData.thumbnail}
-              my={"20px"}
-              boxShadow={"lg"}
-            ></Image>
-            <Button isDisabled={eventData.event_approve === 1} width={'130px'} padding={"20px"} color={'white'} bgColor={'#336699'} borderRadius={'40px'} _hover={{ bgColor: '#1f568c' }} onClick={onOpen}>อนุมัติกิจกรรม</Button>
+            <PdfViewer fileUrl={certificate} />
+            <Button mt={'15px'} mb={'20px'} width={'200px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={certificate} download={`${eventData.event_name}certificate.pdf`}>
+              ดาวน์โหลดเทมเพลท PDF
+            </Button>
+            <Button isDisabled={eventData.event_approve === 1} mt={'20px'} width={'130px'} padding={"20px"} color={'white'} bgColor={'#336699'} borderRadius={'40px'} _hover={{ bgColor: '#1f568c' }} onClick={onOpen}>อนุมัติกิจกรรม</Button>
           </Flex>
-          <Flex flex={1} ml={["10%", "10%", "0%"]} width={{base: '90%', md:'50%'}}>
+          <Flex flex={1} ml={["10%", "10%", "0%"]} width={{ base: '90%', md: '50%' }}>
             <Stack spacing={5} w={"full"} pr={"10%"}>
               <Heading fontSize={"2xl"} pt="20px">
                 ความคิดเห็น

@@ -23,48 +23,11 @@ db.connect((err) => {
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/admin/", adminRouter);
-app.use("/prof/", profRouter);
-app.use("/student/", studentRouter);
-app.use("/user/", userRouter);
+app.use("/admin", adminRouter);
+app.use("/prof", profRouter);
+app.use("/student", studentRouter);
+app.use("/user", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
-// const authMiddleware = (req, res, next) => {
-//   const token = req.cookies.token;
-//   const profToken = req.cookies.profToken;
-//   const adminToken = req.cookies.adminToken;
-//   console.log(token, profToken, adminToken);
-
-//   const professorPath = process.env.VITE_PROFESSOR_PATH;
-//   const professorLoginPath = process.env.VITE_PROFESSOR_PATH_LOGIN;
-//   const adminPath = process.env.VITE_ADMIN_PATH;
-//   const adminLoginPath = process.env.VITE_ADMIN_PATH_LOGIN;
-//   console.log(!jwt.verify(adminToken, process.env.JWTSecretKey))
-//   try {
-//     if (req.path.startsWith(professorPath)) {
-//       if (!profToken || !jwt.verify(profToken, process.env.JWTSecretKey)) {
-//         return res.redirect(professorLoginPath);
-//       }
-//     } else if (req.path.startsWith(adminPath)) {
-//       if (!adminToken || !jwt.verify(adminToken, process.env.JWTSecretKey)) {
-//         return res.redirect(adminLoginPath);
-//       }
-//     } else {
-//       if (!token || !jwt.verify(token, process.env.JWTSecretKey)) {
-//         return res.redirect("/login");
-//       }
-//     }
-//   } catch (err) {
-//     if (req.path.startsWith(professorPath)) {
-//       return res.redirect(professorLoginPath);
-//     } else if (req.path.startsWith(adminPath)) {
-//       return res.redirect(adminLoginPath);
-//     } else {
-//       return res.redirect("/login");
-//     }
-//   }
-//   next();
-// };
