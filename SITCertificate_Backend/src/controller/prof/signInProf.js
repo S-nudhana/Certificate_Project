@@ -9,9 +9,9 @@ const SignInProf = async (req, res) => {
     const query = "select * from professor where professor_email = ?";
     const value = [email];
     const user = await connection.promise().query(query, value);
-    if (user[0].length != 1) throw "This User Doesn't existed";
+    if (user[0].length != 1) throw "ไม่พบบัญชีนี้ในระบบ";
     const compared = bcrypt.compareSync(password, user[0][0].professor_password);
-    if (!compared) throw "Password Doesn't Match";
+    if (!compared) throw "รหัสผ่านไม่ถูกต้อง";
     const tokenData = {
       professor_id: user[0][0].professor_id,
     };
