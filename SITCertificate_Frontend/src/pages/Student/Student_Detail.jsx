@@ -23,12 +23,18 @@ function Student_Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState();
+  const [studentData, setStudentData] = useState();
   const getEventData = async () => {
     const response = await axiosInstance.get(`/user/event?id=${id}`);
     setEventData(response.data.data);
   };
+  const getStudentGenerate = async () => {
+    const response = await axiosInstance.get(`/student/generate?id=${id}`);
+    setStudentData(response.data.data);
+  }
   useEffect(() => {
     getEventData()
+    getStudentGenerate()
   }, []);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -40,7 +46,7 @@ function Student_Detail() {
     name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
 
   const aleadyGenerate = () => {
-    if (false) {
+    if (studentData && studentData.student_eventGenerated === 0) {
       return (
         <>
           {eventData && (
@@ -205,7 +211,7 @@ function Student_Detail() {
       setEmailError('');
     }
 
-    navigate(`/certificate/${event.id}`);
+    navigate(`/certificate/${id}`);
   }
 
   return (

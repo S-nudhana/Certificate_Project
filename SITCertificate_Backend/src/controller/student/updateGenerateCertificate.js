@@ -3,22 +3,20 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 dotenv.config();
 
-const getAllInProgressEvent = async (req, res) => {
+const updateGenerateCertificate = async (req, res) => {
+  const eventId = parseInt(req.query.id);
   try {
     const { token } = req.cookies;
     const userId = jwt.verify(token, process.env.JWTSecretKey);
     const studentId = parseInt(userId.student_id);
-    const value = [studentId];
-    const dataQuery = await db
+    await db
       .promise()
       .query(
-        "SELECT * FROM event WHERE event_endDate > NOW() AND event_approve = 1 AND event_Id IN (SELECT student_joinedEventId FROM student WHERE student_Id = ?) ORDER BY event_startDate DESC",
-        [value]
+        "UPDATE student SET student_eventGenerated = ? WHERE student_joinedEventId = ? AND student_Id = ?",
+        [1, eventId, studentId]
       );
-    const data = dataQuery[0];
     return res.json({
       success: true,
-      data: data,
       error: null,
     });
   } catch (error) {
@@ -30,4 +28,5 @@ const getAllInProgressEvent = async (req, res) => {
     });
   }
 };
-export default getAllInProgressEvent;
+
+export default updateGenerateCertificate;

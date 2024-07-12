@@ -5,12 +5,18 @@ import img from '../../assets/img/SIT_Building.png';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import authMiddleware from "../../utils/authMiddleware";
+import axiosInstance from '../../utils/axiosInstance';
 
 function Student_CertificateExample() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const updateStudentGenerate = async () => {
+        const response = await axiosInstance.put(`/student/generated?id=${id}`);
+        if (response.data.success) {
+            navigate(`/download/${id}`);
+        }
+    }
     return (
         <>
             <ScrollRestoration />
@@ -33,7 +39,7 @@ function Student_CertificateExample() {
                     SITCertificate
                     SITCertificate
                 </Text>
-                <Box width='70%' display='flex' justifyContent='space-between' py='40px'>
+                <Box width='80%' display='flex' justifyContent='space-between' py='40px'>
                     <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
                         navigate(-1)
                     }}>ย้อนกลับ</Button>
@@ -50,7 +56,7 @@ function Student_CertificateExample() {
                 <ModalContent py={["5", "7", "7"]}>
                     <ModalHeader textAlign={"center"} fontWeight={"bold"} fontSize={{ base: "16px", md: '20px' }}>ยืนยันที่จะพิมพ์ใบประกาศนียบัตรหรือไม่?</ModalHeader>
                     <ModalBody textAlign={"center"}>
-                        <Text pb={'7'} fontSize={{ base: "14px", md: '16px' }}>กรุณาตรวจสอบชื่อจริงและนามสกุลของท่าน <br/> เมื่อกดยืนยันแล้วจะไม่สามารถกลับมาแก้ไขได้</Text>
+                        <Text pb={'7'} fontSize={{ base: "14px", md: '16px' }}>กรุณาตรวจสอบชื่อจริงและนามสกุลของท่าน <br /> เมื่อกดยืนยันแล้วจะไม่สามารถกลับมาแก้ไขได้</Text>
                         <Flex justifyContent="center">
                             <Button
                                 mr={3}
@@ -59,7 +65,7 @@ function Student_CertificateExample() {
                                 borderRadius={"30"}
                                 _hover={{ bgColor: "#1f568c" }}
                                 onClick={() => {
-                                    navigate(`/download/${id}`);
+                                    updateStudentGenerate();
                                 }}
                             >
                                 ตกลง
