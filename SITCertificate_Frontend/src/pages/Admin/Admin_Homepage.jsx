@@ -84,8 +84,8 @@ function Admin_Homepage() {
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              pendingAmount = key + 1;
               if (!item.event_approve && dateCheck(item.event_endDate)) {
+                pendingAmount = key + 1;
                 return (
                   <Card
                     width="300px"
@@ -185,8 +185,8 @@ function Admin_Homepage() {
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              approvedAmount = key + 1;
               if (item.event_approve && dateCheck(item.event_endDate)) {
+                approvedAmount = key + 1;
                 return (
                   <Card
                     width="300px"

@@ -10,6 +10,7 @@ import axiosInstance from '../../utils/axiosInstance';
 
 function Student_Homepage() {
   const navigate = useNavigate();
+  var amount = 0;
   const [eventData, setEventData] = useState();
   const getEventData = async () => {
     const response = await axiosInstance.get(`/student/event`);
@@ -29,7 +30,7 @@ function Student_Homepage() {
           textDecoration="underline"
           textUnderlineOffset="2px"
           pt="50px"
-          pl={['40px','40px', '100px', '100px', '100px', '300px']}
+          pl={['40px', '40px', '100px', '100px', '100px', '300px']}
         >
           กิจกรรม
         </Text>
@@ -43,8 +44,9 @@ function Student_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {eventData && eventData.map ((item) => {
-              if(!dateOverSeven(item.event_endDate) && item.event_approve === 1){
+            {eventData && eventData.map((item, key) => {
+              if (!dateOverSeven(item.event_endDate) && item.event_approve === 1) {
+                amount = key + 1;
                 return (
                   <Card
                     width="300px"
@@ -92,6 +94,16 @@ function Student_Homepage() {
                 );
               }
             })}
+          </Box>
+          <Box
+            display={amount === 0 ? "flex" : "none"}
+            alignItems={'center'}
+            textAlign={'center'}
+            width={"100%"}
+            height={"15vh"}
+            justifyContent={"center"}
+          >
+            <Text>ไม่พบกิจกรรม</Text>
           </Box>
         </Box>
       </Box>

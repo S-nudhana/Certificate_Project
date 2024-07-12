@@ -13,7 +13,6 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-// import { FaHistory } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
