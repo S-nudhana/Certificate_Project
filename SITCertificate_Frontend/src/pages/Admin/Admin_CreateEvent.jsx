@@ -20,26 +20,35 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 import axiosInstance from "../../utils/axiosInstance";
-
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from '../../utils/firebaseConfig';
 
 function Admin_CreateEvent() {
   const navigate = useNavigate();
   const [eventName, seteventName] = useState('');
   const [eventOwnerName, seteventOwnerName] = useState('');
   const [thumbnail, setThumbnail] = useState();
+  const [thumbnailURL, setThumbnailURL] = useState();
   const [openDate, setOpenDate] = useState();
   const [closeDate, setCloseDate] = useState();
   const [template, setTemplate] = useState();
   const [Excel, setExcel] = useState();
 
-  function handleThumbnail(e) {
-    setThumbnail(URL.createObjectURL(e.target.files[0]));
-  }
   function handleTemplate(e) {
     setTemplate(URL.createObjectURL(e.target.files[0]));
   }
   function handleExcel(e) {
     setExcel(URL.createObjectURL(e.target.files[0]));
+  }
+  const storage = getStorage(app);
+  const firebaseUpload = async (file) => {
+    if (file) {
+      const storageRef = ref(storage, `upload_images/${file.name}`);
+      await uploadBytes(storageRef, file);
+
+      const imageURL = await getDownloadURL(storageRef);
+      setThumbnailURL(imageURL)
+    }
   }
 
   const handlesubmit = async () => {
@@ -49,7 +58,7 @@ function Admin_CreateEvent() {
         eventOwner: eventOwnerName,
         openDate: openDate,
         closeDate: closeDate,
-        thumbnail: thumbnail,
+        thumbnail: thumbnailURL,
         template: template,
       });
       if (response.status === 200) {
@@ -152,8 +161,13 @@ function Admin_CreateEvent() {
                       (อัปโหลดได้เฉพาะ .png หรือ .jpg เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={handleThumbnail} />
-                  <Img src={thumbnail} pt={2} />
+                  <input
+                    type="file"
+                    onChange={(e) => {firebaseUpload(e.target.files[0])}}
+                  />
+                  {/* <input type="file" onChange={handleThumbnail} /> */}
+                  {/* <Img src={thumbnail} pt={2} /> */}
+                  <Img src={thumbnailURL} pt={2} />
                 </FormControl>
                 <FormControl id="">
                   <FormLabel

@@ -19,6 +19,7 @@ function Student_Homepage() {
   useEffect(() => {
     getEventData();
   }, []);
+  console.log(eventData)
   return (
     <>
       <ScrollRestoration />
