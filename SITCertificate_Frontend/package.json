@@ -22,7 +22,7 @@
     "firebase": "^10.12.4",
     "framer-motion": "^11.2.10",
     "js-cookie": "^3.0.5",
-    "pdfjs-dist": "3.11.174",
+    "pdfjs-dist": "^4.4.168",
     "postcss": "^8.4.38",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

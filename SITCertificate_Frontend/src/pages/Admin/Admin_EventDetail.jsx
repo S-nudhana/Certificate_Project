@@ -26,7 +26,6 @@ import PdfViewer from '../../components/PdfViewer';
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
 import axiosInstance from '../../utils/axiosInstance';
-import certificate from '../../assets/note.pdf'
 
 function Admin_EventDetail() {
     const { id } = useParams();
@@ -71,8 +70,8 @@ function Admin_EventDetail() {
             </Box>
             {eventData && comments && (
                 <>
-                    <Stack direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'} pt="20px">
-                        <Flex flex={1} direction={"column"} ml={["10%", "10%", "5%"]} >
+                    <Stack width={'100%'} direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'} pt="20px">
+                        <Flex width={{ base: '80%', md: '50%' }} direction={"column"} ml={["10%", "10%", "5%"]} >
                             <Text fontSize="32px" fontWeight="bold" >
                                 {eventData.event_name}
                             </Text>
@@ -88,11 +87,11 @@ function Admin_EventDetail() {
                             <Text fontSize="18px" fontWeight={"bold"}>
                                 ใบประกาศนียบัตร
                             </Text>
-                            <PdfViewer fileUrl={certificate} />
-                            <Button mt={'15px'} mb={'20px'} width={'280px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={certificate} download={`${eventData.event_name}certificate.pdf`}>
+                            <PdfViewer fileUrl={eventData.event_certificate} />
+                            {/* <Button mt={'15px'} mb={'20px'} width={'280px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={eventData.event_certificate} download={`${eventData.event_name}_certificate.pdf`}>
                                 ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
-                            </Button>
-                            <Flex gap={'10px'}>
+                            </Button> */}
+                            <Flex width={{ base: '80%', md: '50%' }} gap={'10px'}>
                                 <Text fontSize="18px" fontWeight={"bold"}>
                                     รายชื่อผู้เข้าร่วม:
                                 </Text>

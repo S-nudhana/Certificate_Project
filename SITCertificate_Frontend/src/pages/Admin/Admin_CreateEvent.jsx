@@ -27,27 +27,33 @@ function Admin_CreateEvent() {
   const navigate = useNavigate();
   const [eventName, seteventName] = useState('');
   const [eventOwnerName, seteventOwnerName] = useState('');
-  const [thumbnail, setThumbnail] = useState();
   const [thumbnailURL, setThumbnailURL] = useState();
   const [openDate, setOpenDate] = useState();
   const [closeDate, setCloseDate] = useState();
-  const [template, setTemplate] = useState();
+  const [templateURL, setTemplateURL] = useState();
   const [Excel, setExcel] = useState();
 
-  function handleTemplate(e) {
-    setTemplate(URL.createObjectURL(e.target.files[0]));
-  }
   function handleExcel(e) {
     setExcel(URL.createObjectURL(e.target.files[0]));
   }
-  const storage = getStorage(app);
-  const firebaseUpload = async (file) => {
+  const firebaseUploadImage = async (file) => {
+    const storage = getStorage(app);
     if (file) {
       const storageRef = ref(storage, `upload_images/${file.name}`);
       await uploadBytes(storageRef, file);
 
       const imageURL = await getDownloadURL(storageRef);
       setThumbnailURL(imageURL)
+    }
+  }
+  const firebaseUploadTemplate = async (file) => {
+    const storage = getStorage(app);
+    if (file) {
+      const storageRef = ref(storage, `upload_template/${file.name}`);
+      await uploadBytes(storageRef, file);
+
+      const templateURL = await getDownloadURL(storageRef);
+      setTemplateURL(templateURL)
     }
   }
 
@@ -59,7 +65,7 @@ function Admin_CreateEvent() {
         openDate: openDate,
         closeDate: closeDate,
         thumbnail: thumbnailURL,
-        template: template,
+        template: templateURL,
       });
       if (response.status === 200) {
         navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
@@ -163,10 +169,8 @@ function Admin_CreateEvent() {
                   </FormLabel>
                   <input
                     type="file"
-                    onChange={(e) => {firebaseUpload(e.target.files[0])}}
+                    onChange={(e) => {firebaseUploadImage(e.target.files[0]) }}
                   />
-                  {/* <input type="file" onChange={handleThumbnail} /> */}
-                  {/* <Img src={thumbnail} pt={2} /> */}
                   <Img src={thumbnailURL} pt={2} />
                 </FormControl>
                 <FormControl id="">
@@ -180,7 +184,7 @@ function Admin_CreateEvent() {
                       (อัปโหลดได้เฉพาะ .pdf เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={handleTemplate} />
+                  <input type="file" onChange={(e) => {firebaseUploadTemplate(e.target.files[0])}} />
                 </FormControl>
                 <FormControl>
                   <FormLabel
