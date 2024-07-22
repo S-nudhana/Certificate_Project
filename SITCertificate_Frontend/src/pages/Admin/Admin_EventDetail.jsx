@@ -96,7 +96,7 @@ function Admin_EventDetail() {
                                     รายชื่อผู้เข้าร่วม:
                                 </Text>
                                 <Tooltip hasArrow placement='right' label='คลิกเพื่อดาวน์โหลด' bg='gray.100' p={'5px'} color='black'>
-                                    <Button variant={'link'} color={'#919191'}>
+                                    <Button variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
                                         รายชื่อ.xls
                                     </Button>
                                 </Tooltip>

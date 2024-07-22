@@ -60,7 +60,7 @@ function Admin_EditEvent() {
         const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
         const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
         const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
-        await axiosInstance.put(`/admin/updateEvent`, {
+        const response = await axiosInstance.put(`/admin/updateEvent`, {
           eventName: eventName,
           eventOwner: eventOwnerName,
           openDate: openDate,
@@ -70,6 +70,9 @@ function Admin_EditEvent() {
           excel: uploadedExcelURL,
           eventId: id.id
         });
+        if (response.status === 200) {
+          navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+        }
       }
     } catch (error) {
       console.error("Error creating event:", error);
@@ -200,6 +203,7 @@ function Admin_EditEvent() {
                   </FormLabel>
                   <input
                     type="file"
+                    accept=".pdf"
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {
@@ -219,7 +223,9 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={(e) => {
+                  <input type="file" 
+                    accept=".xlsx" 
+                    onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
                       setExcelFile(file);
