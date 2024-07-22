@@ -8,12 +8,12 @@ const getGenerateCertificate = async (req, res) => {
   try {
     const { token } = req.cookies;
     const userId = jwt.verify(token, process.env.JWTSecretKey);
-    const studentId = parseInt(userId.student_id);
+    const studentId = userId.student_email;
     const value = [eventId, studentId];
     const dataQuery = await db
       .promise()
       .query(
-        `SELECT student_eventGenerated FROM student WHERE student_joinedEventId = ? AND student_Id = ?`,
+        `SELECT student_eventGenerated FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
         value
       );
     const data = dataQuery[0][0];

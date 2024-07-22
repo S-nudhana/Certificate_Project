@@ -7,11 +7,11 @@ import {
   FormControl,
   FormLabel,
   Input,
-  FormErrorMessage
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
-import img from '../../assets/img/SIT_Building.png'
-
+import img from "../../assets/img/SIT_Building.png";
+import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
@@ -31,15 +31,15 @@ function Student_Detail() {
   const getStudentGenerate = async () => {
     const response = await axiosInstance.get(`/student/generate?id=${id}`);
     setStudentData(response.data.data);
-  }
+  };
   useEffect(() => {
-    getEventData()
-    getStudentGenerate()
+    getEventData();
+    getStudentGenerate();
   }, []);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState('');
+  const [emailError, setEmailError] = useState("");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = () =>
@@ -63,7 +63,9 @@ function Student_Detail() {
                   {eventData.event_name}
                 </Text>
                 <Text pt="10px" pb="20px">
-                  เปิดให้ดาว์นโหลดตั้งแต่  {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
+                  เปิดให้ดาว์นโหลดตั้งแต่{" "}
+                  {dateFormatChange(eventData.event_startDate)} ถึง{" "}
+                  {dateFormatChange(eventData.event_endDate)}
                 </Text>
                 <Box
                   border=".7px solid #919191"
@@ -100,10 +102,9 @@ function Student_Detail() {
                       (ใช้ในการส่งใบประกาศนียบัตร)
                     </span>
                   </Text>
-                  <FormControl mb={'20px'} id="email" isInvalid={emailError}>
+                  <FormControl mb={"20px"} id="email" isInvalid={emailError}>
                     <Input
                       type="email"
-                      placeholder="อีเมล"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       borderColor={emailError ? "#D2042D" : "gray.200"}
@@ -120,7 +121,7 @@ function Student_Detail() {
                       _hover={{ bgColor: "#1f568c" }}
                       variant="solid"
                       onClick={() => {
-                        handleClick()
+                        handleClick();
                       }}
                     >
                       ถัดไป
@@ -138,9 +139,9 @@ function Student_Detail() {
           {eventData && (
             <Box display={{ base: "block", lg: "flex" }} pt="80px">
               <Image
-                src={img}
+                src={eventData.event_thumbnail}
                 width={{ base: "100%", lg: "35%" }}
-                height={{ base: "auto", lg: "100vh" }}
+                height={{ base: "auto", lg: "120vh" }}
                 objectFit="cover"
               ></Image>
               <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
@@ -149,33 +150,24 @@ function Student_Detail() {
                   {eventData.event_name}
                 </Text>
                 <Text pt="10px" pb="20px">
-                  เปิดให้ดาว์นโหลดตั้งแต่  {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
+                  เปิดให้ดาว์นโหลดตั้งแต่{" "}
+                  {dateFormatChange(eventData.event_startDate)} ถึง{" "}
+                  {dateFormatChange(eventData.event_endDate)}
                 </Text>
                 <Text fontSize="18px" fontWeight={"bold"}>
                   ใบประกาศนียบัตร
                 </Text>
-                <Box
-                  display="flex"
-                  justifyContent={{ base: "center", lg: "flex-start" }}
-                >
-                  <Image
-                    width="90%"
-                    height={"auto"}
-                    src={img}
-                    my={"20px"}
-                    boxShadow={"lg"}
-                  ></Image>
-                </Box>
+                <PdfViewer fileUrl={eventData.event_certificate} />
                 <Box
                   display="flex"
                   justifyContent={{ base: "center", lg: "flex-start" }}
                   gap={"20px"}
                 >
                   <Button
-                    width="270px"
+                    width="250px"
                     bgColor="#336699"
                     color="white"
-                    fontSize={{ base: "14px", md: "16px" }}
+                    fontSize={{ base: "12px", md: "16px" }}
                     borderRadius="40px"
                     _hover={{ bgColor: "#1f568c" }}
                     variant="solid"
@@ -186,10 +178,13 @@ function Student_Detail() {
                     width="100px"
                     bgColor="#3399cc"
                     color="white"
-                    fontSize={{ base: "14px", md: "16px" }}
+                    fontSize={{ base: "12px", md: "16px" }}
                     borderRadius="40px"
                     _hover={{ bgColor: "#297AA3" }}
                     variant="solid"
+                    as="a"
+                    href={eventData.event_certificate}
+                    download={`${eventData.event_name}_certificate.pdf`}
                   >
                     ดาวน์โหลด
                   </Button>
@@ -204,15 +199,15 @@ function Student_Detail() {
 
   const handleClick = () => {
     if (!emailRegex.test(email)) {
-      setEmailError('Invalid email address');
-      setEmail('')
+      setEmailError("Invalid email address");
+      setEmail("");
       return;
     } else {
-      setEmailError('');
+      setEmailError("");
     }
 
     navigate(`/certificate/${id}`);
-  }
+  };
 
   return (
     <>
