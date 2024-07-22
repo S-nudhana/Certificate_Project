@@ -1,13 +1,24 @@
 import db from "../../db/connection.js";
 
 const updateEventData = async (req, res) => {
-  const {eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, eventId} = req.body;
-  console.log(thumbnail)
+  let {
+    eventName,
+    eventOwner,
+    openDate,
+    closeDate,
+    thumbnail,
+    template,
+    excel,
+    eventId,
+  } = req.body;
   try {
     const dataQuery = await db
       .promise()
-      .query(`SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_Id = ?`, [eventId]);
-    const data = dataQuery[0];
+      .query(
+        `SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_Id = ?`,
+        [eventId]
+      );
+    const data = dataQuery[0][0];
     if (!thumbnail) {
       thumbnail = data.event_thumbnail;
     }
@@ -17,12 +28,11 @@ const updateEventData = async (req, res) => {
     if (!excel) {
       excel = data.event_excel;
     }
-    const value = [eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, eventId];
     await db
       .promise()
       .query(
         "UPDATE event SET event_name = ?, event_owner = ?, event_startDate = ?, event_endDate = ?, event_thumbnail = ?, event_certificate = ?, event_excel = ? WHERE event_Id = ?",
-        [value]
+        [eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, eventId]
       );
     return res.json({
       success: true,

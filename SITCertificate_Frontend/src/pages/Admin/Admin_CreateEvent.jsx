@@ -174,6 +174,7 @@ function Admin_CreateEvent() {
                   </FormLabel>
                   <input
                     type="file"
+                    accept=".pdf"
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {
@@ -193,7 +194,9 @@ function Admin_CreateEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={(e) => {
+                  <input type="file" 
+                    accept=".xlsx" 
+                    onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
                       setExcelFile(file);
