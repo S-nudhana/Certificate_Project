@@ -9,7 +9,7 @@ const SignInStudent = async (req, res) => {
     const { email, password } = req.body;
     const value = [email];
     const user = await db.promise().query("SELECT * FROM student WHERE student_email = ?", [value]);
-    if (user[0].length != 1) {
+    if (user[0].length < 1) {
       throw "ไม่พบบัญชีนี้ในระบบ";
     }
     const compared = password === user[0][0].student_password;
@@ -17,7 +17,7 @@ const SignInStudent = async (req, res) => {
       throw "รหัสผ่านไม่ถูกต้อง";
     }
     const tokenData = {
-      student_id: user[0][0].student_Id,
+      student_email: user[0][0].student_email,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
     res.cookie("token", signedToken);

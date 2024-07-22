@@ -7,12 +7,12 @@ const getAllInProgressEvent = async (req, res) => {
   try {
     const { token } = req.cookies;
     const userId = jwt.verify(token, process.env.JWTSecretKey);
-    const studentId = parseInt(userId.student_id);
+    const studentId = userId.student_email;
     const value = [studentId];
     const dataQuery = await db
       .promise()
       .query(
-        "SELECT * FROM event WHERE event_endDate > NOW() AND event_approve = 1 AND event_Id IN (SELECT student_joinedEventId FROM student WHERE student_Id = ?) ORDER BY event_startDate DESC",
+        "SELECT * FROM event WHERE event_endDate > NOW() AND event_approve = 1 AND event_Id IN (SELECT student_joinedEventId FROM student WHERE student_email = ?) ORDER BY event_startDate DESC",
         [value]
       );
     const data = dataQuery[0];
