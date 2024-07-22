@@ -1,12 +1,12 @@
 import db from "../../db/connection.js";
 const setEvent = async (req, res) => {
   try {
-    const {eventName, eventOwner, openDate, closeDate, thumbnail,template} = req.body;
-    const data = [eventName, eventOwner, openDate, closeDate, thumbnail, 0, template];
+    const {eventName, eventOwner, openDate, closeDate, thumbnail, template, excel} = req.body;
+    const value = [eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, 0];
     await db
       .promise()
-      .query("INSERT INTO `event` (`event_name`, `event_owner`, `event_startDate`, `event_endDate`, `event_thumbnail`, `event_approve`, `event_certificate`) VALUES (?)", [
-        data,
+      .query("INSERT INTO `event` (`event_name`, `event_owner`, `event_startDate`, `event_endDate`, `event_thumbnail`, `event_certificate`, `event_excel`, `event_approve`) VALUES (?)", [
+        value,
       ]);
     return res
       .status(200)

@@ -14,66 +14,66 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from '../../utils/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 import axiosInstance from "../../utils/axiosInstance";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '../../utils/firebaseConfig';
 
 function Admin_CreateEvent() {
   const navigate = useNavigate();
-  const [eventName, seteventName] = useState('');
-  const [eventOwnerName, seteventOwnerName] = useState('');
-  const [thumbnailURL, setThumbnailURL] = useState();
-  const [openDate, setOpenDate] = useState();
-  const [closeDate, setCloseDate] = useState();
-  const [templateURL, setTemplateURL] = useState();
-  const [Excel, setExcel] = useState();
+  const [eventName, setEventName] = useState('');
+  const [eventOwnerName, setEventOwnerName] = useState('');
+  const [openDate, setOpenDate] = useState('');
+  const [closeDate, setCloseDate] = useState('');
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailURL, setThumbnailURL] = useState('');
+  const [templateFile, setTemplateFile] = useState(null);
+  const [excelFile, setExcelFile] = useState(null);
 
-  function handleExcel(e) {
-    setExcel(URL.createObjectURL(e.target.files[0]));
-  }
-  const firebaseUploadImage = async (file) => {
+  const firebaseUploadFile = async (file, folder) => {
     const storage = getStorage(app);
     if (file) {
-      const storageRef = ref(storage, `upload_images/${file.name}`);
+      const storageRef = ref(storage, `${folder}/${file.name}`);
       await uploadBytes(storageRef, file);
-
-      const imageURL = await getDownloadURL(storageRef);
-      setThumbnailURL(imageURL)
+      return getDownloadURL(storageRef);
     }
-  }
-  const firebaseUploadTemplate = async (file) => {
-    const storage = getStorage(app);
-    if (file) {
-      const storageRef = ref(storage, `upload_template/${file.name}`);
-      await uploadBytes(storageRef, file);
-
-      const templateURL = await getDownloadURL(storageRef);
-      setTemplateURL(templateURL)
-    }
+    return null;
   }
 
   const handlesubmit = async () => {
     try {
-      const response = await axiosInstance.post("/admin/createEvent", {
-        eventName: eventName,
-        eventOwner: eventOwnerName,
-        openDate: openDate,
-        closeDate: closeDate,
-        thumbnail: thumbnailURL,
-        template: templateURL,
-      });
-      if (response.status === 200) {
-        navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+      if (thumbnailFile && templateFile) {
+        const uploadedThumbnailURL = await firebaseUploadFile(thumbnailFile, 'upload_images');
+        const uploadedTemplateURL = await firebaseUploadFile(templateFile, 'upload_template');
+        const uploadedExcelURL = await firebaseUploadFile(excelFile, 'upload_excel');
+        if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL) {
+          const response = await axiosInstance.post("/admin/createEvent", {
+            eventName: eventName,
+            eventOwner: eventOwnerName,
+            openDate: openDate,
+            closeDate: closeDate,
+            thumbnail: uploadedThumbnailURL,
+            template: uploadedTemplateURL,
+            excel: uploadedExcelURL
+          });
+          if (response.status === 200) {
+            navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+          }
+        } else {
+          console.error("Missing required event information.");
+        }
+      } else {
+        console.error("Files are not selected.");
       }
     } catch (error) {
-      console.error("Error creating evnet:", error);
+      console.error("Error creating event:", error);
     }
   }
+
   return (
     <>
       <Navbar />
@@ -82,19 +82,8 @@ function Admin_CreateEvent() {
           <BackBTN />
         </Box>
         <Flex minH={"80vh"} align={"center"} justify={"center"}>
-          <Stack
-            spacing={8}
-            mx={"auto"}
-            maxW={["sm", "lg", "lg"]}
-            py={12}
-            px={6}
-          >
-            <Box
-              rounded={"lg"}
-              bg={useColorModeValue("white", "gray.700")}
-              boxShadow={"lg"}
-              p={8}
-            >
+          <Stack spacing={8} mx={"auto"} maxW={["sm", "lg", "lg"]} py={12} px={6}>
+            <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
               <Stack align={"center"} pb={5}>
                 <Heading fontSize={["2xl", "3xl", "3xl"]} textAlign={"center"}>
                   สร้างกิจกรรม
@@ -102,35 +91,29 @@ function Admin_CreateEvent() {
               </Stack>
               <Stack spacing={4}>
                 <FormControl id="">
-                  <FormLabel fontSize={["sm", "md", "md"]}>
-                    ชื่อกิจกรรม
-                  </FormLabel>
+                  <FormLabel fontSize={["sm", "md", "md"]}>ชื่อกิจกรรม</FormLabel>
                   <Input
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อกิจกรรม"
                     value={eventName}
-                    onChange={(e) => seteventName(e.target.value)}
+                    onChange={(e) => setEventName(e.target.value)}
                   />
                 </FormControl>
                 <FormControl id="">
-                  <FormLabel fontSize={["sm", "md", "md"]}>
-                    ชื่อผู้จัดกิจกรรม
-                  </FormLabel>
+                  <FormLabel fontSize={["sm", "md", "md"]}>ชื่อผู้จัดกิจกรรม</FormLabel>
                   <Input
                     type="text"
                     size={["sm", "md", "md"]}
                     placeholder="กรอกชื่อผู้จัดกิจกรรม"
                     value={eventOwnerName}
-                    onChange={(e) => seteventOwnerName(e.target.value)}
+                    onChange={(e) => setEventOwnerName(e.target.value)}
                   />
                 </FormControl>
                 <HStack w="full">
                   <Box w={"50%"}>
                     <FormControl id="">
-                      <FormLabel fontSize={["sm", "md", "md"]}>
-                        เปิดให้เริ่มดาวน์โหลด
-                      </FormLabel>
+                      <FormLabel fontSize={["sm", "md", "md"]}>เปิดให้เริ่มดาวน์โหลด</FormLabel>
                       <Input
                         placeholder="Select Date and Time"
                         size={["sm", "md", "md"]}
@@ -142,9 +125,7 @@ function Admin_CreateEvent() {
                   </Box>
                   <Box w={"50%"}>
                     <FormControl id="">
-                      <FormLabel fontSize={["sm", "md", "md"]}>
-                        สิ้นสุดการดาวน์โหลด
-                      </FormLabel>
+                      <FormLabel fontSize={["sm", "md", "md"]}>สิ้นสุดการดาวน์โหลด</FormLabel>
                       <Input
                         placeholder="Select Date and Time"
                         size={["sm", "md", "md"]}
@@ -169,7 +150,14 @@ function Admin_CreateEvent() {
                   </FormLabel>
                   <input
                     type="file"
-                    onChange={(e) => {firebaseUploadImage(e.target.files[0]) }}
+                    accept=".png, .jpg, .jpeg, .heic, .heif"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setThumbnailFile(file);
+                        setThumbnailURL(URL.createObjectURL(file));
+                      }
+                    }}
                   />
                   <Img src={thumbnailURL} pt={2} />
                 </FormControl>
@@ -184,7 +172,15 @@ function Admin_CreateEvent() {
                       (อัปโหลดได้เฉพาะ .pdf เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={(e) => {firebaseUploadTemplate(e.target.files[0])}} />
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setTemplateFile(file);
+                      }
+                    }}
+                  />
                 </FormControl>
                 <FormControl>
                   <FormLabel
@@ -197,7 +193,12 @@ function Admin_CreateEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={handleExcel} />
+                  <input type="file" onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setExcelFile(file);
+                    }
+                  }} />
                 </FormControl>
                 <Stack spacing={10} pt={2}>
                   <Button
@@ -221,4 +222,5 @@ function Admin_CreateEvent() {
     </>
   );
 }
+
 export default authMiddleware(Admin_CreateEvent);
