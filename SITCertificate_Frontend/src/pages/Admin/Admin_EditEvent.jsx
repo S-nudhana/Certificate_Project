@@ -14,6 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from '../../utils/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -25,48 +27,58 @@ import { formatDate } from "../../utils/function";
 function Admin_EditEvent() {
   const id = useParams();
   const navigate = useNavigate();
-  const [eventName, setEventName] = useState();
-  const [eventOwnerName, setEventOwnerName] = useState();
-  const [thumbnail, setThumbnail] = useState();
-  const [openDate, setOpenDate] = useState();
-  const [closeDate, setCloseDate] = useState();
-  const [template, setTemplate] = useState();
-  const [Excel, setExcel] = useState();
-  function handleThumbnail(e) {
-    setThumbnail(URL.createObjectURL(e.target.files[0]));
-  }
-  function handleTemplate(e) {
-    setTemplate(URL.createObjectURL(e.target.files[0]));
-  }
-  function handleExcel(e) {
-    setExcel(URL.createObjectURL(e.target.files[0]));
-  }
+  const [eventName, setEventName] = useState('');
+  const [eventOwnerName, setEventOwnerName] = useState('');
+  const [openDate, setOpenDate] = useState('');
+  const [closeDate, setCloseDate] = useState('');
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailURL, setThumbnailURL] = useState('');
+  const [templateFile, setTemplateFile] = useState(null);
+  const [excelFile, setExcelFile] = useState(null);
+
   const getEventData = async () => {
     const response = await axiosInstance.get(`/user/event?id=${id.id}`);
     setEventName(response.data.data.event_name);
     setEventOwnerName(response.data.data.event_owner);
-    setThumbnail(response.data.data.event_thumbnail);
     setOpenDate(formatDate(response.data.data.event_startDate));
     setCloseDate(formatDate(response.data.data.event_endDate));
   };
+
+  const firebaseUploadFile = async (file, folder) => {
+    const storage = getStorage(app);
+    if (file) {
+      const storageRef = ref(storage, `${folder}/${file.name}`);
+      await uploadBytes(storageRef, file);
+      return getDownloadURL(storageRef);
+    }
+    return null;
+  }
+
   const updateEventData = async () => {
     try {
-      await axiosInstance.put(`/admin/updateEvent`, {
-        eventName: eventName,
-        eventOwner: eventOwnerName,
-        openDate: openDate,
-        closeDate: closeDate,
-        thumbnail: thumbnail,
-        eventId: id.id
-      });
-      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+      if (eventName || eventOwnerName || openDate || closeDate || thumbnailFile || templateFile || excelFile) {
+        const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
+        const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
+        const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
+        await axiosInstance.put(`/admin/updateEvent`, {
+          eventName: eventName,
+          eventOwner: eventOwnerName,
+          openDate: openDate,
+          closeDate: closeDate,
+          thumbnail: uploadedThumbnailURL,
+          template: uploadedTemplateURL,
+          excel: uploadedExcelURL,
+          eventId: id.id
+        });
+      }
     } catch (error) {
-      console.error('Error updating event data:', error);
+      console.error("Error creating event:", error);
     }
-  };
+  }
+
   useEffect(() => {
     getEventData();
-  }, []);
+  });
 
   return (
     <>
@@ -162,8 +174,18 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .png หรือ .jpg เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={handleThumbnail} />
-                  <Img src={thumbnail} pt={2} />
+                  <input
+                    type="file"
+                    accept=".png, .jpg, .jpeg, .heic, .heif"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setThumbnailFile(file);
+                        setThumbnailURL(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                  <Img src={thumbnailURL} pt={2} />
                 </FormControl>
                 <FormControl>
                   <FormLabel
@@ -176,7 +198,15 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .pdf เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={handleTemplate} />
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setTemplateFile(file);
+                      }
+                    }}
+                  />
                 </FormControl>
                 <FormControl>
                   <FormLabel
@@ -189,7 +219,12 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" onChange={handleExcel} />
+                  <input type="file" onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setExcelFile(file);
+                    }
+                  }} />
                 </FormControl>
                 <Stack spacing={10} pt={2}>
                   <Button

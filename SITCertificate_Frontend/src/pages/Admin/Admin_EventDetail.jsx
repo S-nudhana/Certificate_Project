@@ -88,9 +88,9 @@ function Admin_EventDetail() {
                                 ใบประกาศนียบัตร
                             </Text>
                             <PdfViewer fileUrl={eventData.event_certificate} />
-                            {/* <Button mt={'15px'} mb={'20px'} width={'280px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={eventData.event_certificate} download={`${eventData.event_name}_certificate.pdf`}>
+                            <Button mt={'15px'} mb={'20px'} width={'280px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={eventData.event_certificate} download={`${eventData.event_name}_certificate.pdf`}>
                                 ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
-                            </Button> */}
+                            </Button>
                             <Flex width={{ base: '80%', md: '50%' }} gap={'10px'}>
                                 <Text fontSize="18px" fontWeight={"bold"}>
                                     รายชื่อผู้เข้าร่วม:
