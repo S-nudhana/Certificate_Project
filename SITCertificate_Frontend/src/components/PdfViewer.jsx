@@ -5,7 +5,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 
 export default function PdfViewer({ fileUrl }) {
   return (
-    <Box pb={'20px'} mt={'20px'} ml={["-10%", "-10%", "-5%"]}>
+    <Box pb={'20px'} mt={'20px'}>
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174 /build/pdf.worker.min.js">
         <Box width={'100%'} height={'100%'}>
           <Viewer fileUrl={fileUrl} />

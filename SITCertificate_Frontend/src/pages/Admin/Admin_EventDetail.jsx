@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration, useNavigate } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa6";
+import { SiMicrosoftexcel } from "react-icons/si";
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -96,13 +97,13 @@ function Admin_EventDetail() {
                                     รายชื่อผู้เข้าร่วม:
                                 </Text>
                                 <Tooltip hasArrow placement='right' label='คลิกเพื่อดาวน์โหลด' bg='gray.100' p={'5px'} color='black'>
-                                    <Button variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
-                                        รายชื่อ.xls
+                                    <Button leftIcon={<SiMicrosoftexcel/>} variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
+                                        รายชื่อ.xlsx
                                     </Button>
                                 </Tooltip>
                             </Flex>
                         </Flex>
-                        <Flex flex={1} ml={["10%", "10%", "0%"]} width={'50%'}>
+                        <Flex ml={["10%", "10%", "0%"]} width={{ base: '90%', md: '50%' }}>
                             <Stack spacing={5} w={"full"} pr={"10%"}>
                                 <Heading fontSize={"2xl"} pt={{ base: '20px', md: '0' }}>ความคิดเห็น</Heading>
                                 <Box width={'100%'}>
