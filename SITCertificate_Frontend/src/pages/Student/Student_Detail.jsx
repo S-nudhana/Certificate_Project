@@ -36,6 +36,7 @@ function Student_Detail() {
     getEventData();
     getStudentGenerate();
   }, []);
+
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
@@ -54,7 +55,7 @@ function Student_Detail() {
               <Image
                 src={eventData.event_thumbnail}
                 width={{ base: "100%", lg: "35%" }}
-                height={{ base: "auto", lg: "100vh" }}
+                height={{ base: "300px", lg: "100vh" }}
                 objectFit="cover"
               ></Image>
               <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
