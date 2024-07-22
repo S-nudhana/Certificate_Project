@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration } from "react-router-dom";
 import { FaCheck } from "react-icons/fa6";
-import certificate from '../../assets/note.pdf'
+import { SiMicrosoftexcel } from "react-icons/si";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -82,8 +82,8 @@ function Prof_EventDetail() {
         <BackBTN />
       </Box>
       {eventData && comments && (
-        <Stack direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'}>
-          <Flex flex={1} direction={"column"} ml={["10%", "10%", "5%"]} >
+        <Stack width={'100%'} direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'}>
+          <Flex width={{ base: '80%', md: '50%' }}  direction={"column"} ml={["10%", "10%", "5%"]} >
             <Text fontSize="32px" fontWeight="bold" pt="20px">
               {eventData.event_name}
             </Text>
@@ -99,8 +99,8 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <PdfViewer fileUrl={certificate} />
-            <Button mt={'15px'} mb={'20px'} width={'280px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={certificate} download={`${eventData.event_name}certificate.pdf`}>
+            <PdfViewer fileUrl={eventData.event_certificate} />
+            <Button mt={'15px'} mb={'20px'} width={'280px'} color={'white'} bgColor={'#3399cc'} _hover={{ bgColor: '#297AA3' }} as="a" href={eventData.event_certificate} download={`${eventData.event_name}certificate.pdf`}>
               ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
             </Button>
             <Flex gap={'10px'}>
@@ -108,14 +108,14 @@ function Prof_EventDetail() {
                 รายชื่อผู้เข้าร่วม:
               </Text>
               <Tooltip hasArrow placement='right' label='คลิกเพื่อดาวน์โหลด' bg='gray.100' p={'5px'} color='black'>
-                <Button variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
-                  รายชื่อ.xls
+                <Button leftIcon={<SiMicrosoftexcel />} variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
+                  รายชื่อ.xlsx
                 </Button>
               </Tooltip>
             </Flex>
             <Button isDisabled={eventData.event_approve === 1} mt={'20px'} width={'130px'} padding={"20px"} color={'white'} bgColor={'#336699'} borderRadius={'40px'} _hover={{ bgColor: '#1f568c' }} onClick={onOpen}>อนุมัติกิจกรรม</Button>
           </Flex>
-          <Flex flex={1} ml={["10%", "10%", "0%"]} width={{ base: '90%', md: '50%' }}>
+          <Flex ml={["10%", "10%", "0%"]} width={{ base: '90%', md: '50%' }}>
             <Stack spacing={5} w={"full"} pr={"10%"}>
               <Heading fontSize={"2xl"} pt="20px">
                 ความคิดเห็น

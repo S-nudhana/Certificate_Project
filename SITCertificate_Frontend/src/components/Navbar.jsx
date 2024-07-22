@@ -41,10 +41,10 @@ export default function Navbar() {
     };
   }, [lastScrollTop]);
   const LogoutCheck = () => {
-    if (Cookies.get("profToken") !== undefined) {
+    if (Cookies.get("profToken")) {
       Cookies.remove("profToken");
       return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
-    } else if (Cookies.get("adminToken") !== undefined) {
+    } else if (Cookies.get("adminToken")) {
       Cookies.remove("adminToken");
       return import.meta.env.VITE_ADMIN_PATH_LOGIN;
     } else {
