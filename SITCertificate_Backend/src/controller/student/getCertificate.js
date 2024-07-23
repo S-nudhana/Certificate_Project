@@ -3,20 +3,23 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 dotenv.config();
 
-const updateGenerateCertificate = async (req, res) => {
+const getCertificate = async (req, res) => {
   const eventId = parseInt(req.query.id);
   try {
     const { token } = req.cookies;
     const userId = jwt.verify(token, process.env.JWTSecretKey);
     const studentId = userId.student_email;
-    await db
+    const value = [eventId, studentId];
+    const dataQuery = await db
       .promise()
       .query(
-        "UPDATE student SET student_eventGenerated = ? WHERE student_joinedEventId = ? AND student_email = ?",
-        [1, eventId, studentId]
+        `SELECT event_Certificate FROM event WHERE event_Id = ? AND event_Id in (SELECT student_joinedEventId FROM student WHERE student_email = ?)`,
+        value
       );
+    const data = dataQuery[0][0];
     return res.json({
       success: true,
+      data: data,
       error: null,
     });
   } catch (error) {
@@ -28,5 +31,4 @@ const updateGenerateCertificate = async (req, res) => {
     });
   }
 };
-
-export default updateGenerateCertificate;
+export default getCertificate;

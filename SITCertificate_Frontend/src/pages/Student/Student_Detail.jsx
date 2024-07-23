@@ -7,10 +7,10 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Flex,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
-import img from "../../assets/img/SIT_Building.png";
 import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -142,7 +142,7 @@ function Student_Detail() {
               <Image
                 src={eventData.event_thumbnail}
                 width={{ base: "100%", lg: "35%" }}
-                height={{ base: "auto", lg: "120vh" }}
+                height={{ base: "300px", lg: "100vh" }}
                 objectFit="cover"
               ></Image>
               <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
@@ -158,7 +158,12 @@ function Student_Detail() {
                 <Text fontSize="18px" fontWeight={"bold"}>
                   ใบประกาศนียบัตร
                 </Text>
-                <PdfViewer fileUrl={eventData.event_certificate} />
+                <Box></Box>
+                <Flex width={"100%"} justifyContent={{base: "center", lg: 'start'}}>
+                  <Flex width={{base: '100%', lg: '80%'}} justifyContent={{base: "center", lg: 'start'}}>
+                    <PdfViewer fileUrl={eventData.event_certificate} />
+                  </Flex>
+                </Flex>
                 <Box
                   display="flex"
                   justifyContent={{ base: "center", lg: "flex-start" }}

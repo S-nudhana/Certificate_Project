@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
-import { Box, Button, Text, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure } from '@chakra-ui/react';
-import img from '../../assets/img/SIT_Building.png';
+import { Box, Button, Text, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure, Center } from '@chakra-ui/react';
+import PDF from 'react-pdf-watermark';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -11,35 +12,56 @@ function Student_CertificateExample() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [certificate, setCertificate] = useState();
+
+    const getCertificate = async () => {
+        const response = await axiosInstance.get(`/student/certificate?id=${id}`);
+        setCertificate(response.data.data.event_Certificate);
+    }
+
     const updateStudentGenerate = async () => {
         const response = await axiosInstance.put(`/student/generated?id=${id}`);
         if (response.data.success) {
             navigate(`/download/${id}`);
         }
     }
+
+    const getStudentGenerate = async () => {
+        const response = await axiosInstance.get(`/student/generate?id=${id}`);
+        console.log(response.data.data.student_eventGenerated)
+        if(response.data.data.student_eventGenerated === 1){
+            navigate(`/detail/${id}`);
+        }
+      };
+
+    useEffect(() => {
+        getCertificate();
+        getStudentGenerate();
+    }, []);
+
     return (
         <>
             <ScrollRestoration />
             <Navbar />
             <Box pt='80px' display='flex' flexDirection='column' alignItems='center' justifyContent={'center'}>
-                <Text fontSize='32px' fontWeight='bold' py='40px'>ตัวอย่างใบประกาศนียบัตร</Text>
-                <Text
-                    bgImage={`url(${img})`}
-                    backgroundSize="103% auto"
-                    backgroundPosition="center"
-                    color="rgba(255, 255, 255, 0.5)"
-                    textAlign="center"
-                    fontSize={{ base: '30px', md: "59px", lg: '110px' }}
-                    fontWeight="bold"
-                    display="inline-block"
-                    width="60%"
-                    height="auto"
-                >
-                    SITCertificate
-                    SITCertificate
-                    SITCertificate
-                </Text>
-                <Box width='80%' display='flex' justifyContent='space-between' py='40px'>
+                <Text pb={'20px'} fontSize='32px' fontWeight='bold' pt='40px'>ตัวอย่างใบประกาศนียบัตร</Text>
+                <Flex width={{ base: '150%', md: '100%' }} justifyContent={'center'}>
+                    {certificate &&
+                        <PDF
+                            canvasWidth={'50%'}
+                            canvasHeight={'auto'}
+                            file={certificate}
+                            watermark={"SITCertificate"}
+                            watermarkOptions={{
+                                transparency: 0.5,
+                                fontSize: 140,
+                                fontStyle: 'Bold',
+                                fontFamily: 'Arial'
+                            }}
+                        />
+                    }
+                </Flex>
+                <Box pt={'20px'} width='80%' display='flex' justifyContent='space-between' pb='40px'>
                     <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
                         navigate(-1)
                     }}>ย้อนกลับ</Button>
