@@ -4,6 +4,8 @@ import getAllInProgressEvent from "../controller/student/getAllInProgressEvent.j
 import getGenerateCertificate from "../controller/student/getGenerateCertificate.js";
 import updateGenerateCertificate from "../controller/student/updateGenerateCertificate.js";
 import getCertificate from "../controller/student/getCertificate.js";
+import updataCertificateInformation from "../controller/student/updataCertificateInformation.js";
+import getCertificateInfo from "../controller/student/getCertificateInfo.js";
 
 const studentRouter = express.Router();
 
@@ -12,5 +14,7 @@ studentRouter.get("/event", getAllInProgressEvent);
 studentRouter.get("/generate", getGenerateCertificate);
 studentRouter.put("/generated", updateGenerateCertificate);
 studentRouter.get("/certificate", getCertificate);
+studentRouter.put("/certificateinfo", updataCertificateInformation);
+studentRouter.get("/info", getCertificateInfo);
 
 export default studentRouter;

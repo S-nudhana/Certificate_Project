@@ -32,6 +32,7 @@ function Student_Detail() {
     const response = await axiosInstance.get(`/student/generate?id=${id}`);
     setStudentData(response.data.data);
   };
+
   useEffect(() => {
     getEventData();
     getStudentGenerate();
@@ -42,9 +43,27 @@ function Student_Detail() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const isFormFilled = () => name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
 
-  const isFormFilled = () =>
-    name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
+  const handleSubmit = async () => {
+    if (!emailRegex.test(email)) {
+      setEmailError("Invalid email address");
+      setEmail("");
+      return;
+    } else {
+      setEmailError("");
+    }
+
+    const response = await axiosInstance.put(`/student/certificateinfo`, {
+      eventId: id,
+      name: name,
+      surname: surname,
+      email: email,
+    });
+    if (response.status === 200) {
+      navigate(`/certificate/${id}`);
+    }
+  }
 
   const aleadyGenerate = () => {
     if (studentData && studentData.student_eventGenerated === 0) {
@@ -122,7 +141,7 @@ function Student_Detail() {
                       _hover={{ bgColor: "#1f568c" }}
                       variant="solid"
                       onClick={() => {
-                        handleClick();
+                        handleSubmit();
                       }}
                     >
                       ถัดไป
@@ -151,9 +170,7 @@ function Student_Detail() {
                   {eventData.event_name}
                 </Text>
                 <Text pt="10px" pb="20px">
-                  เปิดให้ดาว์นโหลดตั้งแต่{" "}
-                  {dateFormatChange(eventData.event_startDate)} ถึง{" "}
-                  {dateFormatChange(eventData.event_endDate)}
+                  เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
                 </Text>
                 <Text fontSize="18px" fontWeight={"bold"}>
                   ใบประกาศนียบัตร
@@ -201,18 +218,6 @@ function Student_Detail() {
         </>
       );
     }
-  };
-
-  const handleClick = () => {
-    if (!emailRegex.test(email)) {
-      setEmailError("Invalid email address");
-      setEmail("");
-      return;
-    } else {
-      setEmailError("");
-    }
-
-    navigate(`/certificate/${id}`);
   };
 
   return (

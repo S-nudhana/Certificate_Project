@@ -26,8 +26,8 @@ export default function Student_SignInPage() {
       setEmailError('');
     }
 
-    const res = await studentSignIn(email, password);
-    if (res.status === 201) {
+    const response = await studentSignIn(email, password);
+    if (response.status === 201) {
       navigate('/');
     } else {
       toast({
