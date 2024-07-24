@@ -23,17 +23,14 @@ export default function Admin_History() {
   const navigate = useNavigate();
   const [historyData, setHistoryData] = useState();
   const [search, setSearch] = useState("");
-  const getHistoryData = async () => {
-    const response = await axiosInstance.get(`/user/history`);
-    setHistoryData(response.data.data);
-  }
+
   const searchEvent = async () => {
     const response = await axiosInstance.get(`/user/searchEvent?eventName=${search}`);
     setHistoryData(response.data.data);
   }
   useEffect(() => {
     setSearch("");
-    getHistoryData();
+    searchEvent();
   }, []);
   var amount = 0;
   return (

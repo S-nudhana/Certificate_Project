@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
-import { Worker, Viewer } from '@react-pdf-viewer/core';
 import PDF from 'react-pdf-watermark';
 
 export default function PdfViewer({ fileUrl }) {

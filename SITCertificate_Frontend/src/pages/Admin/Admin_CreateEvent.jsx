@@ -44,7 +44,7 @@ function Admin_CreateEvent() {
     return null;
   }
 
-  const handlesubmit = async () => {
+  const handleSubmit = async () => {
     try {
       if (thumbnailFile && templateFile) {
         const uploadedThumbnailURL = await firebaseUploadFile(thumbnailFile, 'upload_images');
@@ -78,10 +78,7 @@ function Admin_CreateEvent() {
     <>
       <Navbar />
       <Box bg={useColorModeValue("gray.50", "gray.800")}>
-        <Box pt={"120px"} pl={"50px"}>
-          <BackBTN />
-        </Box>
-        <Flex minH={"80vh"} align={"center"} justify={"center"}>
+        <Flex pt={"80px"} minH={"80vh"} align={"center"} justify={"center"}>
           <Stack spacing={8} mx={"auto"} maxW={["sm", "lg", "lg"]} py={12} px={6}>
             <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
               <Stack align={"center"} pb={5}>
@@ -194,28 +191,43 @@ function Admin_CreateEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" 
-                    accept=".xlsx" 
+                  <input type="file"
+                    accept=".xlsx"
                     onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setExcelFile(file);
-                    }
-                  }} />
+                      const file = e.target.files[0];
+                      if (file) {
+                        setExcelFile(file);
+                      }
+                    }} />
                 </FormControl>
-                <Stack spacing={10} pt={2}>
+                <Flex justify={'space-between'} width={'100%'}>
                   <Button
                     loadingText="Submitting"
-                    size="lg"
+                    width={"49%"}
                     bg="#336699"
                     color="white"
                     _hover={{ bg: "#1F568C" }}
                     fontSize={["sm", "lg", "lg"]}
-                    onClick={handlesubmit}
+                    onClick={() => { 
+                      handleSubmit();
+                    }}
                   >
                     สร้างกิจกรรม
                   </Button>
-                </Stack>
+                  <Button
+                    loadingText="Submitting"
+                    width={"49%"}
+                    bg="#AD3D3B"
+                    color="white"
+                    _hover={{ bg: "#A80324" }}
+                    fontSize={["sm", "lg", "lg"]}
+                    onClick={() => {
+                      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+                    }}
+                  >
+                    ยกเลิก
+                  </Button>
+                </Flex>
               </Stack>
             </Box>
           </Stack>

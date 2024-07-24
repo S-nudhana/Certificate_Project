@@ -1,0 +1,32 @@
+import db from "../../db/connection.js";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+dotenv.config();
+
+const updataCertificateInformation = async (req, res) => {
+  const {eventId, name, surname, email} = req.body;
+  try {
+    const { token } = req.cookies;
+    const userId = jwt.verify(token, process.env.JWTSecretKey);
+    const studentId = userId.student_email;
+    await db
+      .promise()
+      .query(
+        "UPDATE student SET student_nameOnCertificate = ?, student_surnameOnCertificate = ?, student_emailToSendCertificate = ? WHERE student_joinedEventId = ? AND student_email = ?",
+        [name, surname, email, parseInt(eventId), studentId]
+      );
+    return res.status(200).json({
+      success: true,
+      error: null,
+    });
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({
+      success: false,
+      data: null,
+      error: error.message,
+    });
+  }
+};
+
+export default updataCertificateInformation;

@@ -14,12 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { app } from '../../utils/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 import axiosInstance from "../../utils/axiosInstance";
 import { formatDate } from "../../utils/function";
@@ -60,6 +59,7 @@ function Admin_EditEvent() {
         const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
         const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
         const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
+
         const response = await axiosInstance.put(`/admin/updateEvent`, {
           eventName: eventName,
           eventOwner: eventOwnerName,
@@ -87,10 +87,7 @@ function Admin_EditEvent() {
     <>
       <Navbar />
       <Box bg={useColorModeValue("gray.50", "gray.800")}>
-        <Box pt={"120px"} pl={"50px"}>
-          <BackBTN />
-        </Box>
-        <Flex minH={"80vh"} align={"center"} justify={"center"}>
+        <Flex pt={"80px"} minH={"80vh"} align={"center"} justify={"center"}>
           <Stack
             spacing={8}
             mx={"auto"}
@@ -223,19 +220,19 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file" 
-                    accept=".xlsx" 
+                  <input type="file"
+                    accept=".xlsx"
                     onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setExcelFile(file);
-                    }
-                  }} />
+                      const file = e.target.files[0];
+                      if (file) {
+                        setExcelFile(file);
+                      }
+                    }} />
                 </FormControl>
-                <Stack spacing={10} pt={2}>
+                <Flex justify={'space-between'} width={'100%'}>
                   <Button
                     loadingText="Submitting"
-                    size="lg"
+                    width={"49%"}
                     bg="#336699"
                     color="white"
                     _hover={{ bg: "#1F568C" }}
@@ -246,7 +243,20 @@ function Admin_EditEvent() {
                   >
                     บันทึก
                   </Button>
-                </Stack>
+                  <Button
+                    loadingText="Submitting"
+                    width={"49%"}
+                    bg="#AD3D3B"
+                    color="white"
+                    _hover={{ bg: "#A80324" }}
+                    fontSize={["sm", "lg", "lg"]}
+                    onClick={() => {
+                      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+                    }}
+                  >
+                    ยกเลิก
+                  </Button>
+                </Flex>
               </Stack>
             </Box>
           </Stack>
