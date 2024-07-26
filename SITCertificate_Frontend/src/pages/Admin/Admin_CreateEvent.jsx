@@ -204,19 +204,6 @@ function Admin_CreateEvent() {
                   <Button
                     loadingText="Submitting"
                     width={"49%"}
-                    bg="#336699"
-                    color="white"
-                    _hover={{ bg: "#1F568C" }}
-                    fontSize={["sm", "lg", "lg"]}
-                    onClick={() => { 
-                      handleSubmit();
-                    }}
-                  >
-                    สร้างกิจกรรม
-                  </Button>
-                  <Button
-                    loadingText="Submitting"
-                    width={"49%"}
                     bg="#AD3D3B"
                     color="white"
                     _hover={{ bg: "#A80324" }}
@@ -226,6 +213,19 @@ function Admin_CreateEvent() {
                     }}
                   >
                     ยกเลิก
+                  </Button>
+                  <Button
+                    loadingText="Submitting"
+                    width={"49%"}
+                    bg="#336699"
+                    color="white"
+                    _hover={{ bg: "#1F568C" }}
+                    fontSize={["sm", "lg", "lg"]}
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    สร้างกิจกรรม
                   </Button>
                 </Flex>
               </Stack>

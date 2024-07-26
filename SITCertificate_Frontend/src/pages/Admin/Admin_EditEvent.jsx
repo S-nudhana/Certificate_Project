@@ -233,19 +233,6 @@ function Admin_EditEvent() {
                   <Button
                     loadingText="Submitting"
                     width={"49%"}
-                    bg="#336699"
-                    color="white"
-                    _hover={{ bg: "#1F568C" }}
-                    fontSize={["sm", "lg", "lg"]}
-                    onClick={() => {
-                      updateEventData();
-                    }}
-                  >
-                    บันทึก
-                  </Button>
-                  <Button
-                    loadingText="Submitting"
-                    width={"49%"}
                     bg="#AD3D3B"
                     color="white"
                     _hover={{ bg: "#A80324" }}
@@ -255,6 +242,19 @@ function Admin_EditEvent() {
                     }}
                   >
                     ยกเลิก
+                  </Button>
+                  <Button
+                    loadingText="Submitting"
+                    width={"49%"}
+                    bg="#336699"
+                    color="white"
+                    _hover={{ bg: "#1F568C" }}
+                    fontSize={["sm", "lg", "lg"]}
+                    onClick={() => {
+                      updateEventData();
+                    }}
+                  >
+                    บันทึก
                   </Button>
                 </Flex>
               </Stack>

@@ -70,7 +70,7 @@ export default function Navbar() {
       <Text color="white" fontWeight="bold" fontSize="24">
         SITCertificate
       </Text>
-      <Flex gap={{base: '10px', md:"30px"}}>
+      <Flex gap={{ base: '10px', md: "30px" }}>
         <Button
           leftIcon={<FaArrowRightFromBracket />}
           bgColor="#336699"
@@ -107,6 +107,15 @@ export default function Navbar() {
               <Button
                 mr={3}
                 color="white"
+                backgroundColor={"#AD3D3B"}
+                _hover={{ bgColor: "#A80324" }}
+                borderRadius={"30"}
+                onClick={onClose}
+              >
+                ยกเลิก
+              </Button>
+              <Button
+                color="white"
                 backgroundColor={"#336699"}
                 borderRadius={"30"}
                 _hover={{ bgColor: "#1f568c" }}
@@ -115,15 +124,6 @@ export default function Navbar() {
                 }}
               >
                 ตกลง
-              </Button>
-              <Button
-                color="white"
-                backgroundColor={"#AD3D3B"}
-                _hover={{ bgColor: "#A80324" }}
-                borderRadius={"30"}
-                onClick={onClose}
-              >
-                ยกเลิก
               </Button>
             </Flex>
           </ModalBody>

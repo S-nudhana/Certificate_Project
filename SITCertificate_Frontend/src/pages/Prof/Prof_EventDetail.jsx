@@ -83,7 +83,7 @@ function Prof_EventDetail() {
       </Box>
       {eventData && comments && (
         <Stack width={'100%'} direction={["column", "column", "row"]} mb={"50px"} justifyContent={'center'}>
-          <Flex width={{ base: '80%', md: '50%' }}  direction={"column"} ml={["10%", "10%", "5%"]} >
+          <Flex width={{ base: '80%', md: '50%' }} direction={"column"} ml={["10%", "10%", "5%"]} >
             <Text fontSize="32px" fontWeight="bold" pt="20px">
               {eventData.event_name}
             </Text>
@@ -185,6 +185,15 @@ function Prof_EventDetail() {
               <Button
                 mr={3}
                 color="white"
+                backgroundColor={"#AD3D3B"}
+                _hover={{ bgColor: "#A80324" }}
+                borderRadius={"30"}
+                onClick={onClose}
+              >
+                ยกเลิก
+              </Button>
+              <Button
+                color="white"
                 backgroundColor={"#336699"}
                 borderRadius={"30"}
                 _hover={{ bgColor: "#1f568c" }}
@@ -194,15 +203,6 @@ function Prof_EventDetail() {
                 }}
               >
                 ยืนยัน
-              </Button>
-              <Button
-                color="white"
-                backgroundColor={"#AD3D3B"}
-                _hover={{ bgColor: "#A80324" }}
-                borderRadius={"30"}
-                onClick={onClose}
-              >
-                ยกเลิก
               </Button>
             </Flex>
           </ModalBody>

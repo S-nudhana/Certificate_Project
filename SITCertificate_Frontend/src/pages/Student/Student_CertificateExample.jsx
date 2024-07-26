@@ -29,10 +29,10 @@ function Student_CertificateExample() {
     const getStudentGenerate = async () => {
         const response = await axiosInstance.get(`/student/generate?id=${id}`);
         console.log(response.data.data.student_eventGenerated)
-        if(response.data.data.student_eventGenerated === 1){
+        if (response.data.data.student_eventGenerated === 1) {
             navigate(`/detail/${id}`);
         }
-      };
+    };
 
     useEffect(() => {
         getCertificate();
@@ -83,6 +83,15 @@ function Student_CertificateExample() {
                             <Button
                                 mr={3}
                                 color="white"
+                                backgroundColor={"#AD3D3B"}
+                                _hover={{ bgColor: "#A80324" }}
+                                borderRadius={"30"}
+                                onClick={onClose}
+                            >
+                                ยกเลิก
+                            </Button>
+                            <Button
+                                color="white"
                                 backgroundColor={"#336699"}
                                 borderRadius={"30"}
                                 _hover={{ bgColor: "#1f568c" }}
@@ -91,15 +100,6 @@ function Student_CertificateExample() {
                                 }}
                             >
                                 ตกลง
-                            </Button>
-                            <Button
-                                color="white"
-                                backgroundColor={"#AD3D3B"}
-                                _hover={{ bgColor: "#A80324" }}
-                                borderRadius={"30"}
-                                onClick={onClose}
-                            >
-                                ยกเลิก
                             </Button>
                         </Flex>
                     </ModalBody>

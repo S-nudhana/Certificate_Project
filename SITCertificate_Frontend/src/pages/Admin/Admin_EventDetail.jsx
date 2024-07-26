@@ -27,6 +27,7 @@ import PdfViewer from '../../components/PdfViewer';
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
 import axiosInstance from '../../utils/axiosInstance';
+// import { sendMailToProfessor } from '../../utils/sendMail';
 
 function Admin_EventDetail() {
     const { id } = useParams();
@@ -34,6 +35,22 @@ function Admin_EventDetail() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [eventData, setEventData] = useState();
     const [comments, setComments] = useState();
+    const [receiver, setReceiver] = useState();
+
+    // const mailOptions = {
+    //     from: {
+    //         name: "SITCertificate",
+    //         address: import.meta.env.VITE_REACT_APP_MAIL_USER,
+    //     },
+    //     to: receiver,
+    //     subject: "เจ้าหน้าที่ได้ดำเนินการแก้ไขตามความคิดเห็นของท่าน",
+    //     text: "",
+    //     html: `<b>ความคิดเห็นนี้ได้รับการแก้ไขแล้ว</b>`,
+    // };
+    const getReceiverEmail = async () => {
+        const response = await axiosInstance.get(`/prof/email?id=${id}`);
+        setReceiver(response.data.data.professor_email);
+    }
     const getEventData = async () => {
         const response = await axiosInstance.get(`/user/event?id=${id}`);
         setEventData(response.data.data);
@@ -48,7 +65,7 @@ function Admin_EventDetail() {
         });
         if (response.data.success) {
             getComment();
-            sendEmail();
+            sendMailToProfessor();
         }
     }
     const deleteEvent = async () => {
@@ -59,9 +76,11 @@ function Admin_EventDetail() {
         }
     }
     useEffect(() => {
+        getReceiverEmail();
         getEventData();
         getComment();
     }, []);
+    // console.log(receiver)
     return (
         <>
             <ScrollRestoration />
@@ -97,7 +116,7 @@ function Admin_EventDetail() {
                                     รายชื่อผู้เข้าร่วม:
                                 </Text>
                                 <Tooltip hasArrow placement='right' label='คลิกเพื่อดาวน์โหลด' bg='gray.100' p={'5px'} color='black'>
-                                    <Button leftIcon={<SiMicrosoftexcel/>} variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
+                                    <Button leftIcon={<SiMicrosoftexcel />} variant={'link'} color={'#919191'} as="a" href={eventData.event_excel} download={`${eventData.event_name}_Excel.pdf`}>
                                         รายชื่อ.xlsx
                                     </Button>
                                 </Tooltip>
@@ -120,7 +139,7 @@ function Admin_EventDetail() {
                                                     icon={<FaCheck />}
                                                     pointerEvents={eventData.event_approve === 1 ? 'none' : 'auto'}
                                                     onClick={() => {
-                                                        toggleCommentStatus(item.comment_Id)
+                                                        toggleCommentStatus(item.comment_Id, item.comment_detail)
                                                     }}
                                                 />
                                             </Flex>
@@ -150,6 +169,15 @@ function Admin_EventDetail() {
                             <Button
                                 mr={3}
                                 color="white"
+                                backgroundColor={"#AD3D3B"}
+                                _hover={{ bgColor: "#A80324" }}
+                                borderRadius={"30"}
+                                onClick={onClose}
+                            >
+                                ยกเลิก
+                            </Button>
+                            <Button
+                                color="white"
                                 backgroundColor={"#336699"}
                                 borderRadius={"30"}
                                 _hover={{ bgColor: "#1f568c" }}
@@ -158,15 +186,6 @@ function Admin_EventDetail() {
                                 }}
                             >
                                 ตกลง
-                            </Button>
-                            <Button
-                                color="white"
-                                backgroundColor={"#AD3D3B"}
-                                _hover={{ bgColor: "#A80324" }}
-                                borderRadius={"30"}
-                                onClick={onClose}
-                            >
-                                ยกเลิก
                             </Button>
                         </Flex>
                     </ModalBody>
