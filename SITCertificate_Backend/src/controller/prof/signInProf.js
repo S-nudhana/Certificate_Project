@@ -22,7 +22,11 @@ const SignInProf = async (req, res) => {
       professor_id: user[0][0].professor_Id,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
-    res.cookie("profToken", signedToken);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+    };
+    res.cookie("profToken", signedToken, cookieOptions);
     return res.status(201).json({ message: "Login Successful" });
   } catch (e) {
     return res.status(500).json({ message: e });

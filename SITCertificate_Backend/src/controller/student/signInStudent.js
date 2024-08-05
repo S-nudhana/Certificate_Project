@@ -20,7 +20,11 @@ const SignInStudent = async (req, res) => {
       student_email: user[0][0].student_email,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
-    res.cookie("token", signedToken);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+    };
+    res.cookie("token", signedToken, cookieOptions);
     return res.status(201).json({ message: "Login Successful" });
   } catch (e) {
     return res.status(500).json({ message: e });

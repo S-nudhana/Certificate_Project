@@ -28,7 +28,6 @@ export default function Admin_SignInPage() {
     }
 
     const res = await adminSignIn(email, password);
-    // console.log(res);
     if (res.status === 201) {
       navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
     } else {
