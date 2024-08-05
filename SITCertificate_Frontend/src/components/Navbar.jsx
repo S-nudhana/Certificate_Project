@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,14 +13,17 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [shouldShowNavbar, setShouldShowNavbar] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const location = useLocation();
+  const [authStatus, setAuthStatus] = useState(null);
+
   const handleScroll = () => {
     const currentScrollTop =
       window.pageYOffset || document.documentElement.scrollTop;
@@ -34,24 +37,44 @@ export default function Navbar() {
     setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    verifyAuth();
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollTop]);
-  const LogoutCheck = () => {
-    if (Cookies.get("profToken")) {
-      Cookies.remove("profToken");
-      return import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
-    } else if (Cookies.get("adminToken")) {
-      Cookies.remove("adminToken");
-      return import.meta.env.VITE_ADMIN_PATH_LOGIN;
-    } else {
-      Cookies.remove("token");
-      return "/login";
+
+  const verifyAuth = async () => {
+    try {
+      const response = await axiosInstance.get("/user/verifyToken");
+      setAuthStatus(response.data);
+    } catch (error) {
+      setAuthStatus({ authenticated: false });
     }
   };
+
+  const LogoutCheck = async () => {
+    if (authStatus.authenticated) {
+      try {
+        let redirectPath = "/login";
+        let token = "token";
+        if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) && authStatus.role === "professor") {
+          token = "profToken";
+          redirectPath = import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
+        } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) && authStatus.role === "admin") {
+          token = "adminToken";
+          redirectPath = import.meta.env.VITE_ADMIN_PATH_LOGIN;
+        }
+        await axiosInstance.delete(`/user/deleteToken?token=${token}`);
+        window.location.href = redirectPath;
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+  };
+  
+
   return (
     <Box
       bgColor="#0c2d4e"

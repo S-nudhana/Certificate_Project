@@ -22,7 +22,11 @@ const SignInAdmin = async (req, res) => {
       admin_id: user[0][0].admin_Id,
     };
     const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
-    res.cookie("adminToken", signedToken);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+    };
+    res.cookie("adminToken", signedToken, cookieOptions);
     return res.status(201).json({ message: "Login Successful" });
   } catch (e) {
     return res.status(500).json({ message: e });

@@ -3,7 +3,6 @@ import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
-import { data } from "../../utils/mockUpData";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
