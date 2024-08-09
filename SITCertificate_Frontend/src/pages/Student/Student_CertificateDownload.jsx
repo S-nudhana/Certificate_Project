@@ -6,14 +6,15 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import authMiddleware from "../../utils/authMiddleware";
 import PdfViewer from '../../components/PdfViewer';
-import axiosInstance from '../../utils/axiosInstance';
+
+import getStudentCertificate from '../../api/student/getStudentCertificate';
 
 function Student_CertificateDownload() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [certificate, setCertificate] = useState();
     const getCertificate = async () => {
-        const response = await axiosInstance.get(`/student/certificate?id=${id}`);
+        const response = await getStudentCertificate(id);
         setCertificate(response.data.data.event_Certificate);
     }
     useEffect(() => {

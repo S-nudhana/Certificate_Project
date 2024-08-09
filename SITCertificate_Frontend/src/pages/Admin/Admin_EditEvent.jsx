@@ -20,8 +20,10 @@ import { app } from '../../utils/firebaseConfig';
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
-import axiosInstance from "../../utils/axiosInstance";
 import { formatDate } from "../../utils/function";
+
+import putAdminUpdateEvent from "../../api/admin/putAdminUpdateEvent";
+import getAdminProfEventData from "../../api/user/getAdminProfEventData";
 
 function Admin_EditEvent() {
   const id = useParams();
@@ -36,7 +38,7 @@ function Admin_EditEvent() {
   const [excelFile, setExcelFile] = useState(null);
 
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/event?id=${id.id}`);
+    const response = await getAdminProfEventData(id.id);
     setEventName(response.data.data.event_name);
     setEventOwnerName(response.data.data.event_owner);
     setOpenDate(formatDate(response.data.data.event_startDate));
@@ -59,17 +61,7 @@ function Admin_EditEvent() {
         const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
         const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
         const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
-
-        const response = await axiosInstance.put(`/admin/updateEvent`, {
-          eventName: eventName,
-          eventOwner: eventOwnerName,
-          openDate: openDate,
-          closeDate: closeDate,
-          thumbnail: uploadedThumbnailURL,
-          template: uploadedTemplateURL,
-          excel: uploadedExcelURL,
-          eventId: id.id
-        });
+        const response = await putAdminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, id.id);
         if (response.status === 200) {
           navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
         }

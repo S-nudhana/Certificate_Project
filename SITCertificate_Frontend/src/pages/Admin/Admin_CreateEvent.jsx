@@ -19,9 +19,9 @@ import { app } from '../../utils/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
-import axiosInstance from "../../utils/axiosInstance";
+
+import postAdminCreateEvent from "../../api/admin/postAdminCreateEvent";
 
 function Admin_CreateEvent() {
   const navigate = useNavigate();
@@ -51,15 +51,7 @@ function Admin_CreateEvent() {
         const uploadedTemplateURL = await firebaseUploadFile(templateFile, 'upload_template');
         const uploadedExcelURL = await firebaseUploadFile(excelFile, 'upload_excel');
         if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL) {
-          const response = await axiosInstance.post("/admin/createEvent", {
-            eventName: eventName,
-            eventOwner: eventOwnerName,
-            openDate: openDate,
-            closeDate: closeDate,
-            thumbnail: uploadedThumbnailURL,
-            template: uploadedTemplateURL,
-            excel: uploadedExcelURL
-          });
+          const response = await postAdminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL);
           if (response.status === 200) {
             navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
           }

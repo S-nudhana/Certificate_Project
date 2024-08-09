@@ -6,7 +6,10 @@ import PDF from 'react-pdf-watermark';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import authMiddleware from "../../utils/authMiddleware";
-import axiosInstance from '../../utils/axiosInstance';
+
+import getStudentGenerateEvent from '../../api/student/getStudentGenerateEvent';
+import updateStudentGenerateStatus from '../../api/student/updateStudentGenerateStatus';
+import getStudentCertificate from '../../api/student/getStudentCertificate';
 
 function Student_CertificateExample() {
     const { id } = useParams();
@@ -15,20 +18,19 @@ function Student_CertificateExample() {
     const [certificate, setCertificate] = useState();
 
     const getCertificate = async () => {
-        const response = await axiosInstance.get(`/student/certificate?id=${id}`);
+        const response = await getStudentCertificate(id);
         setCertificate(response.data.data.event_Certificate);
     }
 
     const updateStudentGenerate = async () => {
-        const response = await axiosInstance.put(`/student/generated?id=${id}`);
+        const response = await updateStudentGenerateStatus(id);
         if (response.data.success) {
             navigate(`/download/${id}`);
         }
     }
 
     const getStudentGenerate = async () => {
-        const response = await axiosInstance.get(`/student/generate?id=${id}`);
-        console.log(response.data.data.student_eventGenerated)
+        const response = await getStudentGenerateEvent(id);
         if (response.data.data.student_eventGenerated === 1) {
             navigate(`/detail/${id}`);
         }

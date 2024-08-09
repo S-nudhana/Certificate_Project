@@ -28,8 +28,12 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
 import authMiddleware from "../../utils/authMiddleware";
-import axiosInstance from "../../utils/axiosInstance";
 import { dateFormatChange, dateCheck } from '../../utils/function';
+
+import userSearchEvent from "../../api/user/searchEvent";
+import getAdminProfEventData from "../../api/user/getAdminProfEventData";
+import postProfComment from "../../api/prof/postProfComment";
+import deleteProfDeleteComment from "../../api/prof/deleteProfDeleteComment";
 
 function Prof_EventDetail() {
   const { id } = useParams();
@@ -38,33 +42,28 @@ function Prof_EventDetail() {
   const [comments, setComments] = useState();
   const [newCommentDetail, setNewCommentDetail] = useState();
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/event?id=${id}`);
+    const response = await getAdminProfEventData(id);
     setEventData(response.data.data);
   };
   const getComment = async () => {
-    const response = await axiosInstance.get(`/user/comment?id=${id}`);
+    const response = await userSearchEvent(id);
     setComments(response.data.data);
   }
   const postComment = async () => {
-    const response = await axiosInstance.post(`/prof/newComment`, {
-      eventId: id,
-      detail: newCommentDetail,
-    });
+    const response = await postProfComment(id, newCommentDetail);
     if (response.data.success) {
       getComment();
       setNewCommentDetail("");
     }
   }
   const approveEvent = async () => {
-    const response = await axiosInstance.put(`/prof/approveEvent`, {
-      eventId: id,
-    });
+    const response = await postProfApproveEvent(id);
     if (response.data.success) {
       getEventData();
     }
   }
   const deleteComment = async (commentId) => {
-    const response = await axiosInstance.delete(`/prof/deleteComment?id=${commentId}`);
+    const response = await deleteProfDeleteComment(commentId);
     if (response.data.success) {
       onClose();
       getComment();

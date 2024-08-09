@@ -20,7 +20,8 @@ import { FaSearch } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import axiosInstance from "../../utils/axiosInstance";
+
+import userSearchEvent from "../../api/user/userSearchEvent";
 
 export default function Admin_History() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function Admin_History() {
   const [search, setSearch] = useState("");
 
   const searchEvent = async () => {
-    const response = await axiosInstance.get(`/user/searchEvent?eventName=${search}`);
+    const response = await userSearchEvent(search);
     setHistoryData(response.data.data);
   }
   useEffect(() => {

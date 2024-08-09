@@ -11,13 +11,17 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
+
 import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
-import axiosInstance from "../../utils/axiosInstance";
+
+import getStudentGenerateEvent from "../../api/student/getStudentGenerateEvent";
+import getStudentEventDataById from "../../api/student/getStudentEventDataById";
+import generateStudentCertificateInfo from "../../api/student/generateStudentCertificateInfo";
 
 function Student_Detail() {
   const { id } = useParams();
@@ -25,11 +29,11 @@ function Student_Detail() {
   const [eventData, setEventData] = useState();
   const [studentData, setStudentData] = useState();
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/event?id=${id}`);
+    const response = await getStudentEventDataById(id);
     setEventData(response.data.data);
   };
   const getStudentGenerate = async () => {
-    const response = await axiosInstance.get(`/student/generate?id=${id}`);
+    const response = await getStudentGenerateEvent(id);
     setStudentData(response.data.data);
   };
 
@@ -53,20 +57,14 @@ function Student_Detail() {
     } else {
       setEmailError("");
     }
-
-    const response = await axiosInstance.put(`/student/certificateinfo`, {
-      eventId: id,
-      name: name,
-      surname: surname,
-      email: email,
-    });
+    const response = await generateStudentCertificateInfo(id, name, surname, email);
     if (response.status === 200) {
       navigate(`/certificate/${id}`);
     }
   }
 
   const aleadyGenerate = () => {
-    if (studentData && studentData.student_eventGenerated === 0) {
+    if (eventData && studentData && studentData.student_eventGenerated === 0) {
       return (
         <>
           {eventData && (

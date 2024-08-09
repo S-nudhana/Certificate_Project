@@ -1,8 +1,8 @@
-import axios from "../../utils/axiosInstance";
+import axiosInstance from "../../utils/axiosInstance";
 
 const profSignIn = async (email,password) => {
   try {
-    const response = await axios.post("/prof/login", {
+    const response = await axiosInstance.post("/prof/login", {
         email,
         password,
     });

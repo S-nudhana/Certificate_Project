@@ -12,7 +12,7 @@ const getAllInProgressEvent = async (req, res) => {
     const dataQuery = await db
       .promise()
       .query(
-        "SELECT * FROM event WHERE event_endDate > NOW() AND event_approve = 1 AND event_Id IN (SELECT student_joinedEventId FROM student WHERE student_email = ?) ORDER BY event_startDate DESC",
+        "SELECT event_Id, event_name, event_startDate, event_endDate, event_thumbnail FROM event WHERE event_startDate <= NOW() AND event_endDate >= NOW() AND event_approve = 1 AND event_Id IN (SELECT student_joinedEventId FROM student WHERE student_email = ?) ORDER BY event_startDate DESC",
         [value]
       );
     const data = dataQuery[0];

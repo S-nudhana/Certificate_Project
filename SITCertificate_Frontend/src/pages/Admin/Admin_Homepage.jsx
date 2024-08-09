@@ -8,7 +8,8 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
 import { dateCheck, dateFormatChange } from "../../utils/function";
-import axiosInstance from '../../utils/axiosInstance';
+
+import getAdminProfEventData from '../../api/user/getAdminProfEventData';
 
 function Admin_Homepage() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Admin_Homepage() {
   var pendingAmount = 0;
   var approvedAmount = 0;
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/allEvent`);
+    const response = await getAdminProfEventData();
     setEventData(response.data.data);
   };
   useEffect(() => {
@@ -76,7 +77,7 @@ function Admin_Homepage() {
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", lg: "flex-start" }}
+            justifyContent={{ base: "center", xl: "flex-start" }}
             gap="30px"
             pt="30px"
             maxWidth="1300px"

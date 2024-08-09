@@ -5,15 +5,16 @@ import { useNavigate, ScrollRestoration } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
-import { dateCheck, dateFormatChange, dateOverSeven } from "../../utils/function";
-import axiosInstance from '../../utils/axiosInstance';
+import { dateFormatChange } from "../../utils/function";
+
+import getStudentData from '../../api/student/getStudentEventData';
 
 function Student_Homepage() {
   const navigate = useNavigate();
   var amount = 0;
   const [eventData, setEventData] = useState();
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/student/event`);
+    const response = await getStudentData();
     setEventData(response.data.data);
   };
   useEffect(() => {
@@ -23,7 +24,7 @@ function Student_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box pt="60px">
+      <Box pt="60px" minHeight={'75vh'}>
         <Text
           fontSize="28px"
           fontWeight="bold"
@@ -38,61 +39,58 @@ function Student_Homepage() {
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", lg: "flex-start" }}
+            justifyContent={{ base: "center", xl: "flex-start" }}
             gap="30px"
             py="30px"
             maxWidth="1300px"
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              if (!dateOverSeven(item.event_endDate) && item.event_approve === 1) {
-                amount = key + 1;
-                return (
-                  <Card
-                    width="300px"
-                    height="auto"
-                    bgColor="white"
-                    borderRadius="30px"
-                    boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                    transition=".2s ease-in"
-                    _hover={{
-                      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                      transform: "scale(1.01)",
-                    }}
-                  >
-                    <Image
-                      src={item.event_thumbnail}
-                      objectFit="cover"
-                      borderTopLeftRadius="30px"
-                      borderTopRightRadius="30px"
-                      width="100%"
-                      height={'250px'}
-                    />
-                    <Box p="30px">
-                      <Text fontSize="28px" fontWeight="bold" pb="5px">
-                        {item.event_name}
-                      </Text>
-                      <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                      <Text pb="5px" color={dateCheck(item.event_endDate) ? "black" : 'red'}>
-                        {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
-                      </Text>
-                      <Button
-                        width="170px"
-                        borderRadius="40px"
-                        bgColor="#336699"
-                        color="white"
-                        _hover={{ bgColor: "#1f568c" }}
-                        isDisabled={!dateCheck(item.event_endDate)}
-                        onClick={() => {
-                          navigate(`/detail/${item.event_Id}`);
-                        }}
-                      >
-                        รับประกาศนียบัตร
-                      </Button>
-                    </Box>
-                  </Card>
-                );
-              }
+              amount = key + 1;
+              return (
+                <Card
+                  width="300px"
+                  height="auto"
+                  bgColor="white"
+                  borderRadius="30px"
+                  boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
+                  transition=".2s ease-in"
+                  _hover={{
+                    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
+                    transform: "scale(1.01)",
+                  }}
+                >
+                  <Image
+                    src={item.event_thumbnail}
+                    objectFit="cover"
+                    borderTopLeftRadius="30px"
+                    borderTopRightRadius="30px"
+                    width="100%"
+                    height={'250px'}
+                  />
+                  <Box p="30px">
+                    <Text fontSize="28px" fontWeight="bold" pb="5px">
+                      {item.event_name}
+                    </Text>
+                    <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
+                    <Text pb="5px" color={"black"}>
+                      {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
+                    </Text>
+                    <Button
+                      width="170px"
+                      borderRadius="40px"
+                      bgColor="#336699"
+                      color="white"
+                      _hover={{ bgColor: "#1f568c" }}
+                      onClick={() => {
+                        navigate(`/detail/${item.event_Id}`);
+                      }}
+                    >
+                      รับประกาศนียบัตร
+                    </Button>
+                  </Box>
+                </Card>
+              );
             })}
           </Box>
           <Box
