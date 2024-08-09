@@ -27,16 +27,30 @@ const authMiddleware = (Component) => {
     }
 
     if (!authStatus.authenticated) {
-      if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) && authStatus.role === "professor") {
+      if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) || authStatus.role === "professor") {
         return <Navigate to={import.meta.env.VITE_PROFESSOR_PATH_LOGIN} replace />;
-      } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) && authStatus.role === "admin") {
+      } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) || authStatus.role === "admin") {
         return <Navigate to={import.meta.env.VITE_ADMIN_PATH_LOGIN} replace />;
       } else {
         return <Navigate to="/login" replace />;
       }
+    } else {
+      if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) && authStatus.role === "professor") {
+        return <Component {...props} />
+      } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) && authStatus.role === "admin") {
+        return <Component {...props} />
+      } else if (location.pathname.startsWith("/") && authStatus.role === "student") {
+        return <Component {...props} />
+      } else {
+        if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH)) {
+          return <Navigate to={import.meta.env.VITE_PROFESSOR_PATH_LOGIN} replace />;
+        } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH)) {
+          return <Navigate to={import.meta.env.VITE_ADMIN_PATH_LOGIN} replace />;
+        } else {
+          return <Navigate to="/login" replace />;
+        }
+      }
     }
-
-    return <Component {...props} />;
   };
 };
 

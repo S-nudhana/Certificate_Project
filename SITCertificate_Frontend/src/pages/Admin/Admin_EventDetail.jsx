@@ -26,14 +26,11 @@ import BackBTN from '../../components/BackBTN';
 import PdfViewer from '../../components/PdfViewer';
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
-import axiosInstance from '../../utils/axiosInstance';
 // import { sendMailToProfessor } from '../../utils/sendMail';
 
-import getAdminProfComment from '../../api/user/getAdminProfComment';
-import putToggleCommentStatus from '../../api/prof/putToggleCommentStatus';
-import deleteAdminDeleteEvent from '../../api/admin/deleteAdminDeleteEvent';
-import getAdminProfEventData from '../../api/user/getAdminProfEventData';
-import getProfRecieverEmail from '../../api/prof/getProfRecieverEmail';
+import { userComment, userEventDataById } from '../../api/user/userAPI';
+import { adminToggleCommentStatus, adminDeleteEvent } from '../../api/admin/adminAPI';
+import { profEmail } from '../../api/prof/profAPI';
 
 function Admin_EventDetail() {
     const { id } = useParams();
@@ -53,28 +50,28 @@ function Admin_EventDetail() {
     //     text: "",
     //     html: `<b>ความคิดเห็นนี้ได้รับการแก้ไขแล้ว</b>`,
     // };
-    
+
     const getReceiverEmail = async () => {
-        const response = await getProfRecieverEmail(id);
+        const response = await profEmail(id);
         setReceiver(response.data.data.professor_email);
     }
     const getEventData = async () => {
-        const response = await getAdminProfEventData(id);
+        const response = await userEventDataById(id);
         setEventData(response.data.data);
     };
     const getComment = async () => {
-        const response = await getAdminProfComment(id);
+        const response = await userComment(id);
         setComments(response.data.data);
     }
     const toggleCommentStatus = async (commentId) => {
-        const response = await putToggleCommentStatus(commentId);
+        const response = await adminToggleCommentStatus(commentId);
         if (response.data.success) {
             getComment();
-            sendMailToProfessor();
+            // sendMailToProfessor();
         }
     }
     const deleteEvent = async () => {
-        const response = await deleteAdminDeleteEvent(id);
+        const response = await adminDeleteEvent(id);
         if (response.data.success) {
             onClose();
             navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);

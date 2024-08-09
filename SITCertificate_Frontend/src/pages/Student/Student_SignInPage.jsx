@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, Stack, IconButton, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
-import Building from "../../assets/img/SIT_Building.png";
-import Logo from "../../assets/img/SIT_Icon.png";
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import studentSignIn from '../../api/student/studentSignIn';
+
+import Building from "../../assets/img/SIT_Building.png";
+import Logo from "../../assets/img/SIT_Icon.png";
+
+import { studentSignIn } from '../../api/student/studentAPI';
+
+
 export default function Student_SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

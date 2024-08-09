@@ -7,14 +7,14 @@ import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
-import getStudentData from '../../api/student/getStudentEventData';
+import { studentData } from '../../api/student/studentAPI';
 
 function Student_Homepage() {
   const navigate = useNavigate();
   var amount = 0;
   const [eventData, setEventData] = useState();
   const getEventData = async () => {
-    const response = await getStudentData();
+    const response = await studentData();
     setEventData(response.data.data);
   };
   useEffect(() => {

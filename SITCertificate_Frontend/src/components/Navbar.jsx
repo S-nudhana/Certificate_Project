@@ -15,8 +15,7 @@ import {
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import verifyToken from "../api/user/verifyToken";
-import deleteToken from "../api/user/deleteToken";
+import { userVerifyToken, userDeleteToken } from "../api/user/userAPI";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -45,7 +44,7 @@ export default function Navbar() {
   }, [lastScrollTop]);
 
   const verifyAuth = async () => {
-    const response = await verifyToken();
+    const response = await userVerifyToken();
     setAuthStatus(response.status === 200 ? response.data : response);
   };
 
@@ -61,7 +60,7 @@ export default function Navbar() {
           token = "adminToken";
           redirectPath = import.meta.env.VITE_ADMIN_PATH_LOGIN;
         }
-        await deleteToken(token);
+        await userDeleteToken(token);
         window.location.href = redirectPath;
       } catch (error) {
         console.error('Logout error:', error);
@@ -85,7 +84,7 @@ export default function Navbar() {
       transition="top 0.3s"
       {...(shouldShowNavbar ? {} : { top: "-80px" })}
     >
-      <Text color="white" fontWeight="bold" fontSize="24">
+      <Text color="white" fontWeight="bold" fontSize="24" cursor={'pointer'}>
         SITCertificate
       </Text>
       <Flex gap={{ base: '10px', md: "30px" }}>

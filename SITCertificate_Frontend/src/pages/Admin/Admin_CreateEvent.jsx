@@ -21,7 +21,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
 
-import postAdminCreateEvent from "../../api/admin/postAdminCreateEvent";
+import { adminCreateEvent } from "../../api/admin/adminAPI";
 
 function Admin_CreateEvent() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ function Admin_CreateEvent() {
         const uploadedTemplateURL = await firebaseUploadFile(templateFile, 'upload_template');
         const uploadedExcelURL = await firebaseUploadFile(excelFile, 'upload_excel');
         if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL) {
-          const response = await postAdminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL);
+          const response = await adminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL);
           if (response.status === 200) {
             navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
           }

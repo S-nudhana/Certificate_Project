@@ -7,14 +7,14 @@ import Footer from '../../components/Footer'
 import authMiddleware from "../../utils/authMiddleware";
 import PdfViewer from '../../components/PdfViewer';
 
-import getStudentCertificate from '../../api/student/getStudentCertificate';
+import { studentCertificate } from '../../api/student/studentAPI';
 
 function Student_CertificateDownload() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [certificate, setCertificate] = useState();
     const getCertificate = async () => {
-        const response = await getStudentCertificate(id);
+        const response = await studentCertificate(id);
         setCertificate(response.data.data.event_Certificate);
     }
     useEffect(() => {

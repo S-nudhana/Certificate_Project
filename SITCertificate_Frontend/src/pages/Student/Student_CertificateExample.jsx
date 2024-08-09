@@ -7,9 +7,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import authMiddleware from "../../utils/authMiddleware";
 
-import getStudentGenerateEvent from '../../api/student/getStudentGenerateEvent';
-import updateStudentGenerateStatus from '../../api/student/updateStudentGenerateStatus';
-import getStudentCertificate from '../../api/student/getStudentCertificate';
+import { studentGenerate, updateStudentGenerateStatus, studentCertificate } from '../../api/student/studentAPI';
 
 function Student_CertificateExample() {
     const { id } = useParams();
@@ -18,7 +16,7 @@ function Student_CertificateExample() {
     const [certificate, setCertificate] = useState();
 
     const getCertificate = async () => {
-        const response = await getStudentCertificate(id);
+        const response = await studentCertificate(id);
         setCertificate(response.data.data.event_Certificate);
     }
 
@@ -30,7 +28,7 @@ function Student_CertificateExample() {
     }
 
     const getStudentGenerate = async () => {
-        const response = await getStudentGenerateEvent(id);
+        const response = await studentGenerate(id);
         if (response.data.data.student_eventGenerated === 1) {
             navigate(`/detail/${id}`);
         }

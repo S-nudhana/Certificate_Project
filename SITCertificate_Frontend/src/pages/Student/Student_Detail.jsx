@@ -19,9 +19,7 @@ import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
-import getStudentGenerateEvent from "../../api/student/getStudentGenerateEvent";
-import getStudentEventDataById from "../../api/student/getStudentEventDataById";
-import generateStudentCertificateInfo from "../../api/student/generateStudentCertificateInfo";
+import { studentGenerate, studentEventDataById, generateStudentCertificateInfo } from "../../api/student/studentAPI";
 
 function Student_Detail() {
   const { id } = useParams();
@@ -29,11 +27,11 @@ function Student_Detail() {
   const [eventData, setEventData] = useState();
   const [studentData, setStudentData] = useState();
   const getEventData = async () => {
-    const response = await getStudentEventDataById(id);
+    const response = await studentEventDataById(id);
     setEventData(response.data.data);
   };
   const getStudentGenerate = async () => {
-    const response = await getStudentGenerateEvent(id);
+    const response = await studentGenerate(id);
     setStudentData(response.data.data);
   };
 

@@ -5,23 +5,26 @@ import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { dateCheck, dateFormatChange } from "../../utils/function";
+import { dateFormatChange } from "../../utils/function";
 import authMiddleware from "../../utils/authMiddleware";
 
-import getAdminProfEventData from '../../api/user/getAdminProfEventData';
+import { userEventData } from '../../api/user/userAPI';
 
 function Prof_Homepage() {
   const navigate = useNavigate();
   const [eventData, setEventData] = useState();
   var pendingAmount = 0;
   var approvedAmount = 0;
+
   const getEventData = async () => {
-    const response = await getAdminProfEventData();
+    const response = await userEventData();
     setEventData(response.data.data);
   };
+
   useEffect(() => {
     getEventData();
   }, []);
+
   return (
     <>
       <ScrollRestoration />
@@ -150,7 +153,7 @@ function Prof_Homepage() {
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              if (item.event_approve && dateCheck(item.event_endDate)) {
+              if (item.event_approve) {
                 approvedAmount = key + 1;
                 return (
                   <Card

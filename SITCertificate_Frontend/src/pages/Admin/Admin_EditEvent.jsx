@@ -22,8 +22,8 @@ import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
 import { formatDate } from "../../utils/function";
 
-import putAdminUpdateEvent from "../../api/admin/putAdminUpdateEvent";
-import getAdminProfEventData from "../../api/user/getAdminProfEventData";
+import { adminUpdateEvent } from "../../api/admin/adminAPI";
+import { userEventDataById } from "../../api/user/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams();
@@ -36,9 +36,8 @@ function Admin_EditEvent() {
   const [thumbnailURL, setThumbnailURL] = useState('');
   const [templateFile, setTemplateFile] = useState(null);
   const [excelFile, setExcelFile] = useState(null);
-
   const getEventData = async () => {
-    const response = await getAdminProfEventData(id.id);
+    const response = await userEventDataById(id.id);
     setEventName(response.data.data.event_name);
     setEventOwnerName(response.data.data.event_owner);
     setOpenDate(formatDate(response.data.data.event_startDate));
@@ -61,7 +60,7 @@ function Admin_EditEvent() {
         const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
         const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
         const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
-        const response = await putAdminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, id.id);
+        const response = await adminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, id.id);
         if (response.status === 200) {
           navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
         }
