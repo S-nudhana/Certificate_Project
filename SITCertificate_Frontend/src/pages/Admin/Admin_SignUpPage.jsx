@@ -21,7 +21,8 @@ import Building from "../../assets/img/SIT_Building.png";
 import Logo from "../../assets/img/SIT_Icon.png";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import adminSignUp from "../../api/admin/adminSignUp";
+
+import { adminSignUp } from "../../api/admin/adminAPI";
 
 export default function Admin_SignUpPage() {
   const [username, setUsername] = useState("");

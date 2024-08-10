@@ -26,8 +26,11 @@ import BackBTN from '../../components/BackBTN';
 import PdfViewer from '../../components/PdfViewer';
 import authMiddleware from "../../utils/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
-import axiosInstance from '../../utils/axiosInstance';
 // import { sendMailToProfessor } from '../../utils/sendMail';
+
+import { userComment, userEventDataById } from '../../api/user/userAPI';
+import { adminToggleCommentStatus, adminDeleteEvent } from '../../api/admin/adminAPI';
+import { profEmail } from '../../api/prof/profAPI';
 
 function Admin_EventDetail() {
     const { id } = useParams();
@@ -47,29 +50,28 @@ function Admin_EventDetail() {
     //     text: "",
     //     html: `<b>ความคิดเห็นนี้ได้รับการแก้ไขแล้ว</b>`,
     // };
+
     const getReceiverEmail = async () => {
-        const response = await axiosInstance.get(`/prof/email?id=${id}`);
+        const response = await profEmail(id);
         setReceiver(response.data.data.professor_email);
     }
     const getEventData = async () => {
-        const response = await axiosInstance.get(`/user/event?id=${id}`);
+        const response = await userEventDataById(id);
         setEventData(response.data.data);
     };
     const getComment = async () => {
-        const response = await axiosInstance.get(`/user/comment?id=${id}`);
+        const response = await userComment(id);
         setComments(response.data.data);
     }
     const toggleCommentStatus = async (commentId) => {
-        const response = await axiosInstance.put(`/prof/updateCommentStatus`, {
-            commentId: commentId,
-        });
+        const response = await adminToggleCommentStatus(commentId);
         if (response.data.success) {
             getComment();
-            sendMailToProfessor();
+            // sendMailToProfessor();
         }
     }
     const deleteEvent = async () => {
-        const response = await axiosInstance.delete(`/admin/deleteEvent?id=${id}`);
+        const response = await adminDeleteEvent(id);
         if (response.data.success) {
             onClose();
             navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
@@ -80,7 +82,7 @@ function Admin_EventDetail() {
         getEventData();
         getComment();
     }, []);
-    // console.log(receiver)
+
     return (
         <>
             <ScrollRestoration />

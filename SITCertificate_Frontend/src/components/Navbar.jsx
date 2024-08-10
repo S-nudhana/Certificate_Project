@@ -13,8 +13,9 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { userVerifyToken, userDeleteToken } from "../api/user/userAPI";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -25,15 +26,12 @@ export default function Navbar() {
   const [authStatus, setAuthStatus] = useState(null);
 
   const handleScroll = () => {
-    const currentScrollTop =
-      window.pageYOffset || document.documentElement.scrollTop;
-
+    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (currentScrollTop > lastScrollTop) {
       setShouldShowNavbar(false);
     } else {
       setShouldShowNavbar(true);
     }
-
     setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
   };
 
@@ -46,12 +44,8 @@ export default function Navbar() {
   }, [lastScrollTop]);
 
   const verifyAuth = async () => {
-    try {
-      const response = await axiosInstance.get("/user/verifyToken");
-      setAuthStatus(response.data);
-    } catch (error) {
-      setAuthStatus({ authenticated: false });
-    }
+    const response = await userVerifyToken();
+    setAuthStatus(response.status === 200 ? response.data : response);
   };
 
   const LogoutCheck = async () => {
@@ -66,7 +60,7 @@ export default function Navbar() {
           token = "adminToken";
           redirectPath = import.meta.env.VITE_ADMIN_PATH_LOGIN;
         }
-        await axiosInstance.delete(`/user/deleteToken?token=${token}`);
+        await userDeleteToken(token);
         window.location.href = redirectPath;
       } catch (error) {
         console.error('Logout error:', error);
@@ -90,7 +84,7 @@ export default function Navbar() {
       transition="top 0.3s"
       {...(shouldShowNavbar ? {} : { top: "-80px" })}
     >
-      <Text color="white" fontWeight="bold" fontSize="24">
+      <Text color="white" fontWeight="bold" fontSize="24" cursor={'pointer'}>
         SITCertificate
       </Text>
       <Flex gap={{ base: '10px', md: "30px" }}>

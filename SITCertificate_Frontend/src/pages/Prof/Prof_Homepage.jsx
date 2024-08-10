@@ -5,27 +5,31 @@ import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import axiosInstance from '../../utils/axiosInstance';
-import { dateCheck, dateFormatChange } from "../../utils/function";
+import { dateFormatChange } from "../../utils/function";
 import authMiddleware from "../../utils/authMiddleware";
+
+import { userEventData } from '../../api/user/userAPI';
 
 function Prof_Homepage() {
   const navigate = useNavigate();
   const [eventData, setEventData] = useState();
   var pendingAmount = 0;
   var approvedAmount = 0;
+
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/allEvent`);
+    const response = await userEventData();
     setEventData(response.data.data);
   };
+
   useEffect(() => {
     getEventData();
   }, []);
+
   return (
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box pt="100px" pb={"40px"}>
+      <Box pt="100px" pb={"40px"} minHeight={'75vh'}>
         <Button
           leftIcon={<FaHistory />}
           ml={["40px", "40px", "100px", "100px", "100px", "300px"]}
@@ -59,64 +63,62 @@ function Prof_Homepage() {
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", lg: "flex-start" }}
+            justifyContent={{ base: "center", xl: "flex-start" }}
             gap="30px"
             pt="30px"
             maxWidth="1300px"
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              if (!item.event_approve && dateCheck(item.event_endDate)) {
-                pendingAmount = key + 1;
-                return (
-                  <Card
-                    width="300px"
-                    height="auto"
-                    bgColor="white"
-                    borderRadius="30px"
-                    boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                    transition=".2s ease-in"
-                    _hover={{
-                      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                      transform: "scale(1.01)",
-                    }}
-                  >
-                    <Image
-                      src={item.event_thumbnail}
-                      objectFit="cover"
-                      borderTopLeftRadius="30px"
-                      borderTopRightRadius="30px"
-                      width="100%"
-                      height={'250px'}
-                    />
-                    <Box p="30px">
-                      <Text fontSize="28px" fontWeight="bold">
-                        {item.event_name}
-                      </Text>
-                      <Text fontWeight="bold">{item.event_owner}</Text>
-                      <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                      <Text pb="5px">
-                        {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
-                      </Text>
-                      <Button
-                        width="130px"
-                        borderRadius="40px"
-                        bgColor="#3399cc"
-                        color="white"
-                        _hover={{ bgColor: "#297AA3" }}
-                        onClick={() => {
-                          navigate(
-                            import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
-                            `${item.event_Id}`
-                          );
-                        }}
-                      >
-                        ดูข้อมูลกิจกรรม
-                      </Button>
-                    </Box>
-                  </Card>
-                );
-              }
+              pendingAmount = key + 1;
+              return (
+                <Card
+                  width="300px"
+                  height="auto"
+                  bgColor="white"
+                  borderRadius="30px"
+                  boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
+                  transition=".2s ease-in"
+                  _hover={{
+                    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
+                    transform: "scale(1.01)",
+                  }}
+                >
+                  <Image
+                    src={item.event_thumbnail}
+                    objectFit="cover"
+                    borderTopLeftRadius="30px"
+                    borderTopRightRadius="30px"
+                    width="100%"
+                    height={'250px'}
+                  />
+                  <Box p="30px">
+                    <Text fontSize="28px" fontWeight="bold">
+                      {item.event_name}
+                    </Text>
+                    <Text fontWeight="bold">{item.event_owner}</Text>
+                    <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
+                    <Text pb="5px">
+                      {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
+                    </Text>
+                    <Button
+                      width="130px"
+                      borderRadius="40px"
+                      bgColor="#3399cc"
+                      color="white"
+                      _hover={{ bgColor: "#297AA3" }}
+                      onClick={() => {
+                        navigate(
+                          import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
+                          `${item.event_Id}`
+                        );
+                      }}
+                    >
+                      ดูข้อมูลกิจกรรม
+                    </Button>
+                  </Box>
+                </Card>
+              );
             })}
           </Box>
           <Box
@@ -151,7 +153,7 @@ function Prof_Homepage() {
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              if (item.event_approve && dateCheck(item.event_endDate)) {
+              if (item.event_approve) {
                 approvedAmount = key + 1;
                 return (
                   <Card

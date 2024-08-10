@@ -28,8 +28,10 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
 import authMiddleware from "../../utils/authMiddleware";
-import axiosInstance from "../../utils/axiosInstance";
-import { dateFormatChange, dateCheck } from '../../utils/function';
+import { dateFormatChange } from '../../utils/function';
+
+import { userComment, userEventDataById } from "../../api/user/userAPI";
+import { profAddComment, profDeleteComment, profApproveEvent } from "../../api/prof/profAPI";
 
 function Prof_EventDetail() {
   const { id } = useParams();
@@ -38,33 +40,28 @@ function Prof_EventDetail() {
   const [comments, setComments] = useState();
   const [newCommentDetail, setNewCommentDetail] = useState();
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/event?id=${id}`);
+    const response = await userEventDataById(id);
     setEventData(response.data.data);
   };
   const getComment = async () => {
-    const response = await axiosInstance.get(`/user/comment?id=${id}`);
+    const response = await userComment(id);
     setComments(response.data.data);
   }
   const postComment = async () => {
-    const response = await axiosInstance.post(`/prof/newComment`, {
-      eventId: id,
-      detail: newCommentDetail,
-    });
+    const response = await profAddComment(id, newCommentDetail);
     if (response.data.success) {
       getComment();
       setNewCommentDetail("");
     }
   }
   const approveEvent = async () => {
-    const response = await axiosInstance.put(`/prof/approveEvent`, {
-      eventId: id,
-    });
+    const response = await profApproveEvent(id);
     if (response.data.success) {
       getEventData();
     }
   }
   const deleteComment = async (commentId) => {
-    const response = await axiosInstance.delete(`/prof/deleteComment?id=${commentId}`);
+    const response = await profDeleteComment(commentId);
     if (response.data.success) {
       onClose();
       getComment();
@@ -150,11 +147,11 @@ function Prof_EventDetail() {
               </Box>
               <FormControl id="comment">
                 <FormLabel>ความคิดเห็นใหม่</FormLabel>
-                <Textarea placeholder="เพิ่มความคิดเห็นที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)} onChange={(e) => setNewCommentDetail(e.target.value)} />
+                <Textarea placeholder="เพิ่มความคิดเห็นที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1} onChange={(e) => setNewCommentDetail(e.target.value)} />
               </FormControl>
               <Stack spacing={6} align={"end"}>
                 <Button
-                  isDisabled={eventData.event_approve === 1 || !dateCheck(eventData.event_endDate)}
+                  isDisabled={eventData.event_approve === 1}
                   variant={"solid"}
                   padding={"20px"}
                   bgColor="#3399cc"

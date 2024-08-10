@@ -7,8 +7,9 @@ import { FaHistory } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../utils/authMiddleware";
-import { dateCheck, dateFormatChange } from "../../utils/function";
-import axiosInstance from '../../utils/axiosInstance';
+import { dateFormatChange } from "../../utils/function";
+
+import { userEventData } from '../../api/user/userAPI';
 
 function Admin_Homepage() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Admin_Homepage() {
   var pendingAmount = 0;
   var approvedAmount = 0;
   const getEventData = async () => {
-    const response = await axiosInstance.get(`/user/allEvent`);
+    const response = await userEventData();
     setEventData(response.data.data);
   };
   useEffect(() => {
@@ -70,20 +71,20 @@ function Admin_Homepage() {
           >
             กิจกรรมที่รอการอนุมัติ
           </Text>
-          <Text color={'red'} fontSize={'14px'} pl={{ base: '40px', md: '0' }}>*โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน</Text>
+          <Text color={'#D2042D'} fontSize={'14px'} pl={{ base: '40px', md: '0' }}>*โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน</Text>
         </Box>
         <Box>
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", lg: "flex-start" }}
+            justifyContent={{ base: "center", xl: "flex-start" }}
             gap="30px"
             pt="30px"
             maxWidth="1300px"
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              if (!item.event_approve && dateCheck(item.event_endDate)) {
+              if (!item.event_approve) {
                 pendingAmount = key + 1;
                 return (
                   <Card
@@ -112,7 +113,7 @@ function Admin_Homepage() {
                       </Text>
                       <Text fontWeight="bold">{item.event_owner}</Text>
                       <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                      <Text pb="5px" color={dateCheck(item.event_endDate) ? "black" : 'red'}>
+                      <Text pb="5px" color={"black"}>
                         {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
                       </Text>
                       <Button
@@ -184,7 +185,7 @@ function Admin_Homepage() {
             mx="auto"
           >
             {eventData && eventData.map((item, key) => {
-              if (item.event_approve && dateCheck(item.event_endDate)) {
+              if (item.event_approve) {
                 approvedAmount = key + 1;
                 return (
                   <Card

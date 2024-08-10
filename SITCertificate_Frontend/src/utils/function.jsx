@@ -1,8 +1,8 @@
-export const dateCheck = (date) => {
-  const inputDate = new Date(date);
-  const currentDate = new Date();
-  return inputDate > currentDate;
-};
+// export const dateCheck = (date) => {
+//   const inputDate = new Date(date);
+//   const currentDate = new Date();
+//   return inputDate > currentDate;
+// };
 
 export const dateFormatChange = (date) => {
   const dateChange = new Date(date);
