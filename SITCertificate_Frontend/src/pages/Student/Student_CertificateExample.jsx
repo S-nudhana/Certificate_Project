@@ -5,7 +5,7 @@ import PDF from 'react-pdf-watermark';
 
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import authMiddleware from "../../utils/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 
 import { studentGenerate, updateStudentGenerateStatus, studentCertificate } from '../../api/student/studentAPI';
 

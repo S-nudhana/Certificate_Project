@@ -19,7 +19,7 @@ import { app } from '../../utils/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import authMiddleware from "../../utils/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 import { formatDate } from "../../utils/function";
 
 import { adminUpdateEvent } from "../../api/admin/adminAPI";

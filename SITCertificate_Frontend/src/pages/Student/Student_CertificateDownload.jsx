@@ -4,7 +4,7 @@ import { Box, Text, Button, Flex } from '@chakra-ui/react'
 
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
-import authMiddleware from "../../utils/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 import PdfViewer from '../../components/PdfViewer';
 
 import { studentCertificate } from '../../api/student/studentAPI';
