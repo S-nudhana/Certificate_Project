@@ -16,7 +16,7 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import authMiddleware from "../../utils/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
 import { studentGenerate, studentEventDataById, generateStudentCertificateInfo } from "../../api/student/studentAPI";
@@ -225,4 +225,5 @@ function Student_Detail() {
     </>
   );
 }
+
 export default authMiddleware(Student_Detail);

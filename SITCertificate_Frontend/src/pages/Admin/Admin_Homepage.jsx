@@ -6,7 +6,7 @@ import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import authMiddleware from "../../utils/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
 import { userEventData } from '../../api/user/userAPI';

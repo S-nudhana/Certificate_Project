@@ -4,7 +4,7 @@ import { useNavigate, ScrollRestoration } from "react-router-dom";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import authMiddleware from "../../utils/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
 import { studentData } from '../../api/student/studentAPI';
@@ -109,4 +109,5 @@ function Student_Homepage() {
     </>
   );
 }
+
 export default authMiddleware(Student_Homepage);
