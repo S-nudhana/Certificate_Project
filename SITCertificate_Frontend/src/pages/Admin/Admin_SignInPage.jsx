@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, Stack, Link, Button, IconButton, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
-import Building from "../../assets/img/SIT_Building.png";
-import Logo from "../../assets/img/SIT_Icon.png";
+import Building from "../../../public/img/SIT_Building.png";
+import Logo from "../../../public/img/SIT_Icon.png";
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
@@ -30,7 +30,7 @@ export default function Admin_SignInPage() {
 
     const res = await adminSignIn(email, password);
     if (res.status === 201) {
-      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+      navigate("/admin/");
     } else {
       toast({
         title: "เกิดข้อผิดพลาด",
@@ -106,7 +106,7 @@ export default function Admin_SignInPage() {
           </Stack>
           <Stack pt={6}>
             <Text align={'center'} onClick={() => {
-              navigate(import.meta.env.VITE_ADMIN_PATH_REGISTER)
+              navigate("/admin/register")
             }}>
               ยังไม่มีบัญชีผู้ใช้? <Link color={'#3399cc'}>สมัครเลย</Link>
             </Text>

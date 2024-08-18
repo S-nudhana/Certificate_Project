@@ -53,7 +53,7 @@ function Admin_CreateEvent() {
         if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL) {
           const response = await adminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL);
           if (response.status === 200) {
-            navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+            navigate("/admin/");
           }
         } else {
           console.error("Missing required event information.");
@@ -201,7 +201,7 @@ function Admin_CreateEvent() {
                     _hover={{ bg: "#A80324" }}
                     fontSize={["sm", "lg", "lg"]}
                     onClick={() => {
-                      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+                      navigate("/admin/");
                     }}
                   >
                     ยกเลิก

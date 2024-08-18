@@ -145,8 +145,7 @@ export default function Admin_History() {
                     color="white"
                     _hover={{ bgColor: "#297AA3" }}
                     onClick={() => {
-                      navigate(
-                        import.meta.env.VITE_ADMIN_PATH_DETAILS + `${item.event_Id}`
+                      navigate(`/admin/detail/${item.event_Id}`
                       );
                     }}
                   >

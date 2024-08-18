@@ -17,8 +17,8 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import Building from "../../assets/img/SIT_Building.png";
-import Logo from "../../assets/img/SIT_Icon.png";
+import Building from "../../../public/img/SIT_Building.png";
+import Logo from "../../../public/img/SIT_Icon.png";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
@@ -72,7 +72,7 @@ export default function Prof_SignUpPage() {
         duration: 2000,
         isClosable: true,
       });
-      navigate(import.meta.env.VITE_PROFESSOR_PATH_LOGIN);
+      navigate("/professor/login");
     } else {
       toast({
         title: "เกิดข้อผิดพลาด",
@@ -196,7 +196,7 @@ export default function Prof_SignUpPage() {
             <Text
               align={"center"}
               onClick={() =>
-                navigate(import.meta.env.VITE_PROFESSOR_PATH_LOGIN)
+                navigate("/professor/login")
               }
             >
               มีบัญชีผู้ใช้อยู่แล้ว? <Link color={"#3399cc"}>เข้าสู่ระบบ</Link>

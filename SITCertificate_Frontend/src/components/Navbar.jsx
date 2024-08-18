@@ -55,10 +55,10 @@ export default function Navbar() {
         let token = "token";
         if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) && authStatus.role === "professor") {
           token = "profToken";
-          redirectPath = import.meta.env.VITE_PROFESSOR_PATH_LOGIN;
-        } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) && authStatus.role === "admin") {
+          redirectPath = "/professor/login";
+        } else if (location.pathname.startsWith("/admin") && authStatus.role === "admin") {
           token = "adminToken";
-          redirectPath = import.meta.env.VITE_ADMIN_PATH_LOGIN;
+          redirectPath = "/admin/login";
         }
         await userDeleteToken(token);
         window.location.href = redirectPath;

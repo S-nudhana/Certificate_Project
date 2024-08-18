@@ -20,11 +20,11 @@ export const formatDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-export const dateOverSeven = (date) => {
-    const inputDate = new Date(date);
-    const currentDate = new Date();
-    return ((currentDate - inputDate)/ (1000 * 3600 * 24)) > 7;
-}
+// export const dateOverSeven = (date) => {
+//     const inputDate = new Date(date);
+//     const currentDate = new Date();
+//     return ((currentDate - inputDate)/ (1000 * 3600 * 24)) > 7;
+// }
 
 // export const dateOverThirty = (date) => {
 //     const inputDate = new Date(date);
