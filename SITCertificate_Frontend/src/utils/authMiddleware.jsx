@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import axiosInstance from "./axiosInstance";
 
 const authMiddleware = (Component) => {
   return (props) => {
@@ -8,44 +7,45 @@ const authMiddleware = (Component) => {
     const [authStatus, setAuthStatus] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const verifyAuth = async () => {
+      try {
+        const response = await userVerifyToken();
+        setAuthStatus(response.data);
+      } catch (error) {
+        setAuthStatus({ authenticated: false });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     useEffect(() => {
-      const verifyAuth = async () => {
-        try {
-          const response = await axiosInstance.get("/user/verifyToken");
-          setAuthStatus(response.data);
-        } catch (error) {
-          setAuthStatus({ authenticated: false });
-        } finally {
-          setLoading(false);
-        }
-      };
       verifyAuth();
-    }, [location.pathname]);
+    }, []);
 
     if (loading) {
-      return <div>Loading...</div>;
+      return "";
     }
 
     if (!authStatus.authenticated) {
-      if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) || authStatus.role === "professor") {
-        return <Navigate to={import.meta.env.VITE_PROFESSOR_PATH_LOGIN} replace />;
-      } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) || authStatus.role === "admin") {
-        return <Navigate to={import.meta.env.VITE_ADMIN_PATH_LOGIN} replace />;
+      if (location.pathname.startsWith("/professor") || authStatus.role === "professor") {
+        return <Navigate to={"/professor/login"} replace />;
+      } else if (location.pathname.startsWith("/admin") || authStatus.role === "admin") {
+        return <Navigate to={"/admin/login"} replace />;
       } else {
         return <Navigate to="/login" replace />;
       }
     } else {
-      if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) && authStatus.role === "professor") {
+      if (location.pathname.startsWith("/professor") && authStatus.role === "professor") {
         return <Component {...props} />
-      } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH) && authStatus.role === "admin") {
+      } else if (location.pathname.startsWith("/admin") && authStatus.role === "admin") {
         return <Component {...props} />
       } else if (location.pathname.startsWith("/") && authStatus.role === "student") {
         return <Component {...props} />
       } else {
-        if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH)) {
-          return <Navigate to={import.meta.env.VITE_PROFESSOR_PATH_LOGIN} replace />;
-        } else if (location.pathname.startsWith(import.meta.env.VITE_ADMIN_PATH)) {
-          return <Navigate to={import.meta.env.VITE_ADMIN_PATH_LOGIN} replace />;
+        if (location.pathname.startsWith("/professor")) {
+          return <Navigate to={"/professor/login"} replace />;
+        } else if (location.pathname.startsWith("/admin")) {
+          return <Navigate to={"/admin/login"} replace />;
         } else {
           return <Navigate to="/login" replace />;
         }

@@ -74,7 +74,7 @@ function Admin_EventDetail() {
         const response = await adminDeleteEvent(id);
         if (response.data.success) {
             onClose();
-            navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+            navigate("/admin/");
         }
     }
     useEffect(() => {

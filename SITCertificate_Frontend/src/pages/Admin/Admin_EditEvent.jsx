@@ -62,7 +62,7 @@ function Admin_EditEvent() {
         const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
         const response = await adminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, id.id);
         if (response.status === 200) {
-          navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+          navigate("/admin/");
         }
       }
     } catch (error) {
@@ -229,7 +229,7 @@ function Admin_EditEvent() {
                     _hover={{ bg: "#A80324" }}
                     fontSize={["sm", "lg", "lg"]}
                     onClick={() => {
-                      navigate(import.meta.env.VITE_ADMIN_PATH_HOMEPAGE);
+                      navigate("/admin/");
                     }}
                   >
                     ยกเลิก

@@ -41,7 +41,7 @@ function Prof_Homepage() {
           transition={".2s"}
           _hover={{ bgColor: "#297AA3" }}
           onClick={() => {
-            navigate(import.meta.env.VITE_PROFESSOR_PATH_HISTORY);
+            navigate("/professor/history");
           }}
         >
           ประวัติกิจกรรม
@@ -109,8 +109,7 @@ function Prof_Homepage() {
                       _hover={{ bgColor: "#297AA3" }}
                       onClick={() => {
                         navigate(
-                          import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
-                          `${item.event_Id}`
+                          `/professor/detail/${item.event_Id}`
                         );
                       }}
                     >
@@ -193,8 +192,7 @@ function Prof_Homepage() {
                         _hover={{ bgColor: "#297AA3" }}
                         onClick={() => {
                           navigate(
-                            import.meta.env.VITE_PROFESSOR_PATH_DETAILS +
-                            `${item.event_Id}`
+                            `/professor/detail/${item.event_Id}`
                           );
                         }}
                       >

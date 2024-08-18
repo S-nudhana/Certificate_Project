@@ -39,7 +39,7 @@ function Admin_Homepage() {
           transition={".2s"}
           _hover={{ bgColor: "#1f568c" }}
           onClick={() => {
-            navigate(import.meta.env.VITE_ADMIN_PATH_CREATE_EVENT);
+            navigate("/admin/createEvent");
           }}
         >
           เพิ่มกิจกรรม
@@ -55,7 +55,7 @@ function Admin_Homepage() {
           transition={".2s"}
           _hover={{ bgColor: "#297AA3" }}
           onClick={() => {
-            navigate(import.meta.env.VITE_ADMIN_PATH_HISTORY);
+            navigate("/admin/history");
           }}
         >
           ประวัติกิจกรรม
@@ -124,8 +124,7 @@ function Admin_Homepage() {
                         _hover={{ bgColor: "#1f568c" }}
                         onClick={() => {
                           navigate(
-                            import.meta.env.VITE_ADMIN_PATH_EDIT_EVENTS +
-                            `${item.event_Id}`
+                            `/admin/editEvent/${item.event_Id}`
                           );
                         }}
                       >
@@ -140,8 +139,7 @@ function Admin_Homepage() {
                         _hover={{ bgColor: "#297AA3" }}
                         onClick={() => {
                           navigate(
-                            import.meta.env.VITE_ADMIN_PATH_DETAILS +
-                            `${item.event_Id}`
+                            `/admin/detail/${item.event_Id}`
                           );
                         }}
                       >
@@ -225,8 +223,7 @@ function Admin_Homepage() {
                         _hover={{ bgColor: "#297AA3" }}
                         onClick={() => {
                           navigate(
-                            import.meta.env.VITE_ADMIN_PATH_DETAILS +
-                            `${item.event_Id}`
+                            `/admin/detail/${item.event_Id}`
                           );
                         }}
                       >
@@ -254,4 +251,5 @@ function Admin_Homepage() {
     </>
   );
 }
+
 export default authMiddleware(Admin_Homepage);

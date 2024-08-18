@@ -24,10 +24,10 @@ db.connect((err) => {
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/admin", adminRouter);
-app.use("/prof", profRouter);
-app.use("/student", studentRouter);
-app.use("/user", userRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/prof", profRouter);
+app.use("/api/student", studentRouter);
+app.use("/api/user", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
