@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { app } from '../../utils/firebaseConfig';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from '../../config/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";

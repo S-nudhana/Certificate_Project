@@ -17,14 +17,16 @@ function Student_Homepage() {
     const response = await studentData();
     setEventData(response.data.data);
   };
+  
   useEffect(() => {
     getEventData();
   }, []);
+
   return (
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box pt="60px" minHeight={'75vh'}>
+      <Box pt="60px" minH={'80vh'}>
         <Text
           fontSize="28px"
           fontWeight="bold"

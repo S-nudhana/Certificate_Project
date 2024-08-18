@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '../../utils/firebaseConfig';
+import { app } from '../../config/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";

@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, Divider, Image, Center } from '@chakra-ui/react';
 import { Link } from "react-router-dom"
 import { FaPhone, FaEnvelope, FaFacebook, FaLine } from "react-icons/fa6";
-import logo from "../../public/img/SIT_Icon.png";
+import logo from "../../public/img/SIT_logo.png";
 
 export default function Footer() {
     return (

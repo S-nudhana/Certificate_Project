@@ -7,6 +7,7 @@ import updateGenerateCertificate from "../controller/student/updateGenerateCerti
 import getCertificate from "../controller/student/getCertificate.js";
 import updataCertificateInformation from "../controller/student/updataCertificateInformation.js";
 import getCertificateInfo from "../controller/student/getCertificateInfo.js";
+import sendCertificate from "../controller/student/sendCertificate.js";
 
 const studentRouter = express.Router();
 
@@ -18,5 +19,6 @@ studentRouter.get("/certificate", getCertificate);
 studentRouter.put("/certificateinfo", updataCertificateInformation);
 studentRouter.get("/info", getCertificateInfo);
 studentRouter.get("/eventId", getAllInProgressEventById);
+studentRouter.post("/sendCertificate", sendCertificate);
 
 export default studentRouter;

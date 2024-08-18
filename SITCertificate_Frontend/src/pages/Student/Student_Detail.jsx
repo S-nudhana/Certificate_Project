@@ -19,13 +19,23 @@ import BackBTN from "../../components/BackBTN";
 import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
-import { studentGenerate, studentEventDataById, generateStudentCertificateInfo } from "../../api/student/studentAPI";
+import {
+  studentCertificate,
+  studentGenerate,
+  studentEventDataById,
+  generateStudentCertificateInfo,
+  sendCertificate,
+} from "../../api/student/studentAPI";
 
 function Student_Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState();
   const [studentData, setStudentData] = useState();
+  const [certificate, setCertificate] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState();
+
   const getEventData = async () => {
     const response = await studentEventDataById(id);
     setEventData(response.data.data);
@@ -35,7 +45,26 @@ function Student_Detail() {
     setStudentData(response.data.data);
   };
 
+  const getCertificate = async () => {
+    const response = await studentCertificate(id);
+    setCertificate(response.data.data.event_Certificate);
+  };
+
+  const sendCertificateToEmail = async () => {
+    try {
+      setIsLoading(true);
+      sendCertificate(id, certificate);
+      setMessage("Email sent successfully!");
+    } catch (error) {
+      setMessage("Failed to send email.");
+      console.error("Error sending email:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
+    getCertificate();
     getEventData();
     getStudentGenerate();
   }, []);
@@ -45,7 +74,8 @@ function Student_Detail() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const isFormFilled = () => name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
+  const isFormFilled = () =>
+    name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
 
   const handleSubmit = async () => {
     if (!emailRegex.test(email)) {
@@ -55,18 +85,27 @@ function Student_Detail() {
     } else {
       setEmailError("");
     }
-    const response = await generateStudentCertificateInfo(id, name, surname, email);
+    const response = await generateStudentCertificateInfo(
+      id,
+      name,
+      surname,
+      email
+    );
     if (response.status === 200) {
       navigate(`/certificate/${id}`);
     }
-  }
+  };
 
   const aleadyGenerate = () => {
     if (eventData && studentData && studentData.student_eventGenerated === 0) {
       return (
         <>
           {eventData && (
-            <Box display={{ base: "block", lg: "flex" }} pt="80px">
+            <Box
+              display={{ base: "block", lg: "flex" }}
+              pt="80px"
+              minH={"80vh"}
+            >
               <Image
                 src={eventData.event_thumbnail}
                 width={{ base: "100%", lg: "35%" }}
@@ -166,14 +205,22 @@ function Student_Detail() {
                   {eventData.event_name}
                 </Text>
                 <Text pt="10px" pb="20px">
-                  เปิดให้ดาว์นโหลดตั้งแต่ {dateFormatChange(eventData.event_startDate)} ถึง {dateFormatChange(eventData.event_endDate)}
+                  เปิดให้ดาว์นโหลดตั้งแต่{" "}
+                  {dateFormatChange(eventData.event_startDate)} ถึง{" "}
+                  {dateFormatChange(eventData.event_endDate)}
                 </Text>
                 <Text fontSize="18px" fontWeight={"bold"}>
                   ใบประกาศนียบัตร
                 </Text>
                 <Box></Box>
-                <Flex width={"100%"} justifyContent={{base: "center", lg: 'start'}}>
-                  <Flex width={{base: '100%', lg: '80%'}} justifyContent={{base: "center", lg: 'start'}}>
+                <Flex
+                  width={"100%"}
+                  justifyContent={{ base: "center", lg: "start" }}
+                >
+                  <Flex
+                    width={{ base: "100%", lg: "80%" }}
+                    justifyContent={{ base: "center", lg: "start" }}
+                  >
                     <PdfViewer fileUrl={eventData.event_certificate} />
                   </Flex>
                 </Flex>
@@ -186,10 +233,13 @@ function Student_Detail() {
                     width="250px"
                     bgColor="#336699"
                     color="white"
-                    fontSize={{ base: "12px", md: "16px" }}
+                    fontSize={{ base: "14px", md: "16px" }}
                     borderRadius="40px"
                     _hover={{ bgColor: "#1f568c" }}
                     variant="solid"
+                    onClick={() => {
+                      sendCertificateToEmail();
+                    }}
                   >
                     ส่งใบประกาศนียบัตรไปยังอีเมลล์
                   </Button>
@@ -197,7 +247,7 @@ function Student_Detail() {
                     width="100px"
                     bgColor="#3399cc"
                     color="white"
-                    fontSize={{ base: "12px", md: "16px" }}
+                    fontSize={{ base: "14px", md: "16px" }}
                     borderRadius="40px"
                     _hover={{ bgColor: "#297AA3" }}
                     variant="solid"
