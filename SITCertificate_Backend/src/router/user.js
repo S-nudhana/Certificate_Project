@@ -6,7 +6,7 @@ import getAllHistoryEvent from "../controller/user/getAllHistoryEvent.js";
 import getCommentById from "../controller/user/getCommentById.js";
 import verifyToken from "../controller/user/verifyToken.js";
 import deleteToken from "../controller/user/deleteToken.js";
-import sendEmail from "../controller/user/sendEmail.js";
+
 
 const userRouter = express.Router();
 
@@ -17,6 +17,5 @@ userRouter.get("/searchEvent", getSearchEvent);
 userRouter.get("/comment", getCommentById);
 userRouter.get("/verifyToken", verifyToken);
 userRouter.delete("/deleteToken", deleteToken);
-userRouter.post("/sendEmail", sendEmail);
 
 export default userRouter;

@@ -9,6 +9,7 @@ import {
   Input,
   Flex,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
 
@@ -34,7 +35,7 @@ function Student_Detail() {
   const [studentData, setStudentData] = useState();
   const [certificate, setCertificate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState();
+  const toast = useToast();
 
   const getEventData = async () => {
     const response = await studentEventDataById(id);
@@ -53,10 +54,17 @@ function Student_Detail() {
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      sendCertificate(id, certificate);
-      setMessage("Email sent successfully!");
+      const response = await sendCertificate(id, certificate);
+      if (response.status === 200) {
+        toast({
+          title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     } catch (error) {
-      setMessage("Failed to send email.");
       console.error("Error sending email:", error);
     } finally {
       setIsLoading(false);
@@ -240,6 +248,7 @@ function Student_Detail() {
                     onClick={() => {
                       sendCertificateToEmail();
                     }}
+                    disabled={isLoading}
                   >
                     ส่งใบประกาศนียบัตรไปยังอีเมลล์
                   </Button>

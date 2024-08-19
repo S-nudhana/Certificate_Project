@@ -1,15 +1,13 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import nodemailer from 'nodemailer';
 import admin from 'firebase-admin';
 import axios from 'axios';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+
+import { transporter } from "../user/transporter.js";
 
 dotenv.config();
 
-// Use `import` to load the service account key
 const serviceAccount = await
 import ('../../../sitcertificateFirebase.json', {
     assert: { type: 'json' }
@@ -21,25 +19,12 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.sit.kmutt.ac.th',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
-
 const sendCertificate = async(req, res) => {
     const { id, fileUrl } = req.body;
     try {
         const { token } = req.cookies;
-        const userId = jwt.verify(token, process.env.JWTSecretKey);
-        const studentId = userId.student_email;
+        const Id = jwt.verify(token, process.env.JWTSecretKey);
+        const studentId = Id.student_email;
         const eventId = parseInt(id);
         const value = [eventId, studentId];
         const dataQuery = await db
@@ -51,7 +36,7 @@ const sendCertificate = async(req, res) => {
         const email = dataQuery[0][0].student_emailToSendCertificate;
         const eventNameQuery = await db.promise()
             .query(
-                `SELECT event_name FROM event WHERE event_Id = ?`, [id]
+                `SELECT event_name FROM event WHERE event_Id = ?`, [eventId]
             );
         const eventName = eventNameQuery[0][0].event_name;
         const response = await axios({
@@ -60,7 +45,7 @@ const sendCertificate = async(req, res) => {
             responseType: 'arraybuffer',
         });
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "แจ้งเตือนจาก SIT Certificate",
             text: `ใบประกาษณีขบัตรของกิจกรรม ${eventName}`,

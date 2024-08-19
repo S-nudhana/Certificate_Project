@@ -40,16 +40,8 @@ export const userComment = async(id) => {
 };
 
 export const userHistory = async(eventName) => {
-    const response = await axiosInstance.get(`/user/history?eventName=${eventName}`);
+    const response = await axiosInstance.get(
+        `/user/history?eventName=${eventName}`
+    );
     return response;
 };
-
-export const userSendEmail = async(reciever, eventName, commentDetail) => {
-    const response = await axiosInstance.post("/user/sendEmail", {
-        to: reciever,
-        subject: 'Hello from Toggle Button',
-        text: `กิจกรรม ${eventName} ความคิดเห็น ${commentDetail} ได้รับการแก้ไขแล้ว`,
-        html: `<b>กิจกรรม ${eventName} ความคิดเห็น ${commentDetail} ได้รับการแก้ไขแล้ว</b>`,
-    });
-    return response;
-}

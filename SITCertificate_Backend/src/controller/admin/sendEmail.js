@@ -1,24 +1,10 @@
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-    host: 'smtp.sit.kmutt.ac.th',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
-
+import { transporter } from "../user/transporter.js";
 
 const sendEmail = async(req, res) => {
     const { to, subject, text, html } = req.body;
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
         to: to,
         subject: subject,
         text: text,

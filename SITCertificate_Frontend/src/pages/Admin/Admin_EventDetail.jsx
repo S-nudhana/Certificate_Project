@@ -31,11 +31,11 @@ import { dateFormatChange } from "../../utils/function";
 import {
   userComment,
   userEventDataById,
-  userSendEmail,
 } from "../../api/user/userAPI";
 import {
   adminToggleCommentStatus,
   adminDeleteEvent,
+  adminSendEmail
 } from "../../api/admin/adminAPI";
 import { profEmail } from "../../api/prof/profAPI";
 
@@ -52,7 +52,7 @@ function Admin_EventDetail() {
   const sendMailToProfessor = async (commentDetail) => {
     try {
       setIsLoading(true);
-      const response = userSendEmail(
+      const response = await adminSendEmail(
         receiver,
         eventData.event_name,
         commentDetail
@@ -60,7 +60,6 @@ function Admin_EventDetail() {
       if (response.status === 200) {
         toast({
           title: "ได้ส่งอีเมลแจ้งการแก้ไขเรียบร้อยแล้ว",
-          description: response.response.data.message,
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -89,7 +88,7 @@ function Admin_EventDetail() {
   const toggleCommentStatus = async (commentId, commentDetail) => {
     const response = await adminToggleCommentStatus(commentId);
     if (response.data.success) {
-      if (response.data.data === 1) {
+      if (response.data.data) {
         sendMailToProfessor(commentDetail);
       }
       getComment();
