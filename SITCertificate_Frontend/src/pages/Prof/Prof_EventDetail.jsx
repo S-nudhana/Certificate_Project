@@ -18,6 +18,7 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
+  useToast
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration } from "react-router-dom";
 import { FaCheck } from "react-icons/fa6";
@@ -31,7 +32,7 @@ import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from '../../utils/function';
 
 import { userComment, userEventDataById } from "../../api/user/userAPI";
-import { profAddComment, profDeleteComment, profApproveEvent } from "../../api/prof/profAPI";
+import { profAddComment, profDeleteComment, profApproveEvent, profSendEmail } from "../../api/prof/profAPI";
 
 function Prof_EventDetail() {
   const { id } = useParams();
@@ -39,6 +40,8 @@ function Prof_EventDetail() {
   const [eventData, setEventData] = useState();
   const [comments, setComments] = useState();
   const [newCommentDetail, setNewCommentDetail] = useState();
+  const toast = useToast();
+
   const getEventData = async () => {
     const response = await userEventDataById(id);
     setEventData(response.data.data);
@@ -52,6 +55,16 @@ function Prof_EventDetail() {
     if (response.data.success) {
       getComment();
       setNewCommentDetail("");
+      const response = await profSendEmail(id, eventData.event_owner, eventData.event_name, newCommentDetail);
+      if (response.status === 200) {
+        toast({
+          title: "เพิ่มความคิดเห็นใหม่สำเร็จ",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     }
   }
   const approveEvent = async () => {

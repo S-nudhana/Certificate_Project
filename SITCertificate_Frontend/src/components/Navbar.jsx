@@ -53,7 +53,7 @@ export default function Navbar() {
       try {
         let redirectPath = "/login";
         let token = "token";
-        if (location.pathname.startsWith(import.meta.env.VITE_PROFESSOR_PATH) && authStatus.role === "professor") {
+        if (location.pathname.startsWith("/professor") && authStatus.role === "professor") {
           token = "profToken";
           redirectPath = "/professor/login";
         } else if (location.pathname.startsWith("/admin") && authStatus.role === "admin") {

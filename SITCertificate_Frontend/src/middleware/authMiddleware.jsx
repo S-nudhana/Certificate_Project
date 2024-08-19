@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
+import { userVerifyToken } from "../api/user/userAPI";
+
 const authMiddleware = (Component) => {
+
   return (props) => {
     const location = useLocation();
     const [authStatus, setAuthStatus] = useState(null);

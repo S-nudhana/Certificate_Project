@@ -43,7 +43,7 @@ function Student_CertificateExample() {
         <>
             <ScrollRestoration />
             <Navbar />
-            <Box pt='80px' display='flex' flexDirection='column' alignItems='center' justifyContent={'center'}>
+            <Box pt='80px' minH={'80vh'} display='flex' flexDirection='column' alignItems='center' justifyContent={'center'}>
                 <Text pb={'20px'} fontSize='32px' fontWeight='bold' pt='40px'>ตัวอย่างใบประกาศนียบัตร</Text>
                 <Flex width={{ base: '150%', md: '100%' }} justifyContent={'center'}>
                     {certificate &&
@@ -62,10 +62,10 @@ function Student_CertificateExample() {
                     }
                 </Flex>
                 <Box pt={'20px'} width='80%' display='flex' justifyContent='space-between' pb='40px'>
-                    <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
+                    <Button width='100px' bgColor='#3399cc' color='white' borderRadius='40px' fontSize={{base: '14px', md: '16px'}} _hover={{ bgColor: '#297AA3' }} variant='solid' onClick={() => {
                         navigate(-1)
                     }}>ย้อนกลับ</Button>
-                    <Button width='200px' bgColor='#336699' color='white' borderRadius='40px' _hover={{ bgColor: '#1f568c' }} variant='solid' onClick={onOpen} >พิมพ์ใบประกาศนียบัตร</Button>
+                    <Button width='200px' bgColor='#336699' color='white' borderRadius='40px' fontSize={{base: '14px', md: '16px'}} _hover={{ bgColor: '#1f568c' }} variant='solid' onClick={onOpen} >พิมพ์ใบประกาศนียบัตร</Button>
                 </Box>
             </Box>
             <Modal
