@@ -11,9 +11,7 @@ import {
   InputRightAddon,
 } from "@chakra-ui/react";
 import { ScrollRestoration, useNavigate } from "react-router-dom";
-import {
-  dateFormatChange,
-} from "../../utils/function";
+import { dateFormatChange } from "../../utils/function";
 import { FaSearch } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
@@ -30,7 +28,7 @@ export default function Admin_History() {
   const searchEvent = async () => {
     const response = await userHistory(search);
     setHistoryData(response.data.data);
-  }
+  };
   useEffect(() => {
     setSearch("");
     searchEvent();
@@ -103,58 +101,58 @@ export default function Admin_History() {
           maxWidth="1300px"
           mx="auto"
         >
-          {historyData && historyData.map((item, key) => {
-            amount = key + 1;
-            return (
-              <Card
-                width="300px"
-                height="auto"
-                bgColor="white"
-                borderRadius="30px"
-                boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                transition=".2s ease-in"
-                _hover={{
-                  boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                  transform: "scale(1.01)",
-                }}
-              >
-                <Image
-                  src={item.event_thumbnail}
-                  objectFit="cover"
-                  borderTopLeftRadius="30px"
-                  borderTopRightRadius="30px"
-                  width="100%"
-                  height={'250px'}
-                />
-                <Box p="30px">
-                  <Text fontSize="28px" fontWeight="bold">
-                    {item.event_name}
-                  </Text>
-                  <Text fontWeight="bold">{item.event_owner}</Text>
-                  <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                  <Text
-                    pb="5px"
-                    color={"red"}
-                  >
-                    {dateFormatChange(item.event_startDate)} ถึง {dateFormatChange(item.event_endDate)}
-                  </Text>
-                  <Button
-                    width="130px"
-                    borderRadius="40px"
-                    bgColor="#3399cc"
-                    color="white"
-                    _hover={{ bgColor: "#297AA3" }}
-                    onClick={() => {
-                      navigate(`/admin/detail/${item.event_Id}`
-                      );
+          {historyData &&
+            historyData.map((item, key) => {
+              amount = key + 1;
+              return (
+                <>
+                  <Card
+                    width="300px"
+                    height="auto"
+                    bgColor="white"
+                    borderRadius="30px"
+                    boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
+                    transition=".2s ease-in"
+                    _hover={{
+                      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
+                      transform: "scale(1.01)",
                     }}
                   >
-                    ดูข้อมูลกิจกรรม
-                  </Button>
-                </Box>
-              </Card>
-            );
-          })}
+                    <Image
+                      src={item.event_thumbnail}
+                      objectFit="cover"
+                      borderTopLeftRadius="30px"
+                      borderTopRightRadius="30px"
+                      width="100%"
+                      height={"250px"}
+                    />
+                    <Box p="30px">
+                      <Text fontSize="28px" fontWeight="bold">
+                        {item.event_name}
+                      </Text>
+                      <Text fontWeight="bold">{item.event_owner}</Text>
+                      <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
+                      <Text pb="5px" color={"red"}>
+                        {dateFormatChange(item.event_startDate)} ถึง{" "}
+                        {dateFormatChange(item.event_endDate)}
+                      </Text>
+                      <Button
+                        width="130px"
+                        borderRadius="40px"
+                        bgColor="#3399cc"
+                        color="white"
+                        _hover={{ bgColor: "#297AA3" }}
+                        onClick={() => {
+                          navigate(`/admin/detail/${item.event_Id}`);
+                        }}
+                      >
+                        ดูข้อมูลกิจกรรม
+                      </Button>
+                    </Box>
+                  </Card>
+                </>
+              );
+            })}
         </Box>
         <Box
           display={amount === 0 ? "flex" : "none"}
