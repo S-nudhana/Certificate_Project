@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, ScrollRestoration } from 'react-router-dom';
-import { Box, Button, Text, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure, Center } from '@chakra-ui/react';
+import { Box, Button, Text, Modal, ModalOverlay, ModalHeader, ModalBody, ModalContent, Flex, useDisclosure } from '@chakra-ui/react';
 import PDF from 'react-pdf-watermark';
 
 import Navbar from '../../components/Navbar';

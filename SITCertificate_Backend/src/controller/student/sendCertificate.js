@@ -12,6 +12,7 @@ const serviceAccount = await
 import ('../../../sitcertificateFirebase.json', {
     assert: { type: 'json' }
 });
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount.default),
     storageBucket: 'gs://sitcertificate-284c8.appspot.com'
@@ -27,18 +28,19 @@ const sendCertificate = async(req, res) => {
         const studentId = Id.student_email;
         const eventId = parseInt(id);
         const value = [eventId, studentId];
-        const dataQuery = await db
+        const studentQuery = await db
             .promise()
             .query(
                 `SELECT student_emailToSendCertificate FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
                 value
             );
-        const email = dataQuery[0][0].student_emailToSendCertificate;
-        const eventNameQuery = await db.promise()
+        const email = studentQuery[0][0].student_emailToSendCertificate;
+        const eventQuery = await db.promise()
             .query(
-                `SELECT event_name FROM event WHERE event_Id = ?`, [eventId]
+                `SELECT event_name, event_emailTemplate FROM event WHERE event_Id = ?`, [eventId]
             );
-        const eventName = eventNameQuery[0][0].event_name;
+        const eventName = eventQuery[0][0].event_name;
+        const emailTemplate = eventQuery[0][0].event_emailTemplate;
         const response = await axios({
             url: fileUrl,
             method: 'GET',
@@ -48,7 +50,7 @@ const sendCertificate = async(req, res) => {
             from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "แจ้งเตือนจาก SIT Certificate",
-            text: `ใบประกาศนียบัตรของกิจกรรม ${eventName}`,
+            text: `${emailTemplate}`,
             attachments: [{
                 filename: `${eventName}.pdf`,
                 content: response.data,
