@@ -4,6 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Textarea,
   HStack,
   Stack,
   Button,
@@ -36,12 +37,16 @@ function Admin_EditEvent() {
   const [thumbnailURL, setThumbnailURL] = useState('');
   const [templateFile, setTemplateFile] = useState(null);
   const [excelFile, setExcelFile] = useState(null);
+  const [emailTemplate, setEmailTemplate] = useState();
+
   const getEventData = async () => {
     const response = await userEventDataById(id.id);
     setEventName(response.data.data.event_name);
     setEventOwnerName(response.data.data.event_owner);
     setOpenDate(formatDate(response.data.data.event_startDate));
     setCloseDate(formatDate(response.data.data.event_endDate));
+    setThumbnailURL(response.data.data.event_thumbnail);
+    setEmailTemplate(response.data.data.event_emailTemplate);
   };
 
   const firebaseUploadFile = async (file, folder) => {
@@ -56,11 +61,11 @@ function Admin_EditEvent() {
 
   const updateEventData = async () => {
     try {
-      if (eventName || eventOwnerName || openDate || closeDate || thumbnailFile || templateFile || excelFile) {
+      if (eventName || eventOwnerName || openDate || closeDate || thumbnailFile || templateFile || excelFile || emailTemplate) {
         const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
         const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
         const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
-        const response = await adminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, id.id);
+        const response = await adminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, emailTemplate, id.id);
         if (response.status === 200) {
           navigate("/admin/");
         }
@@ -72,7 +77,7 @@ function Admin_EditEvent() {
 
   useEffect(() => {
     getEventData();
-  });
+  },[]);
 
   return (
     <>
@@ -219,6 +224,8 @@ function Admin_EditEvent() {
                         setExcelFile(file);
                       }
                     }} />
+                  <FormLabel>เท็มเพลทในการส่งอีเมล</FormLabel>
+                  <Textarea height={'300px'} resize="vertical" placeholder="เพิ่มเท็มเพลทที่นี่" value={emailTemplate} onChange={(e) => setEmailTemplate(e.target.value)} />
                 </FormControl>
                 <Flex justify={'space-between'} width={'100%'}>
                   <Button

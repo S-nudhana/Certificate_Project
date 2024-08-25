@@ -17,6 +17,7 @@ import Prof_Homepage from "./pages/Prof/Prof_Homepage";
 import Admin_EventDetail from "./pages/Admin/Admin_EventDetail";
 import Admin_History from "./pages/Admin/Admin_History";
 import Prof_History from "./pages/Prof/Prof_History";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
     {
         path: "/professor/history",
         element: <Prof_History />,
+    },
+    {
+        path: "*",
+        element: <NotFound/>,
     },
 ]);
 

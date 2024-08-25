@@ -4,7 +4,7 @@ const deleteEvent = async (req, res) => {
   const id = req.query.id;
   try {
     await db.promise().query(`DELETE FROM event WHERE event_Id = ?`, [id]);
-    await db.promise().query(`DELETE FROM comment WHERE event_Id = ?`, [id]);
+    await db.promise().query(`DELETE FROM comment WHERE comment_eventId = ?`, [id]);
     return res.json({
       success: true,
       error: null,

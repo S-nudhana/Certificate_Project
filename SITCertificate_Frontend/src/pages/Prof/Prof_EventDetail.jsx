@@ -123,6 +123,10 @@ function Prof_EventDetail() {
                 </Button>
               </Tooltip>
             </Flex>
+            <FormControl id="comment" p={"20px 20px 0 0"}>
+              <FormLabel fontSize="18px" fontWeight={'bold'}>เท็มเพลทในการส่งอีเมล</FormLabel>
+              <Textarea height={'300px'} resize="vertical" value={eventData.event_emailTemplate} />
+            </FormControl>
             <Button isDisabled={eventData.event_approve === 1} mt={'20px'} width={'130px'} padding={"20px"} color={'white'} bgColor={'#336699'} borderRadius={'40px'} _hover={{ bgColor: '#1f568c' }} onClick={onOpen}>อนุมัติกิจกรรม</Button>
           </Flex>
           <Flex ml={["10%", "10%", "0%"]} width={{ base: '90%', md: '50%' }}>
@@ -148,7 +152,7 @@ function Prof_EventDetail() {
                           pointerEvents={'none'}
                         />
                       </Flex>
-                      <Text pt={'10px'}>{item.comment_detail}</Text>
+                      <Text pt={'10px'} whiteSpace="pre-line">{item.comment_detail}</Text>
                       <Flex width={'100%'} justifyContent={'flex-end'} pt={'10px'}>
                         <Button color={"#AD3D3B"} _hover={{ color: "red" }} variant={'link'} onClick={() => {
                           deleteComment(item.comment_Id)
@@ -160,7 +164,7 @@ function Prof_EventDetail() {
               </Box>
               <FormControl id="comment">
                 <FormLabel>ความคิดเห็นใหม่</FormLabel>
-                <Textarea placeholder="เพิ่มความคิดเห็นที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1} onChange={(e) => setNewCommentDetail(e.target.value)} />
+                <Textarea resize="vertical" placeholder="เพิ่มความคิดเห็นที่นี่" value={newCommentDetail} isDisabled={eventData.event_approve === 1} onChange={(e) => setNewCommentDetail(e.target.value)} />
               </FormControl>
               <Stack spacing={6} align={"end"}>
                 <Button

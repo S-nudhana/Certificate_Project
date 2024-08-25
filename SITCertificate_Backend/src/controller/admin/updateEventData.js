@@ -9,6 +9,7 @@ const updateEventData = async (req, res) => {
     thumbnail,
     template,
     excel,
+    emailTemplate,
     eventId,
   } = req.body;
   try {
@@ -31,8 +32,18 @@ const updateEventData = async (req, res) => {
     await db
       .promise()
       .query(
-        "UPDATE event SET event_name = ?, event_owner = ?, event_startDate = ?, event_endDate = ?, event_thumbnail = ?, event_certificate = ?, event_excel = ? WHERE event_Id = ?",
-        [eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, eventId]
+        "UPDATE event SET event_name = ?, event_owner = ?, event_startDate = ?, event_endDate = ?, event_thumbnail = ?, event_certificate = ?, event_excel = ?, event_emailTemplate = ? WHERE event_Id = ?",
+        [
+          eventName,
+          eventOwner,
+          openDate,
+          closeDate,
+          thumbnail,
+          template,
+          excel,
+          emailTemplate,
+          eventId,
+        ]
       );
     return res.json({
       success: true,

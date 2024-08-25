@@ -30,7 +30,8 @@ export default function Prof_SignUpPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
   const isFormFilled = () =>
     username.trim() !== "" &&
@@ -47,7 +48,8 @@ export default function Prof_SignUpPage() {
 
   const handleSignUp = async () => {
     if (!emailRegex.test(email)) {
-      setEmailError("รูปแบบอีเมลไม่ถูกต้อง");
+      // setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
+      setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
       setEmail("");
       return;
     } else {

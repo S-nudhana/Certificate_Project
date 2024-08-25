@@ -4,6 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Textarea,
   HStack,
   Stack,
   Button,
@@ -33,6 +34,7 @@ function Admin_CreateEvent() {
   const [thumbnailURL, setThumbnailURL] = useState('');
   const [templateFile, setTemplateFile] = useState(null);
   const [excelFile, setExcelFile] = useState(null);
+  const [emailTemplate, setEmailTemplate] = useState('');
 
   const firebaseUploadFile = async (file, folder) => {
     const storage = getStorage(app);
@@ -50,8 +52,8 @@ function Admin_CreateEvent() {
         const uploadedThumbnailURL = await firebaseUploadFile(thumbnailFile, 'upload_images');
         const uploadedTemplateURL = await firebaseUploadFile(templateFile, 'upload_template');
         const uploadedExcelURL = await firebaseUploadFile(excelFile, 'upload_excel');
-        if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL) {
-          const response = await adminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL);
+        if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL && emailTemplate) {
+          const response = await adminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, emailTemplate);
           if (response.status === 200) {
             navigate("/admin/");
           }
@@ -191,6 +193,8 @@ function Admin_CreateEvent() {
                         setExcelFile(file);
                       }
                     }} />
+                    <FormLabel>เท็มเพลทในการส่งอีเมล</FormLabel>
+                  <Textarea height={'300px'} resize="vertical" placeholder="เพิ่มเท็มเพลทที่นี่" value={emailTemplate} onChange={(e) => setEmailTemplate(e.target.value)} />
                 </FormControl>
                 <Flex justify={'space-between'} width={'100%'}>
                   <Button

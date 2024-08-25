@@ -48,8 +48,7 @@ const sendCertificate = async(req, res) => {
             from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "แจ้งเตือนจาก SIT Certificate",
-            text: `ใบประกาษณีขบัตรของกิจกรรม ${eventName}`,
-            html: `<b>ใบประกาษณีขบัตรของกิจกรรม ${eventName}</b>`,
+            text: `ใบประกาศนียบัตรของกิจกรรม ${eventName}`,
             attachments: [{
                 filename: `${eventName}.pdf`,
                 content: response.data,
