@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, IconButton, Stack, Link, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
 import Building from "../../../public/img/SIT_Building.png";
 import Logo from "../../../public/img/SIT_Icon.png";
@@ -12,6 +12,7 @@ export default function Prof_SignInPage() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
   const navigate = useNavigate();
@@ -21,7 +22,8 @@ export default function Prof_SignInPage() {
 
   const handleSignIn = async () => {
     if (!emailRegex.test(email)) {
-      setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
+      // setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
+      setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
       setEmail('')
       return;
     } else {

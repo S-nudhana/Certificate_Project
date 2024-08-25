@@ -16,6 +16,9 @@ import {
   useDisclosure,
   Tooltip,
   useToast,
+  FormControl,
+  FormLabel,
+  Textarea
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration, useNavigate } from "react-router-dom";
 import { FaCheck } from "react-icons/fa6";
@@ -159,7 +162,7 @@ function Admin_EventDetail() {
               >
                 ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
               </Button>
-              <Flex width={{ base: "80%", md: "50%" }} gap={"10px"}>
+              <Flex gap={"10px"}>
                 <Text fontSize="18px" fontWeight={"bold"}>
                   รายชื่อผู้เข้าร่วม:
                 </Text>
@@ -183,6 +186,23 @@ function Admin_EventDetail() {
                   </Button>
                 </Tooltip>
               </Flex>
+              <FormControl id="comment" p={"20px 20px 0 0"}>
+                <FormLabel fontSize="18px" fontWeight={'bold'}>เท็มเพลทในการส่งอีเมล</FormLabel>
+                <Textarea height={'300px'} resize="vertical" placeholder="ยังไม่มีเท็มเพลทในการส่งอีเมล" value={eventData.event_emailTemplate} />
+              </FormControl>
+              <Button
+                isDisabled={eventData.event_approve === 1}
+                mt={'20px'}
+                borderRadius={"40px"}
+                width={'130px'}
+                padding={"20px"}
+                color={"white"}
+                backgroundColor={"#AD3D3B"}
+                _hover={{ bgColor: "#A80324" }}
+                onClick={onOpen}
+              >
+                ลบกิจกรรม
+              </Button>
             </Flex>
             <Flex ml={["10%", "10%", "0%"]} width={{ base: "90%", md: "50%" }}>
               <Stack spacing={5} w={"full"} pr={"10%"}>
@@ -229,18 +249,6 @@ function Admin_EventDetail() {
               </Stack>
             </Flex>
           </Stack>
-          <Flex pb={"20px"} width={"95%"} justifyContent={"flex-end"}>
-            <Button
-              isDisabled={eventData.event_approve === 1}
-              borderRadius={"40px"}
-              color={"white"}
-              backgroundColor={"#AD3D3B"}
-              _hover={{ bgColor: "#A80324" }}
-              onClick={onOpen}
-            >
-              ลบกิจกรรม
-            </Button>
-          </Flex>
         </>
       )}
       <Modal

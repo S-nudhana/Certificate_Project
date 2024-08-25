@@ -19,7 +19,7 @@ const setNewComment = async (req, res) => {
     await db
       .promise()
       .query(
-        "INSERT INTO `comment` (`event_Id`, `comment_username`, `comment_detail`, `comment_status`) VALUES (?)",
+        "INSERT INTO `comment` (`comment_eventId`, `comment_username`, `comment_detail`, `comment_status`) VALUES (?)",
         [data]
       );
     return res

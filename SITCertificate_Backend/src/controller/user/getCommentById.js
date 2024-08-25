@@ -5,7 +5,7 @@ const getCommentById = async (req, res) => {
   try {
     const dataQuery = await db
       .promise()
-      .query(`SELECT * FROM comment WHERE event_Id = ?`, [id]);
+      .query(`SELECT * FROM comment WHERE comment_eventId = ?`, [id]);
     const data = dataQuery[0]
     return res.json({
       success: true,
