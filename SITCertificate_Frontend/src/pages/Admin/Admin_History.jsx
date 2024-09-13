@@ -19,8 +19,9 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 
 import { userHistory } from "../../api/user/userAPI";
+import authMiddleware from "../../middleware/authMiddleware";
 
-export default function Admin_History() {
+function Admin_History() {
   const navigate = useNavigate();
   const [historyData, setHistoryData] = useState();
   const [search, setSearch] = useState("");
@@ -167,3 +168,4 @@ export default function Admin_History() {
     </>
   );
 }
+export default authMiddleware(Admin_History);

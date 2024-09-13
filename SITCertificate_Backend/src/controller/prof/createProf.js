@@ -1,5 +1,5 @@
-import bcrypt from "bcrypt";
 import connection from "../../db/connection.js";
+import { hashedPassword } from "../auth/jwt.js";
 
 const CreateProf = async (req, res) => {
   try {
@@ -19,16 +19,10 @@ const CreateProf = async (req, res) => {
         message: "อีเมลนี้มีผู้ใช้งานแล้ว",
       });
     }
-
-    const salt = bcrypt.genSaltSync(parseInt(process.env.SALT));
-    const hashed_password = bcrypt.hashSync(password, salt);
-
-    const query =
-      "INSERT INTO professor (professor_userName, professor_email ,professor_password) VALUES (?, ?, ?)";
+    const hashed_password = hashedPassword(password);
 
     const values = [username, email, hashed_password];
-
-    await connection.promise().query(query, values);
+    await connection.promise().query("INSERT INTO professor (professor_userName, professor_email ,professor_password) VALUES (?, ?, ?)", values);
     return res.status(201).json({ message: "User created successfully" });
   } catch (e) {
     return res.status(500).json({ message: e.message });
