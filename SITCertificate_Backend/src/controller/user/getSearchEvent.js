@@ -7,7 +7,7 @@ const getSearchEvent = async (req, res) => {
       .promise()
       .query(
         `SELECT * FROM event WHERE event_name LIKE ? ORDER BY event_startDate`,
-        [`%${eventName}%`]
+        [eventName]
       );
     const data = dataQuery[0];
     return res.json({

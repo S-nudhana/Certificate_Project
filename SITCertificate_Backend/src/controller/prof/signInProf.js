@@ -1,8 +1,5 @@
 import db from "../../db/connection.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import { compare, signToken } from "../auth/jwt.js";
 
 const SignInProf = async (req, res) => {
   try {
@@ -10,18 +7,18 @@ const SignInProf = async (req, res) => {
     const value = [email];
     const user = await db
       .promise()
-      .query("SELECT * FROM professor WHERE professor_email = ?", [value]);
+      .query("SELECT professor_Id, professor_password FROM professor WHERE professor_email = ?", [value]);
     if (user[0].length != 1) {
       throw "ไม่พบบัญชีนี้ในระบบ";
     }
-    const compared = bcrypt.compareSync(password, user[0][0].professor_password);
+    const compared = compare(password, user[0][0].professor_password);
     if (!compared) {
       throw "รหัสผ่านไม่ถูกต้อง";
     }
     const tokenData = {
       professor_id: user[0][0].professor_Id,
     };
-    const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
+    const signedToken = signToken(tokenData);
     const cookieOptions = {
       httpOnly: true,
       secure: true,

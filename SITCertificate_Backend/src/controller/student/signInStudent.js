@@ -1,7 +1,5 @@
 import db from "../../db/connection.js";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import { signToken } from "../auth/jwt.js";
 
 const SignInStudent = async(req, res) => {
     try {
@@ -9,7 +7,7 @@ const SignInStudent = async(req, res) => {
         const value = [email];
         const user = await db
             .promise()
-            .query("SELECT * FROM student WHERE student_email = ?", [value]);
+            .query("SELECT student_email, student_password FROM student WHERE student_email = ?", [value]);
         if (user[0].length < 1) {
             throw "ไม่พบบัญชีนี้ในระบบ";
         }
@@ -20,7 +18,7 @@ const SignInStudent = async(req, res) => {
         const tokenData = {
             student_email: user[0][0].student_email,
         };
-        const signedToken = jwt.sign(tokenData, process.env.JWTSecretKey);
+        const signedToken = signToken(tokenData);
         const cookieOptions = {
             httpOnly: true,
             secure: true,

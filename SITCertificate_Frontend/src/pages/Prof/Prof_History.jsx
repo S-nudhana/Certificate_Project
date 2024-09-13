@@ -17,10 +17,11 @@ import { FaSearch } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
+import authMiddleware from "../../middleware/authMiddleware";
 
 import { userHistory } from "../../api/user/userAPI";
 
-export default function Admin_History() {
+function Prof_History() {
   const navigate = useNavigate();
   const [historyData, setHistoryData] = useState();
   const [search, setSearch] = useState("");
@@ -167,3 +168,4 @@ export default function Admin_History() {
     </>
   );
 }
+export default authMiddleware(Prof_History);

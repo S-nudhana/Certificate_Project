@@ -1,20 +1,18 @@
-/* eslint-disable react/display-name */
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 import { userVerifyToken } from "../api/user/userAPI";
 
 const authMiddleware = (Component) => {
-
   return (props) => {
-    const location = useLocation();
+    const { pathname } = useLocation();
     const [authStatus, setAuthStatus] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const verifyAuth = async () => {
       try {
-        const response = await userVerifyToken();
-        setAuthStatus(response.data);
+        const { data } = await userVerifyToken();
+        setAuthStatus(data);
       } catch (error) {
         setAuthStatus({ authenticated: false });
       } finally {
@@ -27,34 +25,26 @@ const authMiddleware = (Component) => {
     }, []);
 
     if (loading) {
-      return "";
+      return null;
     }
-
-    if (!authStatus.authenticated) {
-      if (location.pathname.startsWith("/professor") || authStatus.role === "professor") {
-        return <Navigate to={"/professor/login"} replace />;
-      } else if (location.pathname.startsWith("/admin") || authStatus.role === "admin") {
-        return <Navigate to={"/admin/login"} replace />;
-      } else {
-        return <Navigate to="/login" replace />;
-      }
-    } else {
-      if (location.pathname.startsWith("/professor") && authStatus.role === "professor") {
-        return <Component {...props} />
-      } else if (location.pathname.startsWith("/admin") && authStatus.role === "admin") {
-        return <Component {...props} />
-      } else if (location.pathname.startsWith("/") && authStatus.role === "student") {
-        return <Component {...props} />
-      } else {
-        if (location.pathname.startsWith("/professor")) {
-          return <Navigate to={"/professor/login"} replace />;
-        } else if (location.pathname.startsWith("/admin")) {
-          return <Navigate to={"/admin/login"} replace />;
-        } else {
-          return <Navigate to="/login" replace />;
-        }
+    const { authenticated, role } = authStatus || {};
+    if (!authenticated) {
+      if (pathname.startsWith("/admin")) return <Navigate to="/admin/login" replace />;
+      if (pathname.startsWith("/professor")) return <Navigate to="/professor/login" replace />;
+      return <Navigate to="/login" replace />;
+    }
+    if (role === "admin" && !pathname.startsWith("/admin")) {
+      return <Navigate to="/admin" replace />;
+    }
+    if (role === "professor" && !pathname.startsWith("/professor")) {
+      return <Navigate to="/professor" replace />;
+    }
+    if (role === "student") {
+      if (pathname.startsWith("/admin") || pathname.startsWith("/professor")) {
+        return <Navigate to="/" replace />;
       }
     }
+    return <Component {...props} />;
   };
 };
 
