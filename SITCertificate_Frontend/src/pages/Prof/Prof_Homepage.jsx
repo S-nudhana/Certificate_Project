@@ -30,40 +30,44 @@ function Prof_Homepage() {
       <ScrollRestoration />
       <Navbar />
       <Box pt="100px" pb={"40px"} minHeight={"75vh"}>
-        <Button
-          leftIcon={<FaHistory />}
-          ml={["40px", "40px", "100px", "100px", "100px", "300px"]}
-          cursor="pointer"
-          bgColor={"#3399cc"}
-          color={"white"}
-          fontSize={"medium"}
-          height={"47px"}
-          transition={".2s"}
-          _hover={{ bgColor: "#297AA3" }}
-          onClick={() => {
-            navigate("/professor/history");
-          }}
-        >
-          ประวัติกิจกรรม
-        </Button>
-        <Box
-          display={{ base: "block", md: "flex" }}
-          alignItems={{ base: "end", md: "center" }}
-          pt="20px"
-        >
-          <Text
-            fontSize="28px"
-            fontWeight="bold"
-            textDecoration="underline"
-            textUnderlineOffset="2px"
-            pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
-            pr={"10px"}
+        <Box maxWidth="1300px" mx="auto">
+          <Button
+            leftIcon={<FaHistory />}
+            cursor="pointer"
+            bgColor={"#3399cc"}
+            color={"white"}
+            fontSize={"medium"}
+            height={"47px"}
+            transition={".2s"}
+            _hover={{ bgColor: "#297AA3" }}
+            onClick={() => {
+              navigate("/professor/history");
+            }}
           >
-            กิจกรรมที่รอการอนุมัติ
-          </Text>
-          <Text color={"red"} fontSize={"14px"} pl={{ base: "40px", md: "0" }}>
-            *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
-          </Text>
+            ประวัติกิจกรรม
+          </Button>
+          <Box
+            display={{ base: "block", md: "flex" }}
+            alignItems={{ base: "end", md: "center" }}
+            pt="20px"
+          >
+            <Text
+              fontSize="28px"
+              fontWeight="bold"
+              textDecoration="underline"
+              textUnderlineOffset="2px"
+              pr={"10px"}
+            >
+              กิจกรรมที่รอการอนุมัติ
+            </Text>
+            <Text
+              color={"red"}
+              fontSize={"14px"}
+              pl={{ base: "40px", md: "0" }}
+            >
+              *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
+            </Text>
+          </Box>
         </Box>
         <Box>
           <Box
@@ -145,7 +149,8 @@ function Prof_Homepage() {
           textDecoration="underline"
           textUnderlineOffset="2px"
           pt="20px"
-          pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+          maxWidth="1300px"
+          mx="auto"
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>

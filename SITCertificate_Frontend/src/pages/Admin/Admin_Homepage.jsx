@@ -28,60 +28,60 @@ function Admin_Homepage() {
       <ScrollRestoration />
       <Navbar />
       <Box pt="100px" pb={"40px"}>
-        <Button
-          leftIcon={<FaPlus />}
-          ml={["40px", "40px", "100px", "100px", "100px", "300px"]}
-          cursor="pointer"
-          bgColor={"#336699"}
-          color={"white"}
-          fontSize={"medium"}
-          height={"47px"}
-          transition={".2s"}
-          _hover={{ bgColor: "#1f568c" }}
-          onClick={() => {
-            navigate("/admin/createEvent");
-          }}
-        >
-          เพิ่มกิจกรรม
-        </Button>
-        <Button
-          leftIcon={<FaHistory />}
-          ml={"20px"}
-          cursor="pointer"
-          bgColor={"#3399cc"}
-          color={"white"}
-          fontSize={"medium"}
-          height={"47px"}
-          transition={".2s"}
-          _hover={{ bgColor: "#297AA3" }}
-          onClick={() => {
-            navigate("/admin/history");
-          }}
-        >
-          ประวัติกิจกรรม
-        </Button>
-        <Box
-          display={{ base: "block", md: "flex" }}
-          alignItems={{ base: "end", md: "center" }}
-          pt="20px"
-        >
-          <Text
-            fontSize="28px"
-            fontWeight="bold"
-            textDecoration="underline"
-            textUnderlineOffset="2px"
-            pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
-            pr={"10px"}
+        <Box maxWidth="1300px" mx="auto">
+          <Button
+            leftIcon={<FaPlus />}
+            cursor="pointer"
+            bgColor={"#336699"}
+            color={"white"}
+            fontSize={"medium"}
+            height={"47px"}
+            transition={".2s"}
+            _hover={{ bgColor: "#1f568c" }}
+            onClick={() => {
+              navigate("/admin/createEvent");
+            }}
           >
-            กิจกรรมที่รอการอนุมัติ
-          </Text>
-          <Text
-            color={"#D2042D"}
-            fontSize={"14px"}
-            pl={{ base: "40px", md: "0" }}
+            เพิ่มกิจกรรม
+          </Button>
+          <Button
+            leftIcon={<FaHistory />}
+            ml={"20px"}
+            cursor="pointer"
+            bgColor={"#3399cc"}
+            color={"white"}
+            fontSize={"medium"}
+            height={"47px"}
+            transition={".2s"}
+            _hover={{ bgColor: "#297AA3" }}
+            onClick={() => {
+              navigate("/admin/history");
+            }}
           >
-            *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
-          </Text>
+            ประวัติกิจกรรม
+          </Button>
+          <Box
+            display={{ base: "block", md: "flex" }}
+            alignItems={{ base: "end", md: "center" }}
+            pt="20px"
+          >
+            <Text
+              fontSize="28px"
+              fontWeight="bold"
+              textDecoration="underline"
+              textUnderlineOffset="2px"
+              pr={"10px"}
+            >
+              กิจกรรมที่รอการอนุมัติ
+            </Text>
+            <Text
+              color={"#D2042D"}
+              fontSize={"14px"}
+              pl={{ base: "40px", md: "0" }}
+            >
+              *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
+            </Text>
+          </Box>
         </Box>
         <Box>
           <Box
@@ -178,7 +178,7 @@ function Admin_Homepage() {
           textDecoration="underline"
           textUnderlineOffset="2px"
           pt="20px"
-          pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+          maxWidth="1300px" mx="auto"
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>
