@@ -33,7 +33,8 @@ function Student_Homepage() {
           textDecoration="underline"
           textUnderlineOffset="2px"
           pt="50px"
-          pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+          maxWidth="1300px"
+            mx="auto"
         >
           กิจกรรม
         </Text>
