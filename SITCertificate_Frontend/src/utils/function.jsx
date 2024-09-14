@@ -1,9 +1,3 @@
-// export const dateCheck = (date) => {
-//   const inputDate = new Date(date);
-//   const currentDate = new Date();
-//   return inputDate > currentDate;
-// };
-
 export const dateFormatChange = (date) => {
   const dateChange = new Date(date);
   const day = dateChange.getDate();
@@ -19,15 +13,3 @@ export const formatDate = (date) => {
   const day = String(dateChange.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
-
-// export const dateOverSeven = (date) => {
-//     const inputDate = new Date(date);
-//     const currentDate = new Date();
-//     return ((currentDate - inputDate)/ (1000 * 3600 * 24)) > 7;
-// }
-
-// export const dateOverThirty = (date) => {
-//     const inputDate = new Date(date);
-//     const currentDate = new Date();
-//     return ((currentDate - inputDate)/ (1000 * 3600 * 24)) > 30;
-// }
