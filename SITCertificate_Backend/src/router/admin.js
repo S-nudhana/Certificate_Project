@@ -6,6 +6,9 @@ import updateEventData from "../controller/admin/updateEventData.js";
 import deleteEvent from "../controller/admin/deleteEvent.js";
 import updateCommentStatus from "../controller/admin/updateCommentStatus.js";
 import sendEmail from "../controller/admin/sendEmail.js";
+import setPinForgotPassword from "../controller/admin/setPinForgotPassword.js";
+import sendResetPasswordEmail from "../controller/admin/sendResetPasswordEmail.js";
+import resetPassword from "../controller/prof/resetPassword.js";
 
 const adminRouter = express.Router();
 
@@ -16,5 +19,8 @@ adminRouter.post("/login", SignInAdmin);
 adminRouter.delete("/deleteEvent", deleteEvent);
 adminRouter.put("/updateCommentStatus", updateCommentStatus);
 adminRouter.post("/sendEmail", sendEmail);
+adminRouter.post("/forgotPassword", setPinForgotPassword);
+adminRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
+adminRouter.post("/resetPassword", resetPassword);
 
 export default adminRouter;

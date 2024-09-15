@@ -1,14 +1,11 @@
 import db from "../../db/connection.js";
-import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
-dotenv.config();
-
+import { verifyToken } from "../auth/jwt.js";
 const setEvent = async(req, res) => {
     try {
         const { adminToken } = req.cookies;
-        const id = jwt.verify(adminToken, process.env.JWTSecretKey);
+        const id = verifyToken(adminToken);
         const adminId = id.admin_id;
-        const { eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, emailTemplate} = req.body;
+        const { eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, emailTemplate } = req.body;
         const value = [eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, 0, adminId, emailTemplate];
         await db
             .promise()

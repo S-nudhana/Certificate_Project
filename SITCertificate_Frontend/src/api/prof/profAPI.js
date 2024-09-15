@@ -66,3 +66,26 @@ export const profSendEmail = async(id, sender, eventName, commentDetail) => {
     });
     return response;
 };
+
+export const profForgotPassword = async(email) => {
+    const response = await axiosInstance.post("/prof/forgotPassword", {
+        email: email,
+    });
+    return response;
+};
+
+export const profSendResetPasswordEmail = async(email) => {
+    const response = await axiosInstance.post("/prof/sendResetPasswordEmail", {
+        email: email,
+    });
+    return response;
+}
+
+export const profResetPassword = async(email, pin, password) => {
+    const response = await axiosInstance.post("/prof/resetPassword", {
+        email: email,
+        pin: pin,
+        password: password,
+    });
+    return response;
+}

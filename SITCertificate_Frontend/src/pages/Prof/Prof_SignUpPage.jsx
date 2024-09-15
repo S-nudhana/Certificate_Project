@@ -48,7 +48,6 @@ export default function Prof_SignUpPage() {
 
   const handleSignUp = async () => {
     if (!emailRegex.test(email)) {
-      // setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
       setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
       setEmail("");
       return;

@@ -20,7 +20,6 @@ const createAdmin = async(req, res) => {
             });
         }
         const hashed_password = hashedPassword(password);
-
         const values = [username, email, hashed_password];
         await connection.promise().query("INSERT INTO admin (admin_userName, admin_email ,admin_password) VALUES (?, ?, ?)", values);
         return res.status(201).json({ message: "User created successfully" });

@@ -6,6 +6,9 @@ import updateApproveStatus from "../controller/prof/updateApproveStatus.js";
 import deleteComment from "../controller/prof/deleteComment.js";
 import getProfessorEmail from "../controller/prof/getProfessorEmail.js";
 import sendEmail from "../controller/prof/sendEmail.js";
+import setPinForgotPassword from "../controller/prof/setPinForgotPassword.js";
+import sendResetPasswordEmail from "../controller/prof/sendResetPasswordEmail.js";
+import resetPassword from "../controller/prof/resetPassword.js";
 
 const profRouter = express.Router();
 
@@ -16,5 +19,8 @@ profRouter.put("/approveEvent", updateApproveStatus);
 profRouter.delete("/deleteComment", deleteComment);
 profRouter.get("/email", getProfessorEmail);
 profRouter.post("/sendEmail", sendEmail);
+profRouter.post("/forgotPassword", setPinForgotPassword);
+profRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
+profRouter.post("/resetPassword", resetPassword);
 
 export default profRouter;
