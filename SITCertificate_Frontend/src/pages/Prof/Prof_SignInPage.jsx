@@ -22,7 +22,6 @@ export default function Prof_SignInPage() {
 
   const handleSignIn = async () => {
     if (!emailRegex.test(email)) {
-      // setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
       setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
       setEmail('')
       return;

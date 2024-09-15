@@ -2,21 +2,25 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Student_Homepage from "./pages/Student/Student_Homepage";
 import Student_SignInPage from "./pages/Student/Student_SignInPage";
-import Admin_SignUpPage from "./pages/Admin/Admin_SignUpPage";
-import Admin_SignInPage from "./pages/Admin/Admin_SignInPage";
-import Prof_SignInPage from "./pages/Prof/Prof_SignInPage";
-import Prof_SignUpPage from "./pages/Prof/Prof_SignUpPage";
 import Student_Detail from "./pages/Student/Student_Detail";
 import Student_CertificateExample from "./pages/Student/Student_CertificateExample";
-import Admin_CreateEvent from "./pages/Admin/Admin_CreateEvent";
 import Student_CertificateDownload from "./pages/Student/Student_CertificateDownload";
+
+import Admin_SignUpPage from "./pages/Admin/Admin_SignUpPage";
+import Admin_SignInPage from "./pages/Admin/Admin_SignInPage";
+import Admin_CreateEvent from "./pages/Admin/Admin_CreateEvent";
 import Admin_Homepage from "./pages/Admin/Admin_Homepage";
 import Admin_EditEvent from "./pages/Admin/Admin_EditEvent";
-import Prof_EventDetail from "./pages/Prof/Prof_EventDetail";
-import Prof_Homepage from "./pages/Prof/Prof_Homepage";
 import Admin_EventDetail from "./pages/Admin/Admin_EventDetail";
 import Admin_History from "./pages/Admin/Admin_History";
+import Admin_forgotPassword from "./pages/Admin/Admin_forgotPassword";
+
+import Prof_SignInPage from "./pages/Prof/Prof_SignInPage";
+import Prof_SignUpPage from "./pages/Prof/Prof_SignUpPage";
+import Prof_EventDetail from "./pages/Prof/Prof_EventDetail";
+import Prof_Homepage from "./pages/Prof/Prof_Homepage";
 import Prof_History from "./pages/Prof/Prof_History";
+
 import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
@@ -67,6 +71,10 @@ const router = createBrowserRouter([
     {
         path: "/admin/detail/:id",
         element: <Admin_EventDetail />,
+    },
+    {
+        path: "/admin/forgotPassword",
+        element: <Admin_forgotPassword />,
     },
     {
         path: "/professor/register",
