@@ -1,6 +1,6 @@
 import { transporter } from "../user/transporter.js";
 import db from "../../db/connection.js";
-import { decryptPin } from "../auth/jwt.js";
+import { decryptPin } from "../auth/crypto.js";
 
 const sendResetPasswordEmail = async(req, res) => {
     const { email } = req.body;

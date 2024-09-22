@@ -1,6 +1,7 @@
 import { transporter } from "../user/transporter.js";
 import db from "../../db/connection.js";
-import { decryptPin, hashedPassword } from "../auth/jwt.js";
+import { hashedPassword } from "../auth/jwt.js";
+import { decryptPin } from "../auth/crypto.js";
 
 const resetPassword = async(req, res) => {
     const { email, pin, password } = req.body;

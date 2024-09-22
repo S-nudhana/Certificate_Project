@@ -1,5 +1,5 @@
 import db from "../../db/connection.js";
-import { encryptPin } from "../auth/jwt.js";
+import { encryptPin } from "../auth/crypto.js";
 
 const setPinForgotPassword = async(req, res) => {
     try {
