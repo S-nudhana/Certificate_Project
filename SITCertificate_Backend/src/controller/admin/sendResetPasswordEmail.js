@@ -1,13 +1,14 @@
 import { transporter } from "../user/transporter.js";
 import db from "../../db/connection.js";
-import { decryptPin } from "../auth/jwt.js";
+import { decryptPin } from "../auth/crypto.js";
 
 const sendResetPasswordEmail = async(req, res) => {
     const { email } = req.body;
     const value = [email];
-    const querry = await db.promise().query("SELECT admin_forgotpasswordPin FROM admin WHERE admin_email = ?", value);
-    const pin = querry[0][0].admin_forgotpasswordPin;
-    const decryptedPin = decryptPin(pin);
+    const querry = await db.promise().query("SELECT admin_forgotpasswordPin, admin_iv FROM admin WHERE admin_email = ?", value);
+    const adminResetPin = querry[0][0].admin_forgotpasswordPin;
+    const iv = querry[0][0].admin_iv;
+    const decryptedPin = decryptPin(adminResetPin, iv); 
     const mailOptions = {
         from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
         to: email,

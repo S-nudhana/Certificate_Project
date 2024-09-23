@@ -1,6 +1,7 @@
 import { transporter } from "../user/transporter.js";
 import db from "../../db/connection.js";
-import { decryptPin, hashedPassword } from "../auth/jwt.js";
+import { hashedPassword } from "../auth/jwt.js";
+import { decryptPin } from "../auth/crypto.js";
 
 const resetPassword = async(req, res) => {
     const { email, pin, password } = req.body;
@@ -8,11 +9,12 @@ const resetPassword = async(req, res) => {
     const querry = await db
         .promise()
         .query(
-            "SELECT admin_forgotpasswordPin FROM admin WHERE admin_email = ?",
+            "SELECT admin_forgotpasswordPin, admin_iv FROM admin WHERE admin_email = ?",
             value
         );
     const adminResetPin = querry[0][0].admin_forgotpasswordPin;
-    const decryptedPin = parseInt(decryptPin(adminResetPin), 10);
+    const iv = querry[0][0].admin_iv;
+    const decryptedPin = decryptPin(adminResetPin, iv);
     if (decryptedPin === parseInt(pin, 10)) {
         const hashed_password = hashedPassword(password);
         const value2 = [hashed_password, email];

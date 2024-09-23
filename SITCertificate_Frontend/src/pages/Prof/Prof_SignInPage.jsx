@@ -87,6 +87,18 @@ export default function Prof_SignInPage() {
                   <IconButton variant={'ghost'} borderLeftRadius={'0'} _hover={{ backgroundColor: 'transparent' }} icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />} onClick={handleClickShowPassword} />
                 </InputRightElement>
               </InputGroup>
+              <Text
+                align={"right"}
+                ml={"auto"}
+                width={'70px'}
+                mt={'10px'}
+                fontSize={'14px'}
+                onClick={() => {
+                  navigate("/professor/forgotpassword");
+                }}
+              >
+                <Link color={"#3399cc"}>ลืมรหัสผ่าน?</Link>
+              </Text>
             </FormControl>
             <Stack pt={"3"}>
               <Button
