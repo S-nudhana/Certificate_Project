@@ -5,9 +5,10 @@ import { decryptPin } from "../auth/crypto.js";
 const sendResetPasswordEmail = async(req, res) => {
     const { email } = req.body;
     const value = [email];
-    const querry = await db.promise().query("SELECT professor_forgotpasswordPin FROM professor WHERE professor_email = ?", value);
-    const pin = querry[0][0].professor_forgotpasswordPin;
-    const decryptedPin = decryptPin(pin);
+    const querry = await db.promise().query("SELECT professor_forgotpasswordPin, professor_iv FROM professor WHERE professor_email = ?", value);
+    const professorResetPin = querry[0][0].professor_forgotpasswordPin;
+    const iv = querry[0][0].professor_iv;
+    const decryptedPin = decryptPin(professorResetPin, iv);
     const mailOptions = {
         from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
         to: email,

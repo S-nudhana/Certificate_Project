@@ -9,11 +9,12 @@ const resetPassword = async(req, res) => {
     const querry = await db
         .promise()
         .query(
-            "SELECT admin_forgotpasswordPin FROM admin WHERE admin_email = ?",
+            "SELECT admin_forgotpasswordPin, admin_iv FROM admin WHERE admin_email = ?",
             value
         );
     const adminResetPin = querry[0][0].admin_forgotpasswordPin;
-    const decryptedPin = parseInt(decryptPin(adminResetPin), 10);
+    const iv = querry[0][0].admin_iv;
+    const decryptedPin = decryptPin(adminResetPin, iv);
     if (decryptedPin === parseInt(pin, 10)) {
         const hashed_password = hashedPassword(password);
         const value2 = [hashed_password, email];

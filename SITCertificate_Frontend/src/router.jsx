@@ -20,6 +20,7 @@ import Prof_SignUpPage from "./pages/Prof/Prof_SignUpPage";
 import Prof_EventDetail from "./pages/Prof/Prof_EventDetail";
 import Prof_Homepage from "./pages/Prof/Prof_Homepage";
 import Prof_History from "./pages/Prof/Prof_History";
+import Prof_forgotPassword from "./pages/Prof/Prof_forgotPassword";
 
 import NotFound from "./pages/NotFound";
 
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
     {
         path: "/professor/history",
         element: <Prof_History />,
+    },
+    {
+        path: '/professor/forgotpassword',
+        element: <Prof_forgotPassword />,
     },
     {
         path: "*",
