@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
-import { useNavigate, ScrollRestoration } from "react-router-dom";
+import { Box, Text } from "@chakra-ui/react";
+import { ScrollRestoration } from "react-router-dom";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import StudentCard from "../../components/student/StudentCard";
+
 import authMiddleware from "../../middleware/authMiddleware";
-import { dateFormatChange } from "../../utils/function";
 
 import { studentData } from "../../api/student/studentAPI";
 
 function Student_Homepage() {
-  const navigate = useNavigate();
   var amount = 0;
   const [eventData, setEventData] = useState();
   const getEventData = async () => {
@@ -53,49 +53,11 @@ function Student_Homepage() {
                 amount = key + 1;
                 return (
                   <>
-                    <Card
-                      width="300px"
-                      height="auto"
-                      bgColor="white"
-                      borderRadius="30px"
-                      boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                      transition=".2s ease-in"
-                      _hover={{
-                        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                        transform: "scale(1.01)",
-                      }}
-                    >
-                      <Image
-                        src={item.event_thumbnail}
-                        objectFit="cover"
-                        borderTopLeftRadius="30px"
-                        borderTopRightRadius="30px"
-                        width="100%"
-                        height={"250px"}
-                      />
-                      <Box p="30px">
-                        <Text fontSize="28px" fontWeight="bold" pb="5px">
-                          {item.event_name}
-                        </Text>
-                        <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                        <Text pb="5px" color={"black"}>
-                          {dateFormatChange(item.event_startDate)} ถึง{" "}
-                          {dateFormatChange(item.event_endDate)}
-                        </Text>
-                        <Button
-                          width="170px"
-                          borderRadius="40px"
-                          bgColor="#336699"
-                          color="white"
-                          _hover={{ bgColor: "#1f568c" }}
-                          onClick={() => {
-                            navigate(`/detail/${item.event_Id}`);
-                          }}
-                        >
-                          รับประกาศนียบัตร
-                        </Button>
-                      </Box>
-                    </Card>
+                  <StudentCard event_thumbnail={item.event_thumbnail}
+                    event_name={item.event_name}
+                    event_startDate={item.event_startDate}
+                    event_endDate={item.event_endDate}
+                    event_Id={item.event_Id}></StudentCard>
                   </>
                 );
               })}
