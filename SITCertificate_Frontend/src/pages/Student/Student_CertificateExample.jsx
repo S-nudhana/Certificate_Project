@@ -29,7 +29,7 @@ function Student_CertificateExample() {
 
     const getStudentGenerate = async () => {
         const response = await studentGenerate(id);
-        if (response.data.data.student_eventGenerated === 1) {
+        if (response.data.data) {
             navigate(`/detail/${id}`);
         }
     };

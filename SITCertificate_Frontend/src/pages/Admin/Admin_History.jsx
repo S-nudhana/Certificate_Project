@@ -2,27 +2,24 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Text,
-  Image,
-  Card,
   Button,
   Input,
   InputGroup,
   InputLeftElement,
   InputRightAddon,
 } from "@chakra-ui/react";
-import { ScrollRestoration, useNavigate } from "react-router-dom";
-import { dateFormatChange } from "../../utils/function";
+import { ScrollRestoration } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
+import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
 
 import { userHistory } from "../../api/user/userAPI";
 import authMiddleware from "../../middleware/authMiddleware";
 
 function Admin_History() {
-  const navigate = useNavigate();
   const [historyData, setHistoryData] = useState();
   const [search, setSearch] = useState("");
 
@@ -107,50 +104,14 @@ function Admin_History() {
               amount = key + 1;
               return (
                 <>
-                  <Card
-                    width="300px"
-                    height="auto"
-                    bgColor="white"
-                    borderRadius="30px"
-                    boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                    transition=".2s ease-in"
-                    _hover={{
-                      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                      transform: "scale(1.01)",
-                    }}
-                  >
-                    <Image
-                      src={item.event_thumbnail}
-                      objectFit="cover"
-                      borderTopLeftRadius="30px"
-                      borderTopRightRadius="30px"
-                      width="100%"
-                      height={"250px"}
-                    />
-                    <Box p="30px">
-                      <Text fontSize="28px" fontWeight="bold">
-                        {item.event_name}
-                      </Text>
-                      <Text fontWeight="bold">{item.event_owner}</Text>
-                      <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                      <Text pb="5px" color={"red"}>
-                        {dateFormatChange(item.event_startDate)} ถึง{" "}
-                        {dateFormatChange(item.event_endDate)}
-                      </Text>
-                      <Button
-                        width="130px"
-                        borderRadius="40px"
-                        bgColor="#3399cc"
-                        color="white"
-                        _hover={{ bgColor: "#297AA3" }}
-                        onClick={() => {
-                          navigate(`/admin/detail/${item.event_Id}`);
-                        }}
-                      >
-                        ดูข้อมูลกิจกรรม
-                      </Button>
-                    </Box>
-                  </Card>
+                  <AdminCardConfirmed
+                    event_thumbnail={item.event_thumbnail}
+                    event_name={item.event_name}
+                    event_owner={item.event_owner}
+                    event_startDate={item.event_startDate}
+                    event_endDate={item.event_endDate}
+                    event_Id={item.event_Id}
+                  ></AdminCardConfirmed>
                 </>
               );
             })}

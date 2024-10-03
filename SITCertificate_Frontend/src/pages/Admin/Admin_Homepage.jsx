@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box, Text, Image, Card, Button } from "@chakra-ui/react";
+import { Box, Text, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import AdminCard from "../../components/admin/AdminCard";
+import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
+
 import authMiddleware from "../../middleware/authMiddleware";
-import { dateFormatChange } from "../../utils/function";
 
 import { userEventData } from "../../api/user/userAPI";
 
@@ -99,63 +101,14 @@ function Admin_Homepage() {
                   pendingAmount = key + 1;
                   return (
                     <>
-                      <Card
-                        width="300px"
-                        height="auto"
-                        bgColor="white"
-                        borderRadius="30px"
-                        boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                        transition=".2s ease-in"
-                        _hover={{
-                          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                          transform: "scale(1.01)",
-                        }}
-                      >
-                        <Image
-                          src={item.event_thumbnail}
-                          objectFit="cover"
-                          borderTopLeftRadius="30px"
-                          borderTopRightRadius="30px"
-                          width="100%"
-                          height={"250px"}
-                        />
-                        <Box p="30px">
-                          <Text fontSize="28px" fontWeight="bold" pb="5px">
-                            {item.event_name}
-                          </Text>
-                          <Text fontWeight="bold">{item.event_owner}</Text>
-                          <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                          <Text pb="5px" color={"black"}>
-                            {dateFormatChange(item.event_startDate)} ถึง{" "}
-                            {dateFormatChange(item.event_endDate)}
-                          </Text>
-                          <Button
-                            width="90px"
-                            borderRadius="40px"
-                            bgColor="#336699"
-                            color="white"
-                            _hover={{ bgColor: "#1f568c" }}
-                            onClick={() => {
-                              navigate(`/admin/editEvent/${item.event_Id}`);
-                            }}
-                          >
-                            แก้ไข
-                          </Button>
-                          <Button
-                            ml={"15px"}
-                            width="130px"
-                            borderRadius="40px"
-                            bgColor="#3399cc"
-                            color="white"
-                            _hover={{ bgColor: "#297AA3" }}
-                            onClick={() => {
-                              navigate(`/admin/detail/${item.event_Id}`);
-                            }}
-                          >
-                            ดูข้อมูลกิจกรรม
-                          </Button>
-                        </Box>
-                      </Card>
+                      <AdminCard
+                        event_thumbnail={item.event_thumbnail}
+                        event_name={item.event_name}
+                        event_owner={item.event_owner}
+                        event_startDate={item.event_startDate}
+                        event_endDate={item.event_endDate}
+                        event_Id={item.event_Id}
+                      ></AdminCard>
                     </>
                   );
                 }
@@ -178,7 +131,8 @@ function Admin_Homepage() {
           textDecoration="underline"
           textUnderlineOffset="2px"
           pt="20px"
-          maxWidth="1300px" mx="auto"
+          maxWidth="1300px"
+          mx="auto"
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>
@@ -198,50 +152,14 @@ function Admin_Homepage() {
                   approvedAmount = key + 1;
                   return (
                     <>
-                      <Card
-                        width="300px"
-                        height="auto"
-                        bgColor="white"
-                        borderRadius="30px"
-                        boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
-                        transition=".2s ease-in"
-                        _hover={{
-                          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-                          transform: "scale(1.01)",
-                        }}
-                      >
-                        <Image
-                          src={item.event_thumbnail}
-                          objectFit="cover"
-                          borderTopLeftRadius="30px"
-                          borderTopRightRadius="30px"
-                          width="100%"
-                          height={"250px"}
-                        />
-                        <Box p="30px">
-                          <Text fontSize="28px" fontWeight="bold" pb="5px">
-                            {item.event_name}
-                          </Text>
-                          <Text fontWeight="bold">{item.event_owner}</Text>
-                          <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-                          <Text pb="5px">
-                            {dateFormatChange(item.event_startDate)} ถึง{" "}
-                            {dateFormatChange(item.event_endDate)}
-                          </Text>
-                          <Button
-                            width="130px"
-                            borderRadius="40px"
-                            bgColor="#3399cc"
-                            color="white"
-                            _hover={{ bgColor: "#297AA3" }}
-                            onClick={() => {
-                              navigate(`/admin/detail/${item.event_Id}`);
-                            }}
-                          >
-                            ดูข้อมูลกิจกรรม
-                          </Button>
-                        </Box>
-                      </Card>
+                      <AdminCardConfirmed
+                        event_thumbnail={item.event_thumbnail}
+                        event_name={item.event_name}
+                        event_owner={item.event_owner}
+                        event_startDate={item.event_startDate}
+                        event_endDate={item.event_endDate}
+                        event_Id={item.event_Id}
+                      ></AdminCardConfirmed>
                     </>
                   );
                 }

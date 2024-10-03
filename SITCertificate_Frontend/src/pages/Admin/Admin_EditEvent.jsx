@@ -15,26 +15,26 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '../../config/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+
 import authMiddleware from "../../middleware/authMiddleware";
 import { formatDate } from "../../utils/function";
 
+import { uploadFile } from "../../api/firebaseAPI";
 import { adminUpdateEvent } from "../../api/admin/adminAPI";
 import { userEventDataById } from "../../api/user/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams();
   const navigate = useNavigate();
-  const [eventName, setEventName] = useState('');
-  const [eventOwnerName, setEventOwnerName] = useState('');
-  const [openDate, setOpenDate] = useState('');
-  const [closeDate, setCloseDate] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [eventOwnerName, setEventOwnerName] = useState("");
+  const [openDate, setOpenDate] = useState("");
+  const [closeDate, setCloseDate] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
-  const [thumbnailURL, setThumbnailURL] = useState('');
+  const [thumbnailURL, setThumbnailURL] = useState("");
   const [templateFile, setTemplateFile] = useState(null);
   const [excelFile, setExcelFile] = useState(null);
   const [emailTemplate, setEmailTemplate] = useState();
@@ -50,22 +50,42 @@ function Admin_EditEvent() {
   };
 
   const firebaseUploadFile = async (file, folder) => {
-    const storage = getStorage(app);
-    if (file) {
-      const storageRef = ref(storage, `${folder}/${file.name}`);
-      await uploadBytes(storageRef, file);
-      return getDownloadURL(storageRef);
-    }
-    return null;
-  }
+    const response = await uploadFile(file, folder);
+    return response;
+  };
 
   const updateEventData = async () => {
     try {
-      if (eventName || eventOwnerName || openDate || closeDate || thumbnailFile || templateFile || excelFile || emailTemplate) {
-        const uploadedThumbnailURL = thumbnailFile ? await firebaseUploadFile(thumbnailFile, 'upload_images') : null;
-        const uploadedTemplateURL = templateFile ? await firebaseUploadFile(templateFile, 'upload_template') : null;
-        const uploadedExcelURL = excelFile ? await firebaseUploadFile(excelFile, 'upload_excel') : null;
-        const response = await adminUpdateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, emailTemplate, id.id);
+      if (
+        eventName ||
+        eventOwnerName ||
+        openDate ||
+        closeDate ||
+        thumbnailFile ||
+        templateFile ||
+        excelFile ||
+        emailTemplate
+      ) {
+        const uploadedThumbnailURL = thumbnailFile
+          ? await firebaseUploadFile(thumbnailFile, "upload_images")
+          : null;
+        const uploadedTemplateURL = templateFile
+          ? await firebaseUploadFile(templateFile, "upload_template")
+          : null;
+        const uploadedExcelURL = excelFile
+          ? await firebaseUploadFile(excelFile, "upload_excel")
+          : null;
+        const response = await adminUpdateEvent(
+          eventName,
+          eventOwnerName,
+          openDate,
+          closeDate,
+          uploadedThumbnailURL,
+          uploadedTemplateURL,
+          uploadedExcelURL,
+          emailTemplate,
+          id.id
+        );
         if (response.status === 200) {
           navigate("/admin/");
         }
@@ -73,11 +93,11 @@ function Admin_EditEvent() {
     } catch (error) {
       console.error("Error creating event:", error);
     }
-  }
+  };
 
   useEffect(() => {
     getEventData();
-  },[]);
+  }, []);
 
   return (
     <>
@@ -216,18 +236,26 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-                  <input type="file"
+                  <input
+                    type="file"
                     accept=".xlsx"
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {
                         setExcelFile(file);
                       }
-                    }} />
+                    }}
+                  />
                   <FormLabel>เท็มเพลทในการส่งอีเมล</FormLabel>
-                  <Textarea height={'300px'} resize="vertical" placeholder="เพิ่มเท็มเพลทที่นี่" value={emailTemplate} onChange={(e) => setEmailTemplate(e.target.value)} />
+                  <Textarea
+                    height={"300px"}
+                    resize="vertical"
+                    placeholder="เพิ่มเท็มเพลทที่นี่"
+                    value={emailTemplate}
+                    onChange={(e) => setEmailTemplate(e.target.value)}
+                  />
                 </FormControl>
-                <Flex justify={'space-between'} width={'100%'}>
+                <Flex justify={"space-between"} width={"100%"}>
                   <Button
                     loadingText="Submitting"
                     width={"49%"}

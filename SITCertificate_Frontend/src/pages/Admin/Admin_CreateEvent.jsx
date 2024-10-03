@@ -15,13 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '../../config/firebaseConfig';
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import authMiddleware from "../../middleware/authMiddleware";
 
+import { uploadFile } from "../../api/firebaseAPI";
 import { adminCreateEvent } from "../../api/admin/adminAPI";
 
 function Admin_CreateEvent() {
@@ -37,14 +36,9 @@ function Admin_CreateEvent() {
   const [emailTemplate, setEmailTemplate] = useState('');
 
   const firebaseUploadFile = async (file, folder) => {
-    const storage = getStorage(app);
-    if (file) {
-      const storageRef = ref(storage, `${folder}/${file.name}`);
-      await uploadBytes(storageRef, file);
-      return getDownloadURL(storageRef);
-    }
-    return null;
-  }
+    const response = await uploadFile(file, folder);
+    return response;
+  };
 
   const handleSubmit = async () => {
     try {
@@ -54,6 +48,7 @@ function Admin_CreateEvent() {
         const uploadedExcelURL = await firebaseUploadFile(excelFile, 'upload_excel');
         if (eventName && eventOwnerName && openDate && closeDate && uploadedThumbnailURL && uploadedTemplateURL && uploadedExcelURL && emailTemplate) {
           const response = await adminCreateEvent(eventName, eventOwnerName, openDate, closeDate, uploadedThumbnailURL, uploadedTemplateURL, uploadedExcelURL, emailTemplate);
+          console.log(response.status)
           if (response.status === 200) {
             navigate("/admin/");
           }
