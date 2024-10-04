@@ -1,5 +1,5 @@
 import db from "../../db/connection.js";
-import { signToken } from "../auth/jwt.js";
+import { compare, signToken, hashedPassword } from "../auth/jwt.js";
 
 const SignInStudent = async(req, res) => {
     try {
@@ -11,7 +11,7 @@ const SignInStudent = async(req, res) => {
         if (user[0].length < 1) {
             throw "ไม่พบบัญชีนี้ในระบบ";
         }
-        const compared = password === user[0][0].student_password;
+        const compared = compare(password, user[0][0].student_password);
         if (!compared) {
             throw "รหัสผ่านไม่ถูกต้อง";
         }
