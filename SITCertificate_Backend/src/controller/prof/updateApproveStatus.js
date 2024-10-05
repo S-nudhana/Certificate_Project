@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { hashedPassword } from "../auth/jwt.js";
 
 const __filename = fileURLToPath(
     import.meta.url);
@@ -39,7 +40,7 @@ const updateApproveStatus = async(req, res) => {
         const columnBData = sheetData.map((row) => row.Mobile || "");
         const studentData = columnAData.map((email, index) => [
             columnAData[index],
-            columnBData[index],
+            hashedPassword(columnBData[index]),
             eventId,
             0,
         ]);
