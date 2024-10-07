@@ -11,7 +11,7 @@ export default function NotFound() {
                 <FaFaceFrown size={"100px"} />
                 <Text m={'0'} fontSize={{ base: '110px', md: '180px' }} fontWeight={'bold'} textShadow={"0 4px 6px rgba(0, 0, 0, 0.1)"}>404</Text>
                 <Text mt={'-15%'} fontSize={{ base: '40px', md: '60px' }} fontWeight={'bold'} textShadow={"0 4px 6px rgba(0, 0, 0, 0.1)"}>Not Found</Text>
-                <Button size="md" p={'20px'} color={'white'} bgColor="#336699" _hover={{ bgColor: "#1f568c" }} variant="solid" onClick={() => { navigate("/") }}>Back to Login page</Button>
+                <Button size="md" p={'20px'} color={'white'} bgColor="#336699" _hover={{ bgColor: "#1f568c" }} variant="solid" onClick={() => { navigate("/") }}>Back to Home page</Button>
             </Flex>
         </Flex>
     );
