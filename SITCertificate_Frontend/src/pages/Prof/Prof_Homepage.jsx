@@ -82,19 +82,21 @@ function Prof_Homepage() {
           >
             {eventData &&
               eventData.map((item, key) => {
-                pendingAmount = key + 1;
-                return (
-                  <>
-                    <ProfCard
-                      event_thumbnail={item.event_thumbnail}
-                      event_name={item.event_name}
-                      event_owner={item.event_owner}
-                      event_startDate={item.event_startDate}
-                      event_endDate={item.event_endDate}
-                      event_Id={item.event_Id}
-                    ></ProfCard>
-                  </>
-                );
+                if (!item.event_approve) {
+                  pendingAmount = key + 1;
+                  return (
+                    <>
+                      <ProfCard
+                        event_thumbnail={item.event_thumbnail}
+                        event_name={item.event_name}
+                        event_owner={item.event_owner}
+                        event_startDate={item.event_startDate}
+                        event_endDate={item.event_endDate}
+                        event_Id={item.event_Id}
+                      ></ProfCard>
+                    </>
+                  );
+                }
               })}
           </Box>
           <Box

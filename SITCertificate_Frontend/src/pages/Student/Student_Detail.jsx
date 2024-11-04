@@ -89,21 +89,33 @@ function Student_Detail() {
     name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
 
   const handleSubmit = async () => {
-    if (!emailRegex.test(email)) {
-      setEmailError("Invalid email address");
-      setEmail("");
-      return;
-    } else {
-      setEmailError("");
-    }
-    const response = await generateStudentCertificateInfo(
-      id,
-      name,
-      surname,
-      email
-    );
-    if (response.status === 200) {
-      navigate(`/certificate/${id}`);
+    try {
+      if (!emailRegex.test(email)) {
+        setEmailError("Invalid email address");
+        setEmail("");
+        return;
+      } else {
+        setEmailError("");
+      }
+      const response = await generateStudentCertificateInfo(
+        id,
+        name,
+        surname,
+        email
+      );
+      if (response.status === 200) {
+        navigate(`/certificate/${id}`, {
+          state: {
+            certificateData: response.data.data, // Include this if it's part of the response and needed
+            name,
+            surname,
+            email,
+            id,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
     }
   };
 

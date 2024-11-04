@@ -17,7 +17,7 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import Building from "../../../public/img/SIT_Building.png";
+import Building from "../../../public/img/SIT_Building.png"
 import Logo from "../../../public/img/SIT_Icon.png";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
