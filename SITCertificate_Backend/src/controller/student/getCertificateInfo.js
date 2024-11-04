@@ -16,12 +16,14 @@ const getCertificateInfo = async (req, res) => {
         `SELECT student_nameOnCertificate, student_surnameOnCertificate, student_emailToSendCertificate FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
         value
       );
+
     const data = dataQuery[0][0];
-    return res.json({
+    return res.status(200).json({
       success: true,
       data: data,
       error: null,
     });
+
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
