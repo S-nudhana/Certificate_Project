@@ -33,7 +33,9 @@ export const adminCreateEvent = async(
     uploadedThumbnailURL,
     uploadedTemplateURL,
     uploadedExcelURL,
-    emailTemplate
+    emailTemplate,
+    inputSize,
+    inputY
 ) => {
     const response = await axiosInstance.post("/admin/createEvent", {
         eventName: eventName,
@@ -44,6 +46,8 @@ export const adminCreateEvent = async(
         template: uploadedTemplateURL,
         excel: uploadedExcelURL,
         emailTemplate: emailTemplate,
+        inputSize: inputSize,
+        inputY: inputY,
     });
     return response;
 };

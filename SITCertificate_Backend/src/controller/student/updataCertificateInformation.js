@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const updataCertificateInformation = async (req, res) => {
-  const {eventId, name, surname, email} = req.body;
+  const {eventId, name, surname, email, modifiedPdf} = req.body;
   try {
     const { token } = req.cookies;
     const userId = jwt.verify(token, process.env.JWTSecretKey);
@@ -12,8 +12,8 @@ const updataCertificateInformation = async (req, res) => {
     await db
       .promise()
       .query(
-        "UPDATE student SET student_nameOnCertificate = ?, student_surnameOnCertificate = ?, student_emailToSendCertificate = ? WHERE student_joinedEventId = ? AND student_email = ?",
-        [name, surname, email, parseInt(eventId), studentId]
+        "UPDATE student SET student_nameOnCertificate = ?, student_surnameOnCertificate = ?, student_emailToSendCertificate = ?, student_GenerateCertificate = ? WHERE student_joinedEventId = ? AND student_email = ?",
+        [name, surname, email, modifiedPdf, parseInt(eventId), studentId]
       );
     return res.status(200).json({
       success: true,

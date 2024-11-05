@@ -21,7 +21,8 @@ function Student_CertificateDownload() {
 
   const getCertificate = async () => {
     const response = await studentCertificate(id);
-    setCertificate(response.data.data.event_Certificate);
+    console.log(response)
+    setCertificate(response.data.data.student_GenerateCertificate);
   };
 
   const sendCertificateToEmail = async () => {
