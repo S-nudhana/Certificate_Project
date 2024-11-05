@@ -25,7 +25,6 @@ import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import authMiddleware from "../../middleware/authMiddleware";
 
 import { uploadFile } from "../../api/firebaseAPI";
 import { adminCreateEvent } from "../../api/admin/adminAPI";
@@ -541,4 +540,4 @@ function Admin_CreateEvent() {
   );
 }
 
-export default authMiddleware(Admin_CreateEvent);
+export default Admin_CreateEvent;

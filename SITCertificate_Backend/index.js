@@ -25,10 +25,11 @@ db.connect((err) => {
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/prof", profRouter);
 app.use("/api/student", studentRouter);
-app.use("/api/user", userRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

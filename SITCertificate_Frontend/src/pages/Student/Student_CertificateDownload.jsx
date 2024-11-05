@@ -4,7 +4,6 @@ import { Box, Text, Button, Flex, useToast } from "@chakra-ui/react";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import authMiddleware from "../../middleware/authMiddleware";
 import PdfViewer from "../../components/PdfViewer";
 
 import {
@@ -53,9 +52,9 @@ function Student_CertificateDownload() {
     <>
       <ScrollRestoration />
       <Navbar />
+      <Box height={"80px"} bgColor={"#0c2d4e"}/>
       {certificate && (
         <Box
-          pt="80px"
           minH={"80vh"}
           display="flex"
           flexDirection="column"
@@ -124,4 +123,4 @@ function Student_CertificateDownload() {
     </>
   );
 }
-export default authMiddleware(Student_CertificateDownload);
+export default Student_CertificateDownload;

@@ -1,19 +1,21 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+
+import { verifyToken } from "../auth/jwt.js";
+
 dotenv.config();
 
 const updateGenerateCertificate = async (req, res) => {
   const eventId = parseInt(req.query.id);
   try {
     const { token } = req.cookies;
-    const userId = jwt.verify(token, process.env.JWTSecretKey);
-    const studentId = userId.student_email;
+    const userId = verifyToken(token);
+    const studentEmail = userId.student_email;
     await db
       .promise()
       .query(
         "UPDATE student SET student_eventGenerated = ? WHERE student_joinedEventId = ? AND student_email = ?",
-        [1, eventId, studentId]
+        [1, eventId, studentEmail]
       );
     return res.json({
       success: true,

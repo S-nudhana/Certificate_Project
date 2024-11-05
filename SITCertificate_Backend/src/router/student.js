@@ -9,16 +9,18 @@ import updataCertificateInformation from "../controller/student/updataCertificat
 import getCertificateInfo from "../controller/student/getCertificateInfo.js";
 import sendCertificate from "../controller/student/sendCertificate.js";
 
+import authMiddleware from "../middleware/authMiddleware.js";
+
 const studentRouter = express.Router();
 
 studentRouter.post("/login", SignInStudent);
-studentRouter.get("/event", getAllInProgressEvent);
-studentRouter.get("/generate", getGenerateCertificate);
-studentRouter.put("/generated", updateGenerateCertificate);
-studentRouter.get("/certificate", getCertificate);
-studentRouter.put("/certificateinfo", updataCertificateInformation);
-studentRouter.get("/info", getCertificateInfo);
-studentRouter.get("/eventId", getAllInProgressEventById);
-studentRouter.post("/sendCertificate", sendCertificate);
+studentRouter.get("/event", authMiddleware, getAllInProgressEvent);
+studentRouter.get("/generate", authMiddleware, getGenerateCertificate);
+studentRouter.put("/generated", authMiddleware, updateGenerateCertificate);
+studentRouter.get("/certificate", authMiddleware, getCertificate);
+studentRouter.put("/certificateinfo", authMiddleware, updataCertificateInformation);
+studentRouter.get("/info", authMiddleware, getCertificateInfo);
+studentRouter.get("/eventId", authMiddleware, getAllInProgressEventById);
+studentRouter.post("/sendCertificate", authMiddleware, sendCertificate);
 
 export default studentRouter;

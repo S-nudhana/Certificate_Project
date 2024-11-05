@@ -9,8 +9,6 @@ import Footer from "../../components/Footer";
 import AdminCard from "../../components/admin/AdminCard";
 import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
 
-import authMiddleware from "../../middleware/authMiddleware";
-
 import { userEventData } from "../../api/user/userAPI";
 
 function Admin_Homepage() {
@@ -30,7 +28,7 @@ function Admin_Homepage() {
       <ScrollRestoration />
       <Navbar />
       <Box pt="100px" pb={"40px"}>
-        <Box maxWidth="1300px" mx="auto">
+        <Box maxWidth="1300px" mx={{base: "5%", lg: "auto"}}>
           <Button
             leftIcon={<FaPlus />}
             cursor="pointer"
@@ -79,7 +77,6 @@ function Admin_Homepage() {
             <Text
               color={"#D2042D"}
               fontSize={"14px"}
-              pl={{ base: "40px", md: "0" }}
             >
               *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
             </Text>
@@ -132,7 +129,7 @@ function Admin_Homepage() {
           textUnderlineOffset="2px"
           pt="20px"
           maxWidth="1300px"
-          mx="auto"
+          mx={{base: "5%", lg: "auto"}}
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>
@@ -182,4 +179,4 @@ function Admin_Homepage() {
   );
 }
 
-export default authMiddleware(Admin_Homepage);
+export default Admin_Homepage;

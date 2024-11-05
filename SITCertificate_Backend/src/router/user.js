@@ -4,18 +4,19 @@ import getSearchEvent from "../controller/user/getSearchEvent.js";
 import getAllInProgressEvent from "../controller/user/getAllInProgressEvent.js";
 import getAllHistoryEvent from "../controller/user/getAllHistoryEvent.js";
 import getCommentById from "../controller/user/getCommentById.js";
-import verifyToken from "../controller/user/verifyToken.js";
-import deleteToken from "../controller/user/deleteToken.js";
+import verifyCookiesToken from "../controller/token/verifyCookiesToken.js";
+import deleteToken from "../controller/token/deleteToken.js";
 
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/allEvent", getAllInProgressEvent);
-userRouter.get("/event", getEventById);
-userRouter.get("/history", getAllHistoryEvent);
-userRouter.get("/searchEvent", getSearchEvent);
-userRouter.get("/comment", getCommentById);
-userRouter.get("/verifyToken", verifyToken);
+userRouter.get("/allEvent", authMiddleware, getAllInProgressEvent);
+userRouter.get("/event", authMiddleware, getEventById);
+userRouter.get("/history", authMiddleware, getAllHistoryEvent);
+userRouter.get("/searchEvent", authMiddleware, getSearchEvent);
+userRouter.get("/comment", authMiddleware, getCommentById);
+userRouter.get("/verifyToken", verifyCookiesToken);
 userRouter.delete("/deleteToken", deleteToken);
 
 export default userRouter;

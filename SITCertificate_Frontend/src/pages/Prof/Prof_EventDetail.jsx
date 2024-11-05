@@ -28,7 +28,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
-import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
 import { userComment, userEventDataById } from "../../api/user/userAPI";
@@ -314,4 +313,4 @@ function Prof_EventDetail() {
     </>
   );
 }
-export default authMiddleware(Prof_EventDetail);
+export default Prof_EventDetail;

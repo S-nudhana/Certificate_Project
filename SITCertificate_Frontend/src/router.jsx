@@ -22,89 +22,172 @@ import Prof_Homepage from "./pages/Prof/Prof_Homepage";
 import Prof_History from "./pages/Prof/Prof_History";
 import Prof_forgotPassword from "./pages/Prof/Prof_forgotPassword";
 
+import App from "./App";
 import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "",
         element: <Student_Homepage />,
-    },
-    {
-        path: "/login",
-        element: <Student_SignInPage />,
-    },
-    {
-        path: "/detail/:id",
+      },
+      {
+        path: "detail/:id",
         element: <Student_Detail />,
-    },
-    {
-        path: "/certificate/:id",
+      },
+      {
+        path: "certificate/:id",
         element: <Student_CertificateExample />,
-    },
-    {
-        path: "/download/:id",
+      },
+      {
+        path: "download/:id",
         element: <Student_CertificateDownload />,
-    },
-    {
-        path: "/admin/register",
-        element: <Admin_SignUpPage />,
-    },
-    {
-        path: "/admin/login",
-        element: <Admin_SignInPage />,
-    },
-    {
-        path: "/admin/",
+      },
+      {
+        path: "admin/",
         element: <Admin_Homepage />,
-    },
-    {
-        path: "/admin/history",
+      },
+      {
+        path: "admin/history",
         element: <Admin_History />,
-    },
-    {
-        path: "/admin/createEvent",
+      },
+      {
+        path: "admin/createEvent",
         element: <Admin_CreateEvent />,
-    },
-    {
-        path: "/admin/editEvent/:id",
+      },
+      {
+        path: "admin/editEvent/:id",
         element: <Admin_EditEvent />,
-    },
-    {
-        path: "/admin/detail/:id",
+      },
+      {
+        path: "admin/detail/:id",
         element: <Admin_EventDetail />,
-    },
-    {
-        path: "/admin/forgotPassword",
-        element: <Admin_forgotPassword />,
-    },
-    {
-        path: "/professor/register",
-        element: <Prof_SignUpPage />,
-    },
-    {
-        path: "/professor/login",
-        element: <Prof_SignInPage />,
-    },
-    {
-        path: "/professor/",
+      },
+      {
+        path: "professor/",
         element: <Prof_Homepage />,
-    },
-    {
-        path: "/professor/detail/:id",
+      },
+      {
+        path: "professor/detail/:id",
         element: <Prof_EventDetail />,
-    },
-    {
-        path: "/professor/history",
+      },
+      {
+        path: "professor/history",
         element: <Prof_History />,
-    },
-    {
-        path: '/professor/forgotpassword',
-        element: <Prof_forgotPassword />,
-    },
-    {
-        path: "*",
-        element: <NotFound />,
-    },
+      },
+    ],
+  },
+  {
+    path: "login",
+    element: <Student_SignInPage />,
+  },
+  {
+    path: "admin/login",
+    element: <Admin_SignInPage />,
+  },
+  {
+    path: "admin/register",
+    element: <Admin_SignUpPage />,
+  },
+  {
+    path: "admin/forgotPassword",
+    element: <Admin_forgotPassword />,
+  },
+  {
+    path: "professor/register",
+    element: <Prof_SignUpPage />,
+  },
+  {
+    path: "professor/login",
+    element: <Prof_SignInPage />,
+  },
+  {
+    path: "professor/forgotpassword",
+    element: <Prof_forgotPassword />,
+  },
+  // {
+  //     path: "/",
+  //     element: <Student_Homepage />,
+  // },
+  // {
+  //     path: "/login",
+  //     element: <Student_SignInPage />,
+  // },
+  // {
+  //     path: "/detail/:id",
+  //     element: <Student_Detail />,
+  // },
+  // {
+  //     path: "/certificate/:id",
+  //     element: <Student_CertificateExample />,
+  // },
+  // {
+  //     path: "/download/:id",
+  //     element: <Student_CertificateDownload />,
+  // },
+  // {
+  //     path: "/admin/register",
+  //     element: <Admin_SignUpPage />,
+  // },
+  // {
+  //     path: "/admin/login",
+  //     element: <Admin_SignInPage />,
+  // },
+  // {
+  //     path: "/admin/",
+  //     element: <Admin_Homepage />,
+  // },
+  // {
+  //     path: "/admin/history",
+  //     element: <Admin_History />,
+  // },
+  // {
+  //     path: "/admin/createEvent",
+  //     element: <Admin_CreateEvent />,
+  // },
+  // {
+  //     path: "/admin/editEvent/:id",
+  //     element: <Admin_EditEvent />,
+  // },
+  // {
+  //     path: "/admin/detail/:id",
+  //     element: <Admin_EventDetail />,
+  // },
+  // {
+  //     path: "/admin/forgotPassword",
+  //     element: <Admin_forgotPassword />,
+  // },
+  // {
+  //     path: "/professor/register",
+  //     element: <Prof_SignUpPage />,
+  // },
+  // {
+  //     path: "/professor/login",
+  //     element: <Prof_SignInPage />,
+  // },
+  // {
+  //     path: "/professor/",
+  //     element: <Prof_Homepage />,
+  // },
+  // {
+  //     path: "/professor/detail/:id",
+  //     element: <Prof_EventDetail />,
+  // },
+  // {
+  //     path: "/professor/history",
+  //     element: <Prof_History />,
+  // },
+  // {
+  //     path: '/professor/forgotpassword',
+  //     element: <Prof_forgotPassword />,
+  // },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ]);
 
 export default router;

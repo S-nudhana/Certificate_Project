@@ -23,7 +23,6 @@ import { PDFDocument } from "pdf-lib";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import authMiddleware from "../../middleware/authMiddleware";
 import { uploadFile } from "../../api/firebaseAPI";
 
 import fontkit from "@pdf-lib/fontkit";
@@ -353,4 +352,4 @@ function Student_CertificateExample() {
     </>
   );
 }
-export default authMiddleware(Student_CertificateExample);
+export default Student_CertificateExample;

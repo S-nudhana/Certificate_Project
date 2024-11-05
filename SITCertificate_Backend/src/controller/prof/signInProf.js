@@ -17,13 +17,14 @@ const SignInProf = async (req, res) => {
     }
     const tokenData = {
       professor_id: user[0][0].professor_Id,
+      role: "professor"
     };
     const signedToken = signToken(tokenData);
     const cookieOptions = {
       httpOnly: true,
       secure: true,
     };
-    res.cookie("profToken", signedToken, cookieOptions);
+    res.cookie("token", signedToken, cookieOptions);
     return res.status(201).json({ message: "Login Successful" });
   } catch (e) {
     return res.status(500).json({ message: e });

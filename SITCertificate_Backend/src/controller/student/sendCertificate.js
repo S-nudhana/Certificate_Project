@@ -1,8 +1,9 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
 import admin from 'firebase-admin';
 import axios from 'axios';
+
+import { verifyToken } from "../auth/jwt.js";
 
 import { transporter } from "../user/transporter.js";
 
@@ -24,10 +25,10 @@ const sendCertificate = async(req, res) => {
     const { id, fileUrl } = req.body;
     try {
         const { token } = req.cookies;
-        const Id = jwt.verify(token, process.env.JWTSecretKey);
-        const studentId = Id.student_email;
+        const Id = verifyToken(token);
+        const studentEmail = Id.student_email;
         const eventId = parseInt(id);
-        const value = [eventId, studentId];
+        const value = [eventId, studentEmail];
         const studentQuery = await db
             .promise()
             .query(
@@ -47,7 +48,7 @@ const sendCertificate = async(req, res) => {
             responseType: 'arraybuffer',
         });
         const mailOptions = {
-            from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
+            from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "แจ้งเตือนจาก SIT Certificate",
             text: `${emailTemplate}`,

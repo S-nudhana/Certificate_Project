@@ -1,15 +1,17 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+
+import { verifyToken } from "../auth/jwt.js";
+
 dotenv.config();
 
 const getCertificate = async (req, res) => {
   const eventId = parseInt(req.query.id);
   try {
     const { token } = req.cookies;
-    const userId = jwt.verify(token, process.env.JWTSecretKey);
-    const studentId = userId.student_email;
-    const value = [eventId, studentId];
+    const userId = verifyToken(token);
+    const studentEmail = userId.student_email;
+    const value = [eventId, studentEmail];
     const dataQuery = await db.promise().query(
       `SELECT e.event_Certificate, e.event_name, s.student_nameOnCertificate, s.student_surnameOnCertificate, s.student_emailToSendCertificate, s.student_GenerateCertificate
       ,e.event_certificate_position_y, e.event_certificate_text_size

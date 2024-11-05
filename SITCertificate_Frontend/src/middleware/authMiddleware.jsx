@@ -27,7 +27,9 @@ const authMiddleware = (Component) => {
     if (loading) {
       return null;
     }
+
     const { authenticated, role } = authStatus || {};
+    
     if (!authenticated) {
       if (pathname.startsWith("/admin")) return <Navigate to="/admin/login" replace />;
       if (pathname.startsWith("/professor")) return <Navigate to="/professor/login" replace />;
