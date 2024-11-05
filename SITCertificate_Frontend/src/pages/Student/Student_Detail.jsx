@@ -51,7 +51,7 @@ function Student_Detail() {
 
   const getCertificate = async () => {
     const response = await studentCertificate(id);
-    setCertificate(response.data.data.event_Certificate);
+    setCertificate(response.data.data.student_GenerateCertificate);
   };
 
   const sendCertificateToEmail = async () => {
@@ -238,7 +238,7 @@ function Student_Detail() {
                   width={{ base: "100%", lg: "80%" }}
                   justifyContent={{ base: "center", lg: "start" }}
                 >
-                  <PdfViewer fileUrl={eventData.event_certificate} />
+                  { certificate && <PdfViewer fileUrl={certificate} />}
                 </Flex>
               </Flex>
               <Box
@@ -270,7 +270,7 @@ function Student_Detail() {
                   _hover={{ bgColor: "#297AA3" }}
                   variant="solid"
                   as="a"
-                  href={eventData.event_certificate}
+                  href={certificate}
                   download={`${eventData.event_name}_certificate.pdf`}
                 >
                   ดาวน์โหลด
