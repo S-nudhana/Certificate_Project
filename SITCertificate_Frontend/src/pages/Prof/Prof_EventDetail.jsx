@@ -169,7 +169,7 @@ function Prof_EventDetail() {
             </Flex>
             <FormControl id="comment" p={"20px 20px 0 0"}>
               <FormLabel fontSize="18px" fontWeight={"bold"}>
-                เท็มเพลทในการส่งอีเมล
+                เนื้อความในอีเมลส่งใบประกาศนียบัตร
               </FormLabel>
               <Textarea
                 height={"300px"}
