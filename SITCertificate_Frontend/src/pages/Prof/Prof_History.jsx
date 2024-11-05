@@ -16,8 +16,6 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import ProfCard from "../../components/prof/ProfCard";
 
-import authMiddleware from "../../middleware/authMiddleware";
-
 import { userHistory } from "../../api/user/userAPI";
 
 function Prof_History() {
@@ -130,4 +128,4 @@ function Prof_History() {
     </>
   );
 }
-export default authMiddleware(Prof_History);
+export default Prof_History;

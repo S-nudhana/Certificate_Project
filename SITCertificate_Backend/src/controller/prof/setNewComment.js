@@ -1,12 +1,14 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+
+import { verifyToken } from "../auth/jwt.js";
+
 dotenv.config();
 
 const setNewComment = async(req, res) => {
     try {
-        const { profToken } = req.cookies;
-        const userId = jwt.verify(profToken, process.env.JWTSecretKey);
+        const { token } = req.cookies;
+        const userId = verifyToken(token);
         const { eventId, detail } = req.body;
         const dataQuery = await db
             .promise()

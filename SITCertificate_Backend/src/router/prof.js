@@ -10,13 +10,15 @@ import setPinForgotPassword from "../controller/prof/setPinForgotPassword.js";
 import sendResetPasswordEmail from "../controller/prof/sendResetPasswordEmail.js";
 import resetPassword from "../controller/prof/resetPassword.js";
 
+import authMiddleware from "../middleware/authMiddleware.js";
+
 const profRouter = express.Router();
 
 profRouter.post("/register", CreateProf);
 profRouter.post("/login", SignInProf);
-profRouter.post("/newComment", setNewComment);
-profRouter.put("/approveEvent", updateApproveStatus);
-profRouter.delete("/deleteComment", deleteComment);
+profRouter.post("/newComment", authMiddleware, setNewComment);
+profRouter.put("/approveEvent", authMiddleware, updateApproveStatus);
+profRouter.delete("/deleteComment", authMiddleware, deleteComment);
 profRouter.get("/email", getProfessorEmail);
 profRouter.post("/sendEmail", sendEmail);
 profRouter.post("/forgotPassword", setPinForgotPassword);

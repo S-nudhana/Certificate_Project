@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import { ScrollRestoration } from "react-router-dom";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import StudentCard from "../../components/student/StudentCard";
-
-import authMiddleware from "../../middleware/authMiddleware";
+import image from "../../../public/img/SIT_Building.png";
 
 import { studentData } from "../../api/student/studentAPI";
 
@@ -26,51 +25,89 @@ function Student_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box pt="60px" minH={"80vh"}>
-        <Text
-          fontSize="28px"
-          fontWeight="bold"
-          textDecoration="underline"
-          textUnderlineOffset="2px"
-          pt="50px"
-          maxWidth="1300px"
-            mx="auto"
-        >
-          กิจกรรม
-        </Text>
-        <Box>
+      <Box height={"60px"} bgColor={"#0c2d4e"}/>
+      <Box minH={"75vh"}>
+        <Box position="relative" width="100%" height={{base: "300px", lg: "400px"}} overflow="hidden">
+          <Image
+            src={image}
+            alt="Dimmed background"
+            width="100%"
+            height="100%"
+            objectFit="cover"
+            zIndex={1}
+          />
           <Box
-            display="flex"
-            flexWrap="wrap"
-            justifyContent={{ base: "center", xl: "flex-start" }}
-            gap="30px"
-            py="30px"
-            maxWidth="1300px"
-            mx="auto"
+            position="absolute"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            bg="rgba(0, 0, 0, 0.5)"
+            zIndex={2}
           >
-            {eventData &&
-              eventData.map((item, key) => {
-                amount = key + 1;
-                return (
-                  <>
-                  <StudentCard event_thumbnail={item.event_thumbnail}
-                    event_name={item.event_name}
-                    event_startDate={item.event_startDate}
-                    event_endDate={item.event_endDate}
-                    event_Id={item.event_Id}></StudentCard>
-                  </>
-                );
-              })}
+            <Box
+              position="absolute"
+              top={"40%"}
+              left={{base: "5%", lg: "19%"}}
+              width="100%"
+              height="100%"
+              color={"white"}
+            >
+              <Text fontSize={{base: "30px", lg:"50px"}} fontWeight={"bold"}>
+                ระบบออกใบประกาศนียบัตร
+              </Text>
+              <Text fontSize={{base: "14px", lg: "20px"}}>
+                คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี
+              </Text>
+            </Box>
           </Box>
-          <Box
-            display={amount === 0 ? "flex" : "none"}
-            alignItems={"center"}
-            textAlign={"center"}
-            width={"100%"}
-            height={"15vh"}
-            justifyContent={"center"}
+        </Box>
+        <Box maxWidth="1300px" mx={{ base: "5%", lg: "auto" }}>
+          <Text
+            fontSize="28px"
+            fontWeight="bold"
+            textDecoration="underline"
+            textUnderlineOffset="2px"
+            pt="35px"
           >
-            <Text>ไม่พบกิจกรรม</Text>
+            กิจกรรมที่เข้าร่วม
+          </Text>
+          <Box>
+            <Box
+              display="flex"
+              flexWrap="wrap"
+              justifyContent={{ base: "center", xl: "flex-start" }}
+              gap="30px"
+              py="30px"
+              maxWidth="1300px"
+              mx="auto"
+            >
+              {eventData &&
+                eventData.map((item, key) => {
+                  amount = key + 1;
+                  return (
+                    <>
+                      <StudentCard
+                        event_thumbnail={item.event_thumbnail}
+                        event_name={item.event_name}
+                        event_startDate={item.event_startDate}
+                        event_endDate={item.event_endDate}
+                        event_Id={item.event_Id}
+                      ></StudentCard>
+                    </>
+                  );
+                })}
+            </Box>
+            <Box
+              display={amount === 0 ? "flex" : "none"}
+              alignItems={"center"}
+              textAlign={"center"}
+              width={"100%"}
+              height={"15vh"}
+              justifyContent={"center"}
+            >
+              <Text>ไม่พบกิจกรรม</Text>
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -79,4 +116,4 @@ function Student_Homepage() {
   );
 }
 
-export default authMiddleware(Student_Homepage);
+export default Student_Homepage;

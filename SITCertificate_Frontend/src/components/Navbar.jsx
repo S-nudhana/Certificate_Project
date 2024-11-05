@@ -52,15 +52,12 @@ export default function Navbar() {
     if (authStatus.authenticated) {
       try {
         let redirectPath = "/login";
-        let token = "token";
         if (location.pathname.startsWith("/professor") && authStatus.role === "professor") {
-          token = "profToken";
           redirectPath = "/professor/login";
         } else if (location.pathname.startsWith("/admin") && authStatus.role === "admin") {
-          token = "adminToken";
           redirectPath = "/admin/login";
         }
-        await userDeleteToken(token);
+        await userDeleteToken("token");
         window.location.href = redirectPath;
       } catch (error) {
         console.error('Logout error:', error);

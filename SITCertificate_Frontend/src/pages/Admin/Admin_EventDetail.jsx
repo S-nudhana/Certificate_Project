@@ -42,7 +42,8 @@ import {
 } from "../../api/admin/adminAPI";
 import { profEmail } from "../../api/prof/profAPI";
 
-function Admin_EventDetail() {
+export default function Admin_EventDetail() {
+  authMiddleware(Admin_EventDetail);
   const { id } = useParams();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -291,5 +292,3 @@ function Admin_EventDetail() {
     </>
   );
 }
-
-export default authMiddleware(Admin_EventDetail);

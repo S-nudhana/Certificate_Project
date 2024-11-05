@@ -17,7 +17,6 @@ import BackBTN from "../../components/BackBTN";
 import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
 
 import { userHistory } from "../../api/user/userAPI";
-import authMiddleware from "../../middleware/authMiddleware";
 
 function Admin_History() {
   const [historyData, setHistoryData] = useState();
@@ -129,4 +128,4 @@ function Admin_History() {
     </>
   );
 }
-export default authMiddleware(Admin_History);
+export default Admin_History;

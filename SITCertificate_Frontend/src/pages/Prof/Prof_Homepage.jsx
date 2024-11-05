@@ -7,8 +7,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ProfCard from "../../components/prof/ProfCard";
 
-import authMiddleware from "../../middleware/authMiddleware";
-
 import { userEventData } from "../../api/user/userAPI";
 
 function Prof_Homepage() {
@@ -31,7 +29,7 @@ function Prof_Homepage() {
       <ScrollRestoration />
       <Navbar />
       <Box pt="100px" pb={"40px"} minHeight={"75vh"}>
-        <Box maxWidth="1300px" mx="auto">
+        <Box maxWidth="1300px" mx={{base: "5%", lg: "auto"}}>
           <Button
             leftIcon={<FaHistory />}
             cursor="pointer"
@@ -64,7 +62,6 @@ function Prof_Homepage() {
             <Text
               color={"red"}
               fontSize={"14px"}
-              pl={{ base: "40px", md: "0" }}
             >
               *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
             </Text>
@@ -117,7 +114,7 @@ function Prof_Homepage() {
           textUnderlineOffset="2px"
           pt="20px"
           maxWidth="1300px"
-          mx="auto"
+          mx={{base: "5%", lg: "auto"}}
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>
@@ -129,7 +126,7 @@ function Prof_Homepage() {
             gap="30px"
             pt="30px"
             maxWidth="1300px"
-            mx="auto"
+            mx={{base: "5%", lg: "auto"}}
           >
             {eventData &&
               eventData.map((item, key) => {
@@ -166,4 +163,4 @@ function Prof_Homepage() {
     </>
   );
 }
-export default authMiddleware(Prof_Homepage);
+export default Prof_Homepage;

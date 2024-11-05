@@ -17,13 +17,14 @@ const SignInAdmin = async(req, res) => {
         }
         const tokenData = {
             admin_id: user[0][0].admin_Id,
+            role: "admin"
         };
         const signedToken = signToken(tokenData);
         const cookieOptions = {
             httpOnly: true,
             secure: true,
         };
-        res.cookie("adminToken", signedToken, cookieOptions);
+        res.cookie("token", signedToken, cookieOptions);
         return res.status(201).json({ message: "Login Successful" });
     } catch (e) {
         return res.status(500).json({ message: e });

@@ -17,7 +17,6 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import authMiddleware from "../../middleware/authMiddleware";
 import { dateFormatChange } from "../../utils/function";
 
 import {
@@ -123,9 +122,10 @@ function Student_Detail() {
     <>
       <ScrollRestoration />
       <Navbar />
+      <Box height={"80px"} bgColor={"#0c2d4e"}/>
       {eventData && studentData && (
         <Box display={eventData && studentData ? "block" : "none"}>
-          <Box display={{ base: "block", lg: "flex" }} pt="80px" minH={"80vh"}>
+          <Box display={{ base: "block", lg: "flex" }} minH={"80vh"}>
             <Image
               src={eventData.event_thumbnail}
               width={{ base: "100%", lg: "35%" }}
@@ -209,7 +209,7 @@ function Student_Detail() {
       )}
       {eventData && (
         <Box display={eventData && studentData ? "none" : "block"}>
-          <Box display={{ base: "block", lg: "flex" }} pt="80px">
+          <Box display={{ base: "block", lg: "flex" }}>
             <Image
               src={eventData.event_thumbnail}
               width={{ base: "100%", lg: "35%" }}
@@ -285,4 +285,4 @@ function Student_Detail() {
   );
 }
 
-export default authMiddleware(Student_Detail);
+export default Student_Detail;

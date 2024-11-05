@@ -1,14 +1,16 @@
 import { transporter } from "../user/transporter.js";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db/connection.js";
+
+import { verifyToken } from "../auth/jwt.js";
+
 dotenv.config();
 
 const sendEmail = async(req, res) => {
     const { id, subject, eventName, commentDetail } = req.body;
     try {
-        const { profToken } = req.cookies;
-        const Id = jwt.verify(profToken, process.env.JWTSecretKey);
+        const { token } = req.cookies;
+        const Id = verifyToken(token);
         const profId = parseInt(Id.professor_id);
         const dataQuery = await db
             .promise()

@@ -10,14 +10,16 @@ import setPinForgotPassword from "../controller/admin/setPinForgotPassword.js";
 import sendResetPasswordEmail from "../controller/admin/sendResetPasswordEmail.js";
 import resetPassword from "../controller/admin/resetPassword.js";
 
+import authMiddleware from "../middleware/authMiddleware.js";
+
 const adminRouter = express.Router();
 
-adminRouter.post("/createEvent", setEvent);
+adminRouter.post("/createEvent", authMiddleware, setEvent);
 adminRouter.post("/register", createAdmin);
-adminRouter.put("/updateEvent", updateEventData);
+adminRouter.put("/updateEvent", authMiddleware, updateEventData);
 adminRouter.post("/login", SignInAdmin);
-adminRouter.delete("/deleteEvent", deleteEvent);
-adminRouter.put("/updateCommentStatus", updateCommentStatus);
+adminRouter.delete("/deleteEvent", authMiddleware, deleteEvent);
+adminRouter.put("/updateCommentStatus", authMiddleware, updateCommentStatus);
 adminRouter.post("/sendEmail", sendEmail);
 adminRouter.post("/forgotPassword", setPinForgotPassword);
 adminRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);

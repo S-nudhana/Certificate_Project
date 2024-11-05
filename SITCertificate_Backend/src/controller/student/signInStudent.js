@@ -1,5 +1,5 @@
 import db from "../../db/connection.js";
-import { compare, signToken, hashedPassword } from "../auth/jwt.js";
+import { compare, signToken } from "../auth/jwt.js";
 
 const SignInStudent = async(req, res) => {
     try {
@@ -17,6 +17,7 @@ const SignInStudent = async(req, res) => {
         }
         const tokenData = {
             student_email: user[0][0].student_email,
+            role: "student"
         };
         const signedToken = signToken(tokenData);
         const cookieOptions = {

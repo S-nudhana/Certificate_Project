@@ -1,14 +1,16 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+
+import { verifyToken } from "../auth/jwt.js";
+
 dotenv.config();
 
 const getAllInProgressEvent = async (req, res) => {
   try {
     const { token } = req.cookies;
-    const userId = jwt.verify(token, process.env.JWTSecretKey);
-    const studentId = userId.student_email;
-    const value = [studentId];
+    const userId = verifyToken(token);
+    const student_email = userId.student_email;
+    const value = [student_email];
     const dataQuery = await db
       .promise()
       .query(

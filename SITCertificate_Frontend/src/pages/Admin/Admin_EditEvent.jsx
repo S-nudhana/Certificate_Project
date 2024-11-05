@@ -19,7 +19,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
-import authMiddleware from "../../middleware/authMiddleware";
 import { formatDate } from "../../utils/function";
 
 import { uploadFile } from "../../api/firebaseAPI";
@@ -292,4 +291,4 @@ function Admin_EditEvent() {
     </>
   );
 }
-export default authMiddleware(Admin_EditEvent);
+export default Admin_EditEvent;
