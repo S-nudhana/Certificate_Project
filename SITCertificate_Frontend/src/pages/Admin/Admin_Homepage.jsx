@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Text, Button } from "@chakra-ui/react";
+import { Box, Text, Button, Image } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaPlus } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
@@ -8,6 +8,8 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import AdminCard from "../../components/admin/AdminCard";
 import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
+
+import image from "../../../public/img/SIT_Building.png";
 
 import { userEventData } from "../../api/user/userAPI";
 
@@ -27,8 +29,49 @@ function Admin_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box pt="100px" pb={"40px"}>
-        <Box maxWidth="1300px" mx={{base: "5%", lg: "auto"}}>
+      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box pb={"40px"} minHeight={"75vh"}>
+        <Box
+          position="relative"
+          width="100%"
+          height={{ base: "300px", lg: "400px" }}
+          overflow="hidden"
+        >
+          <Image
+            src={image}
+            alt="Dimmed background"
+            width="100%"
+            height="100%"
+            objectFit="cover"
+            zIndex={1}
+          />
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            bg="rgba(0, 0, 0, 0.5)"
+            zIndex={2}
+          >
+            <Box
+              position="absolute"
+              top={{base: "30%", xl: "40%"}}
+              left={{ base: "5%", xl: "19%" }}
+              width="100%"
+              height="100%"
+              color={"white"}
+            >
+              <Text fontSize={{ base: "30px", lg: "50px" }} fontWeight={"bold"}>
+                ยินดีต้อนรับเข้าสู่ระบบออกใบประกาศนียบัตร
+              </Text>
+              <Text fontSize={{ base: "14px", lg: "22px" }}>
+                คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+        <Box maxWidth="1300px" pt={"30px"} mx={{ base: "5%", lg: "3%", xl: "auto" }}>
           <Button
             leftIcon={<FaPlus />}
             cursor="pointer"
@@ -74,10 +117,7 @@ function Admin_Homepage() {
             >
               กิจกรรมที่รอการอนุมัติ
             </Text>
-            <Text
-              color={"#D2042D"}
-              fontSize={"14px"}
-            >
+            <Text color={"#D2042D"} fontSize={"14px"}>
               *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
             </Text>
           </Box>
@@ -129,7 +169,7 @@ function Admin_Homepage() {
           textUnderlineOffset="2px"
           pt="20px"
           maxWidth="1300px"
-          mx={{base: "5%", lg: "auto"}}
+          mx={{ base: "5%", lg: "3%", xl: "auto" }}
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>

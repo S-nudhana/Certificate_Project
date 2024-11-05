@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   Box,
+  Image,
   Button,
   Text,
   IconButton,
@@ -14,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import logo from "../../public/img/SIT_logo.png";
 
 import { userVerifyToken, userDeleteToken } from "../api/user/userAPI";
 
@@ -81,9 +84,9 @@ export default function Navbar() {
       transition="top 0.3s"
       {...(shouldShowNavbar ? {} : { top: "-80px" })}
     >
-      <Text color="white" fontWeight="bold" fontSize="24" cursor={'pointer'}>
-        SITCertificate
-      </Text>
+      <Box cursor={"pointer"} onClick={() => {navigate("/")}}>
+      <Image src={logo} height={"38px"} />
+      </Box>
       <Flex gap={{ base: '10px', md: "30px" }}>
         <Button
           leftIcon={<FaArrowRightFromBracket />}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Text, Button } from "@chakra-ui/react";
+import { Box, Text, Button, Image } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ProfCard from "../../components/prof/ProfCard";
+
+import image from "../../../public/img/SIT_Building.png";
 
 import { userEventData } from "../../api/user/userAPI";
 
@@ -28,8 +30,49 @@ function Prof_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box pt="100px" pb={"40px"} minHeight={"75vh"}>
-        <Box maxWidth="1300px" mx={{base: "5%", lg: "auto"}}>
+      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box pb={"40px"} minHeight={"75vh"}>
+        <Box
+          position="relative"
+          width="100%"
+          height={{ base: "300px", lg: "400px" }}
+          overflow="hidden"
+        >
+          <Image
+            src={image}
+            alt="Dimmed background"
+            width="100%"
+            height="100%"
+            objectFit="cover"
+            zIndex={1}
+          />
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            bg="rgba(0, 0, 0, 0.5)"
+            zIndex={2}
+          >
+            <Box
+              position="absolute"
+              top={{base: "30%", xl: "40%"}}
+              left={{ base: "5%", xl: "19%" }}
+              width="100%"
+              height="100%"
+              color={"white"}
+            >
+              <Text fontSize={{ base: "30px", lg: "50px" }} fontWeight={"bold"}>
+                ยินดีต้อนรับเข้าสู่ระบบออกใบประกาศนียบัตร
+              </Text>
+              <Text fontSize={{ base: "14px", lg: "22px" }}>
+                คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+        <Box maxWidth="1300px" pt={"30px"} mx={{ base: "5%", lg: "3%", xl: "auto" }}>
           <Button
             leftIcon={<FaHistory />}
             cursor="pointer"
@@ -59,10 +102,7 @@ function Prof_Homepage() {
             >
               กิจกรรมที่รอการอนุมัติ
             </Text>
-            <Text
-              color={"red"}
-              fontSize={"14px"}
-            >
+            <Text color={"red"} fontSize={"14px"}>
               *โปรดอนุมัติกิจกรรมก่อนวันเปิดให้ดาวน์โหลด 3 วัน
             </Text>
           </Box>
@@ -114,7 +154,7 @@ function Prof_Homepage() {
           textUnderlineOffset="2px"
           pt="20px"
           maxWidth="1300px"
-          mx={{base: "5%", lg: "auto"}}
+          mx={{ base: "5%", lg: "3%", xl: "auto" }}
         >
           กิจกรรมที่ได้รับการอนุมัติ
         </Text>
@@ -122,11 +162,11 @@ function Prof_Homepage() {
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", lg: "flex-start" }}
+            justifyContent={{ base: "center", xl: "flex-start" }}
             gap="30px"
             pt="30px"
             maxWidth="1300px"
-            mx={{base: "5%", lg: "auto"}}
+            mx={{ base: "5%", lg: "auto" }}
           >
             {eventData &&
               eventData.map((item, key) => {
