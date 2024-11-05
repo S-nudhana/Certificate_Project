@@ -24,7 +24,7 @@ const sendEmail = async(req, res) => {
             );
         const sender = senderQuery[0][0].professor_userName;
         const mailOptions = {
-            from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
+            from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
             to: reciever,
             subject: subject,
             text: `อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}`,

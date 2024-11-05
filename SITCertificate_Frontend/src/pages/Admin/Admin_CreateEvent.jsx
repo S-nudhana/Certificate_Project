@@ -493,11 +493,11 @@ function Admin_CreateEvent() {
                       }
                     }}
                   />
-                  <FormLabel pt="5">เท็มเพลทในการส่งอีเมล</FormLabel>
+                  <FormLabel pt="5">เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
                   <Textarea
                     height={"300px"}
                     resize="vertical"
-                    placeholder="เพิ่มเท็มเพลทที่นี่"
+                    placeholder="เพิ่มเนื้อความที่นี่"
                     value={emailTemplate}
                     onChange={(e) => setEmailTemplate(e.target.value)}
                   />

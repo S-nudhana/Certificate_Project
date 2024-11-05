@@ -4,7 +4,7 @@ const sendEmail = async(req, res) => {
     const { to, subject, text, html } = req.body;
 
     const mailOptions = {
-        from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
+        from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
         to: to,
         subject: subject,
         text: text,

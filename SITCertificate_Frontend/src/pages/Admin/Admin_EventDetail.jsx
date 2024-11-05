@@ -188,8 +188,8 @@ export default function Admin_EventDetail() {
                 </Tooltip>
               </Flex>
               <FormControl id="comment" p={"20px 20px 0 0"}>
-                <FormLabel fontSize="18px" fontWeight={'bold'}>เท็มเพลทในการส่งอีเมล</FormLabel>
-                <Textarea height={'300px'} resize="vertical" placeholder="ยังไม่มีเท็มเพลทในการส่งอีเมล" value={eventData.event_emailTemplate} />
+                <FormLabel fontSize="18px" fontWeight={'bold'}>เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
+                <Textarea height={'300px'} resize="vertical" placeholder="ยังไม่มีเนื้อความในอีเมลส่งใบประกาศนียบัตร" value={eventData.event_emailTemplate} />
               </FormControl>
               <Button
                 isDisabled={eventData.event_approve === 1}
