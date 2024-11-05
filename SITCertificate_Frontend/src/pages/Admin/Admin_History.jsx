@@ -38,15 +38,17 @@ function Admin_History() {
       <Box
         pt={"120px"}
         pb={"20px"}
-        pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
+        maxWidth="1300px"
+        mx={{ base: "5%", lg: "3%", xl: "auto" }}
       >
         <BackBTN />
       </Box>
       <Box
-        width={"100%"}
+      width={"100%"}
+        maxWidth="1300px"
+        mx={{ base: "5%", lg: "3%", xl: "auto" }}
         display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}
-        pl={["40px", "40px", "100px", "100px", "100px", "300px"]}
       >
         <Text
           fontSize="28px"
@@ -59,7 +61,6 @@ function Admin_History() {
         </Text>
         <InputGroup
           width={{ base: "90%", md: "50%", lg: "500px" }}
-          mr={["40px", "40px", "100px", "100px", "100px", "300px"]}
         >
           <InputLeftElement pointerEvents="none">
             <FaSearch color="gray.300" />
@@ -92,9 +93,9 @@ function Admin_History() {
         <Box
           display="flex"
           flexWrap="wrap"
-          justifyContent={{ base: "center", lg: "flex-start" }}
+          justifyContent={{ base: "center", xl: "flex-start" }}
           gap="30px"
-          py="30px"
+          pt="30px"
           maxWidth="1300px"
           mx="auto"
         >

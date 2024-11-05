@@ -25,9 +25,14 @@ function Student_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"60px"} bgColor={"#0c2d4e"}/>
+      <Box height={"60px"} bgColor={"#0c2d4e"} />
       <Box minH={"75vh"}>
-        <Box position="relative" width="100%" height={{base: "300px", lg: "400px"}} overflow="hidden">
+        <Box
+          position="relative"
+          width="100%"
+          height={{ base: "300px", lg: "400px" }}
+          overflow="hidden"
+        >
           <Image
             src={image}
             alt="Dimmed background"
@@ -47,22 +52,22 @@ function Student_Homepage() {
           >
             <Box
               position="absolute"
-              top={"40%"}
-              left={{base: "5%", lg: "19%"}}
+              top={{base: "30%", xl: "40%"}}
+              left={{ base: "5%", xl: "19%" }}
               width="100%"
               height="100%"
               color={"white"}
             >
-              <Text fontSize={{base: "30px", lg:"50px"}} fontWeight={"bold"}>
-                ระบบออกใบประกาศนียบัตร
+              <Text fontSize={{ base: "30px", lg: "50px" }} fontWeight={"bold"}>
+                ยินดีต้อนรับเข้าสู่ระบบออกใบประกาศนียบัตร
               </Text>
-              <Text fontSize={{base: "14px", lg: "20px"}}>
+              <Text fontSize={{ base: "14px", lg: "22px" }}>
                 คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี
               </Text>
             </Box>
           </Box>
         </Box>
-        <Box maxWidth="1300px" mx={{ base: "5%", lg: "auto" }}>
+        <Box maxWidth="1300px" mx={{ base: "5%", lg: "3%", xl: "auto" }}>
           <Text
             fontSize="28px"
             fontWeight="bold"
