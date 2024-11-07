@@ -23,8 +23,8 @@ const bucket = admin.storage().bucket();
 
 const sendCertificate = async(req, res) => {
     const { id, fileUrl } = req.body;
+    const { token } = req.cookies;
     try {
-        const { token } = req.cookies;
         const Id = verifyToken(token);
         const studentEmail = Id.student_email;
         const eventId = parseInt(id);

@@ -12,16 +12,13 @@ const __filename = fileURLToPath(
 const __dirname = dirname(__filename);
 
 const updateApproveStatus = async(req, res) => {
-    const { eventId } = req.body;
-
+    const { eventId } = req.body
     try {
         const excelQuery = await db
             .promise()
             .query("SELECT event_excel FROM event WHERE event_Id = ?", [eventId]);
 
         const excelUrl = excelQuery[0][0].event_excel;
-        console.log(excelUrl);
-
         if (!excelUrl) {
             return res.status(400).send("No file uploaded.");
         }

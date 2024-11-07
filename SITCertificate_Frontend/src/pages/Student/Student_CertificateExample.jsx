@@ -20,12 +20,13 @@ import {
 } from "@chakra-ui/react";
 import PDF from "react-pdf-watermark";
 import { PDFDocument } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
 import axios from "axios";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { uploadFile } from "../../api/firebaseAPI";
 
-import fontkit from "@pdf-lib/fontkit";
+import { uploadFile } from "../../api/firebaseAPI";
 
 import {
   studentGenerate,
@@ -177,9 +178,13 @@ function Student_CertificateExample() {
   };
 
   const getStudentGenerate = async () => {
-    const response = await studentGenerate(id);
-    if (!response.data.data) {
-      navigate(`/detail/${id}`);
+    try {
+      const response = await studentGenerate(id);
+      if (!response.data.data) {
+        navigate(`/detail/${id}`);
+      }
+    } catch (error) {
+      console.error("Error fetching student generate:", error);
     }
   };
   const handleSubmit = async () => {
@@ -220,10 +225,7 @@ function Student_CertificateExample() {
   };
 
   const firebaseUploadFile = async (fileBlob, folder, filename) => {
-    // Set a custom name property on the Blob for the desired filename
     fileBlob.name = filename;
-
-    // Call uploadFile with the Blob and folder path
     const response = await uploadFile(fileBlob, folder);
     return response;
   };

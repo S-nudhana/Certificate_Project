@@ -6,10 +6,10 @@ import { verifyToken } from "../auth/jwt.js";
 dotenv.config();
 
 const setNewComment = async(req, res) => {
+    const { eventId, detail } = req.body;
+    const { token } = req.cookies;
     try {
-        const { token } = req.cookies;
         const userId = verifyToken(token);
-        const { eventId, detail } = req.body;
         const dataQuery = await db
             .promise()
             .query(

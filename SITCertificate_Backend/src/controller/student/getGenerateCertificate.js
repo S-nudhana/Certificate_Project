@@ -7,8 +7,8 @@ dotenv.config();
 
 const getGenerateCertificate = async(req, res) => {
     const eventId = parseInt(req.query.id);
+    const { token } = req.cookies;
     try {
-        const { token } = req.cookies;
         const userId = verifyToken(token);
         const studentEmail = userId.student_email;
         const value = [eventId, studentEmail];

@@ -39,18 +39,27 @@ function Admin_EditEvent() {
   const [emailTemplate, setEmailTemplate] = useState();
 
   const getEventData = async () => {
-    const response = await userEventDataById(id.id);
-    setEventName(response.data.data.event_name);
-    setEventOwnerName(response.data.data.event_owner);
-    setOpenDate(formatDate(response.data.data.event_startDate));
-    setCloseDate(formatDate(response.data.data.event_endDate));
-    setThumbnailURL(response.data.data.event_thumbnail);
-    setEmailTemplate(response.data.data.event_emailTemplate);
+    try {
+      const response = await userEventDataById(id.id);
+      setEventName(response.data.data.event_name);
+      setEventOwnerName(response.data.data.event_owner);
+      setOpenDate(formatDate(response.data.data.event_startDate));
+      setCloseDate(formatDate(response.data.data.event_endDate));
+      setThumbnailURL(response.data.data.event_thumbnail);
+      setEmailTemplate(response.data.data.event_emailTemplate);
+    } catch (error) {
+      console.error("Error getting event data:", error);
+    }
   };
 
   const firebaseUploadFile = async (file, folder) => {
-    const response = await uploadFile(file, folder);
-    return response;
+    try {
+      const response = await uploadFile(file, folder);
+      return response;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+
+    }
   };
 
   const updateEventData = async () => {
@@ -181,11 +190,14 @@ function Admin_EditEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    display="flex"
-                    alignItems="center"
+                    display={"flex"}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
-                    อัปโหลดรูปปก
-                    <Text color="#D2042D" ml={1} fontSize="xs">
+                    <Text pr={"5px"}>
+                      อัปโหลดรูปปก
+                    </Text>
+                    <Text color="#D2042D" fontSize="xs">
                       (อัปโหลดได้เฉพาะ .png หรือ .jpg เท่านั้น)
                     </Text>
                   </FormLabel>
@@ -205,11 +217,14 @@ function Admin_EditEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    display="flex"
-                    alignItems="center"
+                    display={"flex"}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
-                    อัปโหลดเท็มเพลทใบประกาศนียบัตร
-                    <Text color="#D2042D" ml={1} fontSize="xs">
+                    <Text pr={"5px"}>
+                      อัปโหลดเท็มเพลทใบประกาศนียบัตร
+                    </Text>
+                    <Text color="#D2042D" fontSize="xs">
                       (อัปโหลดได้เฉพาะ .pdf เท่านั้น)
                     </Text>
                   </FormLabel>
@@ -227,11 +242,14 @@ function Admin_EditEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    display="flex"
-                    alignItems="center"
+                    display={"flex"}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
-                    อัปโหลดรายชื่อผู้เข้าร่วม
-                    <Text color="#D2042D" ml={1} fontSize="xs">
+                    <Text pr={"5px"}>
+                      อัปโหลดรายชื่อผู้เข้าร่วม
+                    </Text>
+                    <Text color="#D2042D" fontSize="xs">
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
@@ -245,7 +263,7 @@ function Admin_EditEvent() {
                       }
                     }}
                   />
-                  <FormLabel>เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
+                  <FormLabel pt={"10px"}>เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
                   <Textarea
                     height={"300px"}
                     resize="vertical"

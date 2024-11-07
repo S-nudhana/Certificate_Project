@@ -8,8 +8,8 @@ dotenv.config();
 
 const sendEmail = async(req, res) => {
     const { id, subject, eventName, commentDetail } = req.body;
+    const { token } = req.cookies;
     try {
-        const { token } = req.cookies;
         const Id = verifyToken(token);
         const profId = parseInt(Id.professor_id);
         const dataQuery = await db

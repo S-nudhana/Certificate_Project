@@ -1,7 +1,8 @@
 import { Flex, Button,  Text } from "@chakra-ui/react";
-import Building from "../../public/img/SIT_Building.png";
 import { useNavigate } from 'react-router-dom';
 import { FaFaceFrown } from "react-icons/fa6";
+
+import Building from "../../public/img/SIT_Building.png";
 
 export default function NotFound() {
     const navigate = useNavigate();

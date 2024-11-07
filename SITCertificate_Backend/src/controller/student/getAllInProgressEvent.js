@@ -6,8 +6,8 @@ import { verifyToken } from "../auth/jwt.js";
 dotenv.config();
 
 const getAllInProgressEvent = async (req, res) => {
+  const { token } = req.cookies;
   try {
-    const { token } = req.cookies;
     const userId = verifyToken(token);
     const student_email = userId.student_email;
     const value = [student_email];

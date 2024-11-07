@@ -1,11 +1,11 @@
 import db from "../../db/connection.js";
 import { verifyToken } from "../auth/jwt.js";
 const setEvent = async(req, res) => {
+    const { token } = req.cookies;
+    const { eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, emailTemplate,inputSize,inputY  } = req.body;
     try {
-        const { token } = req.cookies;
         const id = verifyToken(token);
         const adminId = id.admin_id;
-        const { eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, emailTemplate,inputSize,inputY  } = req.body;
         const value = [eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, 0, adminId, emailTemplate,inputSize,inputY];
         await db
             .promise()

@@ -79,9 +79,13 @@ export const generateStudentCertificateInfo = async (
 };
 
 export const sendCertificate = async (id, file) => {
-  const response = await axiosInstance.post(`/student/sendCertificate`, {
-    id: id,
-    fileUrl: file,
-  });
-  return response;
+  try {
+    const response = await axiosInstance.post(`/student/sendCertificate`, {
+      id: id,
+      fileUrl: file,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
 };

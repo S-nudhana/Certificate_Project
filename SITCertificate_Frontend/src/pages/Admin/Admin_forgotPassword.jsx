@@ -19,10 +19,11 @@ import {
   PinInputField,
 } from "@chakra-ui/react";
 
-import Building from "../../../public/img/SIT_Building.png";
-import Logo from "../../../public/img/SIT_Icon.png";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+
+import Building from "../../../public/img/SIT_Building.png";
+import Logo from "../../../public/img/SIT_Icon.png";
 
 import {
   adminForgotPassword,
@@ -54,61 +55,68 @@ export default function Admin_forgotPassword() {
   };
 
   const handleEmail = async () => {
-    if (!emailRegex.test(email)) {
-      setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
-      setEmail("");
-      return;
-    } else {
-      setEmailError("");
-    }
-    const res = await adminForgotPassword(email);
-    if (res.status === 200) {
-      const response = await adminSendResetPasswordEmail(email);
-      if (response.status === 200) {
-        setEmailSent(true);
+    try {
+      if (!emailRegex.test(email)) {
+        setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
+        setEmail("");
+        return;
+      } else {
+        setEmailError("");
       }
-    } else {
-      toast({
-        title: "เกิดข้อผิดพลาด",
-        description: res.response.data.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+      const res = await adminForgotPassword(email);
+      if (res.status === 200) {
+        const response = await adminSendResetPasswordEmail(email);
+        if (response.status === 200) {
+          setEmailSent(true);
+        }
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: res.response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("handleEmail error", error);
     }
   };
 
   const confirmCreatePassword = async () => {
-    if (newPassword !== confirmNewPassword) {
-      toast({
-        title: "รหัสผ่านไม่ตรงกัน",
-        description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-    
-    const res = await adminResetPassword(email, pin, newPassword);
-    if(res.status === 200) {
+    try {
+      if (newPassword !== confirmNewPassword) {
         toast({
-            title: "เปลี่ยนรหัสผ่านสำเร็จ",
-            description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
+          title: "รหัสผ่านไม่ตรงกัน",
+          description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+      const res = await adminResetPassword(email, pin, newPassword);
+      if (res.status === 200) {
+        toast({
+          title: "เปลี่ยนรหัสผ่านสำเร็จ",
+          description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
         });
         console.log("object")
         navigate("/admin/login");
-    }else {
+      } else {
         toast({
-            title: "เกิดข้อผิดพลาด",
-            description: res.response.data.message,
-            status: "error",
-            duration: 2000,
-            isClosable: true,
+          title: "เกิดข้อผิดพลาด",
+          description: res.response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
         });
+      }
+    } catch (error) {
+      console.error("confirmCreatePassword error", error);
     }
   };
   return (
@@ -130,7 +138,7 @@ export default function Admin_forgotPassword() {
         >
           <Stack align="center" spacing={5} py={5} px={1}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
-            <Heading fontSize={["2xl", "3xl", "3xl"]}>
+            <Heading fontSize={["20px", "3xl", "3xl"]}>
               ระบบเปลี่ยนรหัสผ่านสำหรับ Admin
             </Heading>
             <Text fontSize={["sm", "lg", "lg"]} color="gray.600" display="flex">

@@ -17,6 +17,7 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
+
 import { dateFormatChange } from "../../utils/function";
 
 import {
@@ -37,20 +38,32 @@ function Student_Detail() {
   const toast = useToast();
 
   const getEventData = async () => {
-    const response = await studentEventDataById(id);
-    if (!response.data.data) {
-      navigate("/");
+    try {
+      const response = await studentEventDataById(id);
+      if (!response.data.data) {
+        navigate("/");
+      }
+      setEventData(response.data.data);
+    } catch (error) {
+      console.log("Get event data error: " + error);
     }
-    setEventData(response.data.data);
   };
   const getStudentGenerate = async () => {
-    const response = await studentGenerate(id);
-    setStudentData(response.data.data);
+    try {
+      const response = await studentGenerate(id);
+      setStudentData(response.data.data);
+    } catch (error) {
+      console.log("Get student data error: " + error);
+    }
   };
 
   const getCertificate = async () => {
-    const response = await studentCertificate(id);
-    setCertificate(response.data.data.student_GenerateCertificate);
+    try {
+      const response = await studentCertificate(id);
+      setCertificate(response.data.data.student_GenerateCertificate);
+    } catch (error) {
+      console.error("Error getting certificate:", error);
+    }
   };
 
   const sendCertificateToEmail = async () => {

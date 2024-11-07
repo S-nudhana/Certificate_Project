@@ -17,10 +17,11 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import Building from "../../../public/img/SIT_Building.png"
-import Logo from "../../../public/img/SIT_Icon.png";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+
+import Building from "../../../public/img/SIT_Building.png"
+import Logo from "../../../public/img/SIT_Icon.png";
 
 import { adminSignIn } from "../../api/admin/adminAPI";
 
@@ -38,25 +39,29 @@ export default function Admin_SignInPage() {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSignIn = async () => {
-    if (!emailRegex.test(email)) {
-      setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
-      setEmail("");
-      return;
-    } else {
-      setEmailError("");
-    }
+    try {
+      if (!emailRegex.test(email)) {
+        setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
+        setEmail("");
+        return;
+      } else {
+        setEmailError("");
+      }
 
-    const res = await adminSignIn(email, password);
-    if (res.status === 201) {
-      navigate("/admin/");
-    } else {
-      toast({
-        title: "เกิดข้อผิดพลาด",
-        description: res.response.data.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+      const res = await adminSignIn(email, password);
+      if (res.status === 201) {
+        navigate("/admin/");
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: res.response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("handleEmail error", error);
     }
   };
 
