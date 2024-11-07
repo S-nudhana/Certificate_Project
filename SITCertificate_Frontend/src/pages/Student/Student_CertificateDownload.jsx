@@ -19,9 +19,13 @@ function Student_CertificateDownload() {
   const toast = useToast();
 
   const getCertificate = async () => {
-    const response = await studentCertificate(id);
-    console.log(response)
-    setCertificate(response.data.data.student_GenerateCertificate);
+    try {
+      const response = await studentCertificate(id);
+      console.log(response)
+      setCertificate(response.data.data.student_GenerateCertificate);
+    } catch (error) {
+      console.error("Error getting certificate:", error);
+    }
   };
 
   const sendCertificateToEmail = async () => {

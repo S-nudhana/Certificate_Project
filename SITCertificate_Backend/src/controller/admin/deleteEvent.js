@@ -3,8 +3,8 @@ import db from "../../db/connection.js";
 const deleteEvent = async (req, res) => {
   const id = req.query.id;
   try {
-    await db.promise().query(`DELETE FROM event WHERE event_Id = ?`, [id]);
     await db.promise().query(`DELETE FROM comment WHERE comment_eventId = ?`, [id]);
+    await db.promise().query(`DELETE FROM event WHERE event_Id = ?`, [id]);
     return res.json({
       success: true,
       error: null,

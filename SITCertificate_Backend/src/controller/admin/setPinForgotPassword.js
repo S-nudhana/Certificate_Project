@@ -2,8 +2,8 @@ import db from "../../db/connection.js";
 import { encryptPin } from "../auth/crypto.js";
 
 const setPinForgotPassword = async(req, res) => {
+    const { email } = req.body;
     try {
-        const { email } = req.body;
         const value = [email];
         const querry = await db.promise().query("SELECT admin_email FROM admin WHERE admin_email = ?", value);
         const adminEmail = querry[0][0].admin_email;

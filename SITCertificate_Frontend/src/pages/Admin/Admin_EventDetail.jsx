@@ -28,7 +28,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
-import authMiddleware from "../../middleware/authMiddleware";
+
 import { dateFormatChange } from "../../utils/function";
 
 import {
@@ -43,7 +43,6 @@ import {
 import { profEmail } from "../../api/prof/profAPI";
 
 export default function Admin_EventDetail() {
-  authMiddleware(Admin_EventDetail);
   const { id } = useParams();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,31 +77,51 @@ export default function Admin_EventDetail() {
   };
 
   const getReceiverEmail = async () => {
-    const response = await profEmail(id);
-    setReceiver(response.data.data.professor_email);
+    try {
+      const response = await profEmail(id);
+      setReceiver(response.data.data.professor_email);
+    } catch (error) {
+      console.error("Error getting receiver email:", error);
+    }
   };
   const getEventData = async () => {
-    const response = await userEventDataById(id);
-    setEventData(response.data.data);
+    try {
+      const response = await userEventDataById(id);
+      setEventData(response.data.data);
+    } catch (error) {
+      console.error("Error getting event data:", error);
+    }
   };
   const getComment = async () => {
-    const response = await userComment(id);
-    setComments(response.data.data);
+    try {
+      const response = await userComment(id);
+      setComments(response.data.data);
+    } catch (error) {
+      console.error("Error getting comment:", error);
+    }
   };
   const toggleCommentStatus = async (commentId, commentDetail) => {
-    const response = await adminToggleCommentStatus(commentId);
-    if (response.data.success) {
-      if (response.data.data) {
-        sendMailToProfessor(commentDetail);
+    try {
+      const response = await adminToggleCommentStatus(commentId);
+      if (response.data.success) {
+        if (response.data.data) {
+          sendMailToProfessor(commentDetail);
+        }
+        getComment();
       }
-      getComment();
+    } catch (error) {
+      console.error("Error toggling comment status:", error);
     }
   };
   const deleteEvent = async () => {
-    const response = await adminDeleteEvent(id);
-    if (response.data.success) {
-      onClose();
-      navigate("/admin/");
+    try {
+      const response = await adminDeleteEvent(id);
+      if (response.data.success) {
+        onClose();
+        navigate("/admin/");
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
     }
   };
   useEffect(() => {

@@ -21,25 +21,29 @@ export default function Student_SignInPage() {
   const handleClickShowPassword = () => setShowPassword(!showPassword)
 
   const handleSignIn = async () => {
-    if (!emailRegex.test(email)) {
-      setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
-      setEmail('')
-      return;
-    } else {
-      setEmailError('');
-    }
-
-    const response = await studentSignIn(email, password);
-    if (response.status === 201) {
-      navigate('/');
-    } else {
-      toast({
-        title: "เกิดข้อผิดพลาด",
-        description: response.response.data.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+    try {
+      if (!emailRegex.test(email)) {
+        setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
+        setEmail('')
+        return;
+      } else {
+        setEmailError('');
+      }
+  
+      const response = await studentSignIn(email, password);
+      if (response.status === 201) {
+        navigate('/');
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: response.response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.log("Student_SignInPage error: ", error)
     }
   };
   return (

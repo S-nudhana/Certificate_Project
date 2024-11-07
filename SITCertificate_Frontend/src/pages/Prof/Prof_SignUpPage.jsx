@@ -17,10 +17,11 @@ import {
   useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import Building from "../../../public/img/SIT_Building.png";
-import Logo from "../../../public/img/SIT_Icon.png";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+
+import Building from "../../../public/img/SIT_Building.png";
+import Logo from "../../../public/img/SIT_Icon.png";
 
 import { profSignUp } from "../../api/prof/profAPI";
 
@@ -47,41 +48,45 @@ export default function Prof_SignUpPage() {
     setconfirmShowPassword(!confirmShowPassword);
 
   const handleSignUp = async () => {
-    if (!emailRegex.test(email)) {
-      setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
-      setEmail("");
-      return;
-    } else {
-      setEmailError("");
-    }
-    if (password !== confirmPassword) {
-      toast({
-        title: "รหัสผ่านไม่ตรงกัน",
-        description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-    const res = await profSignUp(username, email, password);
-    if (res.status === 201) {
-      toast({
-        title: "สร้างบัญชีผู้ใช้สำเร็จ",
-        description: "สร้างบัญชีของคุณเรียบร้อยแล้ว",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
-      navigate("/professor/login");
-    } else {
-      toast({
-        title: "เกิดข้อผิดพลาด",
-        description: res.response.data.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+    try {
+      if (!emailRegex.test(email)) {
+        setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
+        setEmail("");
+        return;
+      } else {
+        setEmailError("");
+      }
+      if (password !== confirmPassword) {
+        toast({
+          title: "รหัสผ่านไม่ตรงกัน",
+          description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+      const res = await profSignUp(username, email, password);
+      if (res.status === 201) {
+        toast({
+          title: "สร้างบัญชีผู้ใช้สำเร็จ",
+          description: "สร้างบัญชีของคุณเรียบร้อยแล้ว",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        navigate("/professor/login");
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: res.response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Sign up error:", error);
     }
   };
 

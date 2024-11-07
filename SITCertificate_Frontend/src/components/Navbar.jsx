@@ -47,8 +47,12 @@ export default function Navbar() {
   }, [lastScrollTop]);
 
   const verifyAuth = async () => {
-    const response = await userVerifyToken();
-    setAuthStatus(response.status === 200 ? response.data : response);
+    try {
+      const response = await userVerifyToken();
+      setAuthStatus(response.status === 200 ? response.data : response);
+    } catch (error) {
+      console.error('Verify token error:', error);
+    }
   };
 
   const LogoutCheck = async () => {
@@ -67,7 +71,7 @@ export default function Navbar() {
       }
     }
   };
-  
+
 
   return (
     <Box
@@ -84,8 +88,8 @@ export default function Navbar() {
       transition="top 0.3s"
       {...(shouldShowNavbar ? {} : { top: "-80px" })}
     >
-      <Box cursor={"pointer"} onClick={() => {navigate("/")}}>
-      <Image src={logo} height={"38px"} />
+      <Box cursor={"pointer"} onClick={() => { navigate("/") }}>
+        <Image src={logo} height={"38px"} />
       </Box>
       <Flex gap={{ base: '10px', md: "30px" }}>
         <Button

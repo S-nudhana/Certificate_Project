@@ -28,9 +28,11 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
+
 import { dateFormatChange } from "../../utils/function";
 
 import { userComment, userEventDataById } from "../../api/user/userAPI";
+
 import {
   profAddComment,
   profDeleteComment,
@@ -47,46 +49,66 @@ function Prof_EventDetail() {
   const toast = useToast();
 
   const getEventData = async () => {
-    const response = await userEventDataById(id);
-    setEventData(response.data.data);
+    try {
+      const response = await userEventDataById(id);
+      setEventData(response.data.data);
+    } catch (error) {
+      console.error('Get event data error:', error);
+    }
   };
   const getComment = async () => {
-    const response = await userComment(id);
-    setComments(response.data.data);
+    try {
+      const response = await userComment(id);
+      setComments(response.data.data);
+    } catch (error) {
+      console.error('Get comment error:', error);
+    }
   };
   const postComment = async () => {
-    const response = await profAddComment(id, newCommentDetail);
-    if (response.data.success) {
-      getComment();
-      setNewCommentDetail("");
-      const response = await profSendEmail(
-        id,
-        eventData.event_owner,
-        eventData.event_name,
-        newCommentDetail
-      );
-      if (response.status === 200) {
-        toast({
-          title: "เพิ่มความคิดเห็นใหม่สำเร็จ",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-        return;
+    try {
+      const response = await profAddComment(id, newCommentDetail);
+      if (response.data.success) {
+        getComment();
+        setNewCommentDetail("");
+        const response = await profSendEmail(
+          id,
+          eventData.event_owner,
+          eventData.event_name,
+          newCommentDetail
+        );
+        if (response.status === 200) {
+          toast({
+            title: "เพิ่มความคิดเห็นใหม่สำเร็จ",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+          return;
+        }
       }
+    } catch (error) {
+      console.error('Post comment error:', error);
     }
   };
   const approveEvent = async () => {
-    const response = await profApproveEvent(id);
-    if (response.data.success) {
-      getEventData();
+    try {
+      const response = await profApproveEvent(id);
+      if (response.data.success) {
+        getEventData();
+      }
+    } catch (error) {
+      console.error('Approve event error:', error);
     }
   };
   const deleteComment = async (commentId) => {
-    const response = await profDeleteComment(commentId);
-    if (response.data.success) {
-      onClose();
-      getComment();
+    try {
+      const response = await profDeleteComment(commentId);
+      if (response.data.success) {
+        onClose();
+        getComment();
+      }
+    } catch (error) {
+      console.error('Delete comment error:', error);
     }
   };
   useEffect(() => {

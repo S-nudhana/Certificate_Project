@@ -7,8 +7,8 @@ dotenv.config();
 
 const updataCertificateInformation = async (req, res) => {
   const {eventId, name, surname, email, modifiedPdf} = req.body;
+  const { token } = req.cookies;
   try {
-    const { token } = req.cookies;
     const userId = verifyToken(token);
     const studentId = userId.student_email;
     await db

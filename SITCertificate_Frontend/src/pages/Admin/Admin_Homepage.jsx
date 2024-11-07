@@ -19,12 +19,17 @@ function Admin_Homepage() {
   var pendingAmount = 0;
   var approvedAmount = 0;
   const getEventData = async () => {
-    const response = await userEventData();
-    setEventData(response.data.data);
+    try {
+      const response = await userEventData();
+      setEventData(response.data.data);
+    } catch (error) {
+      console.log("Get event data error: " + error);
+    }
   };
   useEffect(() => {
     getEventData();
   }, []);
+
   return (
     <>
       <ScrollRestoration />
@@ -56,8 +61,8 @@ function Admin_Homepage() {
           >
             <Box
               position="absolute"
-              top={{base: "30%", xl: "40%"}}
-              left={{ base: "5%", xl: "19%" }}
+              top={{base: "30%", xl: "37%"}}
+              left={{ base: "5%", xl: "7%" }}
               width="100%"
               height="100%"
               color={"white"}

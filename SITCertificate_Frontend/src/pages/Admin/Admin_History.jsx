@@ -23,29 +23,34 @@ function Admin_History() {
   const [search, setSearch] = useState("");
 
   const searchEvent = async () => {
-    const response = await userHistory(search);
-    setHistoryData(response.data.data);
+    try {
+      const response = await userHistory(search);
+      setHistoryData(response.data.data);
+    } catch (error) {
+      console.log("Search event error: " + error);
+    }
   };
   useEffect(() => {
     setSearch("");
     searchEvent();
   }, []);
   var amount = 0;
+  
   return (
     <>
       <ScrollRestoration />
       <Navbar />
       <Box
-        pt={"120px"}
-        pb={"20px"}
+        pt={"110px"}
+        pb={"10px"}
         maxWidth="1300px"
         mx={{ base: "5%", lg: "3%", xl: "auto" }}
       >
         <BackBTN />
       </Box>
       <Box
-      width={"100%"}
-        maxWidth="1300px"
+        width={"100%"}
+        maxWidth={"1300px"}
         mx={{ base: "5%", lg: "3%", xl: "auto" }}
         display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}

@@ -18,7 +18,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -53,8 +52,12 @@ function Admin_CreateEvent() {
   const [commitY, setCommitY] = useState(45);
 
   const firebaseUploadFile = async (file, folder) => {
-    const response = await uploadFile(file, folder);
-    return response;
+    try {
+      const response = await uploadFile(file, folder);
+      return response;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSubmit = async () => {
@@ -218,12 +221,16 @@ function Admin_CreateEvent() {
     `;
   };
   const handleTemplateChange = async (pdfUrl) => {
-    const modifiedPdfBytes = await fetchAndFillCertificate(pdfUrl, 30, 46);
-    if (modifiedPdfBytes) {
-      const modifiedPdfUrl = URL.createObjectURL(
-        new Blob([modifiedPdfBytes], { type: "application/pdf" })
-      );
-      setModifiedTemplateURL(modifiedPdfUrl);
+    try {
+      const modifiedPdfBytes = await fetchAndFillCertificate(pdfUrl, 30, 46);
+      if (modifiedPdfBytes) {
+        const modifiedPdfUrl = URL.createObjectURL(
+          new Blob([modifiedPdfBytes], { type: "application/pdf" })
+        );
+        setModifiedTemplateURL(modifiedPdfUrl);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
     }
   };
   const templateURLRef = useRef(null); // Store previous URL
@@ -254,16 +261,20 @@ function Admin_CreateEvent() {
   };
 
   const newExampleChange = async () => {
-    const modifiedPdfBytes = await fetchAndFillCertificate(
-      templateURL,
-      inputSize,
-      inputY
-    );
-    if (modifiedPdfBytes) {
-      const modifiedPdfUrl = URL.createObjectURL(
-        new Blob([modifiedPdfBytes], { type: "application/pdf" })
+    try {
+      const modifiedPdfBytes = await fetchAndFillCertificate(
+        templateURL,
+        inputSize,
+        inputY
       );
-      setModifiedTemplateURL(modifiedPdfUrl);
+      if (modifiedPdfBytes) {
+        const modifiedPdfUrl = URL.createObjectURL(
+          new Blob([modifiedPdfBytes], { type: "application/pdf" })
+        );
+        setModifiedTemplateURL(modifiedPdfUrl);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
     }
   };
 
@@ -355,7 +366,8 @@ function Admin_CreateEvent() {
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
-                    alignItems="center"
+                    flexDir={{base: "column", md: "row"}}
+                    alignItems={{base: "start", md:"center"}}
                   >
                     อัปโหลดรูปปก
                     <Text color="#D2042D" ml={1} fontSize="xs">
@@ -378,8 +390,8 @@ function Admin_CreateEvent() {
                 <FormControl id="">
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    display="flex"
-                    alignItems="center"
+                    flexDir={{base: "column", md: "row"}}
+                    alignItems={{base: "start", md:"center"}}
                   >
                     อัปโหลดเท็มเพลทใบประกาศนียบัตร
                     <Text color="#D2042D" ml={1} fontSize="xs">
@@ -475,8 +487,8 @@ function Admin_CreateEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    display="flex"
-                    alignItems="center"
+                    flexDir={{base: "column", md: "row"}}
+                    alignItems={{base: "start", md:"center"}}
                   >
                     อัปโหลดรายชื่อผู้เข้าร่วม
                     <Text color="#D2042D" ml={1} fontSize="xs">
