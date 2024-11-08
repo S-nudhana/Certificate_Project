@@ -1,5 +1,7 @@
 import db from "../../db/connection.js";
 
+import { deleteFile } from "../../middleware/deleteFile.js";
+
 const updateEventData = async (req, res) => {
   let {
     eventName,
@@ -24,12 +26,19 @@ const updateEventData = async (req, res) => {
     const data = dataQuery[0][0];
     if (!thumbnail) {
       thumbnail = data.event_thumbnail;
+    }else{
+      deleteFile(data.event_thumbnail);
     }
     if (!template) {
       template = data.event_certificate;
     }
+    else{
+      deleteFile(data.event_certificate);
+    }
     if (!excel) {
       excel = data.event_excel;
+    } else {
+      deleteFile(data.event_excel);
     }
     await db
       .promise()

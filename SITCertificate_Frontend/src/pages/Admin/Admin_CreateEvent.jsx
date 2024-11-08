@@ -22,16 +22,17 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
+import PDF from "react-pdf-watermark";
+import { PDFDocument } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
+import axios from "axios";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 import { adminCreateEvent } from "../../api/admin/adminAPI";
 import { uploadFile } from "../../api/user/userAPI"
 
-import PDF from "react-pdf-watermark";
-import { PDFDocument } from "pdf-lib";
-import fontkit from "@pdf-lib/fontkit";
-import axios from "axios";
 function Admin_CreateEvent() {
   const navigate = useNavigate();
   const [eventName, setEventName] = useState("");
@@ -40,12 +41,9 @@ function Admin_CreateEvent() {
   const [closeDate, setCloseDate] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState("");
-  const [uploadedThumbnailURL, setUploadedThumbnailURL] = useState("");
   const [templateFile, setTemplateFile] = useState(null);
   const [templateURL, setTemplateURL] = useState("");
-  const [uploadedTemplateURL, setUploadedTemplateURL] = useState("");
   const [excelFile, setExcelFile] = useState(null);
-  const [uploadedExcelURL, setUploadedExcelURL] = useState("");
   const [emailTemplate, setEmailTemplate] = useState("");
   const [modifiedTemplateURL, setModifiedTemplateURL] = useState("");
   const [inputSize, setInputSize] = useState(30);
@@ -126,7 +124,6 @@ function Admin_CreateEvent() {
 
   const convertSvgToPng = (svgText, width, height) => {
     return new Promise((resolve, reject) => {
-      // Create an image element
       const img = new Image();
       const svgBlob = new Blob([svgText], {
         type: "image/svg+xml;charset=utf-8",
@@ -152,11 +149,9 @@ function Admin_CreateEvent() {
           }
         }, "image/png");
       };
-
       img.onerror = (error) => {
         reject(error);
       };
-
       img.src = url;
     });
   };
@@ -191,8 +186,9 @@ function Admin_CreateEvent() {
       console.error("Error processing PDF:", error);
     }
   };
-  const templateURLRef = useRef(null);
 
+  const templateURLRef = useRef(null);
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {

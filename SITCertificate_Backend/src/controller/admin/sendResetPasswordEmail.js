@@ -11,7 +11,7 @@ const sendResetPasswordEmail = async(req, res) => {
         const iv = querry[0][0].admin_iv;
         const decryptedPin = decryptPin(adminResetPin, iv); 
         const mailOptions = {
-            from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
+            from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "แจ้งเตือนจาก SIT Certificate",
             text: `รหัสยืนยันการเปลี่ยนรหัสผ่านของคุณคือ ${decryptedPin}`,
