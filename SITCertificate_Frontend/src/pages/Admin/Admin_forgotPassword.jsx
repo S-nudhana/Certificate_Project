@@ -141,12 +141,6 @@ export default function Admin_forgotPassword() {
             <Heading fontSize={["20px", "3xl", "3xl"]}>
               ระบบเปลี่ยนรหัสผ่านสำหรับ Admin
             </Heading>
-            <Text fontSize={["sm", "lg", "lg"]} color="gray.600" display="flex">
-              ยินดีต้อนรับเข้าสู่&nbsp;
-              <Text color="#336699" fontWeight={"600"}>
-                SITCertificate
-              </Text>
-            </Text>
           </Stack>
           <Box display={!emailSent ? "block" : "none"}>
             <FormControl id="email" isInvalid={emailError}>

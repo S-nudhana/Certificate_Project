@@ -39,7 +39,7 @@ export default function Footer() {
                     <Divider width="70%" mt="3" mb="2" />
                 </Center>
                 <Text display='flex' justifyContent='center' textAlign='center' mt='1%' pb='2%' color='#E0E5E5' fontSize={{ base: '9px', md: "12px", lg: "14px" }}>
-                    © 2018 School of Information Technology, King Mongkut's University of Technology Thonburi.
+                    © 2024 School of Information Technology, King Mongkut's University of Technology Thonburi.
                 </Text>
             </Box>
         </>
