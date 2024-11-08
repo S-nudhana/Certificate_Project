@@ -12,9 +12,17 @@ import {
   Text,
   useColorModeValue,
   Img,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  Tooltip,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDisclosure } from "@chakra-ui/react";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -25,6 +33,12 @@ import { uploadFile } from "../../api/firebaseAPI";
 import { adminUpdateEvent } from "../../api/admin/adminAPI";
 import { userEventDataById } from "../../api/user/userAPI";
 
+import PDF from "react-pdf-watermark";
+import { PDFDocument } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
+import axios from "axios";
+
+import { SiMicrosoftexcel } from "react-icons/si";
 function Admin_EditEvent() {
   const id = useParams();
   const navigate = useNavigate();
@@ -38,15 +52,23 @@ function Admin_EditEvent() {
   const [excelFile, setExcelFile] = useState(null);
   const [emailTemplate, setEmailTemplate] = useState();
 
+  const [templateURL, setTemplateURL] = useState("");
+  const [modifiedTemplateURL, setModifiedTemplateURL] = useState("");
+  const [inputSize, setInputSize] = useState(30);
+  const [inputY, setInputY] = useState(45);
+
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id.id);
+      console.log(response);
       setEventName(response.data.data.event_name);
       setEventOwnerName(response.data.data.event_owner);
       setOpenDate(formatDate(response.data.data.event_startDate));
       setCloseDate(formatDate(response.data.data.event_endDate));
       setThumbnailURL(response.data.data.event_thumbnail);
       setEmailTemplate(response.data.data.event_emailTemplate);
+      setTemplateURL(response.data.data.event_certificate);
+      setExcelFile(response.data.data.event_excel);
     } catch (error) {
       console.error("Error getting event data:", error);
     }
@@ -58,7 +80,6 @@ function Admin_EditEvent() {
       return response;
     } catch (error) {
       console.error("Error uploading file:", error);
-
     }
   };
 
@@ -101,6 +122,186 @@ function Admin_EditEvent() {
     } catch (error) {
       console.error("Error creating event:", error);
     }
+  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const fetchAndFillCertificate = async (pdfUrl, size, y) => {
+    try {
+      // Fetch PDF template
+      const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
+      const pdfBytes = response.data;
+
+      // Load the PDF
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      pdfDoc.registerFontkit(fontkit);
+
+      // Load the Noto Sans Thai font
+      const fontUrl =
+        "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
+
+      const page = pdfDoc.getPages()[0];
+      const text = "ชื่อจริง นามสกุล";
+      const fontSize = `${size}`;
+      const textY = `${y}`;
+
+      const { width, height } = page.getSize();
+      // Create SVG
+      const svgText = createTextSVG(
+        text,
+        fontUrl,
+        fontSize,
+        width,
+        height,
+        textY
+      );
+
+      // Create an Image from SVG using a Canvas
+      const pngBytes = await convertSvgToPng(svgText, width, height);
+
+      // Embed the PNG in the PDF
+      const pngImage = await pdfDoc.embedPng(pngBytes);
+
+      page.drawImage(pngImage);
+
+      // Save the modified PDF as bytes
+      const modifiedPdfBytes = await pdfDoc.save();
+      return modifiedPdfBytes;
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+      return null;
+    }
+  };
+
+  // Function to convert SVG to PNG using a Canvas
+  const convertSvgToPng = (svgText, width, height) => {
+    return new Promise((resolve, reject) => {
+      // Create an image element
+      const img = new Image();
+      const svgBlob = new Blob([svgText], {
+        type: "image/svg+xml;charset=utf-8",
+      });
+      const url = URL.createObjectURL(svgBlob);
+
+      img.onload = () => {
+        // Create a canvas to draw the image
+        const canvas = document.createElement("canvas");
+        canvas.width = width; // Adjust width as necessary
+        canvas.height = height; // Adjust height as necessary
+        const ctx = canvas.getContext("2d");
+
+        // Draw the image onto the canvas
+        ctx.drawImage(img, 0, 0);
+
+        // Convert the canvas to PNG
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              resolve(reader.result); // Resolve with the PNG byte array
+              URL.revokeObjectURL(url); // Clean up URL object
+            };
+            reader.readAsArrayBuffer(blob);
+          } else {
+            reject(new Error("Canvas to Blob conversion failed"));
+          }
+        }, "image/png");
+      };
+
+      img.onerror = (error) => {
+        reject(error);
+      };
+
+      img.src = url; // Start loading the SVG as an image
+    });
+  };
+
+  // Function to create SVG
+  const createTextSVG = (text, fontUrl, fontSize, width, height, y) => {
+    return `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+        <style>
+        @font-face {
+          font-family: 'Noto Sans Thai';
+          src: url('https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU5RtlyJ0QCvz.woff2');
+        } .text {
+            font-family: 'Noto Sans Thai';
+            font-size: ${fontSize}px;
+            fill: black;
+          }
+        </style>
+        <text x="50%" y="${y}%" text-anchor="middle" alignment-baseline="middle" class="text">${text}</text>
+      </svg>
+    `;
+  };
+  const handleTemplateChange = async (pdfUrl) => {
+    try {
+      const modifiedPdfBytes = await fetchAndFillCertificate(pdfUrl, 30, 46);
+      if (modifiedPdfBytes) {
+        const modifiedPdfUrl = URL.createObjectURL(
+          new Blob([modifiedPdfBytes], { type: "application/pdf" })
+        );
+        setModifiedTemplateURL(modifiedPdfUrl);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+    }
+  };
+  const templateURLRef = useRef(null); // Store previous URL
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Revoke previous URL if it exists
+      if (templateURLRef.current) {
+        URL.revokeObjectURL(templateURLRef.current);
+      }
+
+      // Create a new object URL for the new file and update refs and states
+      const newUrl = URL.createObjectURL(file);
+      setTemplateFile(file);
+      setTemplateURL(newUrl);
+      templateURLRef.current = newUrl;
+    }
+  };
+
+  const handleSizeChange = (e) => {
+    setInputSize(e.target.value);
+  };
+
+  // Handle change for height input
+  const handleYChange = (e) => {
+    setInputY(e.target.value);
+  };
+
+  const newExampleChange = async () => {
+    try {
+      const modifiedPdfBytes = await fetchAndFillCertificate(
+        templateURL,
+        inputSize,
+        inputY
+      );
+      if (modifiedPdfBytes) {
+        const modifiedPdfUrl = URL.createObjectURL(
+          new Blob([modifiedPdfBytes], { type: "application/pdf" })
+        );
+        setModifiedTemplateURL(modifiedPdfUrl);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+    }
+  };
+
+  const handleExcelChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setExcelFile(file); // Set as File object
+    }
+  };
+
+  // Function to get download URL for the button
+  const getDownloadUrl = () => {
+    if (!excelFile) return null;
+    return typeof excelFile === "string"
+      ? excelFile
+      : URL.createObjectURL(excelFile);
   };
 
   useEffect(() => {
@@ -194,9 +395,7 @@ function Admin_EditEvent() {
                     flexDir={{ base: "column", md: "row" }}
                     alignItems={{ base: "start", md: "center" }}
                   >
-                    <Text pr={"5px"}>
-                      อัปโหลดรูปปก
-                    </Text>
+                    <Text pr={"5px"}>อัปโหลดรูปปก</Text>
                     <Text color="#D2042D" fontSize="xs">
                       (อัปโหลดได้เฉพาะ .png หรือ .jpg เท่านั้น)
                     </Text>
@@ -217,28 +416,101 @@ function Admin_EditEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    display={"flex"}
                     flexDir={{ base: "column", md: "row" }}
                     alignItems={{ base: "start", md: "center" }}
                   >
-                    <Text pr={"5px"}>
-                      อัปโหลดเท็มเพลทใบประกาศนียบัตร
-                    </Text>
-                    <Text color="#D2042D" fontSize="xs">
+                    อัปโหลดเท็มเพลทใบประกาศนียบัตร
+                    <Text color="#D2042D" ml={1} fontSize="xs">
                       (อัปโหลดได้เฉพาะ .pdf เท่านั้น)
                     </Text>
                   </FormLabel>
                   <input
                     type="file"
                     accept=".pdf"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        setTemplateFile(file);
-                      }
-                    }}
+                    onChange={handleFileChange}
                   />
                 </FormControl>
+                {templateURL && (
+                  <PDF
+                    file={templateURL}
+                    key={templateURL}
+                    canvasWidth={"100%"}
+                    canvasHeight={"auto"}
+                  />
+                )}
+                {templateURL && (
+                  <Button
+                    onClick={() => {
+                      onOpen();
+                      handleTemplateChange(templateURL);
+                    }}
+                    size={["sm", "md", "md"]}
+                  >
+                    ปรับตำแหน่งและขนาดชื่อในใบประกาศนียบัตร
+                  </Button>
+                )}
+
+                <Modal isOpen={isOpen} onClose={onClose} size="xl">
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>ปรับตำแหน่งชื่อในใบประกาศนียบัตร</ModalHeader>
+                    <ModalBody>
+                      {modifiedTemplateURL ? (
+                        <PDF
+                          file={modifiedTemplateURL}
+                          canvasWidth={"100%"}
+                          canvasHeight={"auto"}
+                          key={modifiedTemplateURL}
+                        />
+                      ) : (
+                        <Text>Loading PDF preview...</Text>
+                      )}
+                      <Box
+                        display="flex"
+                        flexDirection="row"
+                        alignItems="end"
+                        justifyContent="center"
+                        gap="4"
+                      >
+                        <FormControl>
+                          <FormLabel>ขนาดตัวหนังสือ / px</FormLabel>
+                          <Input
+                            placeholder="30"
+                            variant="outline"
+                            value={inputSize}
+                            type="number"
+                            onChange={handleSizeChange}
+                          />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>ความสูง / %</FormLabel>
+                          <Input
+                            placeholder="45"
+                            variant="outline"
+                            value={inputY}
+                            type="number"
+                            onChange={handleYChange} // Attach the change handler
+                          />
+                        </FormControl>
+
+                        <Button px="30px" onClick={newExampleChange}>
+                          แสดงผล
+                        </Button>
+                      </Box>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        bg="#336699"
+                        color="white"
+                        _hover={{ bg: "#1F568C" }}
+                        onClick={onClose}
+                      >
+                        บันทึก
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
@@ -246,24 +518,48 @@ function Admin_EditEvent() {
                     flexDir={{ base: "column", md: "row" }}
                     alignItems={{ base: "start", md: "center" }}
                   >
-                    <Text pr={"5px"}>
-                      อัปโหลดรายชื่อผู้เข้าร่วม
-                    </Text>
+                    <Text pr={"5px"}>อัปโหลดรายชื่อผู้เข้าร่วม</Text>
                     <Text color="#D2042D" fontSize="xs">
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
+
                   <input
                     type="file"
                     accept=".xlsx"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        setExcelFile(file);
-                      }
-                    }}
+                    onChange={handleExcelChange}
                   />
-                  <FormLabel pt={"10px"}>เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
+                  <Box gap={"10px"} pt={"2"}>
+                    <Tooltip
+                      hasArrow
+                      placement="right"
+                      label="คลิกเพื่อดาวน์โหลด"
+                      bg="gray.100"
+                      p={"5px"}
+                      color="black"
+                    >
+                      <Button
+                        leftIcon={<SiMicrosoftexcel />}
+                        variant={"link"}
+                        color={"#919191"}
+                        as="a"
+                        href={getDownloadUrl()}
+                        download={
+                          typeof excelFile === "string"
+                            ? "รายชื่อ.xlsx"
+                            : `${excelFile}`
+                        }
+                      >
+                        {typeof excelFile === "string"
+                          ? "Download Current File"
+                          : excelFile || "No file selected"}
+                      </Button>
+                    </Tooltip>
+                  </Box>
+
+                  <FormLabel pt={"10px"}>
+                    เนื้อความในอีเมลส่งใบประกาศนียบัตร
+                  </FormLabel>
                   <Textarea
                     height={"300px"}
                     resize="vertical"
