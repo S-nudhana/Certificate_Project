@@ -76,6 +76,8 @@ export const adminUpdateEvent = async (
   uploadedTemplateURL,
   uploadedExcelURL,
   emailTemplate,
+  inputSize,
+  inputY,
   id
 ) => {
   try {
@@ -88,6 +90,8 @@ export const adminUpdateEvent = async (
       template: uploadedTemplateURL,
       excel: uploadedExcelURL,
       emailTemplate: emailTemplate,
+      inputSize: inputSize,
+      inputY: inputY,
       eventId: id,
     });
     return response;
