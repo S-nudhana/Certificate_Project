@@ -26,7 +26,7 @@ const getGenerateCertificate = async(req, res) => {
                 error: null,
             });
         }
-        return res.json({
+        return res.status(200).json({
             success: true,
             data: true,
             error: null,

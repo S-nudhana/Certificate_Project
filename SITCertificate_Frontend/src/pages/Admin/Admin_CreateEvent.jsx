@@ -25,8 +25,9 @@ import { useDisclosure } from "@chakra-ui/react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
-import { uploadFile } from "../../api/firebaseAPI";
+// import { uploadFile } from "../../api/firebaseAPI";
 import { adminCreateEvent } from "../../api/admin/adminAPI";
+import { uploadFile } from "../../api/user/userAPI"
 
 import PDF from "react-pdf-watermark";
 import { PDFDocument } from "pdf-lib";
@@ -40,72 +41,76 @@ function Admin_CreateEvent() {
   const [closeDate, setCloseDate] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState("");
+  const [uploadedThumbnailURL, setUploadedThumbnailURL] = useState("");
   const [templateFile, setTemplateFile] = useState(null);
-  const [excelFile, setExcelFile] = useState(null);
-  const [emailTemplate, setEmailTemplate] = useState("");
   const [templateURL, setTemplateURL] = useState("");
+  const [uploadedTemplateURL, setUploadedTemplateURL] = useState("");
+  const [excelFile, setExcelFile] = useState(null);
+  const [uploadedExcelURL, setUploadedExcelURL] = useState("");
+  const [emailTemplate, setEmailTemplate] = useState("");
   const [modifiedTemplateURL, setModifiedTemplateURL] = useState("");
   const [inputSize, setInputSize] = useState(30);
   const [inputY, setInputY] = useState(45);
 
-  const [commitSize, setCommitSize] = useState(30);
-  const [commitY, setCommitY] = useState(45);
+  // const firebaseUploadFile = async (file, folder) => {
+  //   try {
+  //     const response = await uploadFile(file, folder);
+  //     return response;
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //   }
+  // };
 
-  const firebaseUploadFile = async (file, folder) => {
-    try {
-      const response = await uploadFile(file, folder);
-      return response;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const handleSubmit = async () => {
     try {
-      if (thumbnailFile && templateFile) {
-        const uploadedThumbnailURL = await firebaseUploadFile(
-          thumbnailFile,
-          "upload_images"
+      // const uploadedThumbnailURL = await firebaseUploadFile(
+      //   thumbnailFile,
+      //   "upload_images"
+      // );
+      // const uploadedTemplateURL = await firebaseUploadFile(
+      //   templateFile,
+      //   "upload_template"
+      // );
+      // const uploadedExcelURL = await firebaseUploadFile(
+      //   excelFile,
+      //   "upload_excel"
+      // );
+      if (
+        eventName &&
+        eventOwnerName &&
+        openDate &&
+        closeDate &&
+        thumbnailFile &&
+        templateFile &&
+        excelFile &&
+        emailTemplate
+      ) {
+        const uploadedThumbnail = await uploadFile(thumbnailFile, "upload_images");
+        setUploadedThumbnailURL(uploadedThumbnail.data.file.filePath)
+        const uploadedTemplate = await uploadFile(templateFile, "upload_template");
+        setUploadedTemplateURL(uploadedTemplate.data.file.filePath)
+        const uploadedExcel = await uploadFile(excelFile, "upload_excel");
+        setUploadedExcelURL(uploadedExcel.data.file.filePath)
+        const response = await adminCreateEvent(
+          eventName,
+          eventOwnerName,
+          openDate,
+          closeDate,
+          uploadedThumbnailURL,
+          uploadedTemplateURL,
+          uploadedExcelURL,
+          emailTemplate,
+          inputSize,
+          inputY
         );
-        const uploadedTemplateURL = await firebaseUploadFile(
-          templateFile,
-          "upload_template"
-        );
-        const uploadedExcelURL = await firebaseUploadFile(
-          excelFile,
-          "upload_excel"
-        );
-        if (
-          eventName &&
-          eventOwnerName &&
-          openDate &&
-          closeDate &&
-          uploadedThumbnailURL &&
-          uploadedTemplateURL &&
-          uploadedExcelURL &&
-          emailTemplate
-        ) {
-          const response = await adminCreateEvent(
-            eventName,
-            eventOwnerName,
-            openDate,
-            closeDate,
-            uploadedThumbnailURL,
-            uploadedTemplateURL,
-            uploadedExcelURL,
-            emailTemplate,
-            inputSize,
-            inputY
-          );
-          console.log(response.status);
-          if (response.status === 200) {
-            navigate("/admin/");
-          }
-        } else {
-          console.error("Missing required event information.");
+        console.log(response.status);
+        if (response.status === 200) {
+          navigate("/admin/");
         }
       } else {
-        console.error("Files are not selected.");
+        console.error("Missing required event information.");
       }
     } catch (error) {
       console.error("Error creating event:", error);
@@ -366,8 +371,8 @@ function Admin_CreateEvent() {
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
-                    flexDir={{base: "column", md: "row"}}
-                    alignItems={{base: "start", md:"center"}}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
                     อัปโหลดรูปปก
                     <Text color="#D2042D" ml={1} fontSize="xs">
@@ -390,8 +395,8 @@ function Admin_CreateEvent() {
                 <FormControl id="">
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    flexDir={{base: "column", md: "row"}}
-                    alignItems={{base: "start", md:"center"}}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
                     อัปโหลดเท็มเพลทใบประกาศนียบัตร
                     <Text color="#D2042D" ml={1} fontSize="xs">
@@ -487,8 +492,8 @@ function Admin_CreateEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    flexDir={{base: "column", md: "row"}}
-                    alignItems={{base: "start", md:"center"}}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
                     อัปโหลดรายชื่อผู้เข้าร่วม
                     <Text color="#D2042D" ml={1} fontSize="xs">

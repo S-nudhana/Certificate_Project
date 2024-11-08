@@ -21,7 +21,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration } from "react-router-dom";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaTrash } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
 
 import Navbar from "../../components/Navbar";
@@ -196,6 +196,7 @@ function Prof_EventDetail() {
               <Textarea
                 height={"300px"}
                 resize="vertical"
+                isDisabled={eventData.event_approve === 1}
                 value={eventData.event_emailTemplate}
               />
             </FormControl>
@@ -251,6 +252,10 @@ function Prof_EventDetail() {
                             color={"#AD3D3B"}
                             _hover={{ color: "red" }}
                             variant={"link"}
+                            textDecoration={"underline"}
+                            textUnderlineOffset={"2px"}
+                            leftIcon={<FaTrash />}
+                            isDisabled={eventData.event_approve === 1}
                             onClick={() => {
                               deleteComment(item.comment_Id);
                             }}

@@ -26,7 +26,8 @@ import axios from "axios";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
-import { uploadFile } from "../../api/firebaseAPI";
+import { uploadFile } from "../../api/user/userAPI";
+// import { uploadFile } from "../../api/firebaseAPI";
 
 import {
   studentGenerate,
@@ -42,11 +43,11 @@ function Student_CertificateExample() {
   const location = useLocation();
   const { name, surname, email } = location.state || {};
   const [certificate, setCertificate] = useState();
-  // State to hold the Blob URL for the PDF preview
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
   const [certificateY, setCertificateY] = useState(null);
   const [certificateTextSize, setCertificateTextSize] = useState(null);
-  const [eventName, setEventName] = useState(null); 
+  const [eventName, setEventName] = useState(null);
+  const [uploadedModifiedPdf, setUploadedModifiedPdf] = useState(null);
   const getCertificate = async () => {
     try {
       const response = await studentCertificate(id);
@@ -55,7 +56,6 @@ function Student_CertificateExample() {
       setCertificateY(response.data.data.event_certificate_position_y);
       setCertificateTextSize(response.data.data.event_certificate_text_size);
       setEventName(response.data.data.event_name);
-      console.log(response)
       if(response.status === 200){
         const modifiedPdfBytes = await fetchAndFillCertificate(
           certificateUrl,
@@ -70,43 +70,26 @@ function Student_CertificateExample() {
           setPdfPreviewUrl(blobUrl);
         }
       }
-
-      // Create Blob URL for preview and set it in state
     } catch (error) {
       console.error("Error fetching certificate:", error);
     }
   };
   const fetchAndFillCertificate = async (pdfUrl, name, surname, certY, certText) => {
     try {
-      // Fetch PDF template
       const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
       const pdfBytes = response.data;
-
-      // Load the PDF
       const pdfDoc = await PDFDocument.load(pdfBytes);
       pdfDoc.registerFontkit(fontkit);
-
-      // Load the Noto Sans Thai font
       const fontUrl =
         "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
-
       const page = pdfDoc.getPages()[0];
       const text = `${name} ${surname}`;
-      // const fontSize = `${certText}`;
       const fontSize = 40;
       const { width, height } = page.getSize();
-      // Create SVG
       const svgText = createTextSVG(text, fontUrl, fontSize, width, height, certY);
-
-      // Create an Image from SVG using a Canvas
       const pngBytes = await convertSvgToPng(svgText, width, height);
-
-      // Embed the PNG in the PDF
       const pngImage = await pdfDoc.embedPng(pngBytes);
-
       page.drawImage(pngImage);
-
-      // Save the modified PDF as bytes
       const modifiedPdfBytes = await pdfDoc.save();
       return modifiedPdfBytes;
     } catch (error) {
@@ -115,33 +98,25 @@ function Student_CertificateExample() {
     }
   };
 
-  // Function to convert SVG to PNG using a Canvas
   const convertSvgToPng = (svgText, width, height) => {
     return new Promise((resolve, reject) => {
-      // Create an image element
       const img = new Image();
       const svgBlob = new Blob([svgText], {
         type: "image/svg+xml;charset=utf-8",
       });
       const url = URL.createObjectURL(svgBlob);
-
       img.onload = () => {
-        // Create a canvas to draw the image
         const canvas = document.createElement("canvas");
-        canvas.width = width; // Adjust width as necessary
-        canvas.height = height; // Adjust height as necessary
+        canvas.width = width;
+        canvas.height = height;
         const ctx = canvas.getContext("2d");
-
-        // Draw the image onto the canvas
         ctx.drawImage(img, 0, 0);
-
-        // Convert the canvas to PNG
         canvas.toBlob((blob) => {
           if (blob) {
             const reader = new FileReader();
             reader.onloadend = () => {
-              resolve(reader.result); // Resolve with the PNG byte array
-              URL.revokeObjectURL(url); // Clean up URL object
+              resolve(reader.result);
+              URL.revokeObjectURL(url);
             };
             reader.readAsArrayBuffer(blob);
           } else {
@@ -154,11 +129,10 @@ function Student_CertificateExample() {
         reject(error);
       };
 
-      img.src = url; // Start loading the SVG as an image
+      img.src = url;
     });
   };
 
-  // Function to create SVG
   const createTextSVG = (text, fontUrl, fontSize, width, height,y) => {
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
@@ -196,27 +170,24 @@ function Student_CertificateExample() {
         certificateY,
         certificateTextSize
       );
-      
-
-      // Convert PDF bytes to a Blob
-      const pdfBlob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
-
-      // Upload the Blob to Firebase, specifying the filename as `id_certificate.pdf`
-      const uploadedModifiedPdf = await firebaseUploadFile(
-        pdfBlob,
-        "upload_Certificate",
-        `${eventName}_${name}_${surname}_certificate.pdf`
-      );
+      const filename = `${eventName}_${name}_${surname}_certificate.pdf`
+      const pdfFile = new File([modifiedPdfBytes], filename, { type: "application/pdf" });
+      const uploadPDFFile = await uploadFile(pdfFile, "upload_generatedCertificate");
+      setUploadedModifiedPdf(uploadPDFFile.data.file.filePath);
+      // const uploadedModifiedPdf = await firebaseUploadFile(
+      //   pdfBlob,
+      //   "upload_Certificate",
+      //   `${eventName}_${name}_${surname}_certificate.pdf`
+      // );
       const response = await generateStudentCertificateInfo(
         id,
         name,
         surname,
         email,
-        uploadedModifiedPdf
+        uploadPDFFile.data.file.filePath
       );
       const resStatus = await updateStudentGenerateStatus(id);
-
-      if (response.data.success) {
+      if (response.success) {
         navigate(`/download/${id}`);
       }
     } catch (error) {
@@ -224,11 +195,11 @@ function Student_CertificateExample() {
     }
   };
 
-  const firebaseUploadFile = async (fileBlob, folder, filename) => {
-    fileBlob.name = filename;
-    const response = await uploadFile(fileBlob, folder);
-    return response;
-  };
+  // const firebaseUploadFile = async (fileBlob, folder, filename) => {
+  //   fileBlob.name = filename;
+  //   const response = await uploadFile(fileBlob, folder);
+  //   return response;
+  // };
 
   useEffect(() => {
     getCertificate();
