@@ -25,9 +25,9 @@ import Building from "../../../public/img/SIT_Building.png";
 import Logo from "../../../public/img/SIT_Icon.png";
 
 import {
-    profForgotPassword,
-    profResetPassword,
-    profSendResetPasswordEmail,
+  profForgotPassword,
+  profResetPassword,
+  profSendResetPasswordEmail,
 } from "../../api/prof/profAPI";
 
 export default function Prof_forgotPassword() {
@@ -94,26 +94,26 @@ export default function Prof_forgotPassword() {
         });
         return;
       }
-      
+
       const res = await profResetPassword(email, pin, newPassword);
-      if(res.status === 200) {
-          toast({
-              title: "เปลี่ยนรหัสผ่านสำเร็จ",
-              description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
-              status: "success",
-              duration: 2000,
-              isClosable: true,
-          });
-          console.log("object")
-          navigate("/professor/login");
-      }else {
-          toast({
-              title: "เกิดข้อผิดพลาด",
-              description: res.response.data.message,
-              status: "error",
-              duration: 2000,
-              isClosable: true,
-          });
+      if (res.status === 200) {
+        toast({
+          title: "เปลี่ยนรหัสผ่านสำเร็จ",
+          description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        console.log("object")
+        navigate("/professor/login");
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: res.response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.error("confirmCreatePassword error", error);

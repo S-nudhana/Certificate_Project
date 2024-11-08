@@ -21,7 +21,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration } from "react-router-dom";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaTrash } from "react-icons/fa6";
 import { SiMicrosoftexcel } from "react-icons/si";
 
 import Navbar from "../../components/Navbar";
@@ -93,6 +93,7 @@ function Prof_EventDetail() {
   const approveEvent = async () => {
     try {
       const response = await profApproveEvent(id);
+      console.log(response)
       if (response.data.success) {
         getEventData();
       }
@@ -151,7 +152,7 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <PdfViewer fileUrl={eventData.event_certificate} />
+            <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_certificate}`} />
             <Button
               mt={"15px"}
               mb={"20px"}
@@ -160,7 +161,7 @@ function Prof_EventDetail() {
               bgColor={"#3399cc"}
               _hover={{ bgColor: "#297AA3" }}
               as="a"
-              href={eventData.event_certificate}
+              href={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_certificate}`}
               download={`${eventData.event_name}certificate.pdf`}
             >
               ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
@@ -182,7 +183,7 @@ function Prof_EventDetail() {
                   variant={"link"}
                   color={"#919191"}
                   as="a"
-                  href={eventData.event_excel}
+                  href={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_excel}`}
                   download={`${eventData.event_name}_Excel.pdf`}
                 >
                   รายชื่อ.xlsx
@@ -196,6 +197,7 @@ function Prof_EventDetail() {
               <Textarea
                 height={"300px"}
                 resize="vertical"
+                isDisabled={eventData.event_approve === 1}
                 value={eventData.event_emailTemplate}
               />
             </FormControl>
@@ -251,6 +253,10 @@ function Prof_EventDetail() {
                             color={"#AD3D3B"}
                             _hover={{ color: "red" }}
                             variant={"link"}
+                            textDecoration={"underline"}
+                            textUnderlineOffset={"2px"}
+                            leftIcon={<FaTrash />}
+                            isDisabled={eventData.event_approve === 1}
                             onClick={() => {
                               deleteComment(item.comment_Id);
                             }}

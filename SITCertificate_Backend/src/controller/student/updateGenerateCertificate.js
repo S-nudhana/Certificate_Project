@@ -17,7 +17,7 @@ const updateGenerateCertificate = async (req, res) => {
         "UPDATE student SET student_eventGenerated = ? WHERE student_joinedEventId = ? AND student_email = ?",
         [1, eventId, studentEmail]
       );
-    return res.json({
+    return res.status(200).json({
       success: true,
       error: null,
     });

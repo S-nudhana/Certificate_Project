@@ -22,7 +22,6 @@ const SignInAdmin = async(req, res) => {
         const signedToken = signToken(tokenData);
         const cookieOptions = {
             httpOnly: true,
-            sameSite: "Strict",
             maxAge: 3 * 60 * 60 * 1000,
             expires: new Date(Date.now() + 15 * 60 * 1000),
             secure: true,

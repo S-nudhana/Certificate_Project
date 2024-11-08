@@ -27,7 +27,7 @@ export default function AdminCardConfirmed({
         }}
       >
         <Image
-          src={event_thumbnail}
+          src={`${import.meta.env.VITE_REACT_APP_URL}${event_thumbnail}`}
           objectFit="cover"
           borderTopLeftRadius="30px"
           borderTopRightRadius="30px"

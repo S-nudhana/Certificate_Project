@@ -61,3 +61,17 @@ export const userHistory = async (eventName) => {
     return error;
   }
 };
+
+export const uploadFile = async (file, category) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axiosInstance.post(
+      `/user/uploadFile?category=${category}`,
+      formData
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

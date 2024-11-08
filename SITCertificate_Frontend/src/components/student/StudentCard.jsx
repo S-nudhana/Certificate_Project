@@ -26,7 +26,8 @@ export default function StudentCard({
         }}
       >
         <Image
-          src={event_thumbnail}
+          src={`${import.meta.env.VITE_REACT_APP_URL}${event_thumbnail}`}
+          // src={event_thumbnail}
           objectFit="cover"
           borderTopLeftRadius="30px"
           borderTopRightRadius="30px"

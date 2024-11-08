@@ -25,8 +25,8 @@ import { useDisclosure } from "@chakra-ui/react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
-import { uploadFile } from "../../api/firebaseAPI";
 import { adminCreateEvent } from "../../api/admin/adminAPI";
+import { uploadFile } from "../../api/user/userAPI"
 
 import PDF from "react-pdf-watermark";
 import { PDFDocument } from "pdf-lib";
@@ -40,72 +40,51 @@ function Admin_CreateEvent() {
   const [closeDate, setCloseDate] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState("");
+  const [uploadedThumbnailURL, setUploadedThumbnailURL] = useState("");
   const [templateFile, setTemplateFile] = useState(null);
-  const [excelFile, setExcelFile] = useState(null);
-  const [emailTemplate, setEmailTemplate] = useState("");
   const [templateURL, setTemplateURL] = useState("");
+  const [uploadedTemplateURL, setUploadedTemplateURL] = useState("");
+  const [excelFile, setExcelFile] = useState(null);
+  const [uploadedExcelURL, setUploadedExcelURL] = useState("");
+  const [emailTemplate, setEmailTemplate] = useState("");
   const [modifiedTemplateURL, setModifiedTemplateURL] = useState("");
   const [inputSize, setInputSize] = useState(30);
   const [inputY, setInputY] = useState(45);
 
-  const [commitSize, setCommitSize] = useState(30);
-  const [commitY, setCommitY] = useState(45);
-
-  const firebaseUploadFile = async (file, folder) => {
-    try {
-      const response = await uploadFile(file, folder);
-      return response;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const handleSubmit = async () => {
     try {
-      if (thumbnailFile && templateFile) {
-        const uploadedThumbnailURL = await firebaseUploadFile(
-          thumbnailFile,
-          "upload_images"
+      if (
+        eventName &&
+        eventOwnerName &&
+        openDate &&
+        closeDate &&
+        thumbnailFile &&
+        templateFile &&
+        excelFile &&
+        emailTemplate
+      ) {
+        const uploadedThumbnail = await uploadFile(thumbnailFile, "upload_images");
+        const uploadedTemplate = await uploadFile(templateFile, "upload_template");
+        const uploadedExcel = await uploadFile(excelFile, "upload_excel");
+        const response = await adminCreateEvent(
+          eventName,
+          eventOwnerName,
+          openDate,
+          closeDate,
+          uploadedThumbnail.data.file.filePath,
+          uploadedTemplate.data.file.filePath,
+          uploadedExcel.data.file.filePath,
+          emailTemplate,
+          inputSize,
+          inputY
         );
-        const uploadedTemplateURL = await firebaseUploadFile(
-          templateFile,
-          "upload_template"
-        );
-        const uploadedExcelURL = await firebaseUploadFile(
-          excelFile,
-          "upload_excel"
-        );
-        if (
-          eventName &&
-          eventOwnerName &&
-          openDate &&
-          closeDate &&
-          uploadedThumbnailURL &&
-          uploadedTemplateURL &&
-          uploadedExcelURL &&
-          emailTemplate
-        ) {
-          const response = await adminCreateEvent(
-            eventName,
-            eventOwnerName,
-            openDate,
-            closeDate,
-            uploadedThumbnailURL,
-            uploadedTemplateURL,
-            uploadedExcelURL,
-            emailTemplate,
-            inputSize,
-            inputY
-          );
-          console.log(response.status);
-          if (response.status === 200) {
-            navigate("/admin/");
-          }
-        } else {
-          console.error("Missing required event information.");
+        if (response.status === 200) {
+          navigate("/admin/");
         }
       } else {
-        console.error("Files are not selected.");
+        console.error("Missing required event information.");
       }
     } catch (error) {
       console.error("Error creating event:", error);
@@ -114,15 +93,10 @@ function Admin_CreateEvent() {
 
   const fetchAndFillCertificate = async (pdfUrl, size, y) => {
     try {
-      // Fetch PDF template
       const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
       const pdfBytes = response.data;
-
-      // Load the PDF
       const pdfDoc = await PDFDocument.load(pdfBytes);
       pdfDoc.registerFontkit(fontkit);
-
-      // Load the Noto Sans Thai font
       const fontUrl =
         "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
 
@@ -130,9 +104,7 @@ function Admin_CreateEvent() {
       const text = "ชื่อจริง นามสกุล";
       const fontSize = `${size}`;
       const textY = `${y}`;
-
       const { width, height } = page.getSize();
-      // Create SVG
       const svgText = createTextSVG(
         text,
         fontUrl,
@@ -141,16 +113,9 @@ function Admin_CreateEvent() {
         height,
         textY
       );
-
-      // Create an Image from SVG using a Canvas
       const pngBytes = await convertSvgToPng(svgText, width, height);
-
-      // Embed the PNG in the PDF
       const pngImage = await pdfDoc.embedPng(pngBytes);
-
       page.drawImage(pngImage);
-
-      // Save the modified PDF as bytes
       const modifiedPdfBytes = await pdfDoc.save();
       return modifiedPdfBytes;
     } catch (error) {
@@ -159,7 +124,6 @@ function Admin_CreateEvent() {
     }
   };
 
-  // Function to convert SVG to PNG using a Canvas
   const convertSvgToPng = (svgText, width, height) => {
     return new Promise((resolve, reject) => {
       // Create an image element
@@ -170,22 +134,17 @@ function Admin_CreateEvent() {
       const url = URL.createObjectURL(svgBlob);
 
       img.onload = () => {
-        // Create a canvas to draw the image
         const canvas = document.createElement("canvas");
-        canvas.width = width; // Adjust width as necessary
-        canvas.height = height; // Adjust height as necessary
+        canvas.width = width;
+        canvas.height = height;
         const ctx = canvas.getContext("2d");
-
-        // Draw the image onto the canvas
         ctx.drawImage(img, 0, 0);
-
-        // Convert the canvas to PNG
         canvas.toBlob((blob) => {
           if (blob) {
             const reader = new FileReader();
             reader.onloadend = () => {
-              resolve(reader.result); // Resolve with the PNG byte array
-              URL.revokeObjectURL(url); // Clean up URL object
+              resolve(reader.result);
+              URL.revokeObjectURL(url);
             };
             reader.readAsArrayBuffer(blob);
           } else {
@@ -198,11 +157,10 @@ function Admin_CreateEvent() {
         reject(error);
       };
 
-      img.src = url; // Start loading the SVG as an image
+      img.src = url;
     });
   };
 
-  // Function to create SVG
   const createTextSVG = (text, fontUrl, fontSize, width, height, y) => {
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
@@ -233,17 +191,14 @@ function Admin_CreateEvent() {
       console.error("Error processing PDF:", error);
     }
   };
-  const templateURLRef = useRef(null); // Store previous URL
+  const templateURLRef = useRef(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Revoke previous URL if it exists
       if (templateURLRef.current) {
         URL.revokeObjectURL(templateURLRef.current);
       }
-
-      // Create a new object URL for the new file and update refs and states
       const newUrl = URL.createObjectURL(file);
       setTemplateFile(file);
       setTemplateURL(newUrl);
@@ -255,7 +210,6 @@ function Admin_CreateEvent() {
     setInputSize(e.target.value);
   };
 
-  // Handle change for height input
   const handleYChange = (e) => {
     setInputY(e.target.value);
   };
@@ -366,8 +320,8 @@ function Admin_CreateEvent() {
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
                     display="flex"
-                    flexDir={{base: "column", md: "row"}}
-                    alignItems={{base: "start", md:"center"}}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
                     อัปโหลดรูปปก
                     <Text color="#D2042D" ml={1} fontSize="xs">
@@ -390,8 +344,8 @@ function Admin_CreateEvent() {
                 <FormControl id="">
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    flexDir={{base: "column", md: "row"}}
-                    alignItems={{base: "start", md:"center"}}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
                     อัปโหลดเท็มเพลทใบประกาศนียบัตร
                     <Text color="#D2042D" ml={1} fontSize="xs">
@@ -463,7 +417,7 @@ function Admin_CreateEvent() {
                             variant="outline"
                             value={inputY}
                             type="number"
-                            onChange={handleYChange} // Attach the change handler
+                            onChange={handleYChange}
                           />
                         </FormControl>
 
@@ -487,8 +441,8 @@ function Admin_CreateEvent() {
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
-                    flexDir={{base: "column", md: "row"}}
-                    alignItems={{base: "start", md:"center"}}
+                    flexDir={{ base: "column", md: "row" }}
+                    alignItems={{ base: "start", md: "center" }}
                   >
                     อัปโหลดรายชื่อผู้เข้าร่วม
                     <Text color="#D2042D" ml={1} fontSize="xs">

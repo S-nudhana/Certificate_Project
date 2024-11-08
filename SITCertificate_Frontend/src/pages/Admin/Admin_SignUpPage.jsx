@@ -50,7 +50,6 @@ export default function Admin_SignUpPage() {
   const handleSignUp = async () => {
     try {
       if (!emailRegex.test(email)) {
-        // setEmailError('รูปแบบอีเมลไม่ถูกต้อง');
         setEmailError("โปรดใช้รูปแบบอีเมลสำหรับอาจารย์และบุคลากร");
         setEmail("");
         return;
