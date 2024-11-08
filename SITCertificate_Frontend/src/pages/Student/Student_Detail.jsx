@@ -69,7 +69,7 @@ function Student_Detail() {
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await sendCertificate(id, certificate);
+      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}${certificate}`);
       if (response.status === 200) {
         toast({
           title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
@@ -118,7 +118,7 @@ function Student_Detail() {
       if (response.status === 200) {
         navigate(`/certificate/${id}`, {
           state: {
-            certificateData: response.data.data, // Include this if it's part of the response and needed
+            certificateData: response.data.data,
             name,
             surname,
             email,
@@ -135,12 +135,12 @@ function Student_Detail() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box height={"80px"} bgColor={"#0c2d4e"} />
       {eventData && studentData && (
         <Box display={eventData && studentData ? "block" : "none"}>
           <Box display={{ base: "block", lg: "flex" }} minH={"80vh"}>
             <Image
-              src={eventData.event_thumbnail}
+              src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
@@ -224,7 +224,7 @@ function Student_Detail() {
         <Box display={eventData && studentData ? "none" : "block"}>
           <Box display={{ base: "block", lg: "flex" }}>
             <Image
-              src={eventData.event_thumbnail}
+              src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
@@ -251,7 +251,7 @@ function Student_Detail() {
                   width={{ base: "100%", lg: "80%" }}
                   justifyContent={{ base: "center", lg: "start" }}
                 >
-                  { certificate && <PdfViewer fileUrl={certificate} />}
+                  {certificate && <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />}
                 </Flex>
               </Flex>
               <Box
@@ -283,7 +283,7 @@ function Student_Detail() {
                   _hover={{ bgColor: "#297AA3" }}
                   variant="solid"
                   as="a"
-                  href={certificate}
+                  href={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`}
                   download={`${eventData.event_name}_certificate.pdf`}
                 >
                   ดาวน์โหลด

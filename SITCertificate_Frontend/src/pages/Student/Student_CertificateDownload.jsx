@@ -31,7 +31,7 @@ function Student_CertificateDownload() {
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await sendCertificate(id, certificate);
+      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}${certificate}`);
       if (response.status === 200) {
         toast({
           title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
@@ -72,7 +72,7 @@ function Student_CertificateDownload() {
             width={{ base: "100%", lg: "80%", xl: "50%" }}
             height={"auto"}
           >
-            <PdfViewer fileUrl={certificate} />
+            <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />
           </Flex>
           <Box
             width="80%"
@@ -105,7 +105,7 @@ function Student_CertificateDownload() {
               fontSize={{ base: "14px", md: "16px" }}
               variant="solid"
               as="a"
-              href={certificate}
+              href={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`}
               download={"certificate.pdf"}
             >
               ดาวน์โหลด

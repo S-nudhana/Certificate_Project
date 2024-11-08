@@ -27,7 +27,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 import { uploadFile } from "../../api/user/userAPI";
-// import { uploadFile } from "../../api/firebaseAPI";
 
 import {
   studentGenerate,
@@ -47,16 +46,15 @@ function Student_CertificateExample() {
   const [certificateY, setCertificateY] = useState(null);
   const [certificateTextSize, setCertificateTextSize] = useState(null);
   const [eventName, setEventName] = useState(null);
-  const [uploadedModifiedPdf, setUploadedModifiedPdf] = useState(null);
   const getCertificate = async () => {
     try {
       const response = await studentCertificate(id);
-      const certificateUrl = response.data.data.event_Certificate;
+      const certificateUrl = import.meta.env.VITE_REACT_APP_URL + response.data.data.event_Certificate;
       setCertificate(certificateUrl);
       setCertificateY(response.data.data.event_certificate_position_y);
       setCertificateTextSize(response.data.data.event_certificate_text_size);
       setEventName(response.data.data.event_name);
-      if(response.status === 200){
+      if (response.status === 200) {
         const modifiedPdfBytes = await fetchAndFillCertificate(
           certificateUrl,
           name,
@@ -133,7 +131,7 @@ function Student_CertificateExample() {
     });
   };
 
-  const createTextSVG = (text, fontUrl, fontSize, width, height,y) => {
+  const createTextSVG = (text, fontUrl, fontSize, width, height, y) => {
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
         <style>
@@ -173,12 +171,6 @@ function Student_CertificateExample() {
       const filename = `${eventName}_${name}_${surname}_certificate.pdf`
       const pdfFile = new File([modifiedPdfBytes], filename, { type: "application/pdf" });
       const uploadPDFFile = await uploadFile(pdfFile, "upload_generatedCertificate");
-      setUploadedModifiedPdf(uploadPDFFile.data.file.filePath);
-      // const uploadedModifiedPdf = await firebaseUploadFile(
-      //   pdfBlob,
-      //   "upload_Certificate",
-      //   `${eventName}_${name}_${surname}_certificate.pdf`
-      // );
       const response = await generateStudentCertificateInfo(
         id,
         name,
@@ -194,12 +186,6 @@ function Student_CertificateExample() {
       console.error("Error sending email:", error);
     }
   };
-
-  // const firebaseUploadFile = async (fileBlob, folder, filename) => {
-  //   fileBlob.name = filename;
-  //   const response = await uploadFile(fileBlob, folder);
-  //   return response;
-  // };
 
   useEffect(() => {
     getCertificate();
@@ -224,17 +210,17 @@ function Student_CertificateExample() {
 
         <Flex width={{ base: "150%", md: "100%" }} justifyContent={"center"}>
           {pdfPreviewUrl ? (
-       <PDF
-       canvasWidth={"50%"}
-       canvasHeight={"auto"}
-       file={pdfPreviewUrl}
-       watermark={"SITCertificate"}
-       watermarkOptions={{
-         transparency: 0.5,
-         fontSize: 140,
-         fontStyle: "Bold",
-       }}
-     />
+            <PDF
+              canvasWidth={"50%"}
+              canvasHeight={"auto"}
+              file={pdfPreviewUrl}
+              watermark={"SITCertificate"}
+              watermarkOptions={{
+                transparency: 0.5,
+                fontSize: 140,
+                fontStyle: "Bold",
+              }}
+            />
           ) : (
             <Text>Loading PDF preview...</Text>
           )}

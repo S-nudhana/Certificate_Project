@@ -37,7 +37,6 @@ userRouter.post("/uploadFile", upload.single("file"), async (req, res) => {
     if (req.file) {
       const filePath = req.file.path;
       const fileName = req.file.filename;
-      console.log(fileName)
       res.status(200).json({
         message: "File uploaded successfully",
         file: {

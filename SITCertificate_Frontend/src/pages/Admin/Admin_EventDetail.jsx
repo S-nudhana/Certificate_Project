@@ -168,7 +168,7 @@ export default function Admin_EventDetail() {
               <Text fontSize="18px" fontWeight={"bold"}>
                 ใบประกาศนียบัตร
               </Text>
-              <PdfViewer fileUrl={eventData.event_certificate} />
+              <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_certificate}`} />
               <Button
                 mt={"15px"}
                 mb={"20px"}
@@ -177,7 +177,7 @@ export default function Admin_EventDetail() {
                 bgColor={"#3399cc"}
                 _hover={{ bgColor: "#297AA3" }}
                 as="a"
-                href={eventData.event_certificate}
+                href={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_certificate}`}
                 download={`${eventData.event_name}_certificate.pdf`}
               >
                 ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
@@ -199,7 +199,7 @@ export default function Admin_EventDetail() {
                     variant={"link"}
                     color={"#919191"}
                     as="a"
-                    href={eventData.event_excel}
+                    href={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_excel}`}
                     download={`${eventData.event_name}_Excel.pdf`}
                   >
                     รายชื่อ.xlsx

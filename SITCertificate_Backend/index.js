@@ -17,17 +17,22 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors(corsOptions));
+app.use('/uploads', (req, res, next) => {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+  }, express.static("uploads"));
+
 app.use(logger);
 app.use(helmet());
-app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
 // app.use("/api", limiter);
 db.connect((err) => {
     if (err) throw err;
     console.log("Connected!");
 });
 
-app.use(express.json());
-app.use(cookieParser());
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/prof", profRouter);
