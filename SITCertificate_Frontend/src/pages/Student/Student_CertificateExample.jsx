@@ -25,7 +25,11 @@ import axios from "axios";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { createTextSVG, convertSvgToPng } from "../../components/embedNameOnCertificate"
+import {
+  createTextSVG,
+  convertSvgToPng,
+} from "../../components/embedNameOnCertificate";
+import PdfViewer from "../../components/PdfViewer";
 
 import { uploadFile } from "../../api/user/userAPI";
 
@@ -51,7 +55,9 @@ function Student_CertificateExample() {
   const getCertificate = async () => {
     try {
       const response = await studentCertificate(id);
-      const certificateUrl = import.meta.env.VITE_REACT_APP_URL + response.data.data.event_Certificate;
+      const certificateUrl =
+        import.meta.env.VITE_REACT_APP_URL +
+        response.data.data.event_Certificate;
       setCertificate(certificateUrl);
       setCertificateY(response.data.data.event_certificate_position_y);
       setCertificateTextSize(response.data.data.event_certificate_text_size);
@@ -65,7 +71,9 @@ function Student_CertificateExample() {
           response.data.data.event_certificate_text_size
         );
         if (modifiedPdfBytes) {
-          const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
+          const blob = new Blob([modifiedPdfBytes], {
+            type: "application/pdf",
+          });
           const blobUrl = URL.createObjectURL(blob);
           setPdfPreviewUrl(blobUrl);
         }
@@ -74,7 +82,13 @@ function Student_CertificateExample() {
       console.error("Error fetching certificate:", error);
     }
   };
-  const fetchAndFillCertificate = async (pdfUrl, name, surname, certY, certText) => {
+  const fetchAndFillCertificate = async (
+    pdfUrl,
+    name,
+    surname,
+    certY,
+    certText
+  ) => {
     try {
       const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
       const pdfBytes = response.data;
@@ -86,7 +100,14 @@ function Student_CertificateExample() {
       const text = `${name} ${surname}`;
       const fontSize = 40;
       const { width, height } = page.getSize();
-      const svgText = createTextSVG(text, fontUrl, fontSize, width, height, certY);
+      const svgText = createTextSVG(
+        text,
+        fontUrl,
+        fontSize,
+        width,
+        height,
+        certY
+      );
       const pngBytes = await convertSvgToPng(svgText, width, height);
       const pngImage = await pdfDoc.embedPng(pngBytes);
       page.drawImage(pngImage);
@@ -117,9 +138,14 @@ function Student_CertificateExample() {
         certificateY,
         certificateTextSize
       );
-      const filename = `${eventName}_${name}_${surname}_certificate.pdf`
-      const pdfFile = new File([modifiedPdfBytes], filename, { type: "application/pdf" });
-      const uploadPDFFile = await uploadFile(pdfFile, "upload_generatedCertificate");
+      const filename = `${eventName}_${name}_${surname}_certificate.pdf`;
+      const pdfFile = new File([modifiedPdfBytes], filename, {
+        type: "application/pdf",
+      });
+      const uploadPDFFile = await uploadFile(
+        pdfFile,
+        "upload_generatedCertificate"
+      );
       const response = await generateStudentCertificateInfo(
         id,
         name,
@@ -128,7 +154,6 @@ function Student_CertificateExample() {
         uploadPDFFile.data.file.filePath
       );
       const resStatus = await updateStudentGenerateStatus(id);
-      console.log(resStatus, response)
       if (response.status === 200 && resStatus.status === 200) {
         navigate(`/download/${id}`);
       }

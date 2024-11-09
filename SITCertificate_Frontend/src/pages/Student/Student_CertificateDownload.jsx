@@ -21,7 +21,6 @@ function Student_CertificateDownload() {
   const getCertificate = async () => {
     try {
       const response = await studentCertificate(id);
-      console.log(response)
       setCertificate(response.data.data.student_GenerateCertificate);
     } catch (error) {
       console.error("Error getting certificate:", error);
