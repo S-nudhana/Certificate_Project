@@ -18,10 +18,9 @@ import {
   Flex,
   useDisclosure,
 } from "@chakra-ui/react";
-import PDF from "react-pdf-watermark";
+import axios from "axios";
 import { PDFDocument } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
-import axios from "axios";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -29,8 +28,8 @@ import {
   createTextSVG,
   convertSvgToPng,
 } from "../../components/embedNameOnCertificate";
-import PdfViewer from "../../components/PdfViewer";
 
+import PdfViewer from "../../components/PdfViewer";
 import { uploadFile } from "../../api/user/userAPI";
 
 import {
@@ -48,6 +47,7 @@ function Student_CertificateExample() {
   const { name, surname, email } = location.state || {};
   const [certificate, setCertificate] = useState();
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+  const [pdfWatermarkUrl, setPdfWatermarkUrl] = useState(null);
   const [certificateY, setCertificateY] = useState(null);
   const [certificateTextSize, setCertificateTextSize] = useState(null);
   const [eventName, setEventName] = useState(null);
@@ -58,7 +58,10 @@ function Student_CertificateExample() {
       const certificateUrl =
         import.meta.env.VITE_REACT_APP_URL +
         response.data.data.event_Certificate;
-      setCertificate(certificateUrl);
+      setCertificate(
+        import.meta.env.VITE_REACT_APP_URL +
+          response.data.data.event_Certificate
+      );
       setCertificateY(response.data.data.event_certificate_position_y);
       setCertificateTextSize(response.data.data.event_certificate_text_size);
       setEventName(response.data.data.event_name);
@@ -98,7 +101,7 @@ function Student_CertificateExample() {
         "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
       const page = pdfDoc.getPages()[0];
       const text = `${name} ${surname}`;
-      const fontSize = 40;
+      const fontSize = certText;
       const { width, height } = page.getSize();
       const svgText = createTextSVG(
         text,
@@ -106,7 +109,44 @@ function Student_CertificateExample() {
         fontSize,
         width,
         height,
-        certY
+        certY,
+        "black"
+      );
+      const pngBytes = await convertSvgToPng(svgText, width, height);
+      const pngImage = await pdfDoc.embedPng(pngBytes);
+      page.drawImage(pngImage);
+      const modifiedPdfBytes = await pdfDoc.save();
+      const watermarkPdfBytes = await watermark(modifiedPdfBytes);
+      return setPdfWatermarkUrl(
+        URL.createObjectURL(
+          new Blob([watermarkPdfBytes], { type: "application/pdf" })
+        )
+      );
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+      return null;
+    }
+  };
+
+  const watermark = async (pdfBytes) => {
+    try {
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      pdfDoc.registerFontkit(fontkit);
+      const fontUrl =
+        "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
+      const page = pdfDoc.getPages()[0];
+      const text = "SITCertificate";
+      const fontSize = 120;
+      const { width, height } = page.getSize();
+      const certY = 50;
+      const svgText = createTextSVG(
+        text,
+        fontUrl,
+        fontSize,
+        width,
+        height,
+        certY,
+        "rgba(0, 0, 0, 0.6)"
       );
       const pngBytes = await convertSvgToPng(svgText, width, height);
       const pngImage = await pdfDoc.embedPng(pngBytes);
@@ -182,20 +222,9 @@ function Student_CertificateExample() {
         <Text pb={"20px"} fontSize="32px" fontWeight="bold" pt="40px">
           ตัวอย่างใบประกาศนียบัตร
         </Text>
-
-        <Flex width={{ base: "150%", md: "100%" }} justifyContent={"center"}>
-          {pdfPreviewUrl ? (
-            <PDF
-              canvasWidth={"50%"}
-              canvasHeight={"auto"}
-              file={pdfPreviewUrl}
-              watermark={"SITCertificate"}
-              watermarkOptions={{
-                transparency: 0.5,
-                fontSize: 140,
-                fontStyle: "Bold",
-              }}
-            />
+        <Flex width={{ base: "80%", xl: "50%" }} justifyContent={"center"}>
+          {pdfWatermarkUrl ? (
+            <PdfViewer fileUrl={pdfWatermarkUrl} />
           ) : (
             <Text>Loading PDF preview...</Text>
           )}

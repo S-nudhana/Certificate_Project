@@ -31,7 +31,7 @@ export const convertSvgToPng = (svgText, width, height) => {
     });
 };
 
-export const createTextSVG = (text, fontUrl, fontSize, width, height, y) => {
+export const createTextSVG = (text, fontUrl, fontSize, width, height, y, color) => {
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
         <style>
@@ -41,7 +41,7 @@ export const createTextSVG = (text, fontUrl, fontSize, width, height, y) => {
         } .text {
             font-family: 'Noto Sans Thai', sans-serif;
             font-size: ${fontSize}px;
-            fill: black;
+            fill: ${color};
           }
         </style>
         <text x="50%" y="${y}%" text-anchor="middle" alignment-baseline="middle" class="text">${text}</text>

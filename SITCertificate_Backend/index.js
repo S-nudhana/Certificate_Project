@@ -21,12 +21,13 @@ app.use(cors(corsOptions));
 app.use('/uploads', (req, res, next) => {
     const origin = req.get('origin');
     const path = req.path;
+    console.log(origin, path)
     if (path.includes('upload_template')) {
         if (!origin) {
-            return res.status(403).json({ message: "This file cannot be accessed without a valid origin." });
+             return res.status(403).json({ message: "This file cannot be accessed without a valid origin." });
         }
+        res.setHeader('Access-Control-Allow-Origin', origin);
     }
-    res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     next();
   }, express.static("uploads"));
