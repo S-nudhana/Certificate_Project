@@ -34,7 +34,7 @@ function Admin_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box height={"80px"} bgColor={"#0c2d4e"} />
       <Box pb={"40px"} minHeight={"75vh"}>
         <Box
           position="relative"
@@ -61,7 +61,7 @@ function Admin_Homepage() {
           >
             <Box
               position="absolute"
-              top={{base: "30%", xl: "37%"}}
+              top={{ base: "30%", xl: "37%" }}
               left={{ base: "5%", xl: "7%" }}
               width="100%"
               height="100%"
@@ -76,7 +76,11 @@ function Admin_Homepage() {
             </Box>
           </Box>
         </Box>
-        <Box maxWidth="1300px" pt={"30px"} mx={{ base: "5%", lg: "3%", xl: "auto" }}>
+        <Box
+          maxWidth="1300px"
+          pt={"30px"}
+          mx={{ base: "5%", lg: "3%", xl: "auto" }}
+        >
           <Button
             leftIcon={<FaPlus />}
             cursor="pointer"
@@ -131,11 +135,11 @@ function Admin_Homepage() {
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", xl: "flex-start" }}
+            justifyContent={{ base: "center", md: "space-between", lg: "flex-start" }}
             gap="30px"
             pt="30px"
             maxWidth="1300px"
-            mx="auto"
+            mx={{ base: "5%", md: "8%",  lg: "3%", xl: "auto" }}
           >
             {eventData &&
               eventData.map((item, key) => {
@@ -182,11 +186,11 @@ function Admin_Homepage() {
           <Box
             display="flex"
             flexWrap="wrap"
-            justifyContent={{ base: "center", lg: "flex-start" }}
+            justifyContent={{ base: "center", md: "space-between", lg: "flex-start" }}
             gap="30px"
             pt="30px"
             maxWidth="1300px"
-            mx="auto"
+            mx={{ base: "5%", md: "8%",  lg: "3%", xl: "auto" }}
           >
             {eventData &&
               eventData.map((item, key) => {

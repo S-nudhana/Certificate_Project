@@ -17,7 +17,6 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-
 import { dateFormatChange } from "../../utils/function";
 
 import {
@@ -118,7 +117,7 @@ function Student_Detail() {
       if (response.status === 200) {
         navigate(`/certificate/${id}`, {
           state: {
-            certificateData: response.data.data,
+            certificateData: response.data.data, // Include this if it's part of the response and needed
             name,
             surname,
             email,
@@ -147,7 +146,7 @@ function Student_Detail() {
             ></Image>
             <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
               <BackBTN />
-              <Text fontSize="32px" fontWeight="bold" pt="20px">
+              <Text fontSize="32px" fontWeight="bold" pt="10px">
                 {eventData.event_name}
               </Text>
               <Text pt="10px" pb="20px">
@@ -224,14 +223,14 @@ function Student_Detail() {
         <Box display={eventData && studentData ? "none" : "block"}>
           <Box display={{ base: "block", lg: "flex" }}>
             <Image
-              src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
+               src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
             ></Image>
             <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
               <BackBTN />
-              <Text fontSize="32px" fontWeight="bold" pt="20px">
+              <Text fontSize="32px" fontWeight="bold" pt="10px">
                 {eventData.event_name}
               </Text>
               <Text pt="10px" pb="20px">
@@ -251,7 +250,7 @@ function Student_Detail() {
                   width={{ base: "100%", lg: "80%" }}
                   justifyContent={{ base: "center", lg: "start" }}
                 >
-                  {certificate && <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />}
+                  { certificate && <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />}
                 </Flex>
               </Flex>
               <Box
@@ -283,7 +282,7 @@ function Student_Detail() {
                   _hover={{ bgColor: "#297AA3" }}
                   variant="solid"
                   as="a"
-                  href={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`}
+                  href={certificate}
                   download={`${eventData.event_name}_certificate.pdf`}
                 >
                   ดาวน์โหลด

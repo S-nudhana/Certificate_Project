@@ -13,23 +13,23 @@ export default function Footer() {
                         <Image src={logo} alt="Logo" width={{ base: '300px', lg: "500px" }} height='auto' />
                     </Link>
                     <Box color='whitesmoke' fontSize={{ xs: "12px", md: "14px", lg: '16px' }}>
-                        <Link to="" className="hover:text-white">
-                            <Box display='flex' alignItems='center' pt={{ base: '28px', md: '40px' }} _hover={{ textDecoration: 'underline', textUnderlineOffset: '3px', color: 'white' }}>
+                        <Link to="" className="text-[#c4cece]">
+                            <Box display='flex' alignItems='center' pt={{ base: '28px', md: '40px' }} transition="color 0.2s ease-in-out" _hover={{ color: 'white'}}>
                                 <FaPhone /> <Text pl='5px'> +66 2470 9850</Text>
                             </Box>
                         </Link>
-                        <Link to="mailto:webadmin@sit.kmutt.ac.th" className="hover:text-white flex pt-[5px]">
-                            <Box display='flex' alignItems='center' pt='10px' _hover={{ textDecoration: 'underline', textUnderlineOffset: '3px', color: 'white' }}>
+                        <Link to="mailto:webadmin@sit.kmutt.ac.th" className="text-[#c4cece] flex pt-[5px]">
+                            <Box display='flex' alignItems='center' pt='10px' transition="color 0.2s ease-in-out" _hover={{ color: 'white'}}>
                                 <FaEnvelope /> <Text pl='5px'> webadmin@sit.kmutt.ac.th</Text>
                             </Box>
                         </Link>
-                        <Link to="https://www.facebook.com/SIT.Family" className="hover:text-white flex pt-[5px]">
-                            <Box display='flex' alignItems='center' pt='10px' _hover={{ textDecoration: 'underline', textUnderlineOffset: '3px', color: 'white' }}>
+                        <Link to="https://www.facebook.com/SIT.Family" className="text-[#c4cece] flex pt-[5px]">
+                            <Box display='flex' alignItems='center' pt='10px' transition="color 0.2s ease-in-out" _hover={{ color: 'white'}}>
                                 <FaFacebook /> <Text pl='5px'> SIT.Family</Text>
                             </Box>
                         </Link>
-                        <Link to="https://page.line.me/olt5471s?openQrModal=true" className="hover:text-white flex pt-[5px] pb-[20px]">
-                            <Box display='flex' alignItems='center' pt='10px' _hover={{ textDecoration: 'underline', textUnderlineOffset: '3px', color: 'white' }}>
+                        <Link to="https://page.line.me/olt5471s?openQrModal=true" className="text-[#c4cece] flex pt-[5px] pb-[20px]">
+                            <Box display='flex' alignItems='center' pt='10px' transition="color 0.2s ease-in-out" _hover={{ color: 'white'}}>
                                 <FaLine /> <Text pl='5px'> @sit.kmutt</Text>
                             </Box>
                         </Link>
