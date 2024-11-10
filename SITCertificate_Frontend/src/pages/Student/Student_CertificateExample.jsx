@@ -207,6 +207,21 @@ function Student_CertificateExample() {
     getStudentGenerate();
   }, []);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // 768px for iPad screen size or smaller
+    };
+
+    handleResize(); // Check screen size on mount
+    window.addEventListener('resize', handleResize); // Listen for resize events
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // Clean up the event listener
+    };
+  }, []);
+
   return (
     <>
       <ScrollRestoration />
@@ -223,12 +238,18 @@ function Student_CertificateExample() {
           ตัวอย่างใบประกาศนียบัตร
         </Text>
         <Flex width={{ base: "80%", xl: "50%" }} justifyContent={"center"}>
-          {pdfWatermarkUrl ? (
-            <PdfViewer fileUrl={pdfWatermarkUrl} />
-          ) : (
-            <Text>Loading PDF preview...</Text>
-          )}
-        </Flex>
+      {pdfWatermarkUrl ? (
+        isMobile ? (
+          <PdfViewer fileUrl={pdfWatermarkUrl} />
+        ) : (
+          <Box width={{base: "680px", "2xl": "800px"}} height={{base: "483px", "2xl": "567.5px"}} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
+            <iframe src={`${pdfWatermarkUrl}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
+          </Box>
+        )
+      ) : (
+        <Text>Loading PDF preview...</Text>
+      )}
+    </Flex>
         <Box
           pt={"20px"}
           width="80%"
