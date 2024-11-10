@@ -1,17 +1,12 @@
 import * as React from "react";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import * as ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import "./index.css";
 
-import router from "./router";
+import { theme } from "./theme";
 
-const theme = extendTheme({
-  fonts: {
-    heading: `'Noto Sans Thai', sans-serif`,
-    body: `'Noto Sans Thai', sans-serif`,
-  },
-});
+import router from "./router";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
