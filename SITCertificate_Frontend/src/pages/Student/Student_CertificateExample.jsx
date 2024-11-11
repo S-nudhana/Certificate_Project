@@ -28,10 +28,9 @@ import {
   createTextSVG,
   convertSvgToPng,
 } from "../../components/embedNameOnCertificate";
-
 import PdfViewer from "../../components/PdfViewer";
-import { uploadFile } from "../../api/user/userAPI";
 
+import { uploadFile } from "../../api/user/userAPI";
 import {
   studentGenerate,
   updateStudentGenerateStatus,
@@ -46,7 +45,6 @@ function Student_CertificateExample() {
   const location = useLocation();
   const { name, surname, email } = location.state || {};
   const [certificate, setCertificate] = useState();
-  const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
   const [pdfWatermarkUrl, setPdfWatermarkUrl] = useState(null);
   const [certificateY, setCertificateY] = useState(null);
   const [certificateTextSize, setCertificateTextSize] = useState(null);
@@ -73,14 +71,8 @@ function Student_CertificateExample() {
           response.data.data.event_certificate_position_y,
           response.data.data.event_certificate_text_size
         );
-        if (modifiedPdfBytes) {
-          const blob = new Blob([modifiedPdfBytes], {
-            type: "application/pdf",
-          });
-          const blobUrl = URL.createObjectURL(blob);
-          setPdfPreviewUrl(blobUrl);
-        }
       }
+      return ;
     } catch (error) {
       console.error("Error fetching certificate:", error);
     }
