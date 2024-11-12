@@ -58,7 +58,7 @@ function Student_CertificateExample() {
         response.data.data.event_Certificate;
       setCertificate(
         import.meta.env.VITE_REACT_APP_URL +
-          response.data.data.event_Certificate
+        response.data.data.event_Certificate
       );
       setCertificateY(response.data.data.event_certificate_position_y);
       setCertificateTextSize(response.data.data.event_certificate_text_size);
@@ -69,10 +69,11 @@ function Student_CertificateExample() {
           name,
           surname,
           response.data.data.event_certificate_position_y,
-          response.data.data.event_certificate_text_size
+          response.data.data.event_certificate_text_size,
+          true,
         );
       }
-      return ;
+      return;
     } catch (error) {
       console.error("Error fetching certificate:", error);
     }
@@ -82,7 +83,8 @@ function Student_CertificateExample() {
     name,
     surname,
     certY,
-    certText
+    certText,
+    watermark
   ) => {
     try {
       const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
@@ -108,27 +110,30 @@ function Student_CertificateExample() {
       const pngImage = await pdfDoc.embedPng(pngBytes);
       page.drawImage(pngImage);
       const modifiedPdfBytes = await pdfDoc.save();
-      const watermarkPdfBytes = await watermark(modifiedPdfBytes);
-      return setPdfWatermarkUrl(
-        URL.createObjectURL(
-          new Blob([watermarkPdfBytes], { type: "application/pdf" })
-        )
-      );
+      if (watermark) {
+        const watermarkPdfBytes = await waterMark(modifiedPdfBytes);
+        return setPdfWatermarkUrl(
+          URL.createObjectURL(
+            new Blob([watermarkPdfBytes], { type: "application/pdf" })
+          )
+        );
+      }
+      return modifiedPdfBytes;
     } catch (error) {
       console.error("Error processing PDF:", error);
       return null;
     }
   };
 
-  const watermark = async (pdfBytes) => {
+  const waterMark = async (pdfBytes) => {
     try {
       const pdfDoc = await PDFDocument.load(pdfBytes);
       pdfDoc.registerFontkit(fontkit);
       const fontUrl =
         "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
       const page = pdfDoc.getPages()[0];
-      const text = "SITCertificate";
-      const fontSize = 120;
+      const text = "Example";
+      const fontSize = 150;
       const { width, height } = page.getSize();
       const certY = 50;
       const svgText = createTextSVG(
@@ -138,7 +143,7 @@ function Student_CertificateExample() {
         width,
         height,
         certY,
-        "rgba(0, 0, 0, 0.6)"
+        "rgba(0, 0, 0, 0.4)"
       );
       const pngBytes = await convertSvgToPng(svgText, width, height);
       const pngImage = await pdfDoc.embedPng(pngBytes);
@@ -168,7 +173,8 @@ function Student_CertificateExample() {
         name,
         surname,
         certificateY,
-        certificateTextSize
+        certificateTextSize,
+        false,
       );
       const filename = `${eventName}_${name}_${surname}_certificate.pdf`;
       const pdfFile = new File([modifiedPdfBytes], filename, {
@@ -203,14 +209,12 @@ function Student_CertificateExample() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // 768px for iPad screen size or smaller
+      setIsMobile(window.innerWidth <= 1024);
     };
-
-    handleResize(); // Check screen size on mount
-    window.addEventListener('resize', handleResize); // Listen for resize events
-
+    handleResize();
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize); // Clean up the event listener
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -230,18 +234,18 @@ function Student_CertificateExample() {
           ตัวอย่างใบประกาศนียบัตร
         </Text>
         <Flex width={{ base: "80%", xl: "50%" }} justifyContent={"center"}>
-      {pdfWatermarkUrl ? (
-        isMobile ? (
-          <PdfViewer fileUrl={pdfWatermarkUrl} />
-        ) : (
-          <Box width={{base: "680px", "2xl": "800px"}} height={{base: "483px", "2xl": "567.5px"}} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
-            <iframe src={`${pdfWatermarkUrl}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
-          </Box>
-        )
-      ) : (
-        <Text>Loading PDF preview...</Text>
-      )}
-    </Flex>
+          {pdfWatermarkUrl ? (
+            isMobile ? (
+              <PdfViewer fileUrl={pdfWatermarkUrl} />
+            ) : (
+              <Box width={{ base: "680px", xl: "680px", "2xl": "800px" }} height={{ base: "386px", xl: "483px", "2xl": "567.5px" }} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
+                <iframe src={`${pdfWatermarkUrl}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
+              </Box>
+            )
+          ) : (
+            <Text>Loading PDF preview...</Text>
+          )}
+        </Flex>
         <Box
           pt={"20px"}
           width="80%"

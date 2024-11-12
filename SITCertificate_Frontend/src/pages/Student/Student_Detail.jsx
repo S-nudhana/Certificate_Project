@@ -130,6 +130,19 @@ function Student_Detail() {
     }
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
       <ScrollRestoration />
@@ -223,7 +236,7 @@ function Student_Detail() {
         <Box display={eventData && studentData ? "none" : "block"}>
           <Box display={{ base: "block", lg: "flex" }}>
             <Image
-               src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
+              src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
@@ -245,12 +258,24 @@ function Student_Detail() {
               <Flex
                 width={"100%"}
                 justifyContent={{ base: "center", lg: "start" }}
+                pt={"20px"}
               >
                 <Flex
                   width={{ base: "100%", lg: "80%" }}
                   justifyContent={{ base: "center", lg: "start" }}
+                  pb={"20px"}
                 >
-                  { certificate && <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />}
+                  {certificate ? (
+                    isMobile ? (
+                      <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />
+                    ) : (
+                      <Box width={{ base: "680px", xl: "680px", "2xl": "800px" }} height={{ base: "386px", xl: "483px", "2xl": "567.5px" }} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
+                        <iframe src={`${import.meta.env.VITE_REACT_APP_URL}${certificate}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
+                      </Box>
+                    )
+                  ) : (
+                    <Text>Loading PDF preview...</Text>
+                  )}
                 </Flex>
               </Flex>
               <Box

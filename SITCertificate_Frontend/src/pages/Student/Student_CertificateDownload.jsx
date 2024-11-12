@@ -51,11 +51,24 @@ function Student_CertificateDownload() {
     getCertificate();
   }, []);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box height={"80px"} bgColor={"#0c2d4e"} />
       {certificate && (
         <Box
           minH={"80vh"}
@@ -71,7 +84,17 @@ function Student_CertificateDownload() {
             width={{ base: "100%", lg: "80%", xl: "50%" }}
             height={"auto"}
           >
-            <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />
+            {certificate ? (
+              isMobile ? (
+                <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />
+              ) : (
+                <Box width={{ base: "680px", xl: "680px", "2xl": "800px" }} height={{ base: "386px", xl: "483px", "2xl": "567.5px" }} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
+                  <iframe src={`${import.meta.env.VITE_REACT_APP_URL}${certificate}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
+                </Box>
+              )
+            ) : (
+              <Text>Loading PDF preview...</Text>
+            )}
           </Flex>
           <Box
             width="80%"
