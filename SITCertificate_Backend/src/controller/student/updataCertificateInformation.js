@@ -1,12 +1,12 @@
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
 
-import { verifyToken } from "../auth/jwt.js"; 
+import { verifyToken } from "../auth/jwt.js";
 
 dotenv.config();
 
 const updataCertificateInformation = async (req, res) => {
-  const {eventId, name, surname, email, modifiedPdf} = req.body;
+  const { eventId, name, surname, email, modifiedPdf } = req.body;
   const { token } = req.cookies;
   try {
     const userId = verifyToken(token);

@@ -15,7 +15,7 @@ const getCertificateInfo = async (req, res) => {
     const dataQuery = await db
       .promise()
       .query(
-        `SELECT student_nameOnCertificate, student_surnameOnCertificate, student_emailToSendCertificate FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
+        `SELECT student_nameOnCertificate, student_surnameOnCertificate, student_emailTostudent_sendCertificate FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
         value
       );
 
@@ -25,7 +25,6 @@ const getCertificateInfo = async (req, res) => {
       data: data,
       error: null,
     });
-
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
