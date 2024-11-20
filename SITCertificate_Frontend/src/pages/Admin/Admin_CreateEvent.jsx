@@ -23,19 +23,20 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import PDF from "react-pdf-watermark";
-import { PDFDocument } from "pdf-lib";
-import fontkit from "@pdf-lib/fontkit";
-import axios from "axios";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { convertSvgToPng, createTextSVG } from "../../components/embedNameOnCertificate"
+
+import { sampleSetNameOnCertificate } from "../../components/embedNameOnCertificate";
 
 import { adminCreateEvent } from "../../api/admin/adminAPI";
 import { uploadFile } from "../../api/user/userAPI"
 
 function Admin_CreateEvent() {
   const navigate = useNavigate();
+  const templateURLRef = useRef(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [eventName, setEventName] = useState("");
   const [eventOwnerName, setEventOwnerName] = useState("");
   const [openDate, setOpenDate] = useState("");
@@ -50,7 +51,64 @@ function Admin_CreateEvent() {
   const [inputSize, setInputSize] = useState(30);
   const [inputY, setInputY] = useState(45);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const handleTemplateChange = async (pdfUrl) => {
+    try {
+      const modifiedPdfBytes = await sampleSetNameOnCertificate(pdfUrl, 30, 46);
+      if (modifiedPdfBytes) {
+        const modifiedPdfUrl = URL.createObjectURL(
+          new Blob([modifiedPdfBytes], { type: "application/pdf" })
+        );
+        setModifiedTemplateURL(modifiedPdfUrl);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (templateURL) {
+      handleTemplateChange(templateURL);
+    }
+  }, [templateURL]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (templateURLRef.current) {
+        URL.revokeObjectURL(templateURLRef.current);
+      }
+      const newUrl = URL.createObjectURL(file);
+      setTemplateFile(file);
+      setTemplateURL(newUrl);
+      templateURLRef.current = newUrl;
+    }
+  };
+
+  const handleSizeChange = (e) => {
+    setInputSize(e.target.value);
+  };
+
+  const handleYChange = (e) => {
+    setInputY(e.target.value);
+  };
+
+  const newExampleChange = async () => {
+    try {
+      const modifiedPdfBytes = await sampleSetNameOnCertificate(
+        templateURL,
+        inputSize,
+        inputY
+      );
+      if (modifiedPdfBytes) {
+        const modifiedPdfUrl = URL.createObjectURL(
+          new Blob([modifiedPdfBytes], { type: "application/pdf" })
+        );
+        setModifiedTemplateURL(modifiedPdfUrl);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -90,99 +148,6 @@ function Admin_CreateEvent() {
     }
   };
 
-  const fetchAndFillCertificate = async (pdfUrl, size, y) => {
-    try {
-      const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-      const pdfBytes = response.data;
-      const pdfDoc = await PDFDocument.load(pdfBytes);
-      pdfDoc.registerFontkit(fontkit);
-      const fontUrl =
-        "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
-
-      const page = pdfDoc.getPages()[0];
-      const text = "ชื่อจริง นามสกุล";
-      const fontSize = `${size}`;
-      const textY = `${y}`;
-      const { width, height } = page.getSize();
-      const svgText = createTextSVG(
-        text,
-        fontUrl,
-        fontSize,
-        width,
-        height,
-        textY
-      );
-      const pngBytes = await convertSvgToPng(svgText, width, height);
-      const pngImage = await pdfDoc.embedPng(pngBytes);
-      page.drawImage(pngImage);
-      const modifiedPdfBytes = await pdfDoc.save();
-      return modifiedPdfBytes;
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-      return null;
-    }
-  };
-
-  const handleTemplateChange = async (pdfUrl) => {
-    try {
-      const modifiedPdfBytes = await fetchAndFillCertificate(pdfUrl, 30, 46);
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        setModifiedTemplateURL(modifiedPdfUrl);
-      }
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-    }
-  };
-
-  const templateURLRef = useRef(null);
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (templateURLRef.current) {
-        URL.revokeObjectURL(templateURLRef.current);
-      }
-      const newUrl = URL.createObjectURL(file);
-      setTemplateFile(file);
-      setTemplateURL(newUrl);
-      templateURLRef.current = newUrl;
-    }
-  };
-
-  const handleSizeChange = (e) => {
-    setInputSize(e.target.value);
-  };
-
-  const handleYChange = (e) => {
-    setInputY(e.target.value);
-  };
-
-  const newExampleChange = async () => {
-    try {
-      const modifiedPdfBytes = await fetchAndFillCertificate(
-        templateURL,
-        inputSize,
-        inputY
-      );
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        setModifiedTemplateURL(modifiedPdfUrl);
-      }
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (templateURL) {
-      handleTemplateChange(templateURL);
-    }
-  }, [templateURL]);
   return (
     <>
       <Navbar />

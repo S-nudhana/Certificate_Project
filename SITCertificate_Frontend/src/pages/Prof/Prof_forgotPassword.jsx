@@ -17,6 +17,7 @@ import {
   IconButton,
   PinInput,
   PinInputField,
+  Link
 } from "@chakra-ui/react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
@@ -31,27 +32,26 @@ import {
 } from "../../api/prof/profAPI";
 
 export default function Prof_forgotPassword() {
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setNewConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const [confirmShowPassword, setconfirmShowPassword] = useState(false);
   const [pin, setPin] = useState('');
-  const handleClickConfirmShowPassword = () =>
-    setconfirmShowPassword(!confirmShowPassword);
-  const navigate = useNavigate();
+  const [emailSent, setEmailSent] = useState(false);
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickConfirmShowPassword = () => setconfirmShowPassword(!confirmShowPassword);
   const isFormFilled = () => email.trim() !== "";
-  const isFormResetPasswordFilled = () =>
-    newPassword.trim() !== "" && confirmNewPassword.trim() !== "";
-  const [emailSent, setEmailSent] = useState(false);
-  const toast = useToast();
-  const handleChange = (value) => {
-    setPin(value);
-  };
+  const isFormResetPasswordFilled = () => newPassword.trim() !== "" && confirmNewPassword.trim() !== "";
+  const handleChange = (value) => setPin(value);;
 
   const handleEmail = async () => {
     try {
@@ -94,7 +94,6 @@ export default function Prof_forgotPassword() {
         });
         return;
       }
-
       const res = await profResetPassword(email, pin, newPassword);
       if (res.status === 200) {
         toast({
@@ -104,7 +103,6 @@ export default function Prof_forgotPassword() {
           duration: 2000,
           isClosable: true,
         });
-        console.log("object")
         navigate("/professor/login");
       } else {
         toast({
@@ -119,6 +117,7 @@ export default function Prof_forgotPassword() {
       console.error("confirmCreatePassword error", error);
     }
   };
+
   return (
     <Flex
       minH="100vh"
@@ -242,6 +241,13 @@ export default function Prof_forgotPassword() {
               </Button>
             </Stack>
           </Box>
+          <Stack pt={6}>
+            <Text display={'flex'} justifyContent={'end'} alignItems={'center'} color={'#3399cc'} onClick={() => {
+              navigate("/professor/login")
+            }}>
+              <Link color={'#3399cc'} pl={'3px'}> กลับไปยังหน้าเข้าสู่ระบบ </Link>
+            </Text>
+          </Stack>
         </Box>
       </Stack>
     </Flex>

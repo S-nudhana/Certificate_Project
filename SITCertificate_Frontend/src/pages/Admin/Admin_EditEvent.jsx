@@ -21,26 +21,26 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import { SiMicrosoftexcel } from "react-icons/si";
 import PDF from "react-pdf-watermark";
-import { PDFDocument } from "pdf-lib";
-import fontkit from "@pdf-lib/fontkit";
-import axios from "axios";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { convertSvgToPng, createTextSVG } from "../../components/embedNameOnCertificate";
 
-import { formatDate } from "../../utils/function";
+import { formatDateYMD } from "../../utils/dateFormat";
+import { sampleSetNameOnCertificate } from "../../components/embedNameOnCertificate";
 
 import { adminUpdateEvent } from "../../api/admin/adminAPI";
-import { userEventDataById, uploadFile } from "../../api/user/userAPI";
+import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams();
   const navigate = useNavigate();
+  const templateURLRef = useRef(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [eventName, setEventName] = useState("");
   const [eventOwnerName, setEventOwnerName] = useState("");
   const [openDate, setOpenDate] = useState("");
@@ -50,25 +50,24 @@ function Admin_EditEvent() {
   const [templateFile, setTemplateFile] = useState(null);
   const [excelFile, setExcelFile] = useState(null);
   const [emailTemplate, setEmailTemplate] = useState();
-
   const [templateURL, setTemplateURL] = useState("");
   const [modifiedTemplateURL, setModifiedTemplateURL] = useState("");
   const [inputSize, setInputSize] = useState(null);
   const [inputY, setInputY] = useState(null);
   const [finalExcel, setFinalExcel] = useState(null);
-  const [textSize, setTextSize] = useState();
-  const [textY, setTextY] = useState();
+  const [textSize, setTextSize] = useState("");
+  const [textY, setTextY] = useState("");
 
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id.id);
       setEventName(response.data.data.event_name);
       setEventOwnerName(response.data.data.event_owner);
-      setOpenDate(formatDate(response.data.data.event_startDate));
-      setCloseDate(formatDate(response.data.data.event_endDate));
-      setThumbnailURL(`${import.meta.env.VITE_REACT_APP_URL}${response.data.data.event_thumbnail}`);
-      setTemplateURL(`${import.meta.env.VITE_REACT_APP_URL}${response.data.data.event_certificate}`);
-      setFinalExcel(`${import.meta.env.VITE_REACT_APP_URL}${response.data.data.event_excel}`);
+      setOpenDate(formatDateYMD(response.data.data.event_startDate));
+      setCloseDate(formatDateYMD(response.data.data.event_endDate));
+      setThumbnailURL(await fetchFile(response.data.data.event_thumbnail));
+      setTemplateURL(await fetchFile(response.data.data.event_certificate));
+      setFinalExcel(await fetchFile(response.data.data.event_excel));
       setEmailTemplate(response.data.data.event_emailTemplate);
       setTextSize(response.data.data.event_certificate_text_size);
       setTextY(response.data.data.event_certificate_position_y);
@@ -76,6 +75,10 @@ function Admin_EditEvent() {
       console.error("Error getting event data:", error);
     }
   };
+
+  useEffect(() => {
+    getEventData();
+  }, []);
 
   const updateEventData = async () => {
     try {
@@ -118,45 +121,12 @@ function Admin_EditEvent() {
       console.error("Error creating event:", error);
     }
   };
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const fetchAndFillCertificate = async (pdfUrl, size, y) => {
-    try {
-      const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-      const pdfBytes = response.data;
-      const pdfDoc = await PDFDocument.load(pdfBytes);
-      pdfDoc.registerFontkit(fontkit);
-      const fontUrl =
-        "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
-
-      const page = pdfDoc.getPages()[0];
-      const text = "ชื่อจริง นามสกุล";
-      const fontSize = `${size}`;
-      const textY = `${y}`;
-      const { width, height } = page.getSize();
-      const svgText = createTextSVG(
-        text,
-        fontUrl,
-        fontSize,
-        width,
-        height,
-        textY
-      );
-      const pngBytes = await convertSvgToPng(svgText, width, height);
-      const pngImage = await pdfDoc.embedPng(pngBytes);
-      page.drawImage(pngImage);
-      const modifiedPdfBytes = await pdfDoc.save();
-      return modifiedPdfBytes;
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-      return null;
-    }
-  };
 
   const handleTemplateChange = async (pdfUrl) => {
     try {
       const size = inputSize !== null ? inputSize : textSize;
       const yPosition = inputY !== null ? inputY : textY;
-      const modifiedPdfBytes = await fetchAndFillCertificate(pdfUrl, size, yPosition);
+      const modifiedPdfBytes = await sampleSetNameOnCertificate(pdfUrl, size, yPosition);
       if (modifiedPdfBytes) {
         const modifiedPdfUrl = URL.createObjectURL(
           new Blob([modifiedPdfBytes], { type: "application/pdf" })
@@ -167,8 +137,6 @@ function Admin_EditEvent() {
       console.error("Error processing PDF:", error);
     }
   };
-
-  const templateURLRef = useRef(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -193,7 +161,7 @@ function Admin_EditEvent() {
 
   const newExampleChange = async () => {
     try {
-      const modifiedPdfBytes = await fetchAndFillCertificate(
+      const modifiedPdfBytes = await sampleSetNameOnCertificate(
         templateURL,
         inputSize,
         inputY
@@ -209,12 +177,9 @@ function Admin_EditEvent() {
     }
   };
 
-  useEffect(() => {
-    getEventData();
-  }, []);
-
   return (
     <>
+      <ScrollRestoration />
       <Navbar />
       <Box bg={useColorModeValue("gray.50", "gray.800")}>
         <Flex pt={"80px"} minH={"80vh"} align={"center"} justify={"center"}>
@@ -292,7 +257,6 @@ function Admin_EditEvent() {
                     </FormControl>
                   </Box>
                 </HStack>
-
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
@@ -357,7 +321,7 @@ function Admin_EditEvent() {
 
                 <Modal isOpen={isOpen} onClose={onClose} size="xl">
                   <ModalOverlay />
-                  <ModalContent>
+                  <ModalContent p={"10px"}>
                     <ModalHeader>ปรับตำแหน่งชื่อในใบประกาศนียบัตร</ModalHeader>
                     <ModalBody>
                       {modifiedTemplateURL ? (
@@ -394,19 +358,19 @@ function Admin_EditEvent() {
                             variant="outline"
                             value={inputY}
                             type="number"
-                            onChange={handleYChange} // Attach the change handler
+                            onChange={handleYChange}
                           />
                         </FormControl>
-
                         <Button px="30px" onClick={newExampleChange}>
                           แสดงผล
                         </Button>
                       </Box>
                     </ModalBody>
-                    <ModalFooter gap={"10px"}>
+                    <ModalFooter gap={4}>
                       <Button
                         color="white"
                         backgroundColor={"#AD3D3B"}
+                        w={"49%"}
                         _hover={{ bgColor: "#A80324" }}
                         onClick={() => {
                           setInputSize(30);
@@ -418,6 +382,7 @@ function Admin_EditEvent() {
                       <Button
                         bg="#336699"
                         color="white"
+                        w={"49%"}
                         _hover={{ bg: "#1F568C" }}
                         onClick={onClose}
                       >
@@ -426,7 +391,6 @@ function Admin_EditEvent() {
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
-
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
@@ -439,7 +403,6 @@ function Admin_EditEvent() {
                       (อัปโหลดได้เฉพาะ .xlsx เท่านั้น)
                     </Text>
                   </FormLabel>
-
                   <input
                     type="file"
                     accept=".xlsx"

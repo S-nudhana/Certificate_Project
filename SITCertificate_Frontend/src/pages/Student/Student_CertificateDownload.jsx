@@ -10,27 +10,41 @@ import {
   studentCertificate,
   sendCertificate,
 } from "../../api/student/studentAPI";
+import { fetchCertificate } from "../../api/user/userAPI";
+
+import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
 function Student_CertificateDownload() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [certificate, setCertificate] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const isMobile = deviceScreenCheck();
+  
+  const [certificate, setCertificate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  
 
   const getCertificate = async () => {
+    let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
-      setCertificate(response.data.data.student_GenerateCertificate);
+      console.log(response)
+      const certificateBlob = await fetchCertificate(response.data.data.student_GenerateCertificate);
+      certificateBlobUrl = URL.createObjectURL(certificateBlob);
+      setCertificate(certificateBlobUrl);
     } catch (error) {
       console.error("Error getting certificate:", error);
     }
   };
+  
+  useEffect(() => {
+    getCertificate();
+  }, []);
 
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}${certificate}`);
+      const response = await sendCertificate(id, `${certificate}`);
       if (response.status === 200) {
         toast({
           title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
@@ -46,23 +60,6 @@ function Student_CertificateDownload() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    getCertificate();
-  }, []);
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 1024);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   return (
     <>
@@ -85,13 +82,7 @@ function Student_CertificateDownload() {
             height={"auto"}
           >
             {certificate ? (
-              isMobile ? (
-                <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />
-              ) : (
-                <Box width={{ base: "680px", xl: "680px", "2xl": "800px" }} height={{ base: "386px", xl: "483px", "2xl": "567.5px" }} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
-                  <iframe src={`${import.meta.env.VITE_REACT_APP_URL}${certificate}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
-                </Box>
-              )
+                <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile}/>
             ) : (
               <Text>Loading PDF preview...</Text>
             )}
@@ -116,7 +107,7 @@ function Student_CertificateDownload() {
               }}
               disabled={isLoading}
             >
-              ส่งใบประกาศนียบัตรไปยังอีเมลล์
+              ส่งใบประกาศนียบัตรไปยังอีเมล
             </Button>
             <Button
               width="100px"

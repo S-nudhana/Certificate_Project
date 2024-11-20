@@ -26,11 +26,17 @@ import Logo from "../../../public/img/SIT_Icon.png";
 import { adminSignUp } from "../../api/admin/adminAPI";
 
 export default function Admin_SignUpPage() {
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmShowPassword, setConfirmShowPassword] = useState(false);
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
@@ -39,13 +45,8 @@ export default function Admin_SignUpPage() {
     email.trim() !== "" &&
     password.trim() !== "" &&
     confirmPassword.trim() !== "";
-  const navigate = useNavigate();
-  const toast = useToast();
-  const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const [confirmShowPassword, setConfirmShowPassword] = useState(false);
-  const handleClickConfirmShowPassword = () =>
-    setConfirmShowPassword(!confirmShowPassword);
+  const handleClickConfirmShowPassword = () => setConfirmShowPassword(!confirmShowPassword);
 
   const handleSignUp = async () => {
     try {
@@ -66,7 +67,6 @@ export default function Admin_SignUpPage() {
         });
         return;
       }
-
       const res = await adminSignUp(username, email, password);
       if (res.status === 201) {
         toast({

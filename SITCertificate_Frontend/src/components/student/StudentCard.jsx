@@ -1,7 +1,10 @@
-import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { dateFormatChange } from "../../utils/function";
+import { fetchFile } from "../../api/user/userAPI";
+
+import { formatDateDMY } from "../../utils/dateFormat";
 
 export default function StudentCard({
   event_thumbnail,
@@ -11,6 +14,21 @@ export default function StudentCard({
   event_Id,
 }) {
   const navigate = useNavigate();
+
+  const [fileUrl, setFileUrl] = useState(null);
+
+  const getFile = async () => {
+    try {
+      setFileUrl(await fetchFile(event_thumbnail));
+    } catch (error) {
+      console.error("Error fetching file:", error);
+    }
+  };
+
+  useEffect(() => {
+    getFile();
+  }, [])
+
   return (
     <>
       <Card
@@ -26,8 +44,7 @@ export default function StudentCard({
         }}
       >
         <Image
-          src={`${import.meta.env.VITE_REACT_APP_URL}${event_thumbnail}`}
-          // src={event_thumbnail}
+          src={`${fileUrl}`}
           objectFit="cover"
           borderTopLeftRadius="30px"
           borderTopRightRadius="30px"
@@ -40,8 +57,8 @@ export default function StudentCard({
           </Text>
           <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
           <Text pb="5px" color={"black"}>
-            {dateFormatChange(event_startDate)} ถึง{" "}
-            {dateFormatChange(event_endDate)}
+            {formatDateDMY(event_startDate)} ถึง{" "}
+            {formatDateDMY(event_endDate)}
           </Text>
           <Button
             width="170px"

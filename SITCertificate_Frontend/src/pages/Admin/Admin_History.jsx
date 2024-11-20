@@ -19,7 +19,7 @@ import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
 import { userHistory } from "../../api/user/userAPI";
 
 function Admin_History() {
-  const [historyData, setHistoryData] = useState();
+  const [historyData, setHistoryData] = useState([]);
   const [search, setSearch] = useState("");
 
   const searchEvent = async () => {
@@ -30,11 +30,11 @@ function Admin_History() {
       console.log("Search event error: " + error);
     }
   };
+
   useEffect(() => {
     setSearch("");
     searchEvent();
   }, []);
-  var amount = 0;
   
   return (
     <>
@@ -104,9 +104,7 @@ function Admin_History() {
           maxWidth="1300px"
           mx="auto"
         >
-          {historyData &&
-            historyData.map((item, key) => {
-              amount = key + 1;
+          {historyData.map((item, key) => {
               return (
                 <>
                   <AdminCardConfirmed
@@ -122,7 +120,7 @@ function Admin_History() {
             })}
         </Box>
         <Box
-          display={amount === 0 ? "flex" : "none"}
+          display={historyData.length === 0 ? "flex" : "none"}
           width={"100%"}
           height={"40vh"}
           justifyContent={"center"}

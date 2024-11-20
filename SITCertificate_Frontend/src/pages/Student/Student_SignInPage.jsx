@@ -9,15 +9,17 @@ import Logo from "../../../public/img/SIT_Icon.png";
 import { studentSignIn } from '../../api/student/studentAPI';
 
 export default function Student_SignInPage() {
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
+  
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
-  const navigate = useNavigate();
-  const toast = useToast();
-  const [showPassword, setShowPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(!showPassword)
 
   const handleSignIn = async () => {
@@ -46,6 +48,7 @@ export default function Student_SignInPage() {
       console.log("Student_SignInPage error: ", error)
     }
   };
+  
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>

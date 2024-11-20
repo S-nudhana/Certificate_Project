@@ -18,32 +18,31 @@ import {
   Flex,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { PDFDocument } from "pdf-lib";
-import fontkit from "@pdf-lib/fontkit";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import {
-  createTextSVG,
-  convertSvgToPng,
+  fetchAndFillCertificate
 } from "../../components/embedNameOnCertificate";
 import PdfViewer from "../../components/PdfViewer";
 
-import { uploadFile } from "../../api/user/userAPI";
+import { uploadFile, fetchCertificate } from "../../api/user/userAPI";
 import {
   studentGenerate,
   updateStudentGenerateStatus,
   studentCertificate,
   generateStudentCertificateInfo,
 } from "../../api/student/studentAPI";
+import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
 function Student_CertificateExample() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
+  const isMobile = deviceScreenCheck();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, surname, email } = location.state || {};
+
   const [certificate, setCertificate] = useState();
   const [pdfWatermarkUrl, setPdfWatermarkUrl] = useState(null);
   const [certificateY, setCertificateY] = useState(null);
@@ -51,110 +50,31 @@ function Student_CertificateExample() {
   const [eventName, setEventName] = useState(null);
 
   const getCertificate = async () => {
+    let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
-      const certificateUrl =
-        import.meta.env.VITE_REACT_APP_URL +
-        response.data.data.event_Certificate;
-      setCertificate(
-        import.meta.env.VITE_REACT_APP_URL +
-        response.data.data.event_Certificate
-      );
+      const certificateBlob = await fetchCertificate(response.data.data.event_Certificate);
+      certificateBlobUrl = URL.createObjectURL(certificateBlob);
+      setCertificate(certificateBlobUrl);
       setCertificateY(response.data.data.event_certificate_position_y);
       setCertificateTextSize(response.data.data.event_certificate_text_size);
       setEventName(response.data.data.event_name);
       if (response.status === 200) {
-        const modifiedPdfBytes = await fetchAndFillCertificate(
-          certificateUrl,
+        const watermarkCertificate = await fetchAndFillCertificate(
+          certificateBlobUrl,
           name,
           surname,
           response.data.data.event_certificate_position_y,
           response.data.data.event_certificate_text_size,
-          true,
+          true
         );
+        setPdfWatermarkUrl(watermarkCertificate);
       }
-      return;
     } catch (error) {
       console.error("Error fetching certificate:", error);
     }
   };
-  const fetchAndFillCertificate = async (
-    pdfUrl,
-    name,
-    surname,
-    certY,
-    certText,
-    watermark
-  ) => {
-    try {
-      const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-      const pdfBytes = response.data;
-      const pdfDoc = await PDFDocument.load(pdfBytes);
-      pdfDoc.registerFontkit(fontkit);
-      const fontUrl =
-        "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
-      const page = pdfDoc.getPages()[0];
-      const text = `${name} ${surname}`;
-      const fontSize = certText;
-      const { width, height } = page.getSize();
-      const svgText = createTextSVG(
-        text,
-        fontUrl,
-        fontSize,
-        width,
-        height,
-        certY,
-        "black"
-      );
-      const pngBytes = await convertSvgToPng(svgText, width, height);
-      const pngImage = await pdfDoc.embedPng(pngBytes);
-      page.drawImage(pngImage);
-      const modifiedPdfBytes = await pdfDoc.save();
-      if (watermark) {
-        const watermarkPdfBytes = await waterMark(modifiedPdfBytes);
-        return setPdfWatermarkUrl(
-          URL.createObjectURL(
-            new Blob([watermarkPdfBytes], { type: "application/pdf" })
-          )
-        );
-      }
-      return modifiedPdfBytes;
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-      return null;
-    }
-  };
 
-  const waterMark = async (pdfBytes) => {
-    try {
-      const pdfDoc = await PDFDocument.load(pdfBytes);
-      pdfDoc.registerFontkit(fontkit);
-      const fontUrl =
-        "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
-      const page = pdfDoc.getPages()[0];
-      const text = "Example";
-      const fontSize = 150;
-      const { width, height } = page.getSize();
-      const certY = 50;
-      const svgText = createTextSVG(
-        text,
-        fontUrl,
-        fontSize,
-        width,
-        height,
-        certY,
-        "rgba(0, 0, 0, 0.4)"
-      );
-      const pngBytes = await convertSvgToPng(svgText, width, height);
-      const pngImage = await pdfDoc.embedPng(pngBytes);
-      page.drawImage(pngImage);
-      const modifiedPdfBytes = await pdfDoc.save();
-      return modifiedPdfBytes;
-    } catch (error) {
-      console.error("Error processing PDF:", error);
-      return null;
-    }
-  };
 
   const getStudentGenerate = async () => {
     try {
@@ -166,6 +86,12 @@ function Student_CertificateExample() {
       console.error("Error fetching student generate:", error);
     }
   };
+
+  useEffect(() => {
+    getCertificate();
+    getStudentGenerate();
+  }, []);
+
   const handleSubmit = async () => {
     try {
       const modifiedPdfBytes = await fetchAndFillCertificate(
@@ -200,24 +126,6 @@ function Student_CertificateExample() {
     }
   };
 
-  useEffect(() => {
-    getCertificate();
-    getStudentGenerate();
-  }, []);
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 1024);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
     <>
       <ScrollRestoration />
@@ -235,13 +143,7 @@ function Student_CertificateExample() {
         </Text>
         <Flex width={{ base: "80%", xl: "50%" }} justifyContent={"center"}>
           {pdfWatermarkUrl ? (
-            isMobile ? (
-              <PdfViewer fileUrl={pdfWatermarkUrl} />
-            ) : (
-              <Box width={{ base: "680px", xl: "680px", "2xl": "800px" }} height={{ base: "386px", xl: "483px", "2xl": "567.5px" }} boxShadow={"0 6px 12px rgba(0, 0, 0, 0.2)"}>
-                <iframe src={`${pdfWatermarkUrl}#toolbar=0`} type="application/pdf" width={"100%"} height={"100%"}></iframe>
-              </Box>
-            )
+            <PdfViewer fileUrl={pdfWatermarkUrl} isMobile={isMobile} />
           ) : (
             <Text>Loading PDF preview...</Text>
           )}
@@ -332,4 +234,5 @@ function Student_CertificateExample() {
     </>
   );
 }
+
 export default Student_CertificateExample;
