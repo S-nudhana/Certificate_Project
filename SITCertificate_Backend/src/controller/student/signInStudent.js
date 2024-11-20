@@ -7,7 +7,7 @@ const SignInStudent = async(req, res) => {
         const value = [email];
         const user = await db
             .promise()
-            .query("SELECT student_email, student_password FROM student WHERE student_email = ?", [value]);
+            .query("SELECT student_email, student_password, student_Id FROM student WHERE student_email = ?", [value]);
         if (user[0].length < 1) {
             throw "ไม่พบบัญชีนี้ในระบบ";
         }
@@ -17,7 +17,8 @@ const SignInStudent = async(req, res) => {
         }
         const tokenData = {
             student_email: user[0][0].student_email,
-            role: "student"
+            role: "student",
+            id: user[0][0].student_Id
         };
         const signedToken = signToken(tokenData);
         const cookieOptions = {

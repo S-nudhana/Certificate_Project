@@ -14,7 +14,7 @@ const updateEventData = async (req, res) => {
     emailTemplate,
     inputSize,
     inputY,
-    eventId
+    eventId,
   } = req.body;
   try {
     const dataQuery = await db
@@ -26,13 +26,12 @@ const updateEventData = async (req, res) => {
     const data = dataQuery[0][0];
     if (!thumbnail) {
       thumbnail = data.event_thumbnail;
-    }else{
+    } else {
       deleteFile(data.event_thumbnail);
     }
     if (!template) {
       template = data.event_certificate;
-    }
-    else{
+    } else {
       deleteFile(data.event_certificate);
     }
     if (!excel) {

@@ -26,16 +26,18 @@ import Logo from "../../../public/img/SIT_Icon.png";
 import { adminSignIn } from "../../api/admin/adminAPI";
 
 export default function Admin_SignInPage() {
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
   const isFormFilled = () => email.trim() !== "" && password.trim() !== "";
-  const navigate = useNavigate();
-  const toast = useToast();
-  const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSignIn = async () => {

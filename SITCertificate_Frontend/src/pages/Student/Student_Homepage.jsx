@@ -10,8 +10,8 @@ import image from "../../../public/img/SIT_Building.png";
 import { studentData } from "../../api/student/studentAPI";
 
 function Student_Homepage() {
-  var amount = 0;
-  const [eventData, setEventData] = useState();
+  const [eventData, setEventData] = useState([]);
+  
   const getEventData = async () => {
     try {
       const response = await studentData();
@@ -56,7 +56,7 @@ function Student_Homepage() {
           >
             <Box
               position="absolute"
-              top={{base: "30%", xl: "37%"}}
+              top={{ base: "30%", xl: "37%" }}
               left={{ base: "5%", xl: "7%" }}
               width="100%"
               height="100%"
@@ -91,24 +91,22 @@ function Student_Homepage() {
               maxWidth="1300px"
               mx="auto"
             >
-              {eventData &&
-                eventData.map((item, key) => {
-                  amount = key + 1;
-                  return (
-                    <>
-                      <StudentCard
-                        event_thumbnail={item.event_thumbnail}
-                        event_name={item.event_name}
-                        event_startDate={item.event_startDate}
-                        event_endDate={item.event_endDate}
-                        event_Id={item.event_Id}
-                      ></StudentCard>
-                    </>
-                  );
-                })}
+              {eventData.map((item, key) => {
+                return (
+                  <>
+                    <StudentCard
+                      event_thumbnail={item.event_thumbnail}
+                      event_name={item.event_name}
+                      event_startDate={item.event_startDate}
+                      event_endDate={item.event_endDate}
+                      event_Id={item.event_Id}
+                    ></StudentCard>
+                  </>
+                );
+              })}
             </Box>
             <Box
-              display={amount === 0 ? "flex" : "none"}
+              display={eventData.length === 0 ? "flex" : "none"}
               alignItems={"center"}
               textAlign={"center"}
               width={"100%"}

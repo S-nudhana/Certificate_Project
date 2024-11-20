@@ -10,27 +10,41 @@ import {
   studentCertificate,
   sendCertificate,
 } from "../../api/student/studentAPI";
+import { fetchCertificate } from "../../api/user/userAPI";
+
+import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
 function Student_CertificateDownload() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [certificate, setCertificate] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const isMobile = deviceScreenCheck();
+  
+  const [certificate, setCertificate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  
 
   const getCertificate = async () => {
+    let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
-      setCertificate(response.data.data.student_GenerateCertificate);
+      console.log(response)
+      const certificateBlob = await fetchCertificate(response.data.data.student_GenerateCertificate);
+      certificateBlobUrl = URL.createObjectURL(certificateBlob);
+      setCertificate(certificateBlobUrl);
     } catch (error) {
       console.error("Error getting certificate:", error);
     }
   };
+  
+  useEffect(() => {
+    getCertificate();
+  }, []);
 
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}${certificate}`);
+      const response = await sendCertificate(id, `${certificate}`);
       if (response.status === 200) {
         toast({
           title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
@@ -47,15 +61,11 @@ function Student_CertificateDownload() {
     }
   };
 
-  useEffect(() => {
-    getCertificate();
-  }, []);
-
   return (
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box height={"80px"} bgColor={"#0c2d4e"} />
       {certificate && (
         <Box
           minH={"80vh"}
@@ -71,7 +81,11 @@ function Student_CertificateDownload() {
             width={{ base: "100%", lg: "80%", xl: "50%" }}
             height={"auto"}
           >
-            <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />
+            {certificate ? (
+                <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile}/>
+            ) : (
+              <Text>Loading PDF preview...</Text>
+            )}
           </Flex>
           <Box
             width="80%"
@@ -93,7 +107,7 @@ function Student_CertificateDownload() {
               }}
               disabled={isLoading}
             >
-              ส่งใบประกาศนียบัตรไปยังอีเมลล์
+              ส่งใบประกาศนียบัตรไปยังอีเมล
             </Button>
             <Button
               width="100px"

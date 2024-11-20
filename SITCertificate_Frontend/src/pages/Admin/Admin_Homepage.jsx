@@ -15,17 +15,21 @@ import { userEventData } from "../../api/user/userAPI";
 
 function Admin_Homepage() {
   const navigate = useNavigate();
-  const [eventData, setEventData] = useState();
-  var pendingAmount = 0;
-  var approvedAmount = 0;
+
+  const [approveEventData, setApproveEventData] = useState([]);
+  const [pendingEventData, setPendingEventData] = useState([]);
+
   const getEventData = async () => {
     try {
       const response = await userEventData();
-      setEventData(response.data.data);
+      const data = response.data.data;
+      setApproveEventData(data.filter((item) => item.event_approve));
+      setPendingEventData(data.filter((item) => !item.event_approve));
     } catch (error) {
       console.log("Get event data error: " + error);
     }
   };
+  
   useEffect(() => {
     getEventData();
   }, []);
@@ -139,29 +143,26 @@ function Admin_Homepage() {
             gap="30px"
             pt="30px"
             maxWidth="1300px"
-            mx={{ base: "5%", md: "8%",  lg: "3%", xl: "auto" }}
+            mx={{ base: "5%", md: "8%", lg: "3%", xl: "auto" }}
           >
-            {eventData &&
-              eventData.map((item, key) => {
-                if (!item.event_approve) {
-                  pendingAmount = key + 1;
-                  return (
-                    <>
-                      <AdminCard
-                        event_thumbnail={item.event_thumbnail}
-                        event_name={item.event_name}
-                        event_owner={item.event_owner}
-                        event_startDate={item.event_startDate}
-                        event_endDate={item.event_endDate}
-                        event_Id={item.event_Id}
-                      ></AdminCard>
-                    </>
-                  );
-                }
-              })}
+            {pendingEventData.map((item, key) => {
+              return (
+                <>
+                  <AdminCard
+                    event_thumbnail={item.event_thumbnail}
+                    event_name={item.event_name}
+                    event_owner={item.event_owner}
+                    event_startDate={item.event_startDate}
+                    event_endDate={item.event_endDate}
+                    event_Id={item.event_Id}
+                  ></AdminCard>
+                </>
+              );
+            }
+            )}
           </Box>
           <Box
-            display={pendingAmount === 0 ? "flex" : "none"}
+            display={pendingEventData.length === 0 ? "flex" : "none"}
             alignItems={"center"}
             textAlign={"center"}
             width={"100%"}
@@ -190,29 +191,25 @@ function Admin_Homepage() {
             gap="30px"
             pt="30px"
             maxWidth="1300px"
-            mx={{ base: "5%", md: "8%",  lg: "3%", xl: "auto" }}
+            mx={{ base: "5%", md: "8%", lg: "3%", xl: "auto" }}
           >
-            {eventData &&
-              eventData.map((item, key) => {
-                if (item.event_approve) {
-                  approvedAmount = key + 1;
-                  return (
-                    <>
-                      <AdminCardConfirmed
-                        event_thumbnail={item.event_thumbnail}
-                        event_name={item.event_name}
-                        event_owner={item.event_owner}
-                        event_startDate={item.event_startDate}
-                        event_endDate={item.event_endDate}
-                        event_Id={item.event_Id}
-                      ></AdminCardConfirmed>
-                    </>
-                  );
-                }
-              })}
+            {approveEventData.map((item, key) => {
+              return (
+                <>
+                  <AdminCardConfirmed
+                    event_thumbnail={item.event_thumbnail}
+                    event_name={item.event_name}
+                    event_owner={item.event_owner}
+                    event_startDate={item.event_startDate}
+                    event_endDate={item.event_endDate}
+                    event_Id={item.event_Id}
+                  ></AdminCardConfirmed>
+                </>
+              );
+            })}
           </Box>
           <Box
-            display={approvedAmount === 0 ? "flex" : "none"}
+            display={approveEventData.length === 0 ? "flex" : "none"}
             alignItems={"center"}
             textAlign={"center"}
             width={"100%"}

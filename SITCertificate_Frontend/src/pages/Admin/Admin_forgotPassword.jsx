@@ -32,27 +32,26 @@ import {
 } from "../../api/admin/adminAPI";
 
 export default function Admin_forgotPassword() {
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setNewConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const [confirmShowPassword, setconfirmShowPassword] = useState(false);
   const [pin, setPin] = useState('');
-  const handleClickConfirmShowPassword = () =>
-    setconfirmShowPassword(!confirmShowPassword);
-  const navigate = useNavigate();
+  const [emailSent, setEmailSent] = useState(false);
+  
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickConfirmShowPassword = () => setconfirmShowPassword(!confirmShowPassword);
   const isFormFilled = () => email.trim() !== "";
-  const isFormResetPasswordFilled = () =>
-    newPassword.trim() !== "" && confirmNewPassword.trim() !== "";
-  const [emailSent, setEmailSent] = useState(false);
-  const toast = useToast();
-  const handleChange = (value) => {
-    setPin(value);
-  };
+  const isFormResetPasswordFilled = () => newPassword.trim() !== "" && confirmNewPassword.trim() !== "";
+  const handleChange = (value) => setPin(value);
 
   const handleEmail = async () => {
     try {
@@ -119,6 +118,7 @@ export default function Admin_forgotPassword() {
       console.error("confirmCreatePassword error", error);
     }
   };
+  
   return (
     <Flex
       minH="100vh"

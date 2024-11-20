@@ -29,9 +29,9 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
 
-import { dateFormatChange } from "../../utils/function";
+import { formatDateDMY } from "../../utils/dateFormat";
 
-import { userComment, userEventDataById } from "../../api/user/userAPI";
+import { userComment, userEventDataById, fetchFile } from "../../api/user/userAPI";
 
 import {
   profAddComment,
@@ -41,21 +41,27 @@ import {
 } from "../../api/prof/profAPI";
 
 function Prof_EventDetail() {
+  const toast = useToast();
   const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [eventData, setEventData] = useState();
-  const [comments, setComments] = useState();
+
+  const [eventData, setEventData] = useState([]);
+  const [certificate, setCertificate] = useState("");
+  const [excel, setExcel] = useState("");
+  const [comments, setComments] = useState([]);
   const [newCommentDetail, setNewCommentDetail] = useState();
-  const toast = useToast();
 
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
       setEventData(response.data.data);
+      setCertificate(await fetchFile(response.data.data.event_certificate));
+      setExcel(await fetchFile(response.data.data.event_excel));
     } catch (error) {
       console.error('Get event data error:', error);
     }
   };
+
   const getComment = async () => {
     try {
       const response = await userComment(id);
@@ -64,6 +70,12 @@ function Prof_EventDetail() {
       console.error('Get comment error:', error);
     }
   };
+
+  useEffect(() => {
+    getEventData();
+    getComment();
+  }, []);
+
   const postComment = async () => {
     try {
       const response = await profAddComment(id, newCommentDetail);
@@ -72,7 +84,6 @@ function Prof_EventDetail() {
         setNewCommentDetail("");
         const response = await profSendEmail(
           id,
-          eventData.event_owner,
           eventData.event_name,
           newCommentDetail
         );
@@ -90,6 +101,7 @@ function Prof_EventDetail() {
       console.error('Post comment error:', error);
     }
   };
+
   const approveEvent = async () => {
     try {
       const response = await profApproveEvent(id);
@@ -101,6 +113,7 @@ function Prof_EventDetail() {
       console.error('Approve event error:', error);
     }
   };
+
   const deleteComment = async (commentId) => {
     try {
       const response = await profDeleteComment(commentId);
@@ -112,10 +125,7 @@ function Prof_EventDetail() {
       console.error('Delete comment error:', error);
     }
   };
-  useEffect(() => {
-    getEventData();
-    getComment();
-  }, []);
+
   return (
     <>
       <ScrollRestoration />
@@ -143,8 +153,8 @@ function Prof_EventDetail() {
             </Text>
             <Text pt="10px" pb="10px">
               เปิดให้ดาว์นโหลดตั้งแต่{" "}
-              {dateFormatChange(eventData.event_startDate)} ถึง{" "}
-              {dateFormatChange(eventData.event_endDate)}
+              {formatDateDMY(eventData.event_startDate)} ถึง{" "}
+              {formatDateDMY(eventData.event_endDate)}
             </Text>
             <Text pb="20px" color={eventData.event_approve ? "green" : "red"}>
               สถานะ : {eventData.event_approve ? "อนุมัติ" : "รอการอนุมัติ"}
@@ -152,7 +162,7 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_certificate}`} />
+            <PdfViewer fileUrl={`${certificate}`} />
             <Button
               mt={"15px"}
               mb={"20px"}
@@ -161,8 +171,8 @@ function Prof_EventDetail() {
               bgColor={"#3399cc"}
               _hover={{ bgColor: "#297AA3" }}
               as="a"
-              href={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_certificate}`}
-              download={`${eventData.event_name}certificate.pdf`}
+              href={`${certificate}`}
+              download={`${eventData.event_name}_certificate.pdf`}
             >
               ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
             </Button>
@@ -183,8 +193,8 @@ function Prof_EventDetail() {
                   variant={"link"}
                   color={"#919191"}
                   as="a"
-                  href={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_excel}`}
-                  download={`${eventData.event_name}_Excel.pdf`}
+                  href={`${excel}`}
+                  download={`${eventData.event_name}_Excel.xlsx`}
                 >
                   รายชื่อ.xlsx
                 </Button>
@@ -341,4 +351,5 @@ function Prof_EventDetail() {
     </>
   );
 }
+
 export default Prof_EventDetail;

@@ -1,12 +1,12 @@
-export const dateFormatChange = (date) => {
+export const formatDateDMY = (date) => {
   const dateChange = new Date(date);
   const day = dateChange.getDate();
   const month = dateChange.getMonth() + 1;
-  const year = dateChange.getFullYear();
+  const year = dateChange.getFullYear() + 543;
   return `${day}/${month}/${year}`;
 };
 
-export const formatDate = (date) => {
+export const formatDateYMD = (date) => {
   const dateChange = new Date(date);
   const year = dateChange.getFullYear();
   const month = String(dateChange.getMonth() + 1).padStart(2, '0');

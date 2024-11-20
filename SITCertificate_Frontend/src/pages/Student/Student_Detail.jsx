@@ -17,7 +17,9 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import { dateFormatChange } from "../../utils/function";
+
+import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+import { formatDateDMY } from "../../utils/dateFormat";
 
 import {
   studentCertificate,
@@ -26,15 +28,20 @@ import {
   generateStudentCertificateInfo,
   sendCertificate,
 } from "../../api/student/studentAPI";
+import { fetchFile } from "../../api/user/userAPI";
 
 function Student_Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [eventData, setEventData] = useState();
-  const [studentData, setStudentData] = useState();
-  const [certificate, setCertificate] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const isMobile = deviceScreenCheck();
+
+  const [eventData, setEventData] = useState([]);
+  const [studentStatus, setStudentStatus] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [certificate, setCertificate] = useState("");
+  const [certificateRaw, setCertificateRaw] = useState("");
+  const [thumbnailURL, setThumbnailURL] = useState(null);
 
   const getEventData = async () => {
     try {
@@ -43,6 +50,7 @@ function Student_Detail() {
         navigate("/");
       }
       setEventData(response.data.data);
+      setThumbnailURL(await fetchFile(response.data.data.event_thumbnail));
     } catch (error) {
       console.log("Get event data error: " + error);
     }
@@ -50,45 +58,20 @@ function Student_Detail() {
   const getStudentGenerate = async () => {
     try {
       const response = await studentGenerate(id);
-      setStudentData(response.data.data);
-    } catch (error) {
-      console.log("Get student data error: " + error);
-    }
-  };
-
-  const getCertificate = async () => {
-    try {
-      const response = await studentCertificate(id);
-      setCertificate(response.data.data.student_GenerateCertificate);
-    } catch (error) {
-      console.error("Error getting certificate:", error);
-    }
-  };
-
-  const sendCertificateToEmail = async () => {
-    try {
-      setIsLoading(true);
-      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}${certificate}`);
-      if (response.status === 200) {
-        toast({
-          title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-        return;
+      setStudentStatus(response.data.data);
+      if (!response.data.data) {
+        const response = await studentCertificate(id);
+        setCertificateRaw(response.data.data.student_GenerateCertificate);
+        setCertificate(await fetchFile(response.data.data.student_GenerateCertificate));
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-    } finally {
-      setIsLoading(false);
+      console.log("Get student data error: " + error);
     }
   };
 
   useEffect(() => {
     getEventData();
     getStudentGenerate();
-    getCertificate();
   }, []);
 
   const [name, setName] = useState("");
@@ -96,8 +79,7 @@ function Student_Detail() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const isFormFilled = () =>
-    name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
+  const isFormFilled = () => name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
 
   const handleSubmit = async () => {
     try {
@@ -117,7 +99,7 @@ function Student_Detail() {
       if (response.status === 200) {
         navigate(`/certificate/${id}`, {
           state: {
-            certificateData: response.data.data, // Include this if it's part of the response and needed
+            certificateData: response.data.data,
             name,
             surname,
             email,
@@ -130,16 +112,36 @@ function Student_Detail() {
     }
   };
 
+  const sendCertificateToEmail = async () => {
+    try {
+      setIsLoading(true);
+      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}file/${certificateRaw}`);
+      if (response.status === 200) {
+        toast({
+          title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <ScrollRestoration />
       <Navbar />
       <Box height={"80px"} bgColor={"#0c2d4e"} />
-      {eventData && studentData && (
-        <Box display={eventData && studentData ? "block" : "none"}>
+      {eventData && studentStatus && (
+        <Box display={eventData && studentStatus ? "block" : "none"}>
           <Box display={{ base: "block", lg: "flex" }} minH={"80vh"}>
             <Image
-              src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
+              src={`${thumbnailURL}`}
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
@@ -150,9 +152,9 @@ function Student_Detail() {
                 {eventData.event_name}
               </Text>
               <Text pt="10px" pb="20px">
-                เปิดให้ดาว์นโหลดตั้งแต่{" "}
-                {dateFormatChange(eventData.event_startDate)} ถึง{" "}
-                {dateFormatChange(eventData.event_endDate)}
+                เปิดให้ดาว์นโหลดตั้งแต่วันที่ {" "} 
+                {formatDateDMY(eventData.event_startDate)} ถึง{" "}
+                {formatDateDMY(eventData.event_endDate)}
               </Text>
               <Box
                 border=".7px solid #919191"
@@ -220,10 +222,10 @@ function Student_Detail() {
         </Box>
       )}
       {eventData && (
-        <Box display={eventData && studentData ? "none" : "block"}>
+        <Box display={eventData && studentStatus ? "none" : "block"}>
           <Box display={{ base: "block", lg: "flex" }}>
             <Image
-               src={`${import.meta.env.VITE_REACT_APP_URL}${eventData.event_thumbnail}`}
+              src={`${thumbnailURL}`}
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
@@ -234,14 +236,13 @@ function Student_Detail() {
                 {eventData.event_name}
               </Text>
               <Text pt="10px" pb="20px">
-                เปิดให้ดาว์นโหลดตั้งแต่{" "}
-                {dateFormatChange(eventData.event_startDate)} ถึง{" "}
-                {dateFormatChange(eventData.event_endDate)}
+                เปิดให้ดาว์นโหลดตั้งแต่วันที่{" "}
+                {formatDateDMY(eventData.event_startDate)} ถึง{" "}
+                {formatDateDMY(eventData.event_endDate)}
               </Text>
               <Text fontSize="18px" fontWeight={"bold"}>
                 ใบประกาศนียบัตร
               </Text>
-              <Box></Box>
               <Flex
                 width={"100%"}
                 justifyContent={{ base: "center", lg: "start" }}
@@ -249,8 +250,13 @@ function Student_Detail() {
                 <Flex
                   width={{ base: "100%", lg: "80%" }}
                   justifyContent={{ base: "center", lg: "start" }}
+                  pb={"20px"}
                 >
-                  { certificate && <PdfViewer fileUrl={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`} />}
+                  {certificate ? (
+                    <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+                  ) : (
+                    <Text>Loading PDF preview...</Text>
+                  )}
                 </Flex>
               </Flex>
               <Box
@@ -271,7 +277,7 @@ function Student_Detail() {
                   }}
                   disabled={isLoading}
                 >
-                  ส่งใบประกาศนียบัตรไปยังอีเมลล์
+                  ส่งใบประกาศนียบัตรไปยังอีเมล
                 </Button>
                 <Button
                   width="100px"

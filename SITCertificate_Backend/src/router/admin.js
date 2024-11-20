@@ -1,4 +1,5 @@
 import express from "express";
+
 import setEvent from "../controller/admin/setEvent.js";
 import createAdmin from "../controller/admin/createAdmin.js";
 import SignInAdmin from "../controller/admin/signInAdmin.js";
@@ -11,18 +12,20 @@ import sendResetPasswordEmail from "../controller/admin/sendResetPasswordEmail.j
 import resetPassword from "../controller/admin/resetPassword.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
+import { accessManager } from "../middleware/accessManager.js";
 
 const adminRouter = express.Router();
 
-adminRouter.post("/createEvent", authMiddleware, setEvent);
-adminRouter.post("/register", createAdmin);
-adminRouter.put("/updateEvent", authMiddleware, updateEventData);
 adminRouter.post("/login", SignInAdmin);
-adminRouter.delete("/deleteEvent", authMiddleware, deleteEvent);
-adminRouter.put("/updateCommentStatus", authMiddleware, updateCommentStatus);
+adminRouter.post("/register", createAdmin);
 adminRouter.post("/sendEmail", sendEmail);
 adminRouter.post("/forgotPassword", setPinForgotPassword);
-adminRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
 adminRouter.post("/resetPassword", resetPassword);
+adminRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
+
+adminRouter.post("/createEvent", authMiddleware, accessManager(["admin"]), setEvent);
+adminRouter.put("/updateEvent", authMiddleware, accessManager(["admin"]), updateEventData);
+adminRouter.delete("/deleteEvent", authMiddleware, accessManager(["admin"]), deleteEvent);
+adminRouter.put("/updateCommentStatus", authMiddleware, accessManager(["admin"]), updateCommentStatus);
 
 export default adminRouter;

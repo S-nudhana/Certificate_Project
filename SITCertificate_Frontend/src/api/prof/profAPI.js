@@ -77,7 +77,7 @@ export const profDeleteComment = async (id) => {
   }
 };
 
-export const profSendEmail = async (id, sender, eventName, commentDetail) => {
+export const profSendEmail = async (id, eventName, commentDetail) => {
   try {
     const response = await axiosInstance.post("/prof/sendEmail", {
       id: id,

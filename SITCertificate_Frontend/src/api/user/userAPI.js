@@ -1,4 +1,5 @@
 import axiosInstance from "../../utils/axiosInstance";
+import axios from "axios";
 
 export const userVerifyToken = async () => {
   try {
@@ -15,13 +16,6 @@ export const userDeleteToken = async (token) => {
   } catch (error) {
     return error;
   }
-};
-
-export const userSearchEvent = async (eventName) => {
-  const response = await axiosInstance.get(
-    `/user/searchEvent?eventName=${eventName}`
-  );
-  return response;
 };
 
 export const userEventData = async () => {
@@ -72,6 +66,32 @@ export const uploadFile = async (file, category) => {
     );
     return response;
   } catch (error) {
+    return error;
+  }
+};
+
+export const fetchFile = async (filepath) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_REACT_APP_URL}file?filepath=${filepath}`,
+      { responseType: "blob", withCredentials: true }
+    );
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("Error in fetchFile:", error);
+    return error;
+  }
+};
+
+export const fetchCertificate = async (filepath) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_REACT_APP_URL}file?filepath=${filepath}`,
+      { responseType: "blob", withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in fetchFile:", error);
     return error;
   }
 };

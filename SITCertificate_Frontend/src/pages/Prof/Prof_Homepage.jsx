@@ -13,14 +13,16 @@ import { userEventData } from "../../api/user/userAPI";
 
 function Prof_Homepage() {
   const navigate = useNavigate();
-  const [eventData, setEventData] = useState();
-  var pendingAmount = 0;
-  var approvedAmount = 0;
+
+  const [approveEventData, setApproveEventData] = useState([]);
+  const [pendingEventData, setPendingEventData] = useState([]);
 
   const getEventData = async () => {
     try {
       const response = await userEventData();
-      setEventData(response.data.data);
+      const data = response.data.data;
+      setApproveEventData(data.filter((item) => item.event_approve));
+      setPendingEventData(data.filter((item) => !item.event_approve));
     } catch (error) {
       console.log("Get event data error: " + error);
     }
@@ -34,7 +36,7 @@ function Prof_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"}/>
+      <Box height={"80px"} bgColor={"#0c2d4e"} />
       <Box pb={"40px"} minHeight={"75vh"}>
         <Box
           position="relative"
@@ -61,7 +63,7 @@ function Prof_Homepage() {
           >
             <Box
               position="absolute"
-              top={{base: "30%", xl: "37%"}}
+              top={{ base: "30%", xl: "37%" }}
               left={{ base: "5%", xl: "7%" }}
               width="100%"
               height="100%"
@@ -121,27 +123,23 @@ function Prof_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {eventData &&
-              eventData.map((item, key) => {
-                if (!item.event_approve) {
-                  pendingAmount = key + 1;
-                  return (
-                    <>
-                      <ProfCard
-                        event_thumbnail={item.event_thumbnail}
-                        event_name={item.event_name}
-                        event_owner={item.event_owner}
-                        event_startDate={item.event_startDate}
-                        event_endDate={item.event_endDate}
-                        event_Id={item.event_Id}
-                      ></ProfCard>
-                    </>
-                  );
-                }
-              })}
+            {pendingEventData.map((item, key) => {
+              return (
+                <>
+                  <ProfCard
+                    event_thumbnail={item.event_thumbnail}
+                    event_name={item.event_name}
+                    event_owner={item.event_owner}
+                    event_startDate={item.event_startDate}
+                    event_endDate={item.event_endDate}
+                    event_Id={item.event_Id}
+                  ></ProfCard>
+                </>
+              );
+            })}
           </Box>
           <Box
-            display={pendingAmount === 0 ? "flex" : "none"}
+            display={pendingEventData.length === 0 ? "flex" : "none"}
             alignItems={"center"}
             textAlign={"center"}
             width={"100%"}
@@ -172,27 +170,23 @@ function Prof_Homepage() {
             maxWidth="1300px"
             mx={{ base: "5%", lg: "auto" }}
           >
-            {eventData &&
-              eventData.map((item, key) => {
-                if (item.event_approve) {
-                  approvedAmount = key + 1;
-                  return (
-                    <>
-                      <ProfCard
-                        event_thumbnail={item.event_thumbnail}
-                        event_name={item.event_name}
-                        event_owner={item.event_owner}
-                        event_startDate={item.event_startDate}
-                        event_endDate={item.event_endDate}
-                        event_Id={item.event_Id}
-                      ></ProfCard>
-                    </>
-                  );
-                }
-              })}
+            {approveEventData.map((item, key) => {
+              return (
+                <>
+                  <ProfCard
+                    event_thumbnail={item.event_thumbnail}
+                    event_name={item.event_name}
+                    event_owner={item.event_owner}
+                    event_startDate={item.event_startDate}
+                    event_endDate={item.event_endDate}
+                    event_Id={item.event_Id}
+                  ></ProfCard>
+                </>
+              );
+            })}
           </Box>
           <Box
-            display={approvedAmount === 0 ? "flex" : "none"}
+            display={approveEventData.length === 0 ? "flex" : "none"}
             alignItems={"center"}
             textAlign={"center"}
             width={"100%"}
