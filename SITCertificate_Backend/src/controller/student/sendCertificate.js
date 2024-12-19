@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 import { verifyToken } from "../auth/jwt.js";
-import { transporter } from "../user/transporter.js";
+import { transporter } from "../../services/transporter.js";
 
 dotenv.config();
 

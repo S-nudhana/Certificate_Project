@@ -23,7 +23,7 @@ profRouter.post("/forgotPassword", setPinForgotPassword);
 profRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
 profRouter.post("/resetPassword", resetPassword);
 
-profRouter.get("/email", authMiddleware, accessManager(["professor"]), getProfessorEmail);
+profRouter.get("/email", authMiddleware, accessManager(["professor", "admin"]), getProfessorEmail);
 profRouter.post("/newComment", authMiddleware, accessManager(["professor"]), setNewComment);
 profRouter.put("/approveEvent", authMiddleware, accessManager(["professor"]), updateApproveStatus);
 profRouter.delete("/deleteComment", authMiddleware, accessManager(["professor"]), deleteComment);

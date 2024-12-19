@@ -21,7 +21,6 @@ userRouter.get("/allEvent", authMiddleware, accessManager(["admin", "professor"]
 userRouter.get("/event", authMiddleware, accessManager(["admin", "professor"]), getEventById);
 userRouter.get("/history", authMiddleware, accessManager(["admin", "professor"]), getAllHistoryEvent);
 userRouter.get("/comment", authMiddleware, accessManager(["admin", "professor"]), getCommentById);
-
 userRouter.post("/uploadFile", authMiddleware, accessManager(["student", "professor", "admin"]), upload.single("file"), async (req, res) => {
   try {
     if (req.file) {
