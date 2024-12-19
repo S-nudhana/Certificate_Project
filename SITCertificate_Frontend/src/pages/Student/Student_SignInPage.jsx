@@ -31,10 +31,15 @@ export default function Student_SignInPage() {
       } else {
         setEmailError('');
       }
-  
       const response = await studentSignIn(email, password);
       if (response.status === 201) {
         navigate('/');
+        toast({
+          title: "เข้าสู่ระบบสำเร็จ",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
       } else {
         toast({
           title: "เกิดข้อผิดพลาด",
@@ -49,6 +54,12 @@ export default function Student_SignInPage() {
     }
   };
   
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSignIn();
+    }
+  };
+
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>
@@ -89,6 +100,7 @@ export default function Student_SignInPage() {
                   placeholder="หมายเลขโทรศัพท์"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
                 <InputRightElement>
                   <IconButton variant={'ghost'} borderLeftRadius={'0'} _hover={{ backgroundColor: 'transparent' }} icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />} onClick={handleClickShowPassword} />

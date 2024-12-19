@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { Box, Text, Button, Image } from "@chakra-ui/react";
+import { Box, Text, Button } from "@chakra-ui/react";
 import { useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaHistory } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import ProfCard from "../../components/prof/ProfCard";
-
-import image from "../../../public/img/SIT_Building.png";
+import Banner from "../../components/Banner";
 
 import { userEventData } from "../../api/user/userAPI";
 
@@ -38,46 +37,7 @@ function Prof_Homepage() {
       <Navbar />
       <Box height={"80px"} bgColor={"#0c2d4e"} />
       <Box pb={"40px"} minHeight={"75vh"}>
-        <Box
-          position="relative"
-          width="100%"
-          height={{ base: "300px", lg: "400px" }}
-          overflow="hidden"
-        >
-          <Image
-            src={image}
-            alt="Dimmed background"
-            width="100%"
-            height="100%"
-            objectFit="cover"
-            zIndex={1}
-          />
-          <Box
-            position="absolute"
-            top="0"
-            left="0"
-            width="100%"
-            height="100%"
-            bg="rgba(0, 0, 0, 0.5)"
-            zIndex={2}
-          >
-            <Box
-              position="absolute"
-              top={{ base: "30%", xl: "37%" }}
-              left={{ base: "5%", xl: "7%" }}
-              width="100%"
-              height="100%"
-              color={"white"}
-            >
-              <Text fontSize={{ base: "30px", lg: "50px" }} fontWeight={"bold"}>
-                ยินดีต้อนรับเข้าสู่ระบบออกใบประกาศนียบัตร
-              </Text>
-              <Text fontSize={{ base: "14px", lg: "22px" }}>
-                คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี
-              </Text>
-            </Box>
-          </Box>
-        </Box>
+        <Banner/>
         <Box maxWidth="1300px" pt={"30px"} mx={{ base: "5%", lg: "3%", xl: "auto" }}>
           <Button
             leftIcon={<FaHistory />}
@@ -123,20 +83,16 @@ function Prof_Homepage() {
             maxWidth="1300px"
             mx="auto"
           >
-            {pendingEventData.map((item, key) => {
-              return (
-                <>
-                  <ProfCard
-                    event_thumbnail={item.event_thumbnail}
-                    event_name={item.event_name}
-                    event_owner={item.event_owner}
-                    event_startDate={item.event_startDate}
-                    event_endDate={item.event_endDate}
-                    event_Id={item.event_Id}
-                  ></ProfCard>
-                </>
-              );
-            })}
+            {pendingEventData && pendingEventData.map((item, key) => (
+              <ProfCard
+                event_thumbnail={item.event_thumbnail}
+                event_name={item.event_name}
+                event_owner={item.event_owner}
+                event_startDate={item.event_startDate}
+                event_endDate={item.event_endDate}
+                event_Id={item.event_Id}
+              />
+            ))}
           </Box>
           <Box
             display={pendingEventData.length === 0 ? "flex" : "none"}
@@ -170,9 +126,7 @@ function Prof_Homepage() {
             maxWidth="1300px"
             mx={{ base: "5%", lg: "auto" }}
           >
-            {approveEventData.map((item, key) => {
-              return (
-                <>
+            {approveEventData.map((item, key) => (
                   <ProfCard
                     event_thumbnail={item.event_thumbnail}
                     event_name={item.event_name}
@@ -180,10 +134,8 @@ function Prof_Homepage() {
                     event_startDate={item.event_startDate}
                     event_endDate={item.event_endDate}
                     event_Id={item.event_Id}
-                  ></ProfCard>
-                </>
-              );
-            })}
+                  />
+              ))}
           </Box>
           <Box
             display={approveEventData.length === 0 ? "flex" : "none"}

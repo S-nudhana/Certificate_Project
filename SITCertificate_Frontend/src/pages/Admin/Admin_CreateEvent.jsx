@@ -18,21 +18,22 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
+  useToast,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDisclosure } from "@chakra-ui/react";
 import PDF from "react-pdf-watermark";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-
 import { sampleSetNameOnCertificate } from "../../components/embedNameOnCertificate";
 
 import { adminCreateEvent } from "../../api/admin/adminAPI";
 import { uploadFile } from "../../api/user/userAPI"
 
 function Admin_CreateEvent() {
+  const toast = useToast();
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,6 +42,7 @@ function Admin_CreateEvent() {
   const [eventOwnerName, setEventOwnerName] = useState("");
   const [openDate, setOpenDate] = useState("");
   const [closeDate, setCloseDate] = useState("");
+  const [closeDateError, setCloseDateError] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState("");
   const [templateFile, setTemplateFile] = useState(null);
@@ -112,6 +114,17 @@ function Admin_CreateEvent() {
 
   const handleSubmit = async () => {
     try {
+      if(closeDate < openDate){
+        setCloseDateError("วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด")
+        setCloseDate("");
+        toast({
+          title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
       if (
         eventName &&
         eventOwnerName &&
@@ -139,6 +152,12 @@ function Admin_CreateEvent() {
         );
         if (response.status === 200) {
           navigate("/admin/");
+          toast({
+            title: "สร้างกิจกรรมสำเร็จ",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
         }
       } else {
         console.error("Missing required event information.");
@@ -212,7 +231,7 @@ function Admin_CreateEvent() {
                     </FormControl>
                   </Box>
                   <Box w={"50%"}>
-                    <FormControl id="">
+                    <FormControl id="closeDate" isInvalid={closeDateError}>
                       <FormLabel fontSize={["sm", "md", "md"]}>
                         สิ้นสุดการดาวน์โหลด
                       </FormLabel>
@@ -221,7 +240,10 @@ function Admin_CreateEvent() {
                         size={["sm", "md", "md"]}
                         type="date"
                         value={closeDate}
-                        onChange={(e) => setCloseDate(e.target.value)}
+                        onChange={(e) =>
+                          setCloseDate(e.target.value)
+                        }
+                        borderColor={closeDateError ? "#D2042D" : "gray.200"}
                       />
                     </FormControl>
                   </Box>

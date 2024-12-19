@@ -113,12 +113,13 @@ export const profSendResetPasswordEmail = async (email) => {
   }
 };
 
-export const profResetPassword = async (email, pin, password) => {
+export const profResetPassword = async (email, pin, password, refCode) => {
   try {
     const response = await axiosInstance.post("/prof/resetPassword", {
       email: email,
       pin: pin,
       password: password,
+      refCode: refCode,
     });
     return response;
   } catch (error) {

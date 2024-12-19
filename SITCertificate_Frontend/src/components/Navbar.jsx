@@ -3,7 +3,6 @@ import {
   Box,
   Image,
   Button,
-  Text,
   IconButton,
   Modal,
   ModalOverlay,
@@ -44,7 +43,7 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollTop]);
+  }, []);
 
   const verifyAuth = async () => {
     try {

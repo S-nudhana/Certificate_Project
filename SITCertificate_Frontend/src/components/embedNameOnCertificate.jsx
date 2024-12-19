@@ -109,7 +109,7 @@ export const convertSvgToPng = (svgText, width, height) => {
     });
 };
 
-export const createTextSVG = (text, fontUrl, fontSize, width, height, y, color) => {
+export const createTextSVG = (text, fontSize, width, height, y, color) => {
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
         <style>

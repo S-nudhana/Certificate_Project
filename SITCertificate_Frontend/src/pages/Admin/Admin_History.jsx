@@ -35,7 +35,13 @@ function Admin_History() {
     setSearch("");
     searchEvent();
   }, []);
-  
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      searchEvent();
+    }
+  };
+
   return (
     <>
       <ScrollRestoration />
@@ -75,6 +81,7 @@ function Admin_History() {
             type="text"
             placeholder="ค้นหากิจกรรม"
             value={search}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setSearch(e.target.value)}
           ></Input>
           <InputRightAddon p={"0"} border="none">
@@ -104,20 +111,16 @@ function Admin_History() {
           maxWidth="1300px"
           mx="auto"
         >
-          {historyData.map((item, key) => {
-              return (
-                <>
-                  <AdminCardConfirmed
-                    event_thumbnail={item.event_thumbnail}
-                    event_name={item.event_name}
-                    event_owner={item.event_owner}
-                    event_startDate={item.event_startDate}
-                    event_endDate={item.event_endDate}
-                    event_Id={item.event_Id}
-                  ></AdminCardConfirmed>
-                </>
-              );
-            })}
+          {historyData.map((item, key) => (
+            <AdminCardConfirmed
+              event_thumbnail={item.event_thumbnail}
+              event_name={item.event_name}
+              event_owner={item.event_owner}
+              event_startDate={item.event_startDate}
+              event_endDate={item.event_endDate}
+              event_Id={item.event_Id}
+            />
+          ))}
         </Box>
         <Box
           display={historyData.length === 0 ? "flex" : "none"}

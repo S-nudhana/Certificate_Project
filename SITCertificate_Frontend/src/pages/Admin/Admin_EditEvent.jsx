@@ -18,13 +18,14 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
+  useToast,
   Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
-import { SiMicrosoftexcel } from "react-icons/si";
 import PDF from "react-pdf-watermark";
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -37,6 +38,7 @@ import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI
 
 function Admin_EditEvent() {
   const id = useParams();
+  const toast = useToast();
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,6 +47,7 @@ function Admin_EditEvent() {
   const [eventOwnerName, setEventOwnerName] = useState("");
   const [openDate, setOpenDate] = useState("");
   const [closeDate, setCloseDate] = useState("");
+  const [closeDateError, setCloseDateError] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState("");
   const [templateFile, setTemplateFile] = useState(null);
@@ -82,6 +85,17 @@ function Admin_EditEvent() {
 
   const updateEventData = async () => {
     try {
+      if(closeDate < openDate){
+        setCloseDateError("วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด")
+        setCloseDate("");
+        toast({
+          title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
       if (
         eventName ||
         eventOwnerName ||
@@ -115,6 +129,12 @@ function Admin_EditEvent() {
         );
         if (response.status === 200) {
           navigate("/admin/");
+          toast({
+            title: "แก้ไขกิจกรรมสำเร็จ",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
         }
       }
     } catch (error) {
@@ -242,7 +262,7 @@ function Admin_EditEvent() {
                     </FormControl>
                   </Box>
                   <Box w={"50%"}>
-                    <FormControl>
+                    <FormControl id="closeDate" isInvalid={closeDateError}>
                       <FormLabel fontSize={["sm", "md", "md"]}>
                         สิ้นสุดการดาวน์โหลด
                       </FormLabel>
@@ -253,6 +273,7 @@ function Admin_EditEvent() {
                         format="dd/MM/yyyy"
                         value={closeDate}
                         onChange={(e) => setCloseDate(e.target.value)}
+                        borderColor={closeDateError ? "#D2042D" : "gray.200"}
                       />
                     </FormControl>
                   </Box>
@@ -424,7 +445,7 @@ function Admin_EditEvent() {
                       color="black"
                     >
                       <Button
-                        leftIcon={<SiMicrosoftexcel />}
+                        leftIcon={<PiMicrosoftExcelLogoFill />}
                         variant={"link"}
                         color={"#919191"}
                         as="a"

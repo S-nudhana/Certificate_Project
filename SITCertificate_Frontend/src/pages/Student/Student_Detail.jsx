@@ -12,6 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
+import { FaDownload } from "react-icons/fa6";
 
 import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
@@ -37,7 +38,7 @@ function Student_Detail() {
   const isMobile = deviceScreenCheck();
 
   const [eventData, setEventData] = useState([]);
-  const [studentStatus, setStudentStatus] = useState(true);
+  const [studentStatus, setStudentStatus] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [certificate, setCertificate] = useState("");
   const [certificateRaw, setCertificateRaw] = useState("");
@@ -145,14 +146,14 @@ function Student_Detail() {
               width={{ base: "100%", lg: "35%" }}
               height={{ base: "300px", lg: "100vh" }}
               objectFit="cover"
-            ></Image>
+            />
             <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
               <BackBTN />
               <Text fontSize="32px" fontWeight="bold" pt="10px">
                 {eventData.event_name}
               </Text>
               <Text pt="10px" pb="20px">
-                เปิดให้ดาว์นโหลดตั้งแต่วันที่ {" "} 
+                เปิดให้ดาว์นโหลดตั้งแต่วันที่ {" "}
                 {formatDateDMY(eventData.event_startDate)} ถึง{" "}
                 {formatDateDMY(eventData.event_endDate)}
               </Text>
@@ -265,7 +266,6 @@ function Student_Detail() {
                 gap={"20px"}
               >
                 <Button
-                  width="250px"
                   bgColor="#336699"
                   color="white"
                   fontSize={{ base: "14px", md: "16px" }}
@@ -280,7 +280,7 @@ function Student_Detail() {
                   ส่งใบประกาศนียบัตรไปยังอีเมล
                 </Button>
                 <Button
-                  width="100px"
+                  leftIcon={<FaDownload />}
                   bgColor="#3399cc"
                   color="white"
                   fontSize={{ base: "14px", md: "16px" }}

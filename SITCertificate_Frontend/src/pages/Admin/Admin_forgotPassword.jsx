@@ -43,6 +43,7 @@ export default function Admin_forgotPassword() {
   const [confirmShowPassword, setconfirmShowPassword] = useState(false);
   const [pin, setPin] = useState('');
   const [emailSent, setEmailSent] = useState(false);
+  const [refCode, setRefCode] = useState('');
   
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
@@ -64,6 +65,7 @@ export default function Admin_forgotPassword() {
       }
       const res = await adminForgotPassword(email);
       if (res.status === 200) {
+        setRefCode(res.data.data);
         const response = await adminSendResetPasswordEmail(email);
         if (response.status === 200) {
           setEmailSent(true);
@@ -94,8 +96,9 @@ export default function Admin_forgotPassword() {
         });
         return;
       }
-      const res = await adminResetPassword(email, pin, newPassword);
+      const res = await adminResetPassword(email, pin, newPassword, refCode);
       if (res.status === 200) {
+        navigate("/admin/login");
         toast({
           title: "เปลี่ยนรหัสผ่านสำเร็จ",
           description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
@@ -103,8 +106,6 @@ export default function Admin_forgotPassword() {
           duration: 2000,
           isClosable: true,
         });
-        console.log("object")
-        navigate("/admin/login");
       } else {
         toast({
           title: "เกิดข้อผิดพลาด",
@@ -134,9 +135,8 @@ export default function Admin_forgotPassword() {
           bg={useColorModeValue("white", "gray.700")}
           boxShadow="lg"
           p={8}
-          px={10}
         >
-          <Stack align="center" spacing={5} py={5} px={1}>
+          <Stack align="center" spacing={5} p={5}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
             <Heading fontSize={["20px", "3xl", "3xl"]}>
               ระบบเปลี่ยนรหัสผ่านสำหรับ Admin
@@ -182,6 +182,9 @@ export default function Admin_forgotPassword() {
               </PinInput>
             </Box>
             <Stack align="center" spacing={5} py={5}>
+              <Text fontSize={["sm", "md", "md"]}>
+                รหัสอ้างอิง : {refCode}
+              </Text>
               <FormControl id="password">
                 <FormLabel fontSize={["sm", "lg", "lg"]}>
                   สร้างรหัสผ่านใหม่

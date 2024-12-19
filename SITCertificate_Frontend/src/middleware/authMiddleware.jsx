@@ -6,13 +6,15 @@ import { userVerifyToken } from "../api/user/userAPI";
 const authMiddleware = (Component) => {
   return (props) => {
     const { pathname } = useLocation();
-    const [authStatus, setAuthStatus] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [authenticated, setAuthenticated] = useState(false);
+    const [role, setRole] = useState(null);
 
     const verifyAuth = async () => {
       try {
         const { data } = await userVerifyToken();
-        setAuthStatus(data);
+        setAuthenticated(data.authenticated);
+        setRole(data.role);
       } catch (error) {
         setAuthStatus({ authenticated: false });
       } finally {
@@ -27,8 +29,6 @@ const authMiddleware = (Component) => {
     if (loading) {
       return null;
     }
-
-    const { authenticated, role } = authStatus || {};
     
     if (!authenticated) {
       if (pathname.startsWith("/admin")) return <Navigate to="/admin/login" replace />;

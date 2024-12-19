@@ -53,6 +53,12 @@ export default function Admin_SignInPage() {
       const res = await adminSignIn(email, password);
       if (res.status === 201) {
         navigate("/admin/");
+        toast({
+          title: "เข้าสู่ระบบสำเร็จ",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
       } else {
         toast({
           title: "เกิดข้อผิดพลาด",
@@ -64,6 +70,12 @@ export default function Admin_SignInPage() {
       }
     } catch (error) {
       console.error("handleEmail error", error);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSignIn();
     }
   };
 
@@ -115,6 +127,7 @@ export default function Admin_SignInPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="รหัสผ่าน"
                   value={password}
+                  onKeyDown={handleKeyDown}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputRightElement>
