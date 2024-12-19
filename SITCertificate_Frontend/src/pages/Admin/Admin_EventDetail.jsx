@@ -21,8 +21,8 @@ import {
   Textarea
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration, useNavigate } from "react-router-dom";
-import { FaCheck } from "react-icons/fa6";
-import { SiMicrosoftexcel } from "react-icons/si";
+import { FaCheck, FaDownload } from "react-icons/fa6";
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -30,6 +30,7 @@ import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
 
 import { formatDateDMY } from "../../utils/dateFormat";
+import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
 import {
   userComment,
@@ -55,7 +56,7 @@ export default function Admin_EventDetail() {
   const [comments, setComments] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
@@ -143,6 +144,8 @@ export default function Admin_EventDetail() {
     }
   };
 
+  const isMobile = deviceScreenCheck();
+
   return (
     <>
       <ScrollRestoration />
@@ -170,8 +173,7 @@ export default function Admin_EventDetail() {
           </Text>
           <Text pt="10px" pb="10px">
             เปิดให้ดาว์นโหลดตั้งแต่{" "}
-            {formatDateDMY(eventData.event_startDate)} ถึง{" "}
-            {formatDateDMY(eventData.event_endDate)}
+            {formatDateDMY(eventData.event_startDate)} ถึง {formatDateDMY(eventData.event_endDate)}
           </Text>
           <Text pb="20px" color={eventData.event_approve ? "green" : "red"}>
             สถานะ : {eventData.event_approve ? "อนุมัติ" : "รอการอนุมัติ"}
@@ -179,11 +181,12 @@ export default function Admin_EventDetail() {
           <Text fontSize="18px" fontWeight={"bold"}>
             ใบประกาศนียบัตร
           </Text>
-          <PdfViewer fileUrl={`${certificate}`} />
+          <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
           <Button
+            leftIcon={<FaDownload />}
             mt={"15px"}
             mb={"20px"}
-            width={"280px"}
+            width={{ base: "auto", lg: "300px" }}
             color={"white"}
             bgColor={"#3399cc"}
             _hover={{ bgColor: "#297AA3" }}
@@ -206,7 +209,7 @@ export default function Admin_EventDetail() {
               color="black"
             >
               <Button
-                leftIcon={<SiMicrosoftexcel />}
+                leftIcon={<PiMicrosoftExcelLogoFill />}
                 variant={"link"}
                 color={"#919191"}
                 as="a"
@@ -219,7 +222,7 @@ export default function Admin_EventDetail() {
           </Flex>
           <FormControl id="comment" p={"20px 20px 0 0"}>
             <FormLabel fontSize="18px" fontWeight={'bold'}>เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
-            <Textarea height={'300px'} resize="vertical" placeholder="ยังไม่มีเนื้อความในอีเมลส่งใบประกาศนียบัตร" value={eventData.event_emailTemplate} disabled/>
+            <Textarea height={'300px'} resize="vertical" placeholder="ยังไม่มีเนื้อความในอีเมลส่งใบประกาศนียบัตร" value={eventData.event_emailTemplate} disabled />
           </FormControl>
           <Button
             isDisabled={eventData.event_approve === 1}
@@ -240,8 +243,8 @@ export default function Admin_EventDetail() {
             <Heading fontSize={"2xl"} pt={{ base: "20px", md: "0" }}>
               ความคิดเห็น
             </Heading>
-            <Box width={"100%"}>
-              {comments.map((item) => (
+            <Box width={"100%"} display={comments.length === 0 ? "none" : "flex"}>
+              {comments && comments.map((item) => (
                 <Card
                   p={"20px"}
                   mb={"20px"}
@@ -276,6 +279,16 @@ export default function Admin_EventDetail() {
                   <Text pt={"10px"}>{item.comment_detail}</Text>
                 </Card>
               ))}
+            </Box>
+            <Box
+              display={comments.length === 0 ? "flex" : "none"}
+              alignItems={"center"}
+              textAlign={"center"}
+              width={"100%"}
+              height={"15vh"}
+              justifyContent={"center"}
+            >
+              <Text>ไม่พบความคิดเห็น</Text>
             </Box>
           </Stack>
         </Flex>

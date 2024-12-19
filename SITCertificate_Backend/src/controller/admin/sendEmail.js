@@ -1,4 +1,4 @@
-import { transporter } from "../user/transporter.js";
+import { transporter } from "../../services/transporter.js";
 
 const sendEmail = async (req, res) => {
   const { to, subject, text, html } = req.body;

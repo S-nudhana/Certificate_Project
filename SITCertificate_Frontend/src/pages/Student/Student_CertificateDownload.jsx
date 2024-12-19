@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
 import { Box, Text, Button, Flex, useToast } from "@chakra-ui/react";
+import { FaDownload } from "react-icons/fa6";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -19,16 +20,15 @@ function Student_CertificateDownload() {
   const navigate = useNavigate();
   const toast = useToast();
   const isMobile = deviceScreenCheck();
-  
+
   const [certificate, setCertificate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
+
 
   const getCertificate = async () => {
     let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
-      console.log(response)
       const certificateBlob = await fetchCertificate(response.data.data.student_GenerateCertificate);
       certificateBlobUrl = URL.createObjectURL(certificateBlob);
       setCertificate(certificateBlobUrl);
@@ -36,7 +36,7 @@ function Student_CertificateDownload() {
       console.error("Error getting certificate:", error);
     }
   };
-  
+
   useEffect(() => {
     getCertificate();
   }, []);
@@ -82,7 +82,7 @@ function Student_CertificateDownload() {
             height={"auto"}
           >
             {certificate ? (
-                <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile}/>
+              <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
             ) : (
               <Text>Loading PDF preview...</Text>
             )}
@@ -110,6 +110,7 @@ function Student_CertificateDownload() {
               ส่งใบประกาศนียบัตรไปยังอีเมล
             </Button>
             <Button
+              leftIcon={<FaDownload />}
               width="100px"
               bgColor="#3399cc"
               color="white"

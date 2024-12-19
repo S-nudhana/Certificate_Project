@@ -26,7 +26,6 @@ app.use(logger);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-// app.use("/api", limiter);
 
 db.connect((err) => {
     if (err) throw err;
@@ -35,6 +34,7 @@ db.connect((err) => {
 
 app.use('/file/', getFile);
 app.use("/api/user", userRouter);
+app.use("/api", limiter);
 app.use("/api/admin", adminRouter);
 app.use("/api/prof", profRouter);
 app.use("/api/student", studentRouter);

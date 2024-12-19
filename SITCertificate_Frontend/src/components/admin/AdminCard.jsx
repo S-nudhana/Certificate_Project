@@ -59,8 +59,7 @@ export default function AdminCard({
           <Text fontWeight="bold">{event_owner}</Text>
           <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
           <Text pb="5px" color={"red"}>
-            {formatDateDMY(event_startDate)} ถึง{" "}
-            {formatDateDMY(event_endDate)}
+            {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
           </Text>
           <Button
             width="90px"

@@ -36,6 +36,12 @@ export default function Prof_SignInPage() {
       const res = await profSignIn(email, password);
       if (res.status === 201) {
         navigate("/professor/");
+        toast({
+          title: "เข้าสู่ระบบสำเร็จ",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
       } else {
         toast({
           title: "เกิดข้อผิดพลาด",
@@ -47,6 +53,12 @@ export default function Prof_SignInPage() {
       }
     } catch (error) {
       console.error("handleEmail error", error);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSignIn();
     }
   };
   
@@ -89,6 +101,7 @@ export default function Prof_SignInPage() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="รหัสผ่าน"
                   value={password}
+                  onKeyDown={handleKeyDown}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputRightElement>

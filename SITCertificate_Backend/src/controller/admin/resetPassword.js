@@ -1,16 +1,16 @@
-import { transporter } from "../user/transporter.js";
+import { transporter } from "../../services/transporter.js";
 import db from "../../db/connection.js";
 import { hashedPassword } from "../auth/jwt.js";
 import { decryptPin } from "../auth/crypto.js";
 
 const resetPassword = async (req, res) => {
-  const { email, pin, password } = req.body;
+  const { email, pin, password, refCode } = req.body;
   try {
-    const value = [email];
+    const value = [email, refCode];
     const querry = await db
       .promise()
       .query(
-        "SELECT admin_forgotpasswordPin, admin_iv FROM admin WHERE admin_email = ?",
+        "SELECT admin_forgotpasswordPin, admin_iv FROM admin WHERE admin_email = ? AND admin_refCode = ?",
         value
       );
     const adminResetPin = querry[0][0].admin_forgotpasswordPin;
@@ -36,7 +36,7 @@ const resetPassword = async (req, res) => {
         if (error) {
           return res
             .status(500)
-            .json({ message: "Failed to send email", error });
+            .json({ message: "เกิดข้อผิดพลาดในการส่งอีเมล", error });
         }
         res.status(200).json({ message: "Email sent", info });
       });

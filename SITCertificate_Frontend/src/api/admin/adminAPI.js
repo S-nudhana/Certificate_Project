@@ -147,12 +147,13 @@ export const adminSendResetPasswordEmail = async (email) => {
   }
 };
 
-export const adminResetPassword = async (email, pin, password) => {
+export const adminResetPassword = async (email, pin, password, refCode) => {
   try {
     const response = await axiosInstance.post("/admin/resetPassword", {
       email: email,
       pin: pin,
       password: password,
+      refCode: refCode,
     });
     return response;
   } catch (error) {
