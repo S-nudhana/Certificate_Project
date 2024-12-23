@@ -113,42 +113,44 @@ export default function Navbar() {
           onClick={onOpen}
         />
       </Flex>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-        size={["xs", "sm", "sm"]}
-      >
-        <ModalOverlay />
-        <ModalContent py={["5", "7", "7"]}>
-          <ModalHeader textAlign={"center"}>ยืนยันที่จะออกจากระบบ?</ModalHeader>
-          <ModalBody>
-            <Flex justifyContent="center">
-              <Button
-                mr={3}
-                color="white"
-                backgroundColor={"#AD3D3B"}
-                _hover={{ bgColor: "#A80324" }}
-                borderRadius={"30"}
-                onClick={onClose}
-              >
-                ยกเลิก
-              </Button>
-              <Button
-                color="white"
-                backgroundColor={"#336699"}
-                borderRadius={"30"}
-                _hover={{ bgColor: "#1f568c" }}
-                onClick={() => {
-                  navigate(LogoutCheck());
-                }}
-              >
-                ตกลง
-              </Button>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size={["xs", "sm", "sm"]}
+        >
+          <ModalOverlay />
+          <ModalContent py={["5", "7", "7"]}>
+            <ModalHeader textAlign={"center"}>ยืนยันที่จะออกจากระบบ?</ModalHeader>
+            <ModalBody>
+              <Flex justifyContent="center">
+                <Button
+                  mr={3}
+                  color="white"
+                  backgroundColor={"#AD3D3B"}
+                  _hover={{ bgColor: "#A80324" }}
+                  borderRadius={"30"}
+                  onClick={onClose}
+                >
+                  ยกเลิก
+                </Button>
+                <Button
+                  color="white"
+                  backgroundColor={"#336699"}
+                  borderRadius={"30"}
+                  _hover={{ bgColor: "#1f568c" }}
+                  onClick={() => {
+                    navigate(LogoutCheck());
+                  }}
+                >
+                  ตกลง
+                </Button>
+              </Flex>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </Box>
   );
 }

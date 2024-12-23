@@ -24,7 +24,7 @@ export default function Banner() {
                     left="0"
                     width="100%"
                     height="100%"
-                    bg="rgba(0, 0, 0, 0.4)"
+                    bg="rgba(0, 0, 0, 0.5)"
                     zIndex={2}
                 >
                     <Box

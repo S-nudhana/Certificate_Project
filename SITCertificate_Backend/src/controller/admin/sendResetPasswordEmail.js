@@ -1,6 +1,6 @@
-import { transporter } from "../../services/transporter.js";
 import db from "../../db/connection.js";
-import { decryptPin } from "../auth/crypto.js";
+import { decryptPin } from "../../utils/crypto.js";
+import { sendMail } from "../../services/sendMail.js";
 
 const sendResetPasswordEmail = async (req, res) => {
   const { email } = req.body;
@@ -16,19 +16,15 @@ const sendResetPasswordEmail = async (req, res) => {
     const iv = querry[0][0].admin_iv;
     const refCode = querry[0][0].admin_refCode;
     const decryptedPin = decryptPin(adminResetPin, iv);
-    const mailOptions = {
-      from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "แจ้งเตือนจาก SIT Certificate",
-      text: `รหัสยืนยันการเปลี่ยนรหัสผ่านของคุณคือ ${decryptedPin} รหัสอ้างอิง:${refCode}`,
-      html: `<p>รหัสยืนยันการเปลี่ยนรหัสผ่านของคุณคือ <b>${decryptedPin}</b> <br> <br> รหัสอ้างอิง:<b>${refCode}</b></p>`,
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return res.status(500).json({ message: "เกิดข้อผิดพลาดในการส่งอีเมล", error });
-      }
-      res.status(200).json({ message: "Email sent", info });
-    });
+    try {
+      const response = sendMail({to: email, subject: "แจ้งเตือนจาก SIT Certificate", text: `รหัสยืนยันการเปลี่ยนรหัสผ่านของคุณคือ ${decryptedPin} รหัสอ้างอิง:${refCode}`, html: `<p>รหัสยืนยันการเปลี่ยนรหัสผ่านของคุณคือ <b>${decryptedPin}</b> <br> <br> รหัสอ้างอิง:<b>${refCode}</b></p>`});
+      return res.status(200).json(response);
+    } catch (mailError) {
+      console.error("Failed to send email", mailError);
+      return res
+        .status(500)
+        .json({ message: "Password updated, but email failed to send" });
+    }
   } catch (error) {
     console.error("sendResetPasswordEmail error", error);
     return res.status(500).json({ message: "Internal server error" });

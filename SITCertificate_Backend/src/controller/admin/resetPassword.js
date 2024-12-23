@@ -1,7 +1,7 @@
-import { transporter } from "../../services/transporter.js";
+import { transporter } from "../../config/transporter.config.js";
 import db from "../../db/connection.js";
 import { hashedPassword } from "../auth/jwt.js";
-import { decryptPin } from "../auth/crypto.js";
+import { decryptPin } from "../../utils/crypto.js";
 
 const resetPassword = async (req, res) => {
   const { email, pin, password, refCode } = req.body;
@@ -25,21 +25,20 @@ const resetPassword = async (req, res) => {
           "UPDATE admin SET admin_password = ? WHERE admin_email = ?",
           value2
         );
-      const mailOptions = {
-        from: `"SITCertificate" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "แจ้งเตือนจาก SIT Certificate",
-        text: `รหัสผ่านของคุณถูกเปลี่ยนแล้ว`,
-        html: `<p>รหัสผ่านของคุณถูกเปลี่ยนแล้ว</p>`,
-      };
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          return res
-            .status(500)
-            .json({ message: "เกิดข้อผิดพลาดในการส่งอีเมล", error });
-        }
-        res.status(200).json({ message: "Email sent", info });
-      });
+      try {
+        const response = await sendMail({
+          to: email,
+          subject: "แจ้งเตือนจาก SIT Certificate",
+          text: "รหัสผ่านของคุณถูกเปลี่ยนแล้ว",
+          html: `<p>รหัสผ่านของคุณถูกเปลี่ยนแล้ว</p>`,
+        });
+        return res.status(200).json(response);
+      } catch (mailError) {
+        console.error("Failed to send email", mailError);
+        return res
+          .status(500)
+          .json({ message: "Password updated, but email failed to send" });
+      }
     } else {
       return res.status(400).json({ message: "Invalid pin" });
     }

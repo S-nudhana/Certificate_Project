@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 import { verifyToken } from "../auth/jwt.js";
-import { transporter } from "../../services/transporter.js";
+import { transporter } from "../../config/transporter.config.js";
 
 dotenv.config();
 
@@ -52,7 +52,7 @@ const sendCertificate = async (req, res) => {
       if (error) {
         return res.status(500).json({ message: "Failed to send email", error });
       }
-      res.status(200).json({ message: "Email sent", info });
+      return res.status(200).json({ message: "Email sent" });
     });
   } catch (error) {
     console.log("Error:", error);

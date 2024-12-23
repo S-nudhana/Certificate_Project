@@ -11,6 +11,7 @@ import sendCertificate from "../controller/student/sendCertificate.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 import { accessManager } from "../middleware/accessManager.js";
+import getStudentGeneratedCertificate from "../controller/student/getStudentGeneratedCertificate.js";
 
 const studentRouter = express.Router();
 
@@ -19,6 +20,7 @@ studentRouter.get("/event", authMiddleware, accessManager(["student"]), getAllIn
 studentRouter.get("/generate", authMiddleware, accessManager(["student"]), getGenerateCertificate);
 studentRouter.put("/generated", authMiddleware, accessManager(["student"]), updateGenerateCertificate);
 studentRouter.get("/certificate", authMiddleware, accessManager(["student"]), getCertificate);
+studentRouter.get("/certificateGenerated", authMiddleware, accessManager(["student"]), getStudentGeneratedCertificate);
 studentRouter.put("/certificateinfo", authMiddleware, accessManager(["student"]), updataCertificateInformation);
 studentRouter.get("/eventId", authMiddleware, accessManager(["student"]), getAllInProgressEventById);
 studentRouter.post("/sendCertificate", authMiddleware, accessManager(["student"]), sendCertificate);
