@@ -20,10 +20,10 @@ import {
   ModalBody,
   useToast,
   Tooltip,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
-import { useDisclosure } from "@chakra-ui/react";
 import PDF from "react-pdf-watermark";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
@@ -31,7 +31,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 import { formatDateYMD } from "../../utils/dateFormat";
-import { sampleSetNameOnCertificate } from "../../components/embedNameOnCertificate";
+import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
 import { adminUpdateEvent } from "../../api/admin/adminAPI";
 import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI";
@@ -85,7 +85,7 @@ function Admin_EditEvent() {
 
   const updateEventData = async () => {
     try {
-      if(closeDate < openDate){
+      if (closeDate < openDate) {
         setCloseDateError("วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด")
         setCloseDate("");
         toast({
@@ -151,8 +151,9 @@ function Admin_EditEvent() {
         const modifiedPdfUrl = URL.createObjectURL(
           new Blob([modifiedPdfBytes], { type: "application/pdf" })
         );
-        setModifiedTemplateURL(modifiedPdfUrl);
+        return setModifiedTemplateURL(modifiedPdfUrl);
       }
+      return null;
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -330,6 +331,9 @@ function Admin_EditEvent() {
                 )}
                 {templateURL && (
                   <Button
+                    bg={"#3399cc"}
+                    color={"white"}
+                    _hover={{ bgColor: "#297AA3" }}
                     onClick={() => {
                       onOpen();
                       handleTemplateChange(templateURL);
@@ -339,79 +343,6 @@ function Admin_EditEvent() {
                     ปรับตำแหน่งและขนาดชื่อในใบประกาศนียบัตร
                   </Button>
                 )}
-
-                <Modal isOpen={isOpen} onClose={onClose} size="xl">
-                  <ModalOverlay />
-                  <ModalContent p={"10px"}>
-                    <ModalHeader>ปรับตำแหน่งชื่อในใบประกาศนียบัตร</ModalHeader>
-                    <ModalBody>
-                      {modifiedTemplateURL ? (
-                        <PDF
-                          file={modifiedTemplateURL}
-                          canvasWidth={"100%"}
-                          canvasHeight={"auto"}
-                          key={modifiedTemplateURL}
-                        />
-                      ) : (
-                        <Text>Loading PDF preview...</Text>
-                      )}
-                      <Box
-                        display="flex"
-                        flexDirection="row"
-                        alignItems="end"
-                        justifyContent="center"
-                        gap="4"
-                      >
-                        <FormControl>
-                          <FormLabel>ขนาดตัวหนังสือ / px</FormLabel>
-                          <Input
-                            placeholder={textSize}
-                            variant="outline"
-                            value={inputSize}
-                            type="number"
-                            onChange={handleSizeChange}
-                          />
-                        </FormControl>
-                        <FormControl>
-                          <FormLabel>ความสูง / %</FormLabel>
-                          <Input
-                            placeholder={textY}
-                            variant="outline"
-                            value={inputY}
-                            type="number"
-                            onChange={handleYChange}
-                          />
-                        </FormControl>
-                        <Button px="30px" onClick={newExampleChange}>
-                          แสดงผล
-                        </Button>
-                      </Box>
-                    </ModalBody>
-                    <ModalFooter gap={4}>
-                      <Button
-                        color="white"
-                        backgroundColor={"#AD3D3B"}
-                        w={"49%"}
-                        _hover={{ bgColor: "#A80324" }}
-                        onClick={() => {
-                          setInputSize(30);
-                          setInputY(45);
-                        }}
-                      >
-                        รีเซ็ตค่า
-                      </Button>
-                      <Button
-                        bg="#336699"
-                        color="white"
-                        w={"49%"}
-                        _hover={{ bg: "#1F568C" }}
-                        onClick={onClose}
-                      >
-                        บันทึก
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
                 <FormControl>
                   <FormLabel
                     fontSize={["sm", "md", "md"]}
@@ -502,6 +433,80 @@ function Admin_EditEvent() {
         </Flex>
       </Box>
       <Footer />
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent p={"10px"} w={{ base: "85%", md: "100%" }}>
+            <ModalHeader>ปรับตำแหน่งชื่อในใบประกาศนียบัตร</ModalHeader>
+            <ModalBody>
+              {modifiedTemplateURL ? (
+                <PDF
+                  file={modifiedTemplateURL}
+                  canvasWidth={"100%"}
+                  canvasHeight={"auto"}
+                  key={modifiedTemplateURL}
+                />
+              ) : (
+                <Text>Loading PDF preview...</Text>
+              )}
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="end"
+                justifyContent="center"
+                gap="4"
+              >
+                <FormControl>
+                  <FormLabel>ขนาดตัวหนังสือ / px</FormLabel>
+                  <Input
+                    placeholder={textSize}
+                    variant="outline"
+                    value={inputSize}
+                    type="number"
+                    onChange={handleSizeChange}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>ความสูง / %</FormLabel>
+                  <Input
+                    placeholder={textY}
+                    variant="outline"
+                    value={inputY}
+                    type="number"
+                    onChange={handleYChange}
+                  />
+                </FormControl>
+                <Button px="30px" onClick={newExampleChange}>
+                  แสดงผล
+                </Button>
+              </Box>
+            </ModalBody>
+            <ModalFooter gap={4}>
+              <Button
+                color="white"
+                backgroundColor={"#AD3D3B"}
+                w={"49%"}
+                _hover={{ bgColor: "#A80324" }}
+                onClick={() => {
+                  setInputSize(30);
+                  setInputY(45);
+                }}
+              >
+                รีเซ็ตค่า
+              </Button>
+              <Button
+                bg="#336699"
+                color="white"
+                w={"49%"}
+                _hover={{ bg: "#1F568C" }}
+                onClick={onClose}
+              >
+                บันทึก
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 }

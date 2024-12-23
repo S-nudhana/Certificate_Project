@@ -1,8 +1,9 @@
-import { transporter } from "../../services/transporter.js";
+import { transporter } from "../../config/transporter.config.js";
 import dotenv from "dotenv";
 import db from "../../db/connection.js";
 
 import { verifyToken } from "../auth/jwt.js";
+import { sendMail } from "../../services/sendMail.js";
 
 dotenv.config();
 
@@ -26,20 +27,20 @@ const sendEmail = async (req, res) => {
         [profId]
       );
     const sender = senderQuery[0][0].professor_userName;
-    const mailOptions = {
-      from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
-      to: reciever,
-      subject: subject,
-      text: `อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}`,
-      html: `<p>อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}</p>`,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return res.status(500).json({ message: "Failed to send email", error });
-      }
-      res.status(200).json({ message: "Email sent", info });
-    });
+    try {
+      const response = await sendMail({
+        to: reciever,
+        subject: subject,
+        text: `อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}`,
+        html: `<p>อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}</p>`,
+      });
+      return res.status(200).json(response);
+    } catch (mailError) {
+      console.error("Failed to send email", mailError);
+      return res
+        .status(500)
+        .json({ message: "Password updated, but email failed to send" });
+    }
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({

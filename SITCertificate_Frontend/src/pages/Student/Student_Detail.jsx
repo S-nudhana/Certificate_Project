@@ -23,7 +23,7 @@ import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 import { formatDateDMY } from "../../utils/dateFormat";
 
 import {
-  studentCertificate,
+  getGeneratedCertificate,
   studentGenerate,
   studentEventDataById,
   generateStudentCertificateInfo,
@@ -61,7 +61,7 @@ function Student_Detail() {
       const response = await studentGenerate(id);
       setStudentStatus(response.data.data);
       if (!response.data.data) {
-        const response = await studentCertificate(id);
+        const response = await getGeneratedCertificate(id);
         setCertificateRaw(response.data.data.student_GenerateCertificate);
         setCertificate(await fetchFile(response.data.data.student_GenerateCertificate));
       }

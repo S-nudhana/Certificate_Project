@@ -21,9 +21,6 @@ import {
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import {
-  fetchAndFillCertificate
-} from "../../components/embedNameOnCertificate";
 import PdfViewer from "../../components/PdfViewer";
 
 import { uploadFile, fetchCertificate } from "../../api/user/userAPI";
@@ -33,6 +30,8 @@ import {
   studentCertificate,
   generateStudentCertificateInfo,
 } from "../../api/student/studentAPI";
+
+import { fetchAndFillCertificate } from "../../utils/embedNameOnCertificate";
 import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
 function Student_CertificateExample() {
@@ -183,54 +182,56 @@ function Student_CertificateExample() {
           </Button>
         </Box>
       </Box>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-        size={["xs", "md", "md"]}
-      >
-        <ModalOverlay />
-        <ModalContent py={["5", "7", "7"]}>
-          <ModalHeader
-            textAlign={"center"}
-            fontWeight={"bold"}
-            fontSize={{ base: "16px", md: "20px" }}
-          >
-            ยืนยันที่จะพิมพ์ใบประกาศนียบัตรหรือไม่?
-          </ModalHeader>
-          <ModalBody textAlign={"center"}>
-            <Text pb={"7"} fontSize={{ base: "14px", md: "16px" }}>
-              ระบบจะส่งใบประกาศนียบัตรไปยังอีเมล {email} <br />{" "}
-              กรุณาตรวจสอบชื่อจริง นามสกุลและอีเมลของท่าน <br />{" "}
-              เมื่อกดยืนยันแล้วจะไม่สามารถกลับมาแก้ไขได้
-            </Text>
-            <Flex justifyContent="center">
-              <Button
-                mr={3}
-                color="white"
-                backgroundColor={"#AD3D3B"}
-                _hover={{ bgColor: "#A80324" }}
-                borderRadius={"30"}
-                onClick={onClose}
-              >
-                ยกเลิก
-              </Button>
-              <Button
-                color="white"
-                backgroundColor={"#336699"}
-                borderRadius={"30"}
-                _hover={{ bgColor: "#1f568c" }}
-                onClick={() => {
-                  handleSubmit();
-                }}
-              >
-                ตกลง
-              </Button>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
       <Footer />
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size={["xs", "md", "md"]}
+        >
+          <ModalOverlay />
+          <ModalContent py={["5", "7", "7"]}>
+            <ModalHeader
+              textAlign={"center"}
+              fontWeight={"bold"}
+              fontSize={{ base: "16px", md: "20px" }}
+            >
+              ยืนยันที่จะพิมพ์ใบประกาศนียบัตรหรือไม่?
+            </ModalHeader>
+            <ModalBody textAlign={"center"}>
+              <Text pb={"7"} fontSize={{ base: "14px", md: "16px" }}>
+                ระบบจะส่งใบประกาศนียบัตรไปยังอีเมล {email} <br />{" "}
+                กรุณาตรวจสอบชื่อจริง นามสกุลและอีเมลของท่าน <br />{" "}
+                เมื่อกดยืนยันแล้วจะไม่สามารถกลับมาแก้ไขได้
+              </Text>
+              <Flex justifyContent="center">
+                <Button
+                  mr={3}
+                  color="white"
+                  backgroundColor={"#AD3D3B"}
+                  _hover={{ bgColor: "#A80324" }}
+                  borderRadius={"30"}
+                  onClick={onClose}
+                >
+                  ยกเลิก
+                </Button>
+                <Button
+                  color="white"
+                  backgroundColor={"#336699"}
+                  borderRadius={"30"}
+                  _hover={{ bgColor: "#1f568c" }}
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                >
+                  ตกลง
+                </Button>
+              </Flex>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 }

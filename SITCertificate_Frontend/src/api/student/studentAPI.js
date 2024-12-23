@@ -57,6 +57,15 @@ export const studentCertificate = async (id) => {
   }
 };
 
+export const getGeneratedCertificate = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/student/certificateGenerated?id=${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
 export const generateStudentCertificateInfo = async (
   id,
   name,

@@ -11,7 +11,7 @@ import {
   studentCertificate,
   sendCertificate,
 } from "../../api/student/studentAPI";
-import { fetchCertificate } from "../../api/user/userAPI";
+import { fetchCertificate, fetchFile } from "../../api/user/userAPI";
 
 import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
@@ -22,6 +22,7 @@ function Student_CertificateDownload() {
   const isMobile = deviceScreenCheck();
 
   const [certificate, setCertificate] = useState("");
+  const [certificateRaw, setCertificateRaw] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -30,6 +31,7 @@ function Student_CertificateDownload() {
     try {
       const response = await studentCertificate(id);
       const certificateBlob = await fetchCertificate(response.data.data.student_GenerateCertificate);
+      setCertificateRaw(await fetchFile(response.data.data.student_GenerateCertificate))
       certificateBlobUrl = URL.createObjectURL(certificateBlob);
       setCertificate(certificateBlobUrl);
     } catch (error) {
@@ -111,7 +113,6 @@ function Student_CertificateDownload() {
             </Button>
             <Button
               leftIcon={<FaDownload />}
-              width="100px"
               bgColor="#3399cc"
               color="white"
               borderRadius="40px"
@@ -119,7 +120,7 @@ function Student_CertificateDownload() {
               fontSize={{ base: "14px", md: "16px" }}
               variant="solid"
               as="a"
-              href={`${import.meta.env.VITE_REACT_APP_URL}${certificate}`}
+              href={`${certificateRaw}`}
               download={"certificate.pdf"}
             >
               ดาวน์โหลด
@@ -127,7 +128,7 @@ function Student_CertificateDownload() {
           </Box>
           <Button
             color={"#1f568c"}
-            pb={"30px"}
+            mb={"30px"}
             variant="link"
             onClick={() => {
               navigate("/");

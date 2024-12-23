@@ -1,22 +1,15 @@
-import { transporter } from "../../services/transporter.js";
+import { sendMail } from "../../services/sendMail.js";
 
 const sendEmail = async (req, res) => {
   const { to, subject, text, html } = req.body;
   try {
-    const mailOptions = {
-      from: `"<No Reply> SITCertificate" <${process.env.EMAIL_USER}>`,
+    const response = await sendMail({
       to: to,
       subject: subject,
       text: text,
       html: html,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return res.status(500).json({ message: "Failed to send email", error });
-      }
-      res.status(200).json({ message: "Email sent", info });
     });
+    return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }

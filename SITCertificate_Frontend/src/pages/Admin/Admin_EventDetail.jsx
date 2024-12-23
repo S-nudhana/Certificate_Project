@@ -49,7 +49,6 @@ export default function Admin_EventDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [eventData, setEventData] = useState([]);
   const [certificate, setCertificate] = useState("");
   const [excel, setExcel] = useState("");
@@ -243,7 +242,7 @@ export default function Admin_EventDetail() {
             <Heading fontSize={"2xl"} pt={{ base: "20px", md: "0" }}>
               ความคิดเห็น
             </Heading>
-            <Box width={"100%"} display={comments.length === 0 ? "none" : "flex"}>
+            <Box width={"100%"} display={comments.length === 0 ? "none" : "block"}>
               {comments && comments.map((item) => (
                 <Card
                   p={"20px"}
@@ -293,43 +292,45 @@ export default function Admin_EventDetail() {
           </Stack>
         </Flex>
       </Stack>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-        size={["xs", "sm", "sm"]}
-      >
-        <ModalOverlay />
-        <ModalContent py={["5", "7", "7"]}>
-          <ModalHeader textAlign={"center"}>ยืนยันที่จะลบกิจกรรม?</ModalHeader>
-          <ModalBody>
-            <Flex justifyContent="center">
-              <Button
-                mr={3}
-                color="white"
-                backgroundColor={"#AD3D3B"}
-                _hover={{ bgColor: "#A80324" }}
-                borderRadius={"30"}
-                onClick={onClose}
-              >
-                ยกเลิก
-              </Button>
-              <Button
-                color="white"
-                backgroundColor={"#336699"}
-                borderRadius={"30"}
-                _hover={{ bgColor: "#1f568c" }}
-                onClick={() => {
-                  deleteEvent();
-                }}
-              >
-                ตกลง
-              </Button>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
       <Footer />
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size={["xs", "sm", "sm"]}
+        >
+          <ModalOverlay />
+          <ModalContent py={["5", "7", "7"]}>
+            <ModalHeader textAlign={"center"}>ยืนยันที่จะลบกิจกรรม?</ModalHeader>
+            <ModalBody>
+              <Flex justifyContent="center">
+                <Button
+                  mr={3}
+                  color="white"
+                  backgroundColor={"#AD3D3B"}
+                  _hover={{ bgColor: "#A80324" }}
+                  borderRadius={"30"}
+                  onClick={onClose}
+                >
+                  ยกเลิก
+                </Button>
+                <Button
+                  color="white"
+                  backgroundColor={"#336699"}
+                  borderRadius={"30"}
+                  _hover={{ bgColor: "#1f568c" }}
+                  onClick={() => {
+                    deleteEvent();
+                  }}
+                >
+                  ตกลง
+                </Button>
+              </Flex>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 }

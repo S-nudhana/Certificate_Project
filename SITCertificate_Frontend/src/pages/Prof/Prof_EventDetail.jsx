@@ -276,7 +276,7 @@ function Prof_EventDetail() {
                       </Button>
                     </Flex>
                   </Card>
-                  ))}
+                ))}
               </Box>
               <Box
                 display={comments.length === 0 ? "flex" : "none"}
@@ -317,46 +317,48 @@ function Prof_EventDetail() {
           </Flex>
         </Stack>
       )}
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-        size={["xs", "sm", "sm"]}
-      >
-        <ModalOverlay />
-        <ModalContent py={["5", "7", "7"]}>
-          <ModalHeader textAlign={"center"}>
-            ยืนยันที่จะอนุมัติกิจกรรม?
-          </ModalHeader>
-          <ModalBody>
-            <Flex justifyContent="center">
-              <Button
-                mr={3}
-                color="white"
-                backgroundColor={"#AD3D3B"}
-                _hover={{ bgColor: "#A80324" }}
-                borderRadius={"30"}
-                onClick={onClose}
-              >
-                ยกเลิก
-              </Button>
-              <Button
-                color="white"
-                backgroundColor={"#336699"}
-                borderRadius={"30"}
-                _hover={{ bgColor: "#1f568c" }}
-                onClick={() => {
-                  onClose();
-                  approveEvent();
-                }}
-              >
-                ยืนยัน
-              </Button>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
       <Footer />
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size={["xs", "sm", "sm"]}
+        >
+          <ModalOverlay />
+          <ModalContent py={["5", "7", "7"]}>
+            <ModalHeader textAlign={"center"}>
+              ยืนยันที่จะอนุมัติกิจกรรม?
+            </ModalHeader>
+            <ModalBody>
+              <Flex justifyContent="center">
+                <Button
+                  mr={3}
+                  color="white"
+                  backgroundColor={"#AD3D3B"}
+                  _hover={{ bgColor: "#A80324" }}
+                  borderRadius={"30"}
+                  onClick={onClose}
+                >
+                  ยกเลิก
+                </Button>
+                <Button
+                  color="white"
+                  backgroundColor={"#336699"}
+                  borderRadius={"30"}
+                  _hover={{ bgColor: "#1f568c" }}
+                  onClick={() => {
+                    onClose();
+                    approveEvent();
+                  }}
+                >
+                  ยืนยัน
+                </Button>
+              </Flex>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 }
