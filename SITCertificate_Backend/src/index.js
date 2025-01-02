@@ -4,18 +4,18 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import helmet from "helmet";
 
-import db from "../SITCertificate_Backend/src/db/connection.js";
+import db from "./db/connection.js";
 
-import { corsOptions } from "./src/config/cors.config.js";
-import { limiter } from "./src/middleware/limiter.js";
-import { logger } from "./src/middleware/logger.js";
+import { corsOptions } from "./config/cors.config.js";
+import { limiter } from "./middleware/limiter.js";
+import { logger } from "./middleware/logger.js";
 
-import adminRouter from "./src/router/admin.js";
-import profRouter from "./src/router/prof.js";
-import studentRouter from "./src/router/student.js";
-import userRouter from "./src/router/user.js";
+import adminRouter from "./router/admin.js";
+import profRouter from "./router/prof.js";
+import studentRouter from "./router/student.js";
+import userRouter from "./router/user.js";
 
-import getFile from "./src/controller/getFile.js";
+import getFile from "./controller/getFile.js";
 
 dotenv.config();
 const app = express();
