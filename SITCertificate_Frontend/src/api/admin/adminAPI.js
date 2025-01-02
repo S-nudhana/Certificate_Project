@@ -160,3 +160,12 @@ export const adminResetPassword = async (email, pin, password, refCode) => {
     return error;
   }
 };
+
+export const profEmail = async (profId) => {
+  try {
+    const response = await axiosInstance.get(`/admin/profEmail?id=${profId}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

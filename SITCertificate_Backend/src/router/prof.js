@@ -5,7 +5,6 @@ import SignInProf from "../controller/prof/signInProf.js";
 import setNewComment from "../controller/prof/setNewComment.js";
 import updateApproveStatus from "../controller/prof/updateApproveStatus.js";
 import deleteComment from "../controller/prof/deleteComment.js";
-import getProfessorEmail from "../controller/prof/getProfessorEmail.js";
 import sendEmail from "../controller/prof/sendEmail.js";
 import setPinForgotPassword from "../controller/prof/setPinForgotPassword.js";
 import sendResetPasswordEmail from "../controller/prof/sendResetPasswordEmail.js";
@@ -23,7 +22,6 @@ profRouter.post("/forgotPassword", setPinForgotPassword);
 profRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
 profRouter.post("/resetPassword", resetPassword);
 
-profRouter.get("/email", authMiddleware, accessManager(["professor", "admin"]), getProfessorEmail);
 profRouter.post("/newComment", authMiddleware, accessManager(["professor"]), setNewComment);
 profRouter.put("/approveEvent", authMiddleware, accessManager(["professor"]), updateApproveStatus);
 profRouter.delete("/deleteComment", authMiddleware, accessManager(["professor"]), deleteComment);
