@@ -25,17 +25,6 @@ export const profSignUp = async (username, email, password) => {
   }
 };
 
-export const toggleCommentStatus = async (commentId) => {
-  try {
-    const response = await axiosInstance.put(`/prof/updateCommentStatus`, {
-      commentId: commentId,
-    });
-    return response;
-  } catch (error) {
-    return error;
-  }
-};
-
 export const profAddComment = async (id, newCommentDetail) => {
   try {
     const response = await axiosInstance.post(`/prof/newComment`, {
@@ -53,15 +42,6 @@ export const profApproveEvent = async (id) => {
     const response = await axiosInstance.put(`/prof/approveEvent`, {
       eventId: id,
     });
-    return response;
-  } catch (error) {
-    return error;
-  }
-};
-
-export const profEmail = async (profId) => {
-  try {
-    const response = await axiosInstance.get(`/prof/email?id=${profId}`);
     return response;
   } catch (error) {
     return error;

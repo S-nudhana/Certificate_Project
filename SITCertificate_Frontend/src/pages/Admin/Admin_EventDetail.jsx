@@ -42,7 +42,7 @@ import {
   adminDeleteEvent,
   adminSendEmail
 } from "../../api/admin/adminAPI";
-import { profEmail } from "../../api/prof/profAPI";
+import { profEmail } from "../../api/admin/adminAPI";
 
 export default function Admin_EventDetail() {
   const toast = useToast();

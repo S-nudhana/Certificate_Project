@@ -14,7 +14,7 @@ export const studentSignIn = async (email, password) => {
 
 export const updateStudentGenerateStatus = async (id) => {
   try {
-    const response = await axiosInstance.put(`/student/generated?id=${id}`);
+    const response = await axiosInstance.put(`/student/generateStatusUpdate?id=${id}`);
     return response;
   } catch (error) {
     return error;
@@ -23,7 +23,7 @@ export const updateStudentGenerateStatus = async (id) => {
 
 export const studentGenerate = async (id) => {
   try {
-    const response = await axiosInstance.get(`/student/generate?id=${id}`);
+    const response = await axiosInstance.get(`/student/generateStatus?id=${id}`);
     return response;
   } catch (error) {
     return error;
@@ -59,12 +59,14 @@ export const studentCertificate = async (id) => {
 
 export const getGeneratedCertificate = async (id) => {
   try {
-    const response = await axiosInstance.get(`/student/certificateGenerated?id=${id}`);
+    const response = await axiosInstance.get(
+      `/student/generateCertificate?id=${id}`
+    );
     return response;
   } catch (error) {
     return error;
   }
-}
+};
 
 export const generateStudentCertificateInfo = async (
   id,
@@ -74,7 +76,7 @@ export const generateStudentCertificateInfo = async (
   uploadedModifiedPdf
 ) => {
   try {
-    const response = await axiosInstance.put(`/student/certificateinfo`, {
+    const response = await axiosInstance.put(`/student/certificateInfo`, {
       eventId: id,
       name: name,
       surname: surname,
