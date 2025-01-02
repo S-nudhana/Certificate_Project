@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "nodemon --experimental-modules index.js",
-    "start": "node index.js"
+    "start": "node ./src/index.js"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
