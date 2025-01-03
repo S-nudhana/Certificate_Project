@@ -1,7 +1,7 @@
-import { transporter } from "../../config/transporter.config.js";
 import db from "../../db/connection.js";
 import { hashedPassword } from "../auth/jwt.js";
 import { decryptPin } from "../../utils/crypto.js";
+import { sendMail } from "../../services/sendMail.js";
 
 const resetPassword = async (req, res) => {
   const { email, pin, password, refCode } = req.body;
