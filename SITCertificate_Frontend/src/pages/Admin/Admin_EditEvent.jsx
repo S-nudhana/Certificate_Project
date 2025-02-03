@@ -4,6 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Select,
   Textarea,
   HStack,
   Stack,
@@ -33,7 +34,7 @@ import Footer from "../../components/Footer";
 import { formatDateYMD } from "../../utils/dateFormat";
 import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
-import { adminUpdateEvent } from "../../api/admin/adminAPI";
+import { adminUpdateEvent, getProfessor } from "../../api/admin/adminAPI";
 import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI";
 
 function Admin_EditEvent() {
@@ -60,6 +61,18 @@ function Admin_EditEvent() {
   const [finalExcel, setFinalExcel] = useState(null);
   const [textSize, setTextSize] = useState("");
   const [textY, setTextY] = useState("");
+  const [professorList, setProfessorList] = useState([]);
+
+  const getProfessorList = async () => {
+    try {
+      const response = await getProfessor();
+      if (response.status === 200) {
+        setProfessorList(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error getting professor list:", error);
+    }
+  };
 
   const getEventData = async () => {
     try {
@@ -80,6 +93,7 @@ function Admin_EditEvent() {
   };
 
   useEffect(() => {
+    getProfessorList();
     getEventData();
   }, []);
 
@@ -239,13 +253,13 @@ function Admin_EditEvent() {
                   <FormLabel fontSize={["sm", "md", "md"]}>
                     ชื่อผู้จัดกิจกรรม
                   </FormLabel>
-                  <Input
-                    type="text"
-                    size={["sm", "md", "md"]}
-                    placeholder="กรอกชื่อผู้จัดกิจกรรม"
-                    value={eventOwnerName}
-                    onChange={(e) => setEventOwnerName(e.target.value)}
-                  />
+                  <Select placeholder="เลือกชื่อผู้จัดกิจกรรม" size={["sm", "md", "md"]} value={eventOwnerName} onChange={(e) => setEventOwnerName(e.target.value)}>
+                    {professorList.map((professor) => (
+                      <option key={professor.professor_userName} value={professor.professor_userName}>
+                        {professor.professor_userName}
+                      </option>
+                    ))}
+                  </Select>
                 </FormControl>
                 <HStack w="full">
                   <Box w={"50%"}>

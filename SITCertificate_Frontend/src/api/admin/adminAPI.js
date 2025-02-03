@@ -38,7 +38,7 @@ export const adminCreateEvent = async (
   inputY
 ) => {
   try {
-    const response = await axiosInstance.post("/admin/createEvent", {
+    const response = await axiosInstance.post("/admin/event", {
       eventName: eventName,
       eventOwner: eventOwnerName,
       openDate: openDate,
@@ -56,10 +56,10 @@ export const adminCreateEvent = async (
   }
 };
 
-export const adminDeleteEvent = async (eventId) => {
+export const adminDeleteEvent = async (id) => {
   try {
     const response = await axiosInstance.delete(
-      `/admin/deleteEvent?id=${eventId}`
+      `/admin/event/${id}`
     );
     return response;
   } catch (error) {
@@ -81,7 +81,7 @@ export const adminUpdateEvent = async (
   id
 ) => {
   try {
-    const response = await axiosInstance.put(`/admin/updateEvent`, {
+    const response = await axiosInstance.put(`/admin/event`, {
       eventName: eventName,
       eventOwner: eventOwnerName,
       openDate: openDate,
@@ -100,9 +100,9 @@ export const adminUpdateEvent = async (
   }
 };
 
-export const adminToggleCommentStatus = async (commentId) => {
+export const adminToggleCommentStatus = async (id) => {
   try {
-    const response = await axiosInstance.put(`/admin/updateCommentStatus`, {
+    const response = await axiosInstance.put(`/admin/comment/${id}/status`, {
       commentId: commentId,
     });
     return response;
@@ -113,7 +113,7 @@ export const adminToggleCommentStatus = async (commentId) => {
 
 export const adminSendEmail = async (reciever, eventName, commentDetail) => {
   try {
-    const response = await axiosInstance.post("/admin/sendEmail", {
+    const response = await axiosInstance.post("/admin/email", {
       to: reciever,
       subject: "แจ้งเตือนจาก SIT Certificate",
       text: `กิจกรรม ${eventName} ความคิดเห็น ${commentDetail} ได้รับการแก้ไขโดยเจ้าหน้าที่แล้ว โปรดตรวจสอบใหม่อีกครั้ง`,
@@ -138,7 +138,7 @@ export const adminForgotPassword = async (email) => {
 
 export const adminSendResetPasswordEmail = async (email) => {
   try {
-    const response = await axiosInstance.post("/admin/sendResetPasswordEmail", {
+    const response = await axiosInstance.post("/admin/resetPasswordEmail", {
       email: email,
     });
     return response;
@@ -161,11 +161,20 @@ export const adminResetPassword = async (email, pin, password, refCode) => {
   }
 };
 
-export const profEmail = async (profId) => {
+export const profEmail = async (id) => {
   try {
-    const response = await axiosInstance.get(`/admin/profEmail?id=${profId}`);
+    const response = await axiosInstance.get(`/admin/email/${id}`);
     return response;
   } catch (error) {
     return error;
   }
 };
+
+export const getProfessor = async () => {
+  try {
+    const response = await axiosInstance.get(`/admin/professor`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}

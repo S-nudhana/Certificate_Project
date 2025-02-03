@@ -14,7 +14,7 @@ export const studentSignIn = async (email, password) => {
 
 export const updateStudentGenerateStatus = async (id) => {
   try {
-    const response = await axiosInstance.put(`/student/generateStatusUpdate?id=${id}`);
+    const response = await axiosInstance.put(`/student/status/${id}/update`);
     return response;
   } catch (error) {
     return error;
@@ -23,7 +23,7 @@ export const updateStudentGenerateStatus = async (id) => {
 
 export const studentGenerate = async (id) => {
   try {
-    const response = await axiosInstance.get(`/student/generateStatus?id=${id}`);
+    const response = await axiosInstance.get(`/student/status/${id}`);
     return response;
   } catch (error) {
     return error;
@@ -32,7 +32,7 @@ export const studentGenerate = async (id) => {
 
 export const studentEventDataById = async (id) => {
   try {
-    const response = await axiosInstance.get(`/student/eventId?id=${id}`);
+    const response = await axiosInstance.get(`/student/event/${id}`);
     return response;
   } catch (error) {
     return error;
@@ -50,7 +50,7 @@ export const studentData = async () => {
 
 export const studentCertificate = async (id) => {
   try {
-    const response = await axiosInstance.get(`/student/certificate?id=${id}`);
+    const response = await axiosInstance.get(`/student/certificate/${id}`);
     return response;
   } catch (error) {
     return error;
@@ -60,7 +60,7 @@ export const studentCertificate = async (id) => {
 export const getGeneratedCertificate = async (id) => {
   try {
     const response = await axiosInstance.get(
-      `/student/generateCertificate?id=${id}`
+      `/student/certificate/${id}/generate`
     );
     return response;
   } catch (error) {
@@ -76,7 +76,7 @@ export const generateStudentCertificateInfo = async (
   uploadedModifiedPdf
 ) => {
   try {
-    const response = await axiosInstance.put(`/student/certificateInfo`, {
+    const response = await axiosInstance.put(`/student/certificate/info`, {
       eventId: id,
       name: name,
       surname: surname,
@@ -91,7 +91,7 @@ export const generateStudentCertificateInfo = async (
 
 export const sendCertificate = async (id, file) => {
   try {
-    const response = await axiosInstance.post(`/student/sendCertificate`, {
+    const response = await axiosInstance.post(`/student/certificate`, {
       id: id,
       fileUrl: file,
     });

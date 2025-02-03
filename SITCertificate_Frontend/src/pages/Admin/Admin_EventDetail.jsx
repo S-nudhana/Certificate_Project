@@ -18,7 +18,7 @@ import {
   useToast,
   FormControl,
   FormLabel,
-  Textarea
+  Textarea,
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration, useNavigate } from "react-router-dom";
 import { FaCheck, FaDownload } from "react-icons/fa6";
@@ -28,6 +28,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
+import DoughnutChart from "../../components/DoughnutChart";
 
 import { formatDateDMY } from "../../utils/dateFormat";
 import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
@@ -35,12 +36,13 @@ import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 import {
   userComment,
   userEventDataById,
-  fetchFile
+  fetchFile,
+  getStatistic,
 } from "../../api/user/userAPI";
 import {
   adminToggleCommentStatus,
   adminDeleteEvent,
-  adminSendEmail
+  adminSendEmail,
 } from "../../api/admin/adminAPI";
 import { profEmail } from "../../api/admin/adminAPI";
 
@@ -55,13 +57,22 @@ export default function Admin_EventDetail() {
   const [comments, setComments] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState();
+  const [participantsAmount, setParticipantsAmount] = useState(0);
+  const [participantsDownloadAmount, setParticipantsDownloadAmount] = useState(0);
 
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
       setEventData(response.data.data);
+      setHistory(response.data.history);
       setCertificate(await fetchFile(response.data.data.event_certificate));
       setExcel(await fetchFile(response.data.data.event_excel));
+      if (!history) {
+        const response = await getStatistic(id);
+        setParticipantsAmount(response.data.participantsAmount);
+        setParticipantsDownloadAmount(response.data.participantsDownloadAmount);
+      }
     } catch (error) {
       console.error("Error getting event data:", error);
     }
@@ -171,8 +182,8 @@ export default function Admin_EventDetail() {
             โดย {eventData.event_owner}
           </Text>
           <Text pt="10px" pb="10px">
-            เปิดให้ดาว์นโหลดตั้งแต่{" "}
-            {formatDateDMY(eventData.event_startDate)} ถึง {formatDateDMY(eventData.event_endDate)}
+            เปิดให้ดาว์นโหลดตั้งแต่ {formatDateDMY(eventData.event_startDate)}{" "}
+            ถึง {formatDateDMY(eventData.event_endDate)}
           </Text>
           <Text pb="20px" color={eventData.event_approve ? "green" : "red"}>
             สถานะ : {eventData.event_approve ? "อนุมัติ" : "รอการอนุมัติ"}
@@ -220,14 +231,22 @@ export default function Admin_EventDetail() {
             </Tooltip>
           </Flex>
           <FormControl id="comment" p={"20px 20px 0 0"}>
-            <FormLabel fontSize="18px" fontWeight={'bold'}>เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
-            <Textarea height={'300px'} resize="vertical" placeholder="ยังไม่มีเนื้อความในอีเมลส่งใบประกาศนียบัตร" value={eventData.event_emailTemplate} disabled />
+            <FormLabel fontSize="18px" fontWeight={"bold"}>
+              เนื้อความในอีเมลส่งใบประกาศนียบัตร
+            </FormLabel>
+            <Textarea
+              height={"300px"}
+              resize="vertical"
+              placeholder="ยังไม่มีเนื้อความในอีเมลส่งใบประกาศนียบัตร"
+              value={eventData.event_emailTemplate}
+              disabled
+            />
           </FormControl>
           <Button
             isDisabled={eventData.event_approve === 1}
-            mt={'20px'}
+            mt={"20px"}
             borderRadius={"40px"}
-            width={'130px'}
+            width={"130px"}
             padding={"20px"}
             color={"white"}
             backgroundColor={"#AD3D3B"}
@@ -242,42 +261,46 @@ export default function Admin_EventDetail() {
             <Heading fontSize={"2xl"} pt={{ base: "20px", md: "0" }}>
               ความคิดเห็น
             </Heading>
-            <Box width={"100%"} display={comments.length === 0 ? "none" : "block"}>
-              {comments && comments.map((item) => (
-                <Card
-                  p={"20px"}
-                  mb={"20px"}
-                  variant={"outline"}
-                  key={item.id}
-                >
-                  <Flex
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    gap={"10px"}
+            <Box
+              width={"100%"}
+              display={comments.length === 0 ? "none" : "block"}
+            >
+              {comments &&
+                comments.map((item) => (
+                  <Card
+                    p={"20px"}
+                    mb={"20px"}
+                    variant={"outline"}
+                    key={item.id}
                   >
-                    <Text fontWeight={"bold"}>{item.comment_username}</Text>
-                    <IconButton
-                      isRound={true}
-                      variant="solid"
-                      colorScheme={item.comment_status ? "green" : "gray"}
-                      aria-label="Done"
-                      fontSize="16px"
-                      icon={<FaCheck />}
-                      pointerEvents={
-                        eventData.event_approve === 1 ? "none" : "auto"
-                      }
-                      onClick={() => {
-                        toggleCommentStatus(
-                          item.comment_Id,
-                          item.comment_detail
-                        );
-                      }}
-                      disabled={isLoading}
-                    />
-                  </Flex>
-                  <Text pt={"10px"}>{item.comment_detail}</Text>
-                </Card>
-              ))}
+                    <Flex
+                      alignItems={"center"}
+                      justifyContent={"space-between"}
+                      gap={"10px"}
+                    >
+                      <Text fontWeight={"bold"}>{item.comment_username}</Text>
+                      <IconButton
+                        isRound={true}
+                        variant="solid"
+                        colorScheme={item.comment_status ? "green" : "gray"}
+                        aria-label="Done"
+                        fontSize="16px"
+                        icon={<FaCheck />}
+                        pointerEvents={
+                          eventData.event_approve === 1 ? "none" : "auto"
+                        }
+                        onClick={() => {
+                          toggleCommentStatus(
+                            item.comment_Id,
+                            item.comment_detail
+                          );
+                        }}
+                        disabled={isLoading}
+                      />
+                    </Flex>
+                    <Text pt={"10px"}>{item.comment_detail}</Text>
+                  </Card>
+                ))}
             </Box>
             <Box
               display={comments.length === 0 ? "flex" : "none"}
@@ -292,6 +315,32 @@ export default function Admin_EventDetail() {
           </Stack>
         </Flex>
       </Stack>
+      {history && (
+        <Flex width={"100%"} justifyContent={"center"} pt={"20px"} flexDir={"column"}>
+          <Text align={"center"} fontSize={"24px"} fontWeight="bold" textDecor={"underline"} pb={"20px"}>สถิติของกิจกรรม {eventData.event_name}</Text>
+          <Box
+            display={{ base: "block", lg: "flex" }}
+            width={"full"}
+            justifyContent={"center"}
+            gap={"40px"}
+            p={"0 30px 30px 30px"}
+          >
+            <DoughnutChart
+              participantsAmount={participantsAmount}
+              participantsDownloadAmount={participantsDownloadAmount}
+            />
+            <Box pt={{ base: "20px", lg: "0" }} alignContent={"center"}>
+              <Text>จำนวนผู้เข้าร่วมกิจกรรม : {participantsAmount} คน</Text>
+              <Text>
+                จำนวนผู้ดาวน์โหลดใบประกาษณียบัตร : {participantsDownloadAmount} คน
+              </Text>
+              <Text>
+                จำนวนผู้เข้าร่วมที่ยังไม่ดาวน์โหลดใบประกาษณียบัตร : {participantsAmount - participantsDownloadAmount} คน
+              </Text>
+            </Box>
+          </Box>
+        </Flex>
+      )}
       <Footer />
       {isOpen && (
         <Modal
@@ -302,7 +351,9 @@ export default function Admin_EventDetail() {
         >
           <ModalOverlay />
           <ModalContent py={["5", "7", "7"]}>
-            <ModalHeader textAlign={"center"}>ยืนยันที่จะลบกิจกรรม?</ModalHeader>
+            <ModalHeader textAlign={"center"}>
+              ยืนยันที่จะลบกิจกรรม?
+            </ModalHeader>
             <ModalBody>
               <Flex justifyContent="center">
                 <Button

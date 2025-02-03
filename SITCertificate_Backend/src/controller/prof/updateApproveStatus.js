@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const updateApproveStatus = async (req, res) => {
-    const { eventId } = req.body;
+    const eventId = req.params.id;
     
     try {
         const excelQuery = await db

@@ -4,6 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Select,
   Textarea,
   HStack,
   Stack,
@@ -19,7 +20,7 @@ import {
   ModalFooter,
   ModalBody,
   useToast,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -28,8 +29,8 @@ import PDF from "react-pdf-watermark";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
-import { adminCreateEvent } from "../../api/admin/adminAPI";
-import { uploadFile } from "../../api/user/userAPI"
+import { adminCreateEvent, getProfessor } from "../../api/admin/adminAPI";
+import { uploadFile } from "../../api/user/userAPI";
 
 import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
@@ -53,6 +54,22 @@ function Admin_CreateEvent() {
   const [modifiedTemplateURL, setModifiedTemplateURL] = useState("");
   const [inputSize, setInputSize] = useState(30);
   const [inputY, setInputY] = useState(45);
+  const [professorList, setProfessorList] = useState([]);
+
+  const getProfessorList = async () => {
+    try {
+      const response = await getProfessor();
+      if (response.status === 200) {
+        setProfessorList(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error getting professor list:", error);
+    }
+  };
+
+  useEffect(() => {
+    getProfessorList();
+  }, []);
 
   const handleTemplateChange = async (pdfUrl) => {
     try {
@@ -116,7 +133,9 @@ function Admin_CreateEvent() {
   const handleSubmit = async () => {
     try {
       if (closeDate < openDate) {
-        setCloseDateError("วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด")
+        setCloseDateError(
+          "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด"
+        );
         setCloseDate("");
         toast({
           title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
@@ -136,8 +155,14 @@ function Admin_CreateEvent() {
         excelFile &&
         emailTemplate
       ) {
-        const uploadedThumbnail = await uploadFile(thumbnailFile, "upload_images");
-        const uploadedTemplate = await uploadFile(templateFile, "upload_template");
+        const uploadedThumbnail = await uploadFile(
+          thumbnailFile,
+          "upload_images"
+        );
+        const uploadedTemplate = await uploadFile(
+          templateFile,
+          "upload_template"
+        );
         const uploadedExcel = await uploadFile(excelFile, "upload_excel");
         const response = await adminCreateEvent(
           eventName,
@@ -208,13 +233,14 @@ function Admin_CreateEvent() {
                   <FormLabel fontSize={["sm", "md", "md"]}>
                     ชื่อผู้จัดกิจกรรม
                   </FormLabel>
-                  <Input
-                    type="text"
-                    size={["sm", "md", "md"]}
-                    placeholder="กรอกชื่อผู้จัดกิจกรรม"
-                    value={eventOwnerName}
-                    onChange={(e) => setEventOwnerName(e.target.value)}
-                  />
+                  <Select placeholder="เลือกชื่อผู้จัดกิจกรรม" size={["sm", "md", "md"]} value={eventOwnerName} onChange={(e) => setEventOwnerName(e.target.value)}>
+                    {professorList.map((professor) => (
+                      <option key={professor.professor_userName} value={professor.professor_userName}>
+                        {professor.professor_userName}
+                      </option>
+                      
+                    ))}
+                  </Select>
                 </FormControl>
                 <HStack w="full">
                   <Box w={"50%"}>
@@ -241,9 +267,7 @@ function Admin_CreateEvent() {
                         size={["sm", "md", "md"]}
                         type="date"
                         value={closeDate}
-                        onChange={(e) =>
-                          setCloseDate(e.target.value)
-                        }
+                        onChange={(e) => setCloseDate(e.target.value)}
                         borderColor={closeDateError ? "#D2042D" : "gray.200"}
                       />
                     </FormControl>
@@ -334,7 +358,9 @@ function Admin_CreateEvent() {
                       }
                     }}
                   />
-                  <FormLabel pt="5">เนื้อความในอีเมลส่งใบประกาศนียบัตร</FormLabel>
+                  <FormLabel pt="5">
+                    เนื้อความในอีเมลส่งใบประกาศนียบัตร
+                  </FormLabel>
                   <Textarea
                     height={"300px"}
                     resize="vertical"

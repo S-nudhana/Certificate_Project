@@ -17,13 +17,13 @@ const profRouter = express.Router();
 
 profRouter.post("/register", CreateProf);
 profRouter.post("/login", SignInProf);
-profRouter.post("/sendEmail", sendEmail);
+profRouter.post("/email", sendEmail);
 profRouter.post("/forgotPassword", setPinForgotPassword);
-profRouter.post("/sendResetPasswordEmail", sendResetPasswordEmail);
+profRouter.post("/resetPasswordEmail", sendResetPasswordEmail);
 profRouter.post("/resetPassword", resetPassword);
 
-profRouter.post("/newComment", authMiddleware, accessManager(["professor"]), setNewComment);
-profRouter.put("/approveEvent", authMiddleware, accessManager(["professor"]), updateApproveStatus);
-profRouter.delete("/deleteComment", authMiddleware, accessManager(["professor"]), deleteComment);
+profRouter.post("/comment", authMiddleware, accessManager(["professor"]), setNewComment);
+profRouter.delete("/comment/:id", authMiddleware, accessManager(["professor"]), deleteComment);
+profRouter.put("/event/:id/approve", authMiddleware, accessManager(["professor"]), updateApproveStatus);
 
 export default profRouter;

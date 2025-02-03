@@ -6,7 +6,7 @@ import { verifyToken } from "../auth/jwt.js";
 dotenv.config();
 
 const getCertificate = async (req, res) => {
-  const eventId = parseInt(req.query.id);
+  const eventId = parseInt(req.params.id);
   const { token } = req.cookies;
   try {
     const userId = verifyToken(token);

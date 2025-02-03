@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const userVerifyToken = async () => {
   try {
-    const response = await axiosInstance.get("/user/verifyToken");
+    const response = await axiosInstance.get("/user/token");
     return response;
   } catch (error) {
     return { authenticated: false };
@@ -12,7 +12,7 @@ export const userVerifyToken = async () => {
 
 export const userDeleteToken = async (token) => {
   try {
-    await axiosInstance.delete(`/user/deleteToken?token=${token}`);
+    await axiosInstance.delete(`/user/token?token=${token}`);
   } catch (error) {
     return error;
   }
@@ -20,7 +20,7 @@ export const userDeleteToken = async (token) => {
 
 export const userEventData = async () => {
   try {
-    const response = await axiosInstance.get(`/user/allEvent`);
+    const response = await axiosInstance.get(`/user/event`);
     return response;
   } catch (error) {
     return error;
@@ -29,7 +29,7 @@ export const userEventData = async () => {
 
 export const userEventDataById = async (id) => {
   try {
-    const response = await axiosInstance.get(`/user/event?id=${id}`);
+    const response = await axiosInstance.get(`/user/event/${id}`);
     return response;
   } catch (error) {
     return error;
@@ -55,6 +55,15 @@ export const userHistory = async (eventName) => {
     return error;
   }
 };
+
+export const getStatistic = async (eventId) => {
+  try {
+    const response = await axiosInstance.get(`/user/statistic?eventId=${eventId}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
 
 export const uploadFile = async (file, category) => {
   try {

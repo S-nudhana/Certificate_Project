@@ -3,7 +3,7 @@ import db from "../../db/connection.js";
 import { deleteFile } from "../../middleware/deleteFile.js";
 
 const deleteEvent = async (req, res) => {
-  const id = req.query.id;
+  const id = req.params.id;
   try {
     const eventQuery = await db
       .promise()

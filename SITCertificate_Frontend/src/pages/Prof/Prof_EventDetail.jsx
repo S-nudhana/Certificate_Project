@@ -28,11 +28,17 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
+import DoughnutChart from "../../components/DoughnutChart";
 
 import { formatDateDMY } from "../../utils/dateFormat";
 import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
 
-import { userComment, userEventDataById, fetchFile } from "../../api/user/userAPI";
+import {
+  userComment,
+  userEventDataById,
+  fetchFile,
+  getStatistic,
+} from "../../api/user/userAPI";
 
 import {
   profAddComment,
@@ -51,15 +57,26 @@ function Prof_EventDetail() {
   const [excel, setExcel] = useState("");
   const [comments, setComments] = useState([]);
   const [newCommentDetail, setNewCommentDetail] = useState();
+  const [history, setHistory] = useState();
+  const [participantsAmount, setParticipantsAmount] = useState(0);
+  const [participantsDownloadAmount, setParticipantsDownloadAmount] =
+    useState(0);
 
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
       setEventData(response.data.data);
+      setHistory(response.data.history);
       setCertificate(await fetchFile(response.data.data.event_certificate));
       setExcel(await fetchFile(response.data.data.event_excel));
+      if (!history) {
+        const response = await getStatistic(id);
+        setParticipantsAmount(response.data.participantsAmount);
+        setParticipantsDownloadAmount(response.data.participantsDownloadAmount);
+      }
+      return;
     } catch (error) {
-      console.error('Get event data error:', error);
+      console.error("Get event data error:", error);
     }
   };
 
@@ -68,7 +85,7 @@ function Prof_EventDetail() {
       const response = await userComment(id);
       setComments(response.data.data);
     } catch (error) {
-      console.error('Get comment error:', error);
+      console.error("Get comment error:", error);
     }
   };
 
@@ -93,7 +110,7 @@ function Prof_EventDetail() {
         }
       }
     } catch (error) {
-      console.error('Post comment error:', error);
+      console.error("Post comment error:", error);
     }
   };
 
@@ -110,7 +127,7 @@ function Prof_EventDetail() {
         });
       }
     } catch (error) {
-      console.error('Approve event error:', error);
+      console.error("Approve event error:", error);
     }
   };
 
@@ -122,7 +139,7 @@ function Prof_EventDetail() {
         getComment();
       }
     } catch (error) {
-      console.error('Delete comment error:', error);
+      console.error("Delete comment error:", error);
     }
   };
 
@@ -155,8 +172,8 @@ function Prof_EventDetail() {
               โดย {eventData.event_owner}
             </Text>
             <Text pt="10px" pb="10px">
-              เปิดให้ดาว์นโหลดตั้งแต่{" "}
-              {formatDateDMY(eventData.event_startDate)} ถึง {formatDateDMY(eventData.event_endDate)}
+              เปิดให้ดาว์นโหลดตั้งแต่ {formatDateDMY(eventData.event_startDate)}{" "}
+              ถึง {formatDateDMY(eventData.event_endDate)}
             </Text>
             <Text pb="20px" color={eventData.event_approve ? "green" : "red"}>
               สถานะ : {eventData.event_approve ? "อนุมัติ" : "รอการอนุมัติ"}
@@ -233,50 +250,52 @@ function Prof_EventDetail() {
               <Heading fontSize={"2xl"} pt="20px">
                 ความคิดเห็น
               </Heading>
-              <Box width={"100%"} display={comments.length === 0 ? "none" : "block"}>
-                {comments && comments.map((item) => (
-                  <Card p={"20px"} mb={"20px"} variant={"outline"}>
-                    <Flex
-                      alignItems={"center"}
-                      justifyContent={"space-between"}
-                      gap={"10px"}
-                    >
-                      <Text fontWeight={"bold"}>
-                        {item.comment_username}
-                      </Text>
-                      <IconButton
-                        isRound={true}
-                        icon={<FaCheck />}
-                        colorScheme={item.comment_status ? "green" : "gray"}
-                        aria-label="Done"
-                        pointerEvents={"none"}
-                      />
-                    </Flex>
-                    <Text pt={"10px"} whiteSpace="pre-line">
-                      {item.comment_detail}
-                    </Text>
-                    <Flex
-                      width={"100%"}
-                      justifyContent={"flex-end"}
-                      pt={"10px"}
-                    >
-                      <Button
-                        color={"#AD3D3B"}
-                        _hover={{ color: "red" }}
-                        variant={"link"}
-                        textDecoration={"underline"}
-                        textUnderlineOffset={"2px"}
-                        leftIcon={<FaTrash />}
-                        isDisabled={eventData.event_approve === 1}
-                        onClick={() => {
-                          deleteComment(item.comment_Id);
-                        }}
+              <Box
+                width={"100%"}
+                display={comments.length === 0 ? "none" : "block"}
+              >
+                {comments &&
+                  comments.map((item) => (
+                    <Card p={"20px"} mb={"20px"} variant={"outline"}>
+                      <Flex
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        gap={"10px"}
                       >
-                        ลบความคิดเห็น
-                      </Button>
-                    </Flex>
-                  </Card>
-                ))}
+                        <Text fontWeight={"bold"}>{item.comment_username}</Text>
+                        <IconButton
+                          isRound={true}
+                          icon={<FaCheck />}
+                          colorScheme={item.comment_status ? "green" : "gray"}
+                          aria-label="Done"
+                          pointerEvents={"none"}
+                        />
+                      </Flex>
+                      <Text pt={"10px"} whiteSpace="pre-line">
+                        {item.comment_detail}
+                      </Text>
+                      <Flex
+                        width={"100%"}
+                        justifyContent={"flex-end"}
+                        pt={"10px"}
+                      >
+                        <Button
+                          color={"#AD3D3B"}
+                          _hover={{ color: "red" }}
+                          variant={"link"}
+                          textDecoration={"underline"}
+                          textUnderlineOffset={"2px"}
+                          leftIcon={<FaTrash />}
+                          isDisabled={eventData.event_approve === 1}
+                          onClick={() => {
+                            deleteComment(item.comment_Id);
+                          }}
+                        >
+                          ลบความคิดเห็น
+                        </Button>
+                      </Flex>
+                    </Card>
+                  ))}
               </Box>
               <Box
                 display={comments.length === 0 ? "flex" : "none"}
@@ -316,6 +335,47 @@ function Prof_EventDetail() {
             </Stack>
           </Flex>
         </Stack>
+      )}
+      {history && (
+        <Flex
+          width={"100%"}
+          justifyContent={"center"}
+          pt={"20px"}
+          flexDir={"column"}
+        >
+          <Text
+            align={"center"}
+            fontSize={"24px"}
+            fontWeight="bold"
+            textDecor={"underline"}
+            pb={"20px"}
+          >
+            สถิติของกิจกรรม {eventData.event_name}
+          </Text>
+          <Box
+            display={{ base: "block", lg: "flex" }}
+            width={"full"}
+            justifyContent={"center"}
+            gap={"40px"}
+            p={"0 30px 30px 30px"}
+          >
+            <DoughnutChart
+              participantsAmount={participantsAmount}
+              participantsDownloadAmount={participantsDownloadAmount}
+            />
+            <Box pt={{ base: "20px", lg: "0" }} alignContent={"center"}>
+              <Text>จำนวนผู้เข้าร่วมกิจกรรม : {participantsAmount} คน</Text>
+              <Text>
+                จำนวนผู้ดาวน์โหลดใบประกาษณียบัตร : {participantsDownloadAmount}{" "}
+                คน
+              </Text>
+              <Text>
+                จำนวนผู้เข้าร่วมที่ยังไม่ดาวน์โหลดใบประกาษณียบัตร :{" "}
+                {participantsAmount - participantsDownloadAmount} คน
+              </Text>
+            </Box>
+          </Box>
+        </Flex>
       )}
       <Footer />
       {isOpen && (

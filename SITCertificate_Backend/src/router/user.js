@@ -7,6 +7,7 @@ import getCommentById from "../controller/user/getCommentById.js";
 import verifyCookiesToken from "../controller/token/verifyCookiesToken.js";
 import deleteToken from "../controller/token/deleteToken.js";
 import uploadFile from "../controller/user/uploadFile.js";
+import getStatistics from "../controller/user/getStatistics.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 import { accessManager } from "../middleware/accessManager.js";
@@ -15,13 +16,14 @@ import { upload } from "../config/multer.config.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/verifyToken", verifyCookiesToken);
-userRouter.delete("/deleteToken", deleteToken);
+userRouter.get("/token", verifyCookiesToken);
+userRouter.delete("/token", deleteToken);
 
-userRouter.get("/allEvent", authMiddleware, accessManager(["admin", "professor"]), getAllInProgressEvent);
-userRouter.get("/event", authMiddleware, accessManager(["admin", "professor"]), getEventById);
+userRouter.get("/event", authMiddleware, accessManager(["admin", "professor"]), getAllInProgressEvent);
+userRouter.get("/event/:id", authMiddleware, accessManager(["admin", "professor"]), getEventById);
 userRouter.get("/history", authMiddleware, accessManager(["admin", "professor"]), getAllHistoryEvent);
 userRouter.get("/comment", authMiddleware, accessManager(["admin", "professor"]), getCommentById);
 userRouter.post("/uploadFile", authMiddleware, accessManager(["student", "professor", "admin"]), upload.single("file"), uploadFile);
+userRouter.get("/statistic", authMiddleware, accessManager(["admin", "professor"]), getStatistics);
 
 export default userRouter;

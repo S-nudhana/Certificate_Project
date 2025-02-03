@@ -1,6 +1,6 @@
 import db from "../../db/connection.js";
 const updateCommentStatus = async(req, res) => {
-    const { commentId } = req.body;
+    const commentId = req.params.id;
     try {
         const dataQuery = await db
             .promise()

@@ -18,12 +18,12 @@ const studentRouter = express.Router();
 studentRouter.post("/login", SignInStudent);
 
 studentRouter.get("/event", authMiddleware, accessManager(["student"]), getAllInProgressEvent);
-studentRouter.get("/eventId", authMiddleware, accessManager(["student"]), getAllInProgressEventById);
-studentRouter.get("/certificate", authMiddleware, accessManager(["student"]), getCertificate);
-studentRouter.get("/generateCertificate", authMiddleware, accessManager(["student"]), getStudentGeneratedCertificate);
-studentRouter.get("/generateStatus", authMiddleware, accessManager(["student"]), getGenerateCertificate);
-studentRouter.put("/generateStatusUpdate", authMiddleware, accessManager(["student"]), updateGenerateCertificate);
-studentRouter.put("/certificateInfo", authMiddleware, accessManager(["student"]), updataCertificateInformation);
-studentRouter.post("/sendCertificate", authMiddleware, accessManager(["student"]), sendCertificate);
+studentRouter.get("/event/:id", authMiddleware, accessManager(["student"]), getAllInProgressEventById);
+studentRouter.get("/certificate/:id", authMiddleware, accessManager(["student"]), getCertificate);
+studentRouter.get("/certificate/:id/generate", authMiddleware, accessManager(["student"]), getStudentGeneratedCertificate);
+studentRouter.get("/status/:id", authMiddleware, accessManager(["student"]), getGenerateCertificate);
+studentRouter.put("/status/:id/update", authMiddleware, accessManager(["student"]), updateGenerateCertificate);
+studentRouter.put("/certificate/info", authMiddleware, accessManager(["student"]), updataCertificateInformation);
+studentRouter.post("/certificate", authMiddleware, accessManager(["student"]), sendCertificate);
 
 export default studentRouter;

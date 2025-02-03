@@ -27,7 +27,7 @@ export const profSignUp = async (username, email, password) => {
 
 export const profAddComment = async (id, newCommentDetail) => {
   try {
-    const response = await axiosInstance.post(`/prof/newComment`, {
+    const response = await axiosInstance.post(`/prof/comment`, {
       eventId: id,
       detail: newCommentDetail,
     });
@@ -37,20 +37,18 @@ export const profAddComment = async (id, newCommentDetail) => {
   }
 };
 
-export const profApproveEvent = async (id) => {
+export const profDeleteComment = async (id) => {
   try {
-    const response = await axiosInstance.put(`/prof/approveEvent`, {
-      eventId: id,
-    });
+    const response = await axiosInstance.delete(`/prof/comment/${id}`);
     return response;
   } catch (error) {
     return error;
   }
 };
 
-export const profDeleteComment = async (id) => {
+export const profApproveEvent = async (id) => {
   try {
-    const response = await axiosInstance.delete(`/prof/deleteComment?id=${id}`);
+    const response = await axiosInstance.put(`/prof/event/${id}/approve`);
     return response;
   } catch (error) {
     return error;
@@ -59,7 +57,7 @@ export const profDeleteComment = async (id) => {
 
 export const profSendEmail = async (id, eventName, commentDetail) => {
   try {
-    const response = await axiosInstance.post("/prof/sendEmail", {
+    const response = await axiosInstance.post("/prof/email", {
       id: id,
       subject: "แจ้งเตือนจาก SIT Certificate",
       eventName: eventName,
@@ -84,7 +82,7 @@ export const profForgotPassword = async (email) => {
 
 export const profSendResetPasswordEmail = async (email) => {
   try {
-    const response = await axiosInstance.post("/prof/sendResetPasswordEmail", {
+    const response = await axiosInstance.post("/prof/resetPasswordEmail", {
       email: email,
     });
     return response;
