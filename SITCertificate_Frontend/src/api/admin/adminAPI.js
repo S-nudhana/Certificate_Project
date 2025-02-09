@@ -12,10 +12,11 @@ export const adminSignIn = async (email, password) => {
   }
 };
 
-export const adminSignUp = async (username, email, password) => {
+export const adminSignUp = async (username, fullname, email, password) => {
   try {
     const response = await axiosInstance.post("/admin/register", {
       username,
+      fullname,
       email,
       password,
     });

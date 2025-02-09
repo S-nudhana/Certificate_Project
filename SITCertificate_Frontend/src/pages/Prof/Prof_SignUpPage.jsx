@@ -30,17 +30,21 @@ export default function Prof_SignUpPage() {
   const navigate = useNavigate();
   
   const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [confirmShowPassword, setconfirmShowPassword] = useState(false);
-  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
   const isFormFilled = () =>
     username.trim() !== "" &&
+    firstname.trim() !== "" &&
+    lastname.trim() !== "" &&
     email.trim() !== "" &&
     password.trim() !== "" &&
     confirmPassword.trim() !== "";
@@ -66,7 +70,8 @@ export default function Prof_SignUpPage() {
         });
         return;
       }
-      const res = await profSignUp(username, email, password);
+      const fullname = `${firstname} ${lastname}`;
+      const res = await profSignUp(username, fullname, email, password);
       if (res.status === 201) {
         toast({
           title: "สร้างบัญชีผู้ใช้สำเร็จ",
@@ -106,6 +111,7 @@ export default function Prof_SignUpPage() {
           boxShadow="lg"
           p={8}
           px={10}
+          my={12}
         >
           <Stack align="center" spacing={5} py={5} px={1}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
@@ -129,6 +135,24 @@ export default function Prof_SignUpPage() {
                 onChange={(e) => setUsername(e.target.value)}
               />
               <FormErrorMessage>{emailError}</FormErrorMessage>
+            </FormControl>
+            <FormControl id="firstname">
+              <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อจริง</FormLabel>
+              <Input
+                type="text"
+                placeholder="ชื่อจริง"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="lastname">
+              <FormLabel fontSize={["sm", "lg", "lg"]}>นามสกุล</FormLabel>
+              <Input
+                type="text"
+                placeholder="นามสกุล"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+              />
             </FormControl>
             <FormControl id="email" isInvalid={emailError}>
               <FormLabel fontSize={["sm", "lg", "lg"]}>อีเมล</FormLabel>

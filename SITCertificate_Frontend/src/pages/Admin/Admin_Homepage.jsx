@@ -7,7 +7,6 @@ import { FaHistory } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import AdminCard from "../../components/admin/AdminCard";
-import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
 import Banner from "../../components/Banner";
 
 import { userEventData } from "../../api/user/userAPI";
@@ -113,6 +112,7 @@ function Admin_Homepage() {
                 event_startDate={item.event_startDate}
                 event_endDate={item.event_endDate}
                 event_Id={item.event_Id}
+                event_status={item.event_approve}
               />
             ))}
           </Box>
@@ -151,14 +151,15 @@ function Admin_Homepage() {
             {approveEventData.map((item, key) => {
               return (
                 <>
-                  <AdminCardConfirmed
+                  <AdminCard
                     event_thumbnail={item.event_thumbnail}
                     event_name={item.event_name}
                     event_owner={item.event_owner}
                     event_startDate={item.event_startDate}
                     event_endDate={item.event_endDate}
                     event_Id={item.event_Id}
-                  ></AdminCardConfirmed>
+                    event_status={item.event_approve}
+                  ></AdminCard>
                 </>
               );
             })}

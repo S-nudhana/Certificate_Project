@@ -235,8 +235,8 @@ function Admin_CreateEvent() {
                   </FormLabel>
                   <Select placeholder="เลือกชื่อผู้จัดกิจกรรม" size={["sm", "md", "md"]} value={eventOwnerName} onChange={(e) => setEventOwnerName(e.target.value)}>
                     {professorList.map((professor) => (
-                      <option key={professor.professor_userName} value={professor.professor_userName}>
-                        {professor.professor_userName}
+                      <option key={professor.professor_fullname} value={professor.professor_fullname}>
+                        {professor.professor_fullname}
                       </option>
                       
                     ))}

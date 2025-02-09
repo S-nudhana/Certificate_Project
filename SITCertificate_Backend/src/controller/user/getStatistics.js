@@ -5,14 +5,14 @@ const getStatistics = async (req, res) => {
   try {
     const participantsQuery = await db
       .promise()
-      .query(`SELECT COUNT(*) AS participantsAmount FROM student WHERE student_joinedEventId = ?`, [
+      .query(`SELECT COUNT(*) AS participantsAmount FROM student_event WHERE student_event_eventId = ?`, [
         eventId,
       ]);
     const participantsAmount = parseInt(participantsQuery[0][0].participantsAmount);
     const participantsDownloadQuery = await db
       .promise()
       .query(
-        `SELECT COUNT(*) AS participantsDownloadAmount FROM student WHERE student_joinedEventId = ? AND student_eventGenerated = 1`,
+        `SELECT COUNT(*) AS participantsDownloadAmount FROM student_event WHERE student_event_eventId = ? AND student_event_eventCertificateGenerated = 1`,
         [eventId]
       );
     const participantsDownloadAmount = parseInt(participantsDownloadQuery[0][0].participantsDownloadAmount);

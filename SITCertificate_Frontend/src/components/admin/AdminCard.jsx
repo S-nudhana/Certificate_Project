@@ -13,6 +13,7 @@ export default function AdminCard({
   event_startDate,
   event_endDate,
   event_Id,
+  event_status
 }) {
   const navigate = useNavigate();
 
@@ -62,6 +63,8 @@ export default function AdminCard({
             {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
           </Text>
           <Button
+            display={event_status ? "none" : ""}
+            mr={"15px"}
             width="90px"
             borderRadius="40px"
             bgColor="#336699"
@@ -74,7 +77,6 @@ export default function AdminCard({
             แก้ไข
           </Button>
           <Button
-            ml={"15px"}
             width="130px"
             borderRadius="40px"
             bgColor="#3399cc"

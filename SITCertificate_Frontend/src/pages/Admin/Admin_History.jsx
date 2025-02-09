@@ -14,7 +14,7 @@ import { FaSearch } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import AdminCardConfirmed from "../../components/admin/AdminCardConfirmed";
+import AdminCard from "../../components/admin/AdminCard";
 
 import { userHistory } from "../../api/user/userAPI";
 
@@ -112,13 +112,14 @@ function Admin_History() {
           mx="auto"
         >
           {historyData.map((item, key) => (
-            <AdminCardConfirmed
+            <AdminCard
               event_thumbnail={item.event_thumbnail}
               event_name={item.event_name}
               event_owner={item.event_owner}
               event_startDate={item.event_startDate}
               event_endDate={item.event_endDate}
               event_Id={item.event_Id}
+              event_status={item.event_approve}
             />
           ))}
         </Box>

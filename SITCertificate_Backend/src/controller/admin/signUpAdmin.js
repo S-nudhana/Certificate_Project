@@ -1,10 +1,10 @@
 import connection from "../../db/connection.js";
 import { hashedPassword } from "../auth/jwt.js";
 
-const createAdmin = async (req, res) => {
-  const { username, email, password } = req.body;
+const signUpAdmin = async (req, res) => {
+  const { username, fullname, email, password } = req.body;
   try {
-    if (!username || !email || !password) {
+    if (!username || !fullname || !email || !password) {
       return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบทุกช่อง" });
     }
     const [users] = await connection
@@ -16,12 +16,13 @@ const createAdmin = async (req, res) => {
         message: "อีเมลนี้มีผู้ใช้งานแล้ว",
       });
     }
+
     const hashed_password = hashedPassword(password);
-    const values = [username, email, hashed_password];
+    const values = [username, fullname, email, hashed_password];
     await connection
       .promise()
       .query(
-        "INSERT INTO admin (admin_userName, admin_email ,admin_password) VALUES (?, ?, ?)",
+        "INSERT INTO admin (admin_username, admin_fullname, admin_email ,admin_password) VALUES (?, ?, ?, ?)",
         values
       );
     return res.status(201).json({ message: "User created successfully" });
@@ -31,4 +32,4 @@ const createAdmin = async (req, res) => {
   }
 };
 
-export default createAdmin;
+export default signUpAdmin;

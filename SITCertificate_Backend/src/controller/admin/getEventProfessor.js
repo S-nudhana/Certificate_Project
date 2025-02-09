@@ -5,9 +5,10 @@ const getEventProfessor = async (req, res) => {
     const dataQuery = await db
       .promise()
       .query(
-        `SELECT professor_userName FROM professor`
+        `SELECT professor_fullname FROM professor`
       );
     const data = dataQuery[0];
+    console.log(data)
     return res.json({
       success: true,
       data: data,

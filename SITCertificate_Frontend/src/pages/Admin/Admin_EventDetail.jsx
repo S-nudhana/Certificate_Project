@@ -179,7 +179,7 @@ export default function Admin_EventDetail() {
             {eventData.event_name}
           </Text>
           <Text fontSize="18px" fontWeight="bold">
-            โดย {eventData.event_owner}
+            อาจาร์ยผู้จัดกิจกรรม {eventData.event_owner}
           </Text>
           <Text pt="10px" pb="10px">
             เปิดให้ดาว์นโหลดตั้งแต่ {formatDateDMY(eventData.event_startDate)}{" "}

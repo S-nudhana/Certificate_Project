@@ -1,8 +1,9 @@
 import db from "../../db/connection.js";
 import { verifyToken } from "../auth/jwt.js";
-const setEvent = async(req, res) => {
+
+const createEvent = async(req, res) => {
     const { token } = req.cookies;
-    const { eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, emailTemplate,inputSize,inputY  } = req.body;
+    const { eventName, eventOwner, openDate, closeDate, thumbnail, template, excel, emailTemplate, inputSize, inputY  } = req.body;
     try {
         const id = verifyToken(token);
         const adminId = id.admin_id;
@@ -19,4 +20,4 @@ const setEvent = async(req, res) => {
         return res.status(400).json({ success: false, payload: error.message });
     }
 };
-export default setEvent;
+export default createEvent;
