@@ -1,9 +1,9 @@
-import { transporter } from "../../config/transporter.config.js";
+import { transporter } from "../../config/transporterConfig.js";
 import dotenv from "dotenv";
 import db from "../../db/connection.js";
 
 import { verifyToken } from "../auth/jwt.js";
-import { sendMail } from "../../services/sendMail.js";
+import { sendMail } from "../../services/mail.js";
 
 dotenv.config();
 
@@ -28,24 +28,23 @@ const sendEmail = async (req, res) => {
       );
     const sender = senderQuery[0][0].professor_userName;
     try {
-      const response = await sendMail({
+      await sendMail({
         to: reciever,
         subject: subject,
         text: `อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}`,
         html: `<p>อาจารย์ ${sender} ได้เพิ่มความคิดเห็นใหม่ ${commentDetail} ในกิจกรรม ${eventName}</p>`,
       });
-      return res.status(200).json(response);
+      return res.status(200).json({ success: true, message: "ส่งอีเมลสำเร็จ" });
     } catch (mailError) {
-      console.error("Failed to send email", mailError);
+      console.error("Error: ", mailError);
       return res
         .status(500)
-        .json({ message: "Password updated, but email failed to send" });
+        .json({ success: false, message: "ไม่สามารถส่งอีเมลยืนยันได้" });
     }
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
       error: error.message,
     });
   }

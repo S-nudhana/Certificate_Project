@@ -3,8 +3,8 @@ import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-import Building from "../../../public/img/SIT_Building.png";
-import Logo from "../../../public/img/SIT_Icon.png";
+import Building from "/img/SIT_Building.png";
+import Logo from "/img/SIT_Icon.png";
 
 import { studentSignIn } from '../../api/student/studentAPI';
 
@@ -50,6 +50,13 @@ export default function Student_SignInPage() {
         });
       }
     } catch (error) {
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: "ไม่สามารถเข้าสู่ระบบได้",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
       console.log("Student_SignInPage error: ", error)
     }
   };

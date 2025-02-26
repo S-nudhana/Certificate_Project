@@ -12,10 +12,11 @@ export const profSignIn = async (email, password) => {
   }
 };
 
-export const profSignUp = async (username, email, password) => {
+export const profSignUp = async (username, fullname, email, password) => {
   try {
     const response = await axiosInstance.post("/prof/register", {
       username,
+      fullname,
       email,
       password,
     });

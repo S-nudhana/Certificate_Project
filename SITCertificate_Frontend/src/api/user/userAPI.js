@@ -10,9 +10,10 @@ export const userVerifyToken = async () => {
   }
 };
 
-export const userDeleteToken = async (token) => {
+export const userDeleteToken = async () => {
   try {
-    await axiosInstance.delete(`/user/token?token=${token}`);
+    const response = await axiosInstance.delete(`/user/token`);
+    return response;
   } catch (error) {
     return error;
   }
@@ -39,6 +40,17 @@ export const userEventDataById = async (id) => {
 export const userComment = async (id) => {
   try {
     const response = await axiosInstance.get(`/user/comment?id=${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const userSearchEvent = async (eventName) => {
+  try {
+    const response = await axiosInstance.get(
+      `/user/event/search?eventName=${eventName}`
+    );
     return response;
   } catch (error) {
     return error;
@@ -87,7 +99,6 @@ export const fetchFile = async (filepath) => {
     );
     return URL.createObjectURL(response.data);
   } catch (error) {
-    console.error("Error in fetchFile:", error);
     return error;
   }
 };
@@ -100,7 +111,6 @@ export const fetchCertificate = async (filepath) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error in fetchFile:", error);
     return error;
   }
 };

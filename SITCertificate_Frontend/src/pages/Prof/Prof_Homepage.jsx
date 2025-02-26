@@ -19,7 +19,7 @@ function Prof_Homepage() {
   const getEventData = async () => {
     try {
       const response = await userEventData();
-      const data = response.data.data;
+      const data = response.data.data.events;
       setApproveEventData(data.filter((item) => item.event_approve));
       setPendingEventData(data.filter((item) => !item.event_approve));
     } catch (error) {

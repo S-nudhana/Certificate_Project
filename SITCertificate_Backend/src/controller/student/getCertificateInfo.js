@@ -12,25 +12,25 @@ const getCertificateInfo = async (req, res) => {
     const userId = verifyToken(token);
     const studentEmail = userId.student_email;
     const value = [eventId, studentEmail];
-    const dataQuery = await db
+    const certificateQuery = await db
       .promise()
       .query(
         `SELECT student_nameOnCertificate, student_surnameOnCertificate, student_emailTostudent_sendCertificate FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
         value
       );
 
-    const data = dataQuery[0][0];
+    const certificate = certificateQuery[0][0];
     return res.status(200).json({
       success: true,
-      data: data,
-      error: null,
+      data: {
+        certificate: certificate,
+      },
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      message: error,
     });
   }
 };

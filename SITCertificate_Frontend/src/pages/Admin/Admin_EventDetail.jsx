@@ -40,11 +40,11 @@ import {
   getStatistic,
 } from "../../api/user/userAPI";
 import {
-  adminToggleCommentStatus,
+  adminUpdateCommentStatus,
   adminDeleteEvent,
   adminSendEmail,
 } from "../../api/admin/adminAPI";
-import { profEmail } from "../../api/admin/adminAPI";
+import { getProfessorEmail } from "../../api/admin/adminAPI";
 
 export default function Admin_EventDetail() {
   const toast = useToast();
@@ -57,21 +57,21 @@ export default function Admin_EventDetail() {
   const [comments, setComments] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [history, setHistory] = useState();
+  const [statistic, setStatistic] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(0);
   const [participantsDownloadAmount, setParticipantsDownloadAmount] = useState(0);
 
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
-      setEventData(response.data.data);
-      setHistory(response.data.history);
-      setCertificate(await fetchFile(response.data.data.event_certificate));
-      setExcel(await fetchFile(response.data.data.event_excel));
-      if (!history) {
+      setEventData(response.data.data.event);
+      setStatistic(response.data.data.statistic);
+      setCertificate(await fetchFile(response.data.data.event.event_certificate));
+      setExcel(await fetchFile(response.data.data.event.event_excel));
+      if (!statistic) {
         const response = await getStatistic(id);
-        setParticipantsAmount(response.data.participantsAmount);
-        setParticipantsDownloadAmount(response.data.participantsDownloadAmount);
+        setParticipantsAmount(response.data.data.participantsAmount);
+        setParticipantsDownloadAmount(response.data.data.participantsDownloadAmount);
       }
     } catch (error) {
       console.error("Error getting event data:", error);
@@ -80,9 +80,9 @@ export default function Admin_EventDetail() {
 
   const getReceiverEmail = async () => {
     try {
-      const response = await profEmail(id);
-      if (response.data.data) {
-        setReceiver(response.data.data.professor_email);
+      const response = await getProfessorEmail(id);
+      if (response.status == 200) {
+        setReceiver(response.data.data.professorEmail.professor_email);
       }
     } catch (error) {
       console.error("Error getting receiver email:", error);
@@ -92,7 +92,7 @@ export default function Admin_EventDetail() {
   const getComment = async () => {
     try {
       const response = await userComment(id);
-      setComments(response.data.data);
+      setComments(response.data.data.comment);
     } catch (error) {
       console.error("Error getting comment:", error);
     }
@@ -106,9 +106,9 @@ export default function Admin_EventDetail() {
 
   const toggleCommentStatus = async (commentId, commentDetail) => {
     try {
-      const response = await adminToggleCommentStatus(commentId);
-      if (response.data.success) {
-        if (response.data.data) {
+      const response = await adminUpdateCommentStatus(commentId);
+      if (response.status === 200) {
+        if (response.data.data.commentStatus) {
           sendMailToProfessor(commentDetail);
         }
         getComment();
@@ -121,7 +121,7 @@ export default function Admin_EventDetail() {
   const deleteEvent = async () => {
     try {
       const response = await adminDeleteEvent(id);
-      if (response.data.success) {
+      if (response.status === 200) {
         onClose();
         navigate("/admin/");
       }
@@ -145,8 +145,16 @@ export default function Admin_EventDetail() {
           duration: 2000,
           isClosable: true,
         });
-        return;
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
       }
+      return;
     } catch (error) {
       console.error("Error sending email:", error);
     } finally {
@@ -179,7 +187,7 @@ export default function Admin_EventDetail() {
             {eventData.event_name}
           </Text>
           <Text fontSize="18px" fontWeight="bold">
-            โดย {eventData.event_owner}
+            ผู้จัดกิจกรรม {eventData.event_owner}
           </Text>
           <Text pt="10px" pb="10px">
             เปิดให้ดาว์นโหลดตั้งแต่ {formatDateDMY(eventData.event_startDate)}{" "}
@@ -266,12 +274,12 @@ export default function Admin_EventDetail() {
               display={comments.length === 0 ? "none" : "block"}
             >
               {comments &&
-                comments.map((item) => (
+                comments.map((item, key) => (
                   <Card
+                    key={key}
                     p={"20px"}
                     mb={"20px"}
                     variant={"outline"}
-                    key={item.id}
                   >
                     <Flex
                       alignItems={"center"}
@@ -315,7 +323,7 @@ export default function Admin_EventDetail() {
           </Stack>
         </Flex>
       </Stack>
-      {history && (
+      {statistic && (
         <Flex width={"100%"} justifyContent={"center"} pt={"20px"} flexDir={"column"}>
           <Text align={"center"} fontSize={"24px"} fontWeight="bold" textDecor={"underline"} pb={"20px"}>สถิติของกิจกรรม {eventData.event_name}</Text>
           <Box

@@ -9,15 +9,13 @@ const getCommentById = async (req, res) => {
     const data = dataQuery[0]
     return res.json({
       success: true,
-      data: data,
-      error: null,
+      data: ({comment: data}),
     });
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      message: error,
     });
   }
 };

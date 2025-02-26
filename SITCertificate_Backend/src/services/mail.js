@@ -1,4 +1,4 @@
-import { transporter } from "../config/transporter.config.js";
+import { transporter } from "../config/transporterConfig.js";
 
 export const sendMail = async ({ to, subject, text, html }) => {
   return new Promise((resolve, reject) => {

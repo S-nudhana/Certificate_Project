@@ -2,22 +2,20 @@ import db from "../../db/connection.js";
 
 const getEventProfessor = async (req, res) => {
   try {
-    const dataQuery = await db
+    const professorsQuery = await db
       .promise()
-      .query(
-        `SELECT professor_userName FROM professor`
-      );
-    const data = dataQuery[0];
+      .query(`SELECT professor_fullname FROM professor`);
+    const professors = professorsQuery[0];
     return res.json({
       success: true,
-      data: data,
-      error: null,
+      data: {
+        professors: professors,
+      },
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
       error: error.message,
     });
   }

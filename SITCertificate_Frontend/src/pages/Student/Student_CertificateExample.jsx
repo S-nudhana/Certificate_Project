@@ -40,7 +40,7 @@ function Student_CertificateExample() {
   const location = useLocation();
   const isMobile = deviceScreenCheck();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { name, surname, email } = location.state || {};
+  const { name, surname, email } = location.state || {};  
 
   const [certificate, setCertificate] = useState();
   const [pdfWatermarkUrl, setPdfWatermarkUrl] = useState(null);
@@ -52,19 +52,19 @@ function Student_CertificateExample() {
     let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
-      const certificateBlob = await fetchCertificate(response.data.data.event_Certificate);
+      const certificateBlob = await fetchCertificate(response.data.data.certificate.event_Certificate);
       certificateBlobUrl = URL.createObjectURL(certificateBlob);
       setCertificate(certificateBlobUrl);
-      setCertificateY(response.data.data.event_certificate_position_y);
-      setCertificateTextSize(response.data.data.event_certificate_text_size);
-      setEventName(response.data.data.event_name);
+      setCertificateY(response.data.data.certificate.event_certificate_position_y);
+      setCertificateTextSize(response.data.data.certificate.event_certificate_text_size);
+      setEventName(response.data.data.certificate.event_name);
       if (response.status === 200) {
         const watermarkCertificate = await fetchAndFillCertificate(
           certificateBlobUrl,
           name,
           surname,
-          response.data.data.event_certificate_position_y,
-          response.data.data.event_certificate_text_size,
+          response.data.data.certificate.event_certificate_position_y,
+          response.data.data.certificate.event_certificate_text_size,
           true
         );
         setPdfWatermarkUrl(watermarkCertificate);
@@ -78,7 +78,7 @@ function Student_CertificateExample() {
   const getStudentGenerate = async () => {
     try {
       const response = await studentGenerate(id);
-      if (!response.data.data) {
+      if (!response.data.data.status) {
         navigate(`/detail/${id}`);
       }
     } catch (error) {

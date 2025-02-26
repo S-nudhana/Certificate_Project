@@ -27,11 +27,16 @@ const setPinForgotPassword = async (req, res) => {
         "UPDATE admin SET admin_forgotpasswordPin = ?, admin_iv = ?, admin_refCode = ? WHERE admin_email = ?",
         value2
       );
-    return res
-      .status(200)
-      .json({ message: "Send Pin to Email Successful", data: refCode });
+    return res.status(200).json({
+      success: true,
+      message: "ส่งรหัสการเปลี่ยนรหัสผ่านไปในอีเมลของท่านเรียบร้อยแล้ว",
+      data: {
+        refCode: refCode,
+      },
+    });
   } catch (error) {
-    return res.status(500).json({ message: error });
+    console.error("Error:", error);
+    return res.status(500).json({ success: false, message: error });
   }
 };
 export default setPinForgotPassword;

@@ -22,16 +22,18 @@ const deleteEvent = async (req, res) => {
     await db
       .promise()
       .query(`DELETE FROM comment WHERE comment_eventId = ?`, [id]);
+    await db
+      .promise()
+      .query(`DELETE FROM student_event WHERE student_event_eventId = ?`, [id]);
     await db.promise().query(`DELETE FROM event WHERE event_Id = ?`, [id]);
-    return res.json({
+    return res.status(200).json({
       success: true,
-      error: null,
+      message: "ลบกิจกรรมเสร็จสิ้น",
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
       error: error.message,
     });
   }

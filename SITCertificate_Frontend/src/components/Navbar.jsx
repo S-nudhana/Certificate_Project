@@ -15,7 +15,7 @@ import {
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import logo from "../../public/img/SIT_logo.png";
+import logo from "/img/SIT_logo.png";
 
 import { userVerifyToken, userDeleteToken } from "../api/user/userAPI";
 
@@ -25,7 +25,8 @@ export default function Navbar() {
   const [shouldShowNavbar, setShouldShowNavbar] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
-  const [authStatus, setAuthStatus] = useState(null);
+  const [authStatus, setAuthStatus] = useState(false);
+  const [authRole, setAuthRole] = useState(null);
 
   const handleScroll = () => {
     const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -47,24 +48,25 @@ export default function Navbar() {
 
   const verifyAuth = async () => {
     try {
-      const response = await userVerifyToken();
-      setAuthStatus(response.status === 200 ? response.data : response);
+      const res = await userVerifyToken();
+      setAuthStatus(res.data.data.authenticated);
+      setAuthRole(res.data.data.role);
     } catch (error) {
       console.error('Verify token error:', error);
     }
   };
 
   const LogoutCheck = async () => {
-    if (authStatus.authenticated) {
+    if (authStatus) {
       try {
         let redirectPath = "/login";
-        if (location.pathname.startsWith("/professor") && authStatus.role === "professor") {
+        if (location.pathname.startsWith("/professor") && authRole === "professor") {
           redirectPath = "/professor/login";
-        } else if (location.pathname.startsWith("/admin") && authStatus.role === "admin") {
+        } else if (location.pathname.startsWith("/admin") && authRole === "admin") {
           redirectPath = "/admin/login";
         }
-        await userDeleteToken("token");
         window.location.href = redirectPath;
+        await userDeleteToken();
       } catch (error) {
         console.error('Logout error:', error);
       }

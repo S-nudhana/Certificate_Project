@@ -24,9 +24,10 @@ const setNewComment = async(req, res) => {
             );
         return res
             .status(200)
-            .json({ success: true, payload: "create comment successful" });
+            .json({ success: true, message: "เพิ่มความคิดเห็นสำเร็จ" });
     } catch (error) {
-        return res.status(400).json({ success: false, payload: error.message });
+        console.error("Error:", error);
+        return res.status(400).json({ success: false, message: error });
     }
 };
 export default setNewComment;

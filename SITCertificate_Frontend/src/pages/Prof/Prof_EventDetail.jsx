@@ -57,7 +57,7 @@ function Prof_EventDetail() {
   const [excel, setExcel] = useState("");
   const [comments, setComments] = useState([]);
   const [newCommentDetail, setNewCommentDetail] = useState();
-  const [history, setHistory] = useState();
+  const [statistic, setStatistic] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(0);
   const [participantsDownloadAmount, setParticipantsDownloadAmount] =
     useState(0);
@@ -65,14 +65,14 @@ function Prof_EventDetail() {
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
-      setEventData(response.data.data);
-      setHistory(response.data.history);
-      setCertificate(await fetchFile(response.data.data.event_certificate));
-      setExcel(await fetchFile(response.data.data.event_excel));
-      if (!history) {
+      setEventData(response.data.data.event);
+      setStatistic(response.data.data.statistic);
+      setCertificate(await fetchFile(response.data.data.event.event_certificate));
+      setExcel(await fetchFile(response.data.data.event.event_excel));
+      if (!statistic) {
         const response = await getStatistic(id);
-        setParticipantsAmount(response.data.participantsAmount);
-        setParticipantsDownloadAmount(response.data.participantsDownloadAmount);
+        setParticipantsAmount(response.data.data.participantsAmount);
+        setParticipantsDownloadAmount(response.data.data.participantsDownloadAmount);
       }
       return;
     } catch (error) {
@@ -83,7 +83,7 @@ function Prof_EventDetail() {
   const getComment = async () => {
     try {
       const response = await userComment(id);
-      setComments(response.data.data);
+      setComments(response.data.data.comment);
     } catch (error) {
       console.error("Get comment error:", error);
     }
@@ -122,6 +122,14 @@ function Prof_EventDetail() {
         toast({
           title: "อนุมัติกิจกรรมสำเร็จ",
           status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: response.data.message,
+          status: "error",
           duration: 2000,
           isClosable: true,
         });
@@ -169,7 +177,7 @@ function Prof_EventDetail() {
               {eventData.event_name}
             </Text>
             <Text fontSize="18px" fontWeight="bold">
-              โดย {eventData.event_owner}
+              ผู้จัดกิจกรรม {eventData.event_owner}
             </Text>
             <Text pt="10px" pb="10px">
               เปิดให้ดาว์นโหลดตั้งแต่ {formatDateDMY(eventData.event_startDate)}{" "}
@@ -336,7 +344,7 @@ function Prof_EventDetail() {
           </Flex>
         </Stack>
       )}
-      {history && (
+      {statistic && (
         <Flex
           width={"100%"}
           justifyContent={"center"}

@@ -2,9 +2,9 @@ import connection from "../../db/connection.js";
 import { hashedPassword } from "../auth/jwt.js";
 
 const CreateProf = async (req, res) => {
-  const { username,email, password } = req.body;
+  const { username, fullname, email, password } = req.body;
   try {
-    if (!username || !email || !password) {
+    if (!username || !fullname || !email || !password) {
       return res
         .status(400)
         .json({ message: "กรุณากรอกข้อมูลให้ครบทุกช่อง" });
@@ -19,11 +19,12 @@ const CreateProf = async (req, res) => {
       });
     }
     const hashed_password = hashedPassword(password);
-    const values = [username, email, hashed_password];
-    await connection.promise().query("INSERT INTO professor (professor_userName, professor_email ,professor_password) VALUES (?, ?, ?)", values);
-    return res.status(201).json({ message: "User created successfully" });
-  } catch (e) {
-    return res.status(500).json({ message: e.message });
+    const values = [username, fullname, email, hashed_password];
+    await connection.promise().query("INSERT INTO professor (professor_username, professor_fullname, professor_email ,professor_password) VALUES (?, ?, ?, ?)", values);
+    return res.status(201).json({ success: true, message: "สร้างบัญชีผู้ใช้สำเร็จ" });
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({ message: error });
   }
 };
 

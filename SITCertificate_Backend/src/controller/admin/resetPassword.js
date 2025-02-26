@@ -1,7 +1,7 @@
 import db from "../../db/connection.js";
 import { hashedPassword } from "../auth/jwt.js";
 import { decryptPin } from "../../utils/crypto.js";
-import { sendMail } from "../../services/sendMail.js";
+import { sendMail } from "../../services/mail.js";
 
 const resetPassword = async (req, res) => {
   const { email, pin, password, refCode } = req.body;
@@ -26,25 +26,31 @@ const resetPassword = async (req, res) => {
           value2
         );
       try {
-        const response = await sendMail({
+        await sendMail({
           to: email,
           subject: "แจ้งเตือนจาก SIT Certificate",
           text: "รหัสผ่านของคุณถูกเปลี่ยนแล้ว",
           html: `<p>รหัสผ่านของคุณถูกเปลี่ยนแล้ว</p>`,
         });
-        return res.status(200).json(response);
+        return res
+          .status(200)
+          .json({ success: true, message: "เปลี่ยนรหัสผ่านสำเร็จ" });
       } catch (mailError) {
         console.error("Failed to send email", mailError);
         return res
           .status(500)
-          .json({ message: "Password updated, but email failed to send" });
+          .json({ success: true, message: "ไม่สามารถส่งอีเมลแจ้งเตือนได้" });
       }
     } else {
-      return res.status(400).json({ message: "Invalid pin" });
+      return res
+        .status(400)
+        .json({ success: false, message: "รหัสยืนยันไม่ถูกต้อง" });
     }
   } catch (error) {
-    console.error("resetPassword error", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error("Error", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 export default resetPassword;

@@ -6,13 +6,12 @@ const deleteComment = async (req, res) => {
     await db.promise().query(`DELETE FROM comment WHERE comment_Id = ?`, [commentId]);
     return res.json({
       success: true,
-      error: null,
+      message: "ลบความคิดเห็นสำเร็จ",
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
       error: error.message,
     });
   }

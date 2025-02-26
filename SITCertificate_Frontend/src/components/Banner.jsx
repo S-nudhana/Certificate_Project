@@ -1,4 +1,4 @@
-import image from "../../public/img/SIT_Building.png";
+import image from "/img/SIT_Building.png";
 import { Box, Image, Text } from "@chakra-ui/react";
 
 export default function Banner() {

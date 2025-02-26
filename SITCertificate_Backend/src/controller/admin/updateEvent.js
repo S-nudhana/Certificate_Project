@@ -57,16 +57,15 @@ const updateEventData = async (req, res) => {
           eventId,
         ]
       );
-    return res.json({
+    return res.status(200).json({
       success: true,
-      error: null,
+      message: "อัพเดทกิจกรรมสำเร็จ",
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      error: error,
     });
   }
 };

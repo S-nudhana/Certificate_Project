@@ -20,8 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-import Building from "../../../public/img/SIT_Building.png";
-import Logo from "../../../public/img/SIT_Icon.png";
+import Building from "/img/SIT_Building.png";
+import Logo from "/img/SIT_Icon.png";
 
 import { adminSignUp } from "../../api/admin/adminAPI";
 
@@ -30,6 +30,8 @@ export default function Admin_SignUpPage() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -42,6 +44,8 @@ export default function Admin_SignUpPage() {
 
   const isFormFilled = () =>
     username.trim() !== "" &&
+    firstname.trim() !== "" &&
+    lastname.trim() !== "" &&
     email.trim() !== "" &&
     password.trim() !== "" &&
     confirmPassword.trim() !== "";
@@ -67,7 +71,8 @@ export default function Admin_SignUpPage() {
         });
         return;
       }
-      const res = await adminSignUp(username, email, password);
+      const fullname = `${firstname} ${lastname}`;
+      const res = await adminSignUp(username, fullname, email, password);
       if (res.status === 201) {
         toast({
           title: "สร้างบัญชีผู้ใช้สำเร็จ",
@@ -107,6 +112,7 @@ export default function Admin_SignUpPage() {
           boxShadow="lg"
           p={8}
           px={10}
+          my={"12"}
         >
           <Stack align="center" spacing={5} py={5} px={1}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
@@ -130,6 +136,24 @@ export default function Admin_SignUpPage() {
                 onChange={(e) => setUsername(e.target.value)}
               />
               <FormErrorMessage>{emailError}</FormErrorMessage>
+            </FormControl>
+            <FormControl id="firstname">
+              <FormLabel fontSize={["sm", "lg", "lg"]}>ชื่อ</FormLabel>
+              <Input
+                type="text"
+                placeholder="ชื่อ"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="lastname">
+              <FormLabel fontSize={["sm", "lg", "lg"]}>นามสกุล</FormLabel>
+              <Input
+                type="text"
+                placeholder="นามสกุล"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+              />
             </FormControl>
             <FormControl id="email" isInvalid={emailError}>
               <FormLabel fontSize={["sm", "lg", "lg"]}>อีเมล</FormLabel>
