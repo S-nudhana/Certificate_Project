@@ -38,7 +38,7 @@ import { adminUpdateEvent, getProfessor } from "../../api/admin/adminAPI";
 import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI";
 
 function Admin_EditEvent() {
-  const id = useParams();
+  const id = useParams().id;
   const toast = useToast();
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
@@ -66,9 +66,8 @@ function Admin_EditEvent() {
   const getProfessorList = async () => {
     try {
       const response = await getProfessor();
-      if (response.status === 200) {
-        setProfessorList(response.data.data);
-      }
+      console.log(response)
+      setProfessorList(response.data.data.professors);
     } catch (error) {
       console.error("Error getting professor list:", error);
     }
@@ -76,17 +75,18 @@ function Admin_EditEvent() {
 
   const getEventData = async () => {
     try {
-      const response = await userEventDataById(id.id);
-      setEventName(response.data.data.event_name);
-      setEventOwnerName(response.data.data.event_owner);
-      setOpenDate(formatDateYMD(response.data.data.event_startDate));
-      setCloseDate(formatDateYMD(response.data.data.event_endDate));
-      setThumbnailURL(await fetchFile(response.data.data.event_thumbnail));
-      setTemplateURL(await fetchFile(response.data.data.event_certificate));
-      setFinalExcel(await fetchFile(response.data.data.event_excel));
-      setEmailTemplate(response.data.data.event_emailTemplate);
-      setTextSize(response.data.data.event_certificate_text_size);
-      setTextY(response.data.data.event_certificate_position_y);
+      const response = await userEventDataById(id);
+      console.log(response)
+      setEventName(response.data.data.event.event_name);
+      setEventOwnerName(response.data.data.event.event_owner);
+      setOpenDate(formatDateYMD(response.data.data.event.event_startDate));
+      setCloseDate(formatDateYMD(response.data.data.event.event_endDate));
+      setThumbnailURL(await fetchFile(response.data.data.event.event_thumbnail));
+      setTemplateURL(await fetchFile(response.data.data.event.event_certificate));
+      setFinalExcel(await fetchFile(response.data.data.event.event_excel));
+      setEmailTemplate(response.data.data.event.event_emailTemplate);
+      setTextSize(response.data.data.event.event_certificate_text_size);
+      setTextY(response.data.data.event.event_certificate_position_y);
     } catch (error) {
       console.error("Error getting event data:", error);
     }
@@ -139,7 +139,7 @@ function Admin_EditEvent() {
           emailTemplate,
           inputSize,
           inputY,
-          id.id
+          id
         );
         if (response.status === 200) {
           navigate("/admin/");

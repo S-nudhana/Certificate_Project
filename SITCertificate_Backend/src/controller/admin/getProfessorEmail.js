@@ -1,22 +1,23 @@
 import db from "../../db/connection.js";
 
 const getProfessorEmail = async (req, res) => {
-  const eventId = req.query.id;
+  const eventId = req.params.id;
   try {
-    const dataQuery = await db
+    const professorEmailQuery = await db
       .promise()
       .query(
-        `SELECT professor_email FROM professor WHERE professor_userName in (SELECT event_owner FROM event WHERE event_Id = ?)`,
+        `SELECT professor_email FROM professor WHERE professor_fullname in (SELECT event_owner FROM event WHERE event_Id = ?)`,
         [eventId]
       );
-    const data = dataQuery[0][0];
-    return res.json({
+    const professorEmail = professorEmailQuery[0][0];
+    return res.status(200).json({
       success: true,
-      data: data,
-      error: null,
+      data: {
+        professorEmail: professorEmail,
+      },
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
       data: null,

@@ -20,8 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-import Building from "../../../public/img/SIT_Building.png";
-import Logo from "../../../public/img/SIT_Icon.png";
+import Building from "/img/SIT_Building.png";
+import Logo from "/img/SIT_Icon.png";
 
 import { adminSignUp } from "../../api/admin/adminAPI";
 

@@ -27,9 +27,10 @@ const SignInProf = async (req, res) => {
       secure: true,
   };
     res.cookie("token", signedToken, cookieOptions);
-    return res.status(201).json({ message: "Login Successful" });
-  } catch (e) {
-    return res.status(500).json({ message: e });
+    return res.status(201).json({ success: true, message: "เข้าสู่ระบบสำเร็จ" });
+  } catch (error) {
+    console.error("Error: ", error);
+    return res.status(500).json({ message: error });
   }
 };
 

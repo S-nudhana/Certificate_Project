@@ -4,6 +4,7 @@ const uploadFile = async (req, res) => {
       const filePath = req.file.path;
       const fileName = req.file.filename;
       res.status(200).json({
+        success: true,
         message: "File uploaded successfully",
         file: {
           fileName: fileName,

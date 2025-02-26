@@ -15,7 +15,7 @@ function Student_Homepage() {
   const getEventData = async () => {
     try {
       const response = await studentData();
-      setEventData(response.data.data);
+      setEventData(response.data.data.events);
     } catch (error) {
       console.log("Get event data error: " + error);
     }
@@ -54,6 +54,7 @@ function Student_Homepage() {
             >
               {eventData && eventData.map((item, index) => (
                 <StudentCard
+                  key={index}
                   event_thumbnail={item.event_thumbnail}
                   event_name={item.event_name}
                   event_startDate={item.event_startDate}

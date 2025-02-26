@@ -17,48 +17,49 @@ const updateApproveStatus = async (req, res) => {
     const workbook = XLSX.readFile(excelUrl);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const sheetData = XLSX.utils.sheet_to_json(worksheet);
-    const columnAData = sheetData.map((row) => row.email || "");
-    const columnBData = sheetData.map((row) => row.Mobile || "");
-    const studentData = columnAData.map((email, index) => [
+    const emailList = sheetData.map((row) => row.email || "");
+    const mobileList = sheetData.map((row) => row.Mobile || "");
+    const hashedPasswords = mobileList.map((mobile) => hashedPassword(mobile));
+    const values = emailList.map((email, index) => [
       email,
-      hashedPassword(columnBData[index]),
-      eventId,
-      0,
+      hashedPasswords[index],
     ]);
-    // await db
-    // .promise()
-    // .query(
-    //     "INSERT INTO student_event ( student_event_studentId, student_event_eventId, student_joinedEventId, student_eventGenerated) VALUES ?",
-    //     [studentData]
-    // );
     const [result] = await db
       .promise()
+      .query("INSERT INTO student (student_email, student_password) VALUES ?", [
+        values,
+      ]);
+
+    const emails = emailList.map((email) => email.toLowerCase());
+
+    const [insertedRows] = await db
+      .promise()
+      .query("SELECT student_Id FROM student WHERE student_email IN (?)", [
+        emails,
+      ]);
+    const studentValue = insertedRows.map((row) => [row.student_Id, eventId]);
+    await db
+      .promise()
       .query(
-        "INSERT INTO student (student_email, student_password) VALUES (?, ?)",
-        [email, password]
+        "INSERT INTO student_event (student_event_studentId, student_event_eventId) VALUES ?",
+        [studentValue]
       );
-    const studentId = result.student_Id;
     await db
       .promise()
       .query("UPDATE event SET event_approve = ? WHERE event_Id = ?", [
         1,
         eventId,
       ]);
-    await db.promise().query(
-      "INSERT INTO student_event (student_event_studentId, student_event_eventId) VALUES ?",
-      [studentId, eventId]
-    );
 
     return res.json({
       success: true,
-      error: null,
+      message: "อัพเดทสถานะการอนุมัติสำเร็จ",
     });
   } catch (error) {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      message: error,
     });
   }
 };

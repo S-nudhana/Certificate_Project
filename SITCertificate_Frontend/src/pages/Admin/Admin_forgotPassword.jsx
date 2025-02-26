@@ -22,8 +22,8 @@ import {
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-import Building from "../../../public/img/SIT_Building.png";
-import Logo from "../../../public/img/SIT_Icon.png";
+import Building from "/img/SIT_Building.png";
+import Logo from "/img/SIT_Icon.png";
 
 import {
   adminForgotPassword,
@@ -65,7 +65,7 @@ export default function Admin_forgotPassword() {
       }
       const res = await adminForgotPassword(email);
       if (res.status === 200) {
-        setRefCode(res.data.data);
+        setRefCode(res.data.refCode);
         const response = await adminSendResetPasswordEmail(email);
         if (response.status === 200) {
           setEmailSent(true);
@@ -109,7 +109,7 @@ export default function Admin_forgotPassword() {
       } else {
         toast({
           title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
+          description: res.data.message,
           status: "error",
           duration: 2000,
           isClosable: true,
@@ -136,7 +136,7 @@ export default function Admin_forgotPassword() {
           boxShadow="lg"
           p={8}
         >
-          <Stack align="center" spacing={5} p={5}>
+          <Stack align="center" spacing={5} p={2}>
             <img src={Logo} alt="SIT_Logo" width="100" height="100" />
             <Heading fontSize={["20px", "3xl", "3xl"]}>
               ระบบเปลี่ยนรหัสผ่านสำหรับ Admin

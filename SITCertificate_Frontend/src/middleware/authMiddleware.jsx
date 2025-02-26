@@ -12,11 +12,11 @@ const authMiddleware = (Component) => {
 
     const verifyAuth = async () => {
       try {
-        const { data } = await userVerifyToken();
-        setAuthenticated(data.authenticated);
-        setRole(data.role);
+        const res = await userVerifyToken();
+        setAuthenticated(res.data.data.authenticated);
+        setRole(res.data.data.role);
       } catch (error) {
-        setAuthStatus({ authenticated: false });
+        setAuthenticated(false);
       } finally {
         setLoading(false);
       }

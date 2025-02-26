@@ -30,8 +30,8 @@ function Student_CertificateDownload() {
     let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
-      const certificateBlob = await fetchCertificate(response.data.data.student_GenerateCertificate);
-      setCertificateRaw(await fetchFile(response.data.data.student_GenerateCertificate))
+      const certificateBlob = await fetchCertificate(response.data.data.certificate.student_event_generatedCertificate);
+      setCertificateRaw(await fetchFile(response.data.data.certificate.student_event_generatedCertificate))
       certificateBlobUrl = URL.createObjectURL(certificateBlob);
       setCertificate(certificateBlobUrl);
     } catch (error) {
@@ -54,8 +54,16 @@ function Student_CertificateDownload() {
           duration: 2000,
           isClosable: true,
         });
-        return;
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
       }
+      return;
     } catch (error) {
       console.error("Error sending email:", error);
     } finally {

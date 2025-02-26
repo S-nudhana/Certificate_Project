@@ -20,8 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-import Building from "../../../public/img/SIT_Building.png"
-import Logo from "../../../public/img/SIT_Icon.png";
+import Building from "/img/SIT_Building.png"
+import Logo from "/img/SIT_Icon.png";
 
 import { adminSignIn } from "../../api/admin/adminAPI";
 
@@ -49,9 +49,8 @@ export default function Admin_SignInPage() {
       } else {
         setEmailError("");
       }
-
       const res = await adminSignIn(email, password);
-      if (res.status === 201) {
+      if (res.status == 201) {
         navigate("/admin/");
         toast({
           title: "เข้าสู่ระบบสำเร็จ",
@@ -69,7 +68,7 @@ export default function Admin_SignInPage() {
         });
       }
     } catch (error) {
-      console.error("handleEmail error", error);
+      console.log("handleEmail error", error);
     }
   };
 

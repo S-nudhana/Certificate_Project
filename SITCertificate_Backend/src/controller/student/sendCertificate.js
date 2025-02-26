@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 import { verifyToken } from "../auth/jwt.js";
-import { transporter } from "../../config/transporter.config.js";
+import { transporter } from "../../config/transporterConfig.js";
 
 dotenv.config();
 
@@ -12,18 +12,17 @@ const sendCertificate = async (req, res) => {
   const { id } = req.body;
   const { token } = req.cookies;
   try {
-    const Id = verifyToken(token);
-    const studentEmail = Id.student_email;
+    const user = verifyToken(token);
+    const studentId = user.id;
     const eventId = parseInt(id);
-    const value = [eventId, studentEmail];
     const studentQuery = await db
       .promise()
       .query(
-        `SELECT student_emailToSendCertificate, student_GenerateCertificate FROM student WHERE student_joinedEventId = ? AND student_email = ?`,
-        value
+        `SELECT student_event_mailToSendCertificate, student_event_generatedCertificate FROM student_event WHERE student_event_eventId = ? AND student_event_studentId = ?`,
+        [eventId, studentId]
       );
-    const email = studentQuery[0][0].student_emailToSendCertificate;
-    const generateCertificate = studentQuery[0][0].student_GenerateCertificate;
+    const email = studentQuery[0][0].student_event_mailToSendCertificate;
+    const generateCertificate = studentQuery[0][0].student_event_generatedCertificate;
     const decodedFilePath = decodeURI(generateCertificate);
     const filePath = path.resolve(decodedFilePath);
     const fileBuffer = fs.readFileSync(filePath);
@@ -50,16 +49,17 @@ const sendCertificate = async (req, res) => {
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return res.status(500).json({ message: "Failed to send email", error });
+        return res
+          .status(500)
+          .json({ success: false, message: "ส่งอีเมลไม่สำเร็จ" });
       }
-      return res.status(200).json({ message: "Email sent" });
+      return res.status(200).json({ success: true, message: "ส่งอีเมลสำเร็จ" });
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      message: error,
     });
   }
 };

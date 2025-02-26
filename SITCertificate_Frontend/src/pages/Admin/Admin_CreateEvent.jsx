@@ -59,9 +59,7 @@ function Admin_CreateEvent() {
   const getProfessorList = async () => {
     try {
       const response = await getProfessor();
-      if (response.status === 200) {
-        setProfessorList(response.data.data);
-      }
+      setProfessorList(response.data.data.professors);
     } catch (error) {
       console.error("Error getting professor list:", error);
     }

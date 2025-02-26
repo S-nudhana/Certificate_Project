@@ -10,23 +10,22 @@ const updataCertificateInformation = async (req, res) => {
   const { token } = req.cookies;
   try {
     const userId = verifyToken(token);
-    const studentId = userId.student_email;
+    const studentId = userId.id;
     await db
       .promise()
       .query(
-        "UPDATE student SET student_nameOnCertificate = ?, student_surnameOnCertificate = ?, student_emailToSendCertificate = ?, student_GenerateCertificate = ? WHERE student_joinedEventId = ? AND student_email = ?",
+        "UPDATE student_event SET student_event_nameOnCertificate = ?, student_event_surnameOnCertificate = ?, student_event_mailToSendCertificate = ?, student_event_generatedCertificate = ? WHERE student_event_eventId = ? AND student_event_studentId = ?",
         [name, surname, email, modifiedPdf, parseInt(eventId), studentId]
       );
     return res.status(200).json({
       success: true,
-      error: null,
+      message: "อัพเดทข้อมูลใบรับรองสำเร็จ",
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      message: error,
     });
   }
 };

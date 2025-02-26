@@ -3,24 +3,24 @@ import db from "../../db/connection.js";
 const getEventById = async (req, res) => {
   const id = req.params.id;
   try {
-    const dataQuery = await db
+    const eventQuery = await db
       .promise()
       .query(`SELECT * FROM event WHERE event_Id = ?`, [id]);
-    const data = dataQuery[0][0];
+    const event = eventQuery[0][0];
     const now = new Date();
-    const history = data.event_endDate < now;
+    const statistic = event.event_endDate < now || event.event_approve === 1;
     return res.json({
       success: true,
-      data: data,
-      history: history,
-      error: null,
+      data: {
+        event: event,
+        statistic: statistic,
+      },
     });
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      error: error.message,
+      message: error,
     });
   }
 };

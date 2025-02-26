@@ -6,7 +6,7 @@ import helmet from "helmet";
 
 import db from "./db/connection.js";
 
-import { corsOptions } from "./config/cors.config.js";
+import { corsOptions } from "./config/corsConfig.js";
 import { limiter } from "./middleware/limiter.js";
 import { logger } from "./middleware/logger.js";
 
@@ -23,22 +23,30 @@ const port = process.env.PORT || 3000;
 
 app.use(cors(corsOptions));
 app.use(logger);
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-db.connect((err) => {
-    if (err) throw err;
-    console.log("Connected!");
+db.connect((error) => {
+  if (error) {
+    console.error("Error:", error);
+  } else {
+    console.log("Connected to the database");
+  }
 });
 
-app.use('/file/', getFile);
-app.use("/api/user", userRouter);
+app.use("/file/", getFile);
 app.use("/api", limiter);
+app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/prof", profRouter);
 app.use("/api/student", studentRouter);
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+  console.log(`Server running on PORT:${port}`);
 });

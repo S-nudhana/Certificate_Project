@@ -37,7 +37,7 @@ function Student_Detail() {
   const toast = useToast();
   const isMobile = deviceScreenCheck();
 
-  const [eventData, setEventData] = useState([]);
+  const [eventData, setEventData] = useState({});
   const [studentStatus, setStudentStatus] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [certificate, setCertificate] = useState("");
@@ -47,11 +47,11 @@ function Student_Detail() {
   const getEventData = async () => {
     try {
       const response = await studentEventDataById(id);
-      if (!response.data.data) {
+      if (!response.data.success) {
         navigate("/");
       }
-      setEventData(response.data.data);
-      setThumbnailURL(await fetchFile(response.data.data.event_thumbnail));
+      setEventData(response.data.data.events);
+      setThumbnailURL(await fetchFile(response.data.data.events.event_thumbnail));
     } catch (error) {
       console.log("Get event data error: " + error);
     }
@@ -59,11 +59,11 @@ function Student_Detail() {
   const getStudentGenerate = async () => {
     try {
       const response = await studentGenerate(id);
-      setStudentStatus(response.data.data);
-      if (!response.data.data) {
-        const response = await getGeneratedCertificate(id);
-        setCertificateRaw(response.data.data.student_GenerateCertificate);
-        setCertificate(await fetchFile(response.data.data.student_GenerateCertificate));
+      setStudentStatus(response.data.data.status);
+      if (response.data.success) {
+        const res = await getGeneratedCertificate(id);
+        setCertificateRaw(res.data.data.certificate);
+        setCertificate(await fetchFile(res.data.data.certificate));
       }
     } catch (error) {
       console.log("Get student data error: " + error);
@@ -124,8 +124,16 @@ function Student_Detail() {
           duration: 2000,
           isClosable: true,
         });
-        return;
+      } else {
+        toast({
+          title: "เกิดข้อผิดพลาด",
+          description: response.data.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
       }
+      return;
     } catch (error) {
       console.error("Error sending email:", error);
     } finally {
@@ -138,166 +146,160 @@ function Student_Detail() {
       <ScrollRestoration />
       <Navbar />
       <Box height={"80px"} bgColor={"#0c2d4e"} />
-      {eventData && studentStatus && (
-        <Box display={eventData && studentStatus ? "block" : "none"}>
-          <Box display={{ base: "block", lg: "flex" }} minH={"80vh"}>
-            <Image
-              src={`${thumbnailURL}`}
-              width={{ base: "100%", lg: "35%" }}
-              height={{ base: "300px", lg: "100vh" }}
-              objectFit="cover"
-            />
-            <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
-              <BackBTN />
-              <Text fontSize="32px" fontWeight="bold" pt="10px">
-                {eventData.event_name}
+      {studentStatus ? (
+        <Box display={{ base: "block", lg: "flex" }} minH={"80vh"}>
+          <Image
+            src={`${thumbnailURL}`}
+            width={{ base: "100%", lg: "35%" }}
+            height={{ base: "300px", lg: "100vh" }}
+            objectFit="cover"
+          />
+          <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
+            <BackBTN />
+            <Text fontSize="32px" fontWeight="bold" pt="10px">
+              {eventData.event_name}
+            </Text>
+            <Text pt="10px" pb="20px">
+              เปิดให้ดาว์นโหลดตั้งแต่วันที่ {" "}
+              {formatDateDMY(eventData.event_startDate)} ถึง{" "}
+              {formatDateDMY(eventData.event_endDate)}
+            </Text>
+            <Box
+              border=".7px solid #919191"
+              borderRadius="25px"
+              p="30px"
+              fontWeight="bold"
+              fontSize="20px"
+            >
+              <Text pb="20px">กรอกข้อมูลในใบประกาศนียบัตร</Text>
+              <FormControl id="name" pb="20px">
+                <FormLabel fontSize={["sm", "lg", "lg"]} fontWeight="bold">
+                  ชื่อ
+                </FormLabel>
+                <Input
+                  type="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </FormControl>
+              <FormControl id="surname" pb="20px">
+                <FormLabel fontSize={["sm", "lg", "lg"]} fontWeight="bold">
+                  นามสกุล
+                </FormLabel>
+                <Input
+                  type="surname"
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                />
+              </FormControl>
+              <Text fontSize={["sm", "lg", "lg"]} pb="20px">
+                อีเมล
+                <span style={{ fontWeight: "normal" }}>
+                  {" "}
+                  (ใช้ในการส่งใบประกาศนียบัตร)
+                </span>
               </Text>
-              <Text pt="10px" pb="20px">
-                เปิดให้ดาว์นโหลดตั้งแต่วันที่ {" "}
-                {formatDateDMY(eventData.event_startDate)} ถึง{" "}
-                {formatDateDMY(eventData.event_endDate)}
-              </Text>
-              <Box
-                border=".7px solid #919191"
-                borderRadius="25px"
-                p="30px"
-                fontWeight="bold"
-                fontSize="20px"
-              >
-                <Text pb="20px">กรอกข้อมูลในใบประกาศนียบัตร</Text>
-                <FormControl id="name" pb="20px">
-                  <FormLabel fontSize={["sm", "lg", "lg"]} fontWeight="bold">
-                    ชื่อ
-                  </FormLabel>
-                  <Input
-                    type="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl id="surname" pb="20px">
-                  <FormLabel fontSize={["sm", "lg", "lg"]} fontWeight="bold">
-                    นามสกุล
-                  </FormLabel>
-                  <Input
-                    type="surname"
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                  />
-                </FormControl>
-                <Text fontSize={["sm", "lg", "lg"]} pb="20px">
-                  อีเมล
-                  <span style={{ fontWeight: "normal" }}>
-                    {" "}
-                    (ใช้ในการส่งใบประกาศนียบัตร)
-                  </span>
-                </Text>
-                <FormControl mb={"20px"} id="email" isInvalid={emailError}>
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    borderColor={emailError ? "#D2042D" : "gray.200"}
-                  />
-                  <FormErrorMessage>{emailError}</FormErrorMessage>
-                </FormControl>
-                <Box width="100%" display="flex" justifyContent="flex-end">
-                  <Button
-                    isDisabled={!isFormFilled()}
-                    width="100px"
-                    bgColor="#336699"
-                    color="white"
-                    borderRadius="40px"
-                    _hover={{ bgColor: "#1f568c" }}
-                    variant="solid"
-                    onClick={() => {
-                      handleSubmit();
-                    }}
-                  >
-                    ถัดไป
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      )}
-      {eventData && (
-        <Box display={eventData && studentStatus ? "none" : "block"}>
-          <Box display={{ base: "block", lg: "flex" }}>
-            <Image
-              src={`${thumbnailURL}`}
-              width={{ base: "100%", lg: "35%" }}
-              height={{ base: "300px", lg: "100vh" }}
-              objectFit="cover"
-            ></Image>
-            <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
-              <BackBTN />
-              <Text fontSize="32px" fontWeight="bold" pt="10px">
-                {eventData.event_name}
-              </Text>
-              <Text pt="10px" pb="20px">
-                เปิดให้ดาว์นโหลดตั้งแต่วันที่{" "}
-                {formatDateDMY(eventData.event_startDate)} ถึง{" "}
-                {formatDateDMY(eventData.event_endDate)}
-              </Text>
-              <Text fontSize="18px" fontWeight={"bold"}>
-                ใบประกาศนียบัตร
-              </Text>
-              <Flex
-                width={"100%"}
-                justifyContent={{ base: "center", lg: "start" }}
-              >
-                <Flex
-                  width={{ base: "100%", lg: "80%" }}
-                  justifyContent={{ base: "center", lg: "start" }}
-                  pb={"20px"}
-                >
-                  {certificate ? (
-                    <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
-                  ) : (
-                    <Text>Loading PDF preview...</Text>
-                  )}
-                </Flex>
-              </Flex>
-              <Box
-                display="flex"
-                justifyContent={{ base: "center", lg: "flex-start" }}
-                gap={"20px"}
-              >
+              <FormControl mb={"20px"} id="email" isInvalid={emailError}>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  borderColor={emailError ? "#D2042D" : "gray.200"}
+                />
+                <FormErrorMessage>{emailError}</FormErrorMessage>
+              </FormControl>
+              <Box width="100%" display="flex" justifyContent="flex-end">
                 <Button
+                  isDisabled={!isFormFilled()}
+                  width="100px"
                   bgColor="#336699"
                   color="white"
-                  fontSize={{ base: "14px", md: "16px" }}
                   borderRadius="40px"
                   _hover={{ bgColor: "#1f568c" }}
                   variant="solid"
                   onClick={() => {
-                    sendCertificateToEmail();
+                    handleSubmit();
                   }}
-                  disabled={isLoading}
                 >
-                  ส่งใบประกาศนียบัตรไปยังอีเมล
-                </Button>
-                <Button
-                  leftIcon={<FaDownload />}
-                  bgColor="#3399cc"
-                  color="white"
-                  fontSize={{ base: "14px", md: "16px" }}
-                  borderRadius="40px"
-                  _hover={{ bgColor: "#297AA3" }}
-                  variant="solid"
-                  as="a"
-                  href={certificate}
-                  download={`${eventData.event_name}_certificate.pdf`}
-                >
-                  ดาวน์โหลด
+                  ถัดไป
                 </Button>
               </Box>
             </Box>
           </Box>
         </Box>
-      )}
+      ) : <Box display={{ base: "block", lg: "flex" }}>
+        <Image
+          src={`${thumbnailURL}`}
+          width={{ base: "100%", lg: "35%" }}
+          height={{ base: "300px", lg: "100vh" }}
+          objectFit="cover"
+        ></Image>
+        <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
+          <BackBTN />
+          <Text fontSize="32px" fontWeight="bold" pt="10px">
+            {eventData.event_name}
+          </Text>
+          <Text pt="10px" pb="20px">
+            เปิดให้ดาว์นโหลดตั้งแต่วันที่{" "}
+            {formatDateDMY(eventData.event_startDate)} ถึง{" "}
+            {formatDateDMY(eventData.event_endDate)}
+          </Text>
+          <Text fontSize="18px" fontWeight={"bold"}>
+            ใบประกาศนียบัตร
+          </Text>
+          <Flex
+            width={"100%"}
+            justifyContent={{ base: "center", lg: "start" }}
+          >
+            <Flex
+              width={{ base: "100%", lg: "80%" }}
+              justifyContent={{ base: "center", lg: "start" }}
+              pb={"20px"}
+            >
+              {certificate ? (
+                <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+              ) : (
+                <Text>Loading PDF preview...</Text>
+              )}
+            </Flex>
+          </Flex>
+          <Box
+            display="flex"
+            justifyContent={{ base: "center", lg: "flex-start" }}
+            gap={"20px"}
+          >
+            <Button
+              bgColor="#336699"
+              color="white"
+              fontSize={{ base: "14px", md: "16px" }}
+              borderRadius="40px"
+              _hover={{ bgColor: "#1f568c" }}
+              variant="solid"
+              onClick={() => {
+                sendCertificateToEmail();
+              }}
+              disabled={isLoading}
+            >
+              ส่งใบประกาศนียบัตรไปยังอีเมล
+            </Button>
+            <Button
+              leftIcon={<FaDownload />}
+              bgColor="#3399cc"
+              color="white"
+              fontSize={{ base: "14px", md: "16px" }}
+              borderRadius="40px"
+              _hover={{ bgColor: "#297AA3" }}
+              variant="solid"
+              as="a"
+              href={certificate}
+              download={`${eventData.event_name}_certificate.pdf`}
+            >
+              ดาวน์โหลด
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+      }
       <Footer />
     </>
   );

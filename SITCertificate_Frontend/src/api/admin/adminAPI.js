@@ -59,9 +59,7 @@ export const adminCreateEvent = async (
 
 export const adminDeleteEvent = async (id) => {
   try {
-    const response = await axiosInstance.delete(
-      `/admin/event/${id}`
-    );
+    const response = await axiosInstance.delete(`/admin/event/${id}`);
     return response;
   } catch (error) {
     return error;
@@ -101,11 +99,9 @@ export const adminUpdateEvent = async (
   }
 };
 
-export const adminToggleCommentStatus = async (id) => {
+export const adminUpdateCommentStatus = async (id) => {
   try {
-    const response = await axiosInstance.put(`/admin/comment/${id}/status`, {
-      commentId: commentId,
-    });
+    const response = await axiosInstance.put(`/admin/comment/${id}/status`);
     return response;
   } catch (error) {
     return error;
@@ -139,7 +135,7 @@ export const adminForgotPassword = async (email) => {
 
 export const adminSendResetPasswordEmail = async (email) => {
   try {
-    const response = await axiosInstance.post("/admin/resetPasswordEmail", {
+    const response = await axiosInstance.post("/admin/resetPassword/email", {
       email: email,
     });
     return response;
@@ -162,7 +158,7 @@ export const adminResetPassword = async (email, pin, password, refCode) => {
   }
 };
 
-export const profEmail = async (id) => {
+export const getProfessorEmail = async (id) => {
   try {
     const response = await axiosInstance.get(`/admin/email/${id}`);
     return response;
@@ -173,9 +169,9 @@ export const profEmail = async (id) => {
 
 export const getProfessor = async () => {
   try {
-    const response = await axiosInstance.get(`/admin/professor`);
+    const response = await axiosInstance.get(`/admin/event/professor`);
     return response;
   } catch (error) {
     return error;
   }
-}
+};

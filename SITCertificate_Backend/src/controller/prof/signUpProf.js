@@ -21,9 +21,10 @@ const CreateProf = async (req, res) => {
     const hashed_password = hashedPassword(password);
     const values = [username, fullname, email, hashed_password];
     await connection.promise().query("INSERT INTO professor (professor_username, professor_fullname, professor_email ,professor_password) VALUES (?, ?, ?, ?)", values);
-    return res.status(201).json({ message: "User created successfully" });
-  } catch (e) {
-    return res.status(500).json({ message: e.message });
+    return res.status(201).json({ success: true, message: "สร้างบัญชีผู้ใช้สำเร็จ" });
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({ message: error });
   }
 };
 
