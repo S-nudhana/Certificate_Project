@@ -20,8 +20,7 @@ const getSearchEvent = async (req, res) => {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      data: null,
-      message: error,
+      message: "Internal server error",
     });
   }
 };

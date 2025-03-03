@@ -19,7 +19,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  useToast,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
@@ -28,14 +27,14 @@ import PDF from "react-pdf-watermark";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { Toast } from "../../components/Toast";
 
-import { adminCreateEvent, getProfessor } from "../../api/admin/adminAPI";
-import { uploadFile } from "../../api/user/userAPI";
+import { adminCreateEvent, getProfessor } from "../../services/apis/admin/adminAPI";
+import { uploadFile } from "../../services/apis/user/userAPI";
 
 import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
 function Admin_CreateEvent() {
-  const toast = useToast();
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -135,12 +134,7 @@ function Admin_CreateEvent() {
           "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด"
         );
         setCloseDate("");
-        toast({
-          title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด กรุณากรอกข้อมูลใหม่อีกครั้ง", "วันสิ้นสุดการดาวน์โหลดต้องอยู่หลังวันเปิดให้ดาว์นโหลด", "error");
         return;
       }
       if (
@@ -176,12 +170,7 @@ function Admin_CreateEvent() {
         );
         if (response.status === 200) {
           navigate("/admin/");
-          toast({
-            title: "สร้างกิจกรรมสำเร็จ",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
+          Toast("สร้างกิจกรรมสำเร็จ", `สร้างกิจกรรม ${eventName} สำเร็จ`, "success");
         }
       } else {
         console.error("Missing required event information.");
@@ -236,7 +225,7 @@ function Admin_CreateEvent() {
                       <option key={professor.professor_fullname} value={professor.professor_fullname}>
                         {professor.professor_fullname}
                       </option>
-                      
+
                     ))}
                   </Select>
                 </FormControl>

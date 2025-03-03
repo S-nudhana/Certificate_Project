@@ -42,10 +42,10 @@ const sendEmail = async (req, res) => {
         .json({ success: false, message: "ไม่สามารถส่งอีเมลยืนยันได้" });
     }
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      error: error.message,
+      error: "Internal server error",
     });
   }
 };

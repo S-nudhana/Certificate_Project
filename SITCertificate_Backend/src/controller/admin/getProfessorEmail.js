@@ -21,7 +21,7 @@ const getProfessorEmail = async (req, res) => {
     return res.status(500).json({
       success: false,
       data: null,
-      error: error.message,
+      error: "Internal server error",
     });
   }
 };

@@ -43,7 +43,7 @@ const createEvent = async (req, res) => {
       .json({ success: true, message: "สร้างกิจกกรมเสร็จสิ้น" });
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 export default createEvent;

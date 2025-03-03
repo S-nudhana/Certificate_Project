@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../../api/user/userAPI";
+import { fetchFile } from "../api/user/userAPI";
 
-import { formatDateDMY } from "../../utils/dateFormat";
+import { formatDateDMY } from "../utils/dateFormat";
 
-export default function ProfCard({
+export default function Prof_AdminCard({
   event_thumbnail,
   event_name,
   event_owner,
   event_startDate,
   event_endDate,
   event_Id,
+  event_status,
+  role
 }) {
   const navigate = useNavigate();
 
@@ -58,9 +60,23 @@ export default function ProfCard({
           </Text>
           <Text fontWeight="bold">{event_owner}</Text>
           <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-          <Text pb="5px">
+          <Text pb="5px" color={"red"}>
             {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
           </Text>
+          <Button
+            display={event_status && role === "professor" ? "none" : ""}
+            mr={"15px"}
+            width="90px"
+            borderRadius="40px"
+            bgColor="#336699"
+            color="white"
+            _hover={{ bgColor: "#1f568c" }}
+            onClick={() => {
+              navigate(`/${role}/editEvent/${event_Id}`);
+            }}
+          >
+            แก้ไข
+          </Button>
           <Button
             width="130px"
             borderRadius="40px"
@@ -68,7 +84,7 @@ export default function ProfCard({
             color="white"
             _hover={{ bgColor: "#297AA3" }}
             onClick={() => {
-              navigate(`/professor/detail/${event_Id}`);
+              navigate(`/${role}/detail/${event_Id}`);
             }}
           >
             ดูข้อมูลกิจกรรม

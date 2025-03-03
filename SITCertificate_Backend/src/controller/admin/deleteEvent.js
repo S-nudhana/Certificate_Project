@@ -1,6 +1,6 @@
 import db from "../../db/connection.js";
 
-import { deleteFile } from "../../middleware/deleteFile.js";
+import { deleteFile } from "../deleteFile.js";
 
 const deleteEvent = async (req, res) => {
   const id = req.params.id;
@@ -34,7 +34,7 @@ const deleteEvent = async (req, res) => {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      error: error.message,
+      error: "Internal server error",
     });
   }
 };

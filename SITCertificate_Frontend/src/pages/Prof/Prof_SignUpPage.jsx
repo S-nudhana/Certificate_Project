@@ -14,7 +14,6 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -23,12 +22,13 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { profSignUp } from "../../api/prof/profAPI";
+import { Toast } from "../../components/Toast";
+
+import { profSignUp } from "../../services/apis/prof/profAPI";
 
 export default function Prof_SignUpPage() {
-  const toast = useToast();
   const navigate = useNavigate();
-  
+
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -61,34 +61,16 @@ export default function Prof_SignUpPage() {
         setEmailError("");
       }
       if (password !== confirmPassword) {
-        toast({
-          title: "รหัสผ่านไม่ตรงกัน",
-          description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("รหัสผ่านไม่ตรงกัน", "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง", "error");
         return;
       }
       const fullname = `${firstname} ${lastname}`;
       const res = await profSignUp(username, fullname, email, password);
       if (res.status === 201) {
-        toast({
-          title: "สร้างบัญชีผู้ใช้สำเร็จ",
-          description: "สร้างบัญชีของคุณเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("สร้างบัญชีผู้ใช้สำเร็จ", "สร้างบัญชีของคุณเรียบร้อยแล้ว", "success");
         navigate("/professor/login");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("Sign up error:", error);

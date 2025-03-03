@@ -1,6 +1,6 @@
 import db from "../../db/connection.js";
 
-import { deleteFile } from "../../middleware/deleteFile.js";
+import { deleteFile } from "../deleteFile.js";
 
 const updateEventData = async (req, res) => {
   let {
@@ -65,7 +65,7 @@ const updateEventData = async (req, res) => {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      error: error,
+      error: "Internal server error",
     });
   }
 };

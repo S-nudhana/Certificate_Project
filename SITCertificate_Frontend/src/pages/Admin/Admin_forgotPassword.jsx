@@ -10,7 +10,6 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast,
   FormErrorMessage,
   InputGroup,
   InputRightElement,
@@ -25,14 +24,15 @@ import { useNavigate } from "react-router-dom";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
+import { Toast } from "../../components/Toast";
+
 import {
   adminForgotPassword,
   adminResetPassword,
   adminSendResetPasswordEmail,
-} from "../../api/admin/adminAPI";
+} from "../../services/apis/admin/adminAPI";
 
 export default function Admin_forgotPassword() {
-  const toast = useToast();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -65,19 +65,13 @@ export default function Admin_forgotPassword() {
       }
       const res = await adminForgotPassword(email);
       if (res.status === 200) {
-        setRefCode(res.data.refCode);
+        setRefCode(res.data.data.refCode);
         const response = await adminSendResetPasswordEmail(email);
         if (response.status === 200) {
           setEmailSent(true);
         }
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("handleEmail error", error);
@@ -87,33 +81,15 @@ export default function Admin_forgotPassword() {
   const confirmCreatePassword = async () => {
     try {
       if (newPassword !== confirmNewPassword) {
-        toast({
-          title: "รหัสผ่านไม่ตรงกัน",
-          description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("รหัสผ่านไม่ตรงกัน", "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง", "error");
         return;
       }
       const res = await adminResetPassword(email, pin, newPassword, refCode);
       if (res.status === 200) {
         navigate("/admin/login");
-        toast({
-          title: "เปลี่ยนรหัสผ่านสำเร็จ",
-          description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เปลี่ยนรหัสผ่านสำเร็จ", "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("confirmCreatePassword error", error);

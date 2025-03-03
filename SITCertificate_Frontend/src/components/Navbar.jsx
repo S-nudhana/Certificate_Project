@@ -17,7 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import logo from "/img/SIT_logo.png";
 
-import { userVerifyToken, userDeleteToken } from "../api/user/userAPI";
+import { userVerifyToken, userDeleteToken } from "./apis/user/userAPI";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ export default function Navbar() {
       setShouldShowNavbar(true);
     }
     setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
+    setShouldShowNavbar(currentScrollTop < 30);
   };
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function Navbar() {
   const LogoutCheck = async () => {
     if (authStatus) {
       try {
+        await userDeleteToken();
         let redirectPath = "/login";
         if (location.pathname.startsWith("/professor") && authRole === "professor") {
           redirectPath = "/professor/login";
@@ -66,7 +68,6 @@ export default function Navbar() {
           redirectPath = "/admin/login";
         }
         window.location.href = redirectPath;
-        await userDeleteToken();
       } catch (error) {
         console.error('Logout error:', error);
       }
@@ -80,7 +81,7 @@ export default function Navbar() {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      p="20px 50px"
+      p={{ base: "20px", md: "20px 50px" }}
       position="fixed"
       top="0"
       left="0"

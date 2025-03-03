@@ -1,4 +1,4 @@
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../../../utils/axiosInstance";
 import axios from "axios";
 
 export const userVerifyToken = async () => {
@@ -70,12 +70,14 @@ export const userHistory = async (eventName) => {
 
 export const getStatistic = async (eventId) => {
   try {
-    const response = await axiosInstance.get(`/user/statistic?eventId=${eventId}`);
+    const response = await axiosInstance.get(
+      `/user/statistic?eventId=${eventId}`
+    );
     return response;
   } catch (error) {
     return error;
   }
-}
+};
 
 export const uploadFile = async (file, category) => {
   try {

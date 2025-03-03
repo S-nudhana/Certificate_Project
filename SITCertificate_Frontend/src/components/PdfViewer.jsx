@@ -7,7 +7,7 @@ export default function PdfViewer({ fileUrl, isMobile }) {
     <>
       {fileUrl && (
         isMobile ? (
-          <Box my={'20px'} boxShadow={'lg'} width={'80%'} height={'auto'} display={'flex'} justifyContent={'center'}>
+          <Box my={'20px'} boxShadow={'lg'} width={'100%'} height={'auto'} display={'flex'} justifyContent={'center'}>
             <PDF
               canvasWidth={'100%'}
               canvasHeight={'auto'}

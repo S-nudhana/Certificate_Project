@@ -9,7 +9,6 @@ import {
   Input,
   Flex,
   FormErrorMessage,
-  useToast,
 } from "@chakra-ui/react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
 import { FaDownload } from "react-icons/fa6";
@@ -18,8 +17,9 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
+import { Toast } from "../../components/Toast";
 
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+import { useDeviceScreen } from "../../utils/useDeviceScreen";
 import { formatDateDMY } from "../../utils/dateFormat";
 
 import {
@@ -28,14 +28,14 @@ import {
   studentEventDataById,
   generateStudentCertificateInfo,
   sendCertificate,
-} from "../../api/student/studentAPI";
-import { fetchFile } from "../../api/user/userAPI";
+} from "../../services/apis/student/studentAPI";
+import { fetchFile } from "../../services/apis/user/userAPI";
 
 function Student_Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
-  const isMobile = deviceScreenCheck();
+  const isMobile = useDeviceScreen();
 
   const [eventData, setEventData] = useState({});
   const [studentStatus, setStudentStatus] = useState();
@@ -53,7 +53,7 @@ function Student_Detail() {
       setEventData(response.data.data.events);
       setThumbnailURL(await fetchFile(response.data.data.events.event_thumbnail));
     } catch (error) {
-      console.log("Get event data error: " + error);
+      console.error("Get event data error: " + error);
     }
   };
   const getStudentGenerate = async () => {
@@ -66,7 +66,7 @@ function Student_Detail() {
         setCertificate(await fetchFile(res.data.data.certificate));
       }
     } catch (error) {
-      console.log("Get student data error: " + error);
+      console.error("Get student data error: " + error);
     }
   };
 
@@ -118,20 +118,9 @@ function Student_Detail() {
       setIsLoading(true);
       const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}file/${certificateRaw}`);
       if (response.status === 200) {
-        toast({
-          title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("ส่งใบประกาศนียบัตรสำเร็จ", "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", response.data.message, "error");
       }
       return;
     } catch (error) {
@@ -234,7 +223,7 @@ function Student_Detail() {
           height={{ base: "300px", lg: "100vh" }}
           objectFit="cover"
         ></Image>
-        <Box pl={{ base: "0", lg: "70px" }} p="50px" width="100%">
+        <Box pl={{ base: "0", lg: "70px" }} p={{ base: "20px", md: "50px" }} width="100%">
           <BackBTN />
           <Text fontSize="32px" fontWeight="bold" pt="10px">
             {eventData.event_name}
@@ -266,7 +255,7 @@ function Student_Detail() {
           <Box
             display="flex"
             justifyContent={{ base: "center", lg: "flex-start" }}
-            gap={"20px"}
+            gap={{ base: "10px", md: "20px" }}
           >
             <Button
               bgColor="#336699"

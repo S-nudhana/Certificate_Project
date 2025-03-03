@@ -1,22 +1,23 @@
 import { useState } from 'react';
-import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, Stack, IconButton, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
+import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, Stack, IconButton, Button, Heading, Text, useColorModeValue, FormErrorMessage } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { studentSignIn } from '../../api/student/studentAPI';
+import { Toast } from '../../components/Toast';
+
+import { studentSignIn } from '../../services/apis/student/studentAPI';
 
 export default function Student_SignInPage() {
-  const toast = useToast();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [showPassword, setShowPassword] = useState(false)
-  
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
@@ -34,33 +35,15 @@ export default function Student_SignInPage() {
       const response = await studentSignIn(email, password);
       if (response.status === 201) {
         navigate('/');
-        toast({
-          title: "เข้าสู่ระบบสำเร็จ",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เข้าสู่ระบบสำเร็จ", "ท่านได้เข้าสู่ระบบสำเร็จ", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: response.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", response.response.data.message, "error");
       }
     } catch (error) {
-      toast({
-        title: "เกิดข้อผิดพลาด",
-        description: "ไม่สามารถเข้าสู่ระบบได้",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      console.log("Student_SignInPage error: ", error)
+      console.error("Student_SignInPage error: ", error)
     }
   };
-  
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSignIn();

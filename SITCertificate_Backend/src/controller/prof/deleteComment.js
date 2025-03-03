@@ -12,7 +12,7 @@ const deleteComment = async (req, res) => {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      error: error.message,
+      error: "Internal server error",
     });
   }
 };

@@ -38,7 +38,7 @@ export default function Banner() {
                         <Text fontSize={{ base: "30px", lg: "50px" }} fontWeight={"bold"}>
                             ยินดีต้อนรับเข้าสู่ระบบออกใบประกาศนียบัตร
                         </Text>
-                        <Text fontSize={{ base: "14px", lg: "22px" }}>
+                        <Text fontSize={{ base: "12px", lg: "22px" }}>
                             คณะเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี
                         </Text>
                     </Box>

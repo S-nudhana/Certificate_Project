@@ -23,7 +23,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Building from "/img/SIT_Building.png"
 import Logo from "/img/SIT_Icon.png";
 
-import { adminSignIn } from "../../api/admin/adminAPI";
+import { adminSignIn } from "../../services/apis/admin/adminAPI";
 
 export default function Admin_SignInPage() {
   const toast = useToast();
@@ -68,7 +68,7 @@ export default function Admin_SignInPage() {
         });
       }
     } catch (error) {
-      console.log("handleEmail error", error);
+      console.error("handleEmail error", error);
     }
   };
 

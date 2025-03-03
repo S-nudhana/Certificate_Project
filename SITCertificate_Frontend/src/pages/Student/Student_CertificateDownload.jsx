@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
-import { Box, Text, Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { FaDownload } from "react-icons/fa6";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import PdfViewer from "../../components/PdfViewer";
+import { Toast } from "../../components/Toast";
 
 import {
   studentCertificate,
   sendCertificate,
-} from "../../api/student/studentAPI";
-import { fetchCertificate, fetchFile } from "../../api/user/userAPI";
+} from "../../services/apis/student/studentAPI";
+import { fetchCertificate, fetchFile } from "../../services/apis/user/userAPI";
 
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+import { useDeviceScreen } from "../../utils/useDeviceScreen";
 
 function Student_CertificateDownload() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const toast = useToast();
-  const isMobile = deviceScreenCheck();
+  const isMobile = useDeviceScreen();
 
   const [certificate, setCertificate] = useState("");
   const [certificateRaw, setCertificateRaw] = useState("");
@@ -48,20 +48,9 @@ function Student_CertificateDownload() {
       setIsLoading(true);
       const response = await sendCertificate(id, `${certificate}`);
       if (response.status === 200) {
-        toast({
-          title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("ส่งใบประกาศนียบัตรสำเร็จ", "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", response.data.message, "error");
       }
       return;
     } catch (error) {

@@ -18,12 +18,11 @@ const resetPassword = async (req, res) => {
     const decryptedPin = decryptPin(adminResetPin, iv);
     if (decryptedPin === parseInt(pin, 10)) {
       const hashed_password = hashedPassword(password);
-      const value2 = [hashed_password, email];
       await db
         .promise()
         .query(
-          "UPDATE admin SET admin_password = ? WHERE admin_email = ?",
-          value2
+          "UPDATE admin SET admin_password = ?, admin_forgotPasswordPin = ?, admin_iv = ?, admin_refCode = ? WHERE admin_email = ?",
+          [hashed_password, "", "", "", email]
         );
       try {
         await sendMail({

@@ -13,9 +13,9 @@ import { FaSearch } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import ProfCard from "../../components/prof/ProfCard";
+import Prof_AdminCard from "../../components/Prof_AdminCard";
 
-import { userHistory } from "../../api/user/userAPI";
+import { userHistory } from "../../services/apis/user/userAPI";
 
 function Prof_History() {
   const [historyData, setHistoryData] = useState([]);
@@ -36,7 +36,7 @@ function Prof_History() {
       const response = await userHistory(searchQuery);
       setHistoryData(response.data.data.history);
     } catch (error) {
-      console.log("Search event error: " + error);
+      console.error("Search event error: " + error);
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +70,7 @@ function Prof_History() {
       <Box
         width={"100%"}
         maxWidth={"1300px"}
-        mx={{ base: "5%", lg: "3%", xl: "auto" }}
+        px={{ base: "5%", lg: "3%", xl: "auto" }}
         display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}
       >
@@ -99,7 +99,7 @@ function Prof_History() {
       <Box pb={"20px"}
         maxWidth="1300px"
         mx="auto"
-        >
+      >
         {isLoading ? (
           <Box
             width={"100%"}
@@ -123,7 +123,7 @@ function Prof_History() {
               pt="30px"
             >
               {historyData.map((item, key) => (
-                <ProfCard
+                <Prof_AdminCard
                   key={key}
                   event_thumbnail={item.event_thumbnail}
                   event_name={item.event_name}
@@ -132,6 +132,7 @@ function Prof_History() {
                   event_endDate={item.event_endDate}
                   event_Id={item.event_Id}
                   event_status={item.event_approve}
+                  role={"professor"}
                 />
               ))}
             </Box>
@@ -148,7 +149,7 @@ function Prof_History() {
             )}
           </Box>
         ) : (
-          <>
+          <Box p={"10px 20px"}>
             <Text display={search === "" ? "none" : ""}>
               ผลการค้นหา "{search}" พบทั้งหมด {historyData.length} รายการ
             </Text>
@@ -161,7 +162,7 @@ function Prof_History() {
             >
               <Text>ไม่พบกิจกรรม {search}</Text>
             </Box>
-          </>
+          </Box>
         )}
       </Box>
       <Footer />

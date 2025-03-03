@@ -14,7 +14,6 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +22,11 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { adminSignUp } from "../../api/admin/adminAPI";
+import { Toast } from "../../components/Toast";
+
+import { adminSignUp } from "../../services/apis/admin/adminAPI";
 
 export default function Admin_SignUpPage() {
-  const toast = useToast();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
@@ -62,34 +62,16 @@ export default function Admin_SignUpPage() {
         setEmailError("");
       }
       if (password !== confirmPassword) {
-        toast({
-          title: "รหัสผ่านไม่ตรงกัน",
-          description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", "รหัสผ่านไม่ตรงกัน โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง", "error");
         return;
       }
       const fullname = `${firstname} ${lastname}`;
       const res = await adminSignUp(username, fullname, email, password);
       if (res.status === 201) {
-        toast({
-          title: "สร้างบัญชีผู้ใช้สำเร็จ",
-          description: "สร้างบัญชีของคุณเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("สร้างบัญชีผู้ใช้สำเร็จ", "สร้างบัญชีของคุณเรียบร้อยแล้ว", "success");
         navigate("/admin/login");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("Sign up error:", error);

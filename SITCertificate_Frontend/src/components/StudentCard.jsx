@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../../api/user/userAPI";
+import { fetchFile } from "../api/user/userAPI";
 
-import { formatDateDMY } from "../../utils/dateFormat";
+import { formatDateDMY } from "../utils/dateFormat";
 
 export default function StudentCard({
   event_thumbnail,

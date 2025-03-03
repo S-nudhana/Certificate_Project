@@ -19,7 +19,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  useToast,
   Tooltip,
   useDisclosure
 } from "@chakra-ui/react";
@@ -30,16 +29,16 @@ import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { Toast } from "../../components/Toast";
 
 import { formatDateYMD } from "../../utils/dateFormat";
 import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
-import { adminUpdateEvent, getProfessor } from "../../api/admin/adminAPI";
-import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI";
+import { adminUpdateEvent, getProfessor } from "../../services/apis/admin/adminAPI";
+import { userEventDataById, uploadFile, fetchFile } from "../../services/apis/user/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams().id;
-  const toast = useToast();
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -66,7 +65,6 @@ function Admin_EditEvent() {
   const getProfessorList = async () => {
     try {
       const response = await getProfessor();
-      console.log(response)
       setProfessorList(response.data.data.professors);
     } catch (error) {
       console.error("Error getting professor list:", error);
@@ -76,7 +74,6 @@ function Admin_EditEvent() {
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
-      console.log(response)
       setEventName(response.data.data.event.event_name);
       setEventOwnerName(response.data.data.event.event_owner);
       setOpenDate(formatDateYMD(response.data.data.event.event_startDate));
@@ -102,12 +99,7 @@ function Admin_EditEvent() {
       if (closeDate < openDate) {
         setCloseDateError("วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด")
         setCloseDate("");
-        toast({
-          title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด กรุณากรอกข้อมูลใหม่อีกครั้ง", "วันสิ้นสุดการดาวน์โหลดต้องอยู่หลังวันเปิดให้ดาว์นโหลด", "error");
         return;
       }
       if (
@@ -143,12 +135,7 @@ function Admin_EditEvent() {
         );
         if (response.status === 200) {
           navigate("/admin/");
-          toast({
-            title: "แก้ไขกิจกรรมสำเร็จ",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
+          Toast("แก้ไขกิจกรรมสำเร็จ", "กำลังพาคุณกลับสู่หน้าหลัก", "success");
         }
       }
     } catch (error) {

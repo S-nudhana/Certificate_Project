@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   useParams,
   useNavigate,
@@ -23,24 +22,24 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import PdfViewer from "../../components/PdfViewer";
 
-import { uploadFile, fetchCertificate } from "../../api/user/userAPI";
+import { uploadFile, fetchCertificate } from "../../services/apis/user/userAPI";
 import {
   studentGenerate,
   updateStudentGenerateStatus,
   studentCertificate,
   generateStudentCertificateInfo,
-} from "../../api/student/studentAPI";
+} from "../../services/apis/student/studentAPI";
 
 import { fetchAndFillCertificate } from "../../utils/embedNameOnCertificate";
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+import { useDeviceScreen } from "../../utils/useDeviceScreen";
 
 function Student_CertificateExample() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = deviceScreenCheck();
+  const isMobile = useDeviceScreen();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { name, surname, email } = location.state || {};  
+  const { name, surname, email } = location.state || {};
 
   const [certificate, setCertificate] = useState();
   const [pdfWatermarkUrl, setPdfWatermarkUrl] = useState(null);

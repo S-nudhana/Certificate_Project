@@ -4,12 +4,11 @@ import { compare, signToken } from "../auth/jwt.js";
 const SignInAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const value = [email];
     const user = await db
       .promise()
       .query(
         "SELECT admin_Id, admin_password FROM admin WHERE admin_email = ?",
-        [value]
+        [email]
       );
     if (user[0].length != 1) {
       throw "ไม่พบบัญชีนี้ในระบบ";
@@ -26,8 +25,8 @@ const SignInAdmin = async (req, res) => {
     const cookieOptions = {
       httpOnly: true,
       maxAge: 3 * 60 * 60 * 1000,
-      sameSite: "None",
-      secure: true,
+      expires: new Date(Date.now() + 15 * 60 * 1000),
+      // secure: true,
     };
 
     res.cookie("token", signedToken, cookieOptions);
@@ -36,7 +35,7 @@ const SignInAdmin = async (req, res) => {
       .json({ success: true, message: "เข้าสู่ระบบสำเร็จ" });
   } catch (error) {
     console.error("Error: ", error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

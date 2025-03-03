@@ -24,13 +24,13 @@ const SignInProf = async (req, res) => {
       httpOnly: true,
       maxAge: 3 * 60 * 60 * 1000,
       expires: new Date(Date.now() + 15 * 60 * 1000),
-      secure: true,
+      // secure: true,
   };
     res.cookie("token", signedToken, cookieOptions);
     return res.status(201).json({ success: true, message: "เข้าสู่ระบบสำเร็จ" });
   } catch (error) {
     console.error("Error: ", error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

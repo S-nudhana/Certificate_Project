@@ -14,7 +14,7 @@ const sendEmail = async (req, res) => {
       .json({ success: true, message: "อีเมลถูกส่งเรียบร้อยแล้ว" });
   } catch (error) {
     console.error("Error: ", error);
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 export default sendEmail;
