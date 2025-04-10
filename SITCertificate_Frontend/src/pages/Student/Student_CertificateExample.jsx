@@ -22,13 +22,13 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import PdfViewer from "../../components/PdfViewer";
 
-import { uploadFile, fetchCertificate } from "../../services/apis/user/userAPI";
+import { uploadFile, fetchCertificate } from "../../services/apis/userAPI";
 import {
   studentGenerate,
   updateStudentGenerateStatus,
   studentCertificate,
   generateStudentCertificateInfo,
-} from "../../services/apis/student/studentAPI";
+} from "../../services/apis/studentAPI";
 
 import { fetchAndFillCertificate } from "../../utils/embedNameOnCertificate";
 

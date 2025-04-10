@@ -33,8 +33,8 @@ import { useCustomeToast } from "../../hooks/customeToast";
 
 import { formatDateYMD } from "../../utils/dateFormat";
 
-import { adminUpdateEvent, getProfessor, embedName } from "../../services/apis/admin/adminAPI";
-import { userEventDataById, uploadFile, fetchFile, fetchCertificate } from "../../services/apis/user/userAPI";
+import { adminUpdateEvent, getProfessor, embedName } from "../../services/apis/adminAPI";
+import { userEventDataById, uploadFile, fetchFile, fetchCertificate } from "../../services/apis/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams().id;
@@ -118,7 +118,7 @@ function Admin_EditEvent() {
       ) {
         const uploadedThumbnail = thumbnailFile ? await uploadFile(thumbnailFile, "upload_images") : null;
         const uploadThumbnailURL = uploadedThumbnail ? uploadedThumbnail.data.file.filePath : "";
-        const uploadedTemplate = templateFile && templateChaged ? uploadFile(templateFile, "upload_template") : null;
+        const uploadedTemplate = templateFile && templateChaged ? await uploadFile(templateFile, "upload_template") : null;
         const uploadedTemplateURL = uploadedTemplate ? uploadedTemplate.data.file.filePath : "";
         const uploadedExcel = excelFile ? await uploadFile(excelFile, "upload_excel") : null;
         const uploadExcelURL = uploadedExcel ? uploadedExcel.data.file.filePath : "";
@@ -151,7 +151,6 @@ function Admin_EditEvent() {
       const yPosition = inputY != null ? inputY : textY;
       const modifiedPdfBytes = await embedName(pdfUrl, size, yPosition, "upload_temp");
       setModifiedTemplateURL(modifiedPdfBytes);
-      return null;
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -191,7 +190,6 @@ function Admin_EditEvent() {
       console.error("Error processing PDF:", error);
     }
   };
-
   return (
     <>
       <ScrollRestoration />

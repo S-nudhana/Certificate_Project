@@ -30,7 +30,7 @@ import {
   adminForgotPassword,
   adminResetPassword,
   adminSendResetPasswordEmail,
-} from "../../services/apis/admin/adminAPI";
+} from "../../services/apis/adminAPI";
 
 export default function Admin_forgotPassword() {
   const navigate = useNavigate();

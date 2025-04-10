@@ -15,7 +15,7 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import Prof_AdminCard from "../../components/Prof_admin/Prof_AdminCard";
 
-import { userHistory } from "../../services/apis/user/userAPI";
+import { userHistory } from "../../services/apis/userAPI";
 
 function Prof_History() {
   const [historyData, setHistoryData] = useState([]);

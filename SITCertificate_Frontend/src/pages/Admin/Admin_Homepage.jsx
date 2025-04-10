@@ -16,7 +16,7 @@ import Footer from "../../components/Footer";
 import Banner from "../../components/Banner";
 import EventList from "../../components/EventList";
 
-import { userEventData, userSearchEvent } from "../../services/apis/user/userAPI";
+import { userEventData, userSearchEvent } from "../../services/apis/userAPI";
 
 function Admin_Homepage() {
   const navigate = useNavigate();

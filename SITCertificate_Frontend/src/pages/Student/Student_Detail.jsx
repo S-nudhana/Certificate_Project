@@ -27,8 +27,8 @@ import {
   studentEventDataById,
   generateStudentCertificateInfo,
   sendCertificate,
-} from "../../services/apis/student/studentAPI";
-import { fetchFile } from "../../services/apis/user/userAPI";
+} from "../../services/apis/studentAPI";
+import { fetchFile } from "../../services/apis/userAPI";
 
 function Student_Detail() {
   const { id } = useParams();

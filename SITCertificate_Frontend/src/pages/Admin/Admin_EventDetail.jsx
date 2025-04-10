@@ -38,13 +38,13 @@ import {
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../services/apis/user/userAPI";
+} from "../../services/apis/userAPI";
 import {
   adminUpdateCommentStatus,
   adminDeleteEvent,
   adminSendEmail,
-} from "../../services/apis/admin/adminAPI";
-import { getProfessorEmail } from "../../services/apis/admin/adminAPI";
+} from "../../services/apis/adminAPI";
+import { getProfessorEmail } from "../../services/apis/adminAPI";
 
 export default function Admin_EventDetail() {
   const { id } = useParams();

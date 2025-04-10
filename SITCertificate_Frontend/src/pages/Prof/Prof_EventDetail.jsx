@@ -38,14 +38,14 @@ import {
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../services/apis/user/userAPI";
+} from "../../services/apis/userAPI";
 
 import {
   profAddComment,
   profDeleteComment,
   profApproveEvent,
   profSendEmail,
-} from "../../services/apis/prof/profAPI";
+} from "../../services/apis/profAPI";
 
 function Prof_EventDetail() {
   const { id } = useParams();

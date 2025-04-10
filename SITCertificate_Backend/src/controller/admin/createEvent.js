@@ -3,7 +3,6 @@ import { verifyToken } from "../auth/jwt.js";
 
 const createEvent = async (req, res) => {
   const { token } = req.cookies;
-  console.log("asd")
   const {
     eventName,
     eventOwner,
@@ -33,7 +32,6 @@ const createEvent = async (req, res) => {
       inputSize,
       inputY,
     ];
-    console.log(value);
     await db
       .promise()
       .query(

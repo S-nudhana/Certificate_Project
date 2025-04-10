@@ -17,7 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import logo from "/img/SIT_logo.png";
 
-import { userVerifyToken, userDeleteToken } from "../services/apis/user/userAPI";
+import { userVerifyToken, userDeleteToken } from "../services/apis/userAPI";
 
 export default function Navbar() {
   const navigate = useNavigate();

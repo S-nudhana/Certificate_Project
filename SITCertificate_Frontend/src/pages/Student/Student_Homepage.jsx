@@ -7,7 +7,7 @@ import Footer from "../../components/Footer";
 import Banner from "../../components/Banner";
 import EventList from "../../components/EventList";
 
-import { studentData } from "../../services/apis/student/studentAPI";
+import { studentData } from "../../services/apis/studentAPI";
 
 function Student_Homepage() {
   const [eventData, setEventData] = useState([]);

@@ -24,7 +24,7 @@ import Logo from "/img/SIT_Icon.png";
 
 import { useCustomeToast } from "../../hooks/customeToast";
 
-import { adminSignUp } from "../../services/apis/admin/adminAPI";
+import { adminSignUp } from "../../services/apis/adminAPI";
 
 export default function Admin_SignUpPage() {
   const navigate = useNavigate();

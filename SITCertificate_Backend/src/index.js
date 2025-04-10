@@ -40,7 +40,7 @@ db.connect((error) => {
   }
 });
 
-app.use("/file/", getFile);
+app.use("/file", getFile);
 app.use("/api", limiter);
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);

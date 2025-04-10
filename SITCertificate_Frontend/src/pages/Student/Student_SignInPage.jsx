@@ -8,7 +8,7 @@ import Logo from "/img/SIT_Icon.png";
 
 import { useCustomeToast } from '../../hooks/customeToast';
 
-import { studentSignIn } from '../../services/apis/student/studentAPI';
+import { studentSignIn } from '../../services/apis/studentAPI';
 
 export default function Student_SignInPage() {
   const navigate = useNavigate();

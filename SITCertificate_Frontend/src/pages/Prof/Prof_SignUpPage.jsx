@@ -24,7 +24,7 @@ import Logo from "/img/SIT_Icon.png";
 
 import { useCustomeToast } from "../../hooks/customeToast";
 
-import { profSignUp } from "../../services/apis/prof/profAPI";
+import { profSignUp } from "../../services/apis/profAPI";
 
 export default function Prof_SignUpPage() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../../services/apis/user/userAPI";
+import { fetchFile } from "../../services/apis/userAPI";
 
 import { formatDateDMY } from "../../utils/dateFormat";
 
@@ -14,6 +14,7 @@ export default function Prof_AdminCard({
   event_endDate,
   event_Id,
   event_status,
+  eventEnd,
   role
 }) {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function Prof_AdminCard({
             {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
           </Text>
           <Button
-            display={event_status && role === "professor" ? "none" : ""}
+            display={event_status && role === "professor" || eventEnd  ? "none" : ""}
             mr={"15px"}
             width="90px"
             borderRadius="40px"

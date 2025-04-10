@@ -8,7 +8,7 @@ import Footer from "../../components/Footer";
 import EventList from "../../components/EventList";
 import Banner from "../../components/Banner";
 
-import { userEventData } from "../../services/apis/user/userAPI";
+import { userEventData } from "../../services/apis/userAPI";
 
 function Prof_Homepage() {
   const navigate = useNavigate();

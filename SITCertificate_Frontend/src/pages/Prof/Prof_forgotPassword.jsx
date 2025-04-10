@@ -30,7 +30,7 @@ import {
   profForgotPassword,
   profResetPassword,
   profSendResetPasswordEmail,
-} from "../../services/apis/prof/profAPI";
+} from "../../services/apis/profAPI";
 
 export default function Prof_forgotPassword() {
   const navigate = useNavigate();

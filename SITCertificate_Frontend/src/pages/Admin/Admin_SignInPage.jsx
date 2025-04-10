@@ -23,7 +23,7 @@ import { useCustomeToast } from "../../hooks/customeToast";
 import Building from "/img/SIT_Building.png"
 import Logo from "/img/SIT_Icon.png";
 
-import { adminSignIn } from "../../services/apis/admin/adminAPI";
+import { adminSignIn } from "../../services/apis/adminAPI";
 
 export default function Admin_SignInPage() {
   const Toast = useCustomeToast();

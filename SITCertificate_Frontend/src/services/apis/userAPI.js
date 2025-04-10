@@ -1,4 +1,4 @@
-import axiosInstance from "../../../utils/axiosInstance";
+import axiosInstance from "../../utils/axiosInstance";
 import axios from "axios";
 
 export const userVerifyToken = async () => {
@@ -94,6 +94,9 @@ export const uploadFile = async (file, category) => {
 };
 
 export const fetchFile = async (filepath) => {
+  if (!filepath || filepath == "") {
+    return null;
+  }
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_URL}file?filepath=${filepath}`,
@@ -106,6 +109,9 @@ export const fetchFile = async (filepath) => {
 };
 
 export const fetchCertificate = async (filepath) => {
+  if (!filepath || filepath == "") {
+    return null;
+  }
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_URL}file?filepath=${filepath}`,

@@ -10,8 +10,8 @@ import PdfViewer from "../../components/PdfViewer";
 import {
   studentCertificate,
   sendCertificate,
-} from "../../services/apis/student/studentAPI";
-import { fetchCertificate, fetchFile } from "../../services/apis/user/userAPI";
+} from "../../services/apis/studentAPI";
+import { fetchCertificate, fetchFile } from "../../services/apis/userAPI";
 
 import { useCustomeToast } from "../../hooks/customeToast";
 

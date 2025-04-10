@@ -15,7 +15,7 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import Prof_AdminCard from "../../components/Prof_admin/Prof_AdminCard";
 
-import { userHistory } from "../../services/apis/user/userAPI";
+import { userHistory } from "../../services/apis/userAPI";
 
 function Admin_History() {
   const [historyData, setHistoryData] = useState([]);
@@ -70,7 +70,7 @@ function Admin_History() {
       <Box
         width={"100%"}
         maxWidth={"1300px"}
-        px={{ base: "5%", lg: "3%", xl: "auto" }}
+        mx="auto"
         display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}
       >
@@ -96,10 +96,7 @@ function Admin_History() {
           />
         </InputGroup>
       </Box>
-      <Box pb={"20px"}
-        maxWidth="1300px"
-        mx="auto"
-      >
+      <Box pb={"20px"} maxWidth="1300px" mx="auto">
         {isLoading ? (
           <Box
             width={"100%"}
@@ -108,7 +105,7 @@ function Admin_History() {
             alignItems="center"
             justifyContent="center"
           >
-            <Spinner size="xl" color={"#1f568c"} emptyColor='gray.200' />
+            <Spinner size="xl" color={"#1f568c"} emptyColor="gray.200" />
           </Box>
         ) : historyData.length != 0 ? (
           <Box>
@@ -132,6 +129,7 @@ function Admin_History() {
                   event_endDate={item.event_endDate}
                   event_Id={item.event_Id}
                   event_status={item.event_approve}
+                  eventEnd={true}
                   role={"admin"}
                 />
               ))}

@@ -35,6 +35,7 @@ function EventList({ events, title, message, role }) {
                                 event_endDate={item.event_endDate}
                                 event_Id={item.event_Id}
                                 event_status={item.event_approve || false}
+                                eventEnd={false}
                                 role={role}
                             />
                         ))
@@ -45,6 +46,7 @@ function EventList({ events, title, message, role }) {
                                 event_name={item.event_name}
                                 event_startDate={item.event_startDate}
                                 event_endDate={item.event_endDate}
+                                eventEnd={false}
                                 event_Id={item.event_Id}
                             />
                         ))}
