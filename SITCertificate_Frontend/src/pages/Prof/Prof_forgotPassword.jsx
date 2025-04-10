@@ -21,7 +21,7 @@ import {
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-import { Toast } from "../../components/Toast";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
@@ -34,6 +34,7 @@ import {
 
 export default function Prof_forgotPassword() {
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");

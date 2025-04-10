@@ -14,7 +14,7 @@ import { FaPlus, FaHistory, FaSearch } from "react-icons/fa";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Banner from "../../components/Banner";
-import EventList from "../../components/EventList"; // Import new component
+import EventList from "../../components/EventList";
 
 import { userEventData, userSearchEvent } from "../../services/apis/user/userAPI";
 

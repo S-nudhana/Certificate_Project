@@ -2,19 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../api/user/userAPI";
+import { fetchFile } from "../../services/apis/user/userAPI";
 
-import { formatDateDMY } from "../utils/dateFormat";
+import { formatDateDMY } from "../../utils/dateFormat";
 
-export default function Prof_AdminCard({
+export default function StudentCard({
   event_thumbnail,
   event_name,
-  event_owner,
   event_startDate,
   event_endDate,
   event_Id,
-  event_status,
-  role
 }) {
   const navigate = useNavigate();
 
@@ -30,7 +27,7 @@ export default function Prof_AdminCard({
 
   useEffect(() => {
     getFile();
-  }, []);
+  }, [])
 
   return (
     <>
@@ -55,39 +52,25 @@ export default function Prof_AdminCard({
           height={"250px"}
         />
         <Box p="30px">
-          <Text fontSize="28px" fontWeight="bold">
+          <Text fontSize="28px" fontWeight="bold" pb="5px">
             {event_name}
           </Text>
-          <Text fontWeight="bold">{event_owner}</Text>
           <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-          <Text pb="5px" color={"red"}>
-            {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
+          <Text pb="5px" color={"black"}>
+            {formatDateDMY(event_startDate)} ถึง{" "}
+            {formatDateDMY(event_endDate)}
           </Text>
           <Button
-            display={event_status && role === "professor" ? "none" : ""}
-            mr={"15px"}
-            width="90px"
+            width="170px"
             borderRadius="40px"
             bgColor="#336699"
             color="white"
             _hover={{ bgColor: "#1f568c" }}
             onClick={() => {
-              navigate(`/${role}/editEvent/${event_Id}`);
+              navigate(`/detail/${event_Id}`);
             }}
           >
-            แก้ไข
-          </Button>
-          <Button
-            width="130px"
-            borderRadius="40px"
-            bgColor="#3399cc"
-            color="white"
-            _hover={{ bgColor: "#297AA3" }}
-            onClick={() => {
-              navigate(`/${role}/detail/${event_Id}`);
-            }}
-          >
-            ดูข้อมูลกิจกรรม
+            รับประกาศนียบัตร
           </Button>
         </Box>
       </Card>

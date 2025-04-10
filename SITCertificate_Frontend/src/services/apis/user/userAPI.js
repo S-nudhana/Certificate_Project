@@ -116,3 +116,16 @@ export const fetchCertificate = async (filepath) => {
     return error;
   }
 };
+
+export const userEmbedName = async (eventId, name, surname) => {
+  try {
+    const response = await axiosInstance.put(`/user/watermark`, {
+      eventId: eventId,
+      name: name,
+      surname: surname,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+}

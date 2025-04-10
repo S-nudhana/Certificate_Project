@@ -22,12 +22,13 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { Toast } from "../../components/Toast";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import { adminSignUp } from "../../services/apis/admin/adminAPI";
 
 export default function Admin_SignUpPage() {
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
 
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");

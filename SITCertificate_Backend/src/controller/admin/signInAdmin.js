@@ -26,7 +26,7 @@ const SignInAdmin = async (req, res) => {
       httpOnly: true,
       maxAge: 3 * 60 * 60 * 1000,
       expires: new Date(Date.now() + 15 * 60 * 1000),
-      // secure: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
     };
 
     res.cookie("token", signedToken, cookieOptions);

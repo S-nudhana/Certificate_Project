@@ -31,13 +31,11 @@ import {
 } from "../../services/apis/student/studentAPI";
 
 import { fetchAndFillCertificate } from "../../utils/embedNameOnCertificate";
-import { useDeviceScreen } from "../../utils/useDeviceScreen";
 
 function Student_CertificateExample() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useDeviceScreen();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, surname, email } = location.state || {};
 
@@ -141,7 +139,7 @@ function Student_CertificateExample() {
         </Text>
         <Flex width={{ base: "80%", xl: "50%" }} justifyContent={"center"}>
           {pdfWatermarkUrl ? (
-            <PdfViewer fileUrl={pdfWatermarkUrl} isMobile={isMobile} />
+            <PdfViewer fileUrl={pdfWatermarkUrl}/>
           ) : (
             <Text>Loading PDF preview...</Text>
           )}

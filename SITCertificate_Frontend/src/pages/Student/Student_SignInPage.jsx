@@ -6,13 +6,13 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { Toast } from '../../components/Toast';
+import { useCustomeToast } from '../../hooks/customeToast';
 
 import { studentSignIn } from '../../services/apis/student/studentAPI';
 
 export default function Student_SignInPage() {
   const navigate = useNavigate();
-
+  const Toast = useCustomeToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');

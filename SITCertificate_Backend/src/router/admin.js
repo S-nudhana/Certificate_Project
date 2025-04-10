@@ -12,9 +12,12 @@ import sendResetPasswordEmail from "../controller/admin/sendResetPasswordEmail.j
 import resetPassword from "../controller/admin/resetPassword.js";
 import getProfessorEmail from "../controller/admin/getProfessorEmail.js";
 import getEventProfessor from "../controller/admin/getEventProfessor.js";
+import embedName from "../controller/admin/embedName.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 import { accessManager } from "../middleware/accessManager.js";
+
+import { upload } from "../config/multerConfig.js";
 
 const adminRouter = express.Router();
 
@@ -31,5 +34,6 @@ adminRouter.delete("/event/:id", authMiddleware, accessManager(["admin"]), delet
 adminRouter.put("/comment/:id/status", authMiddleware, accessManager(["admin"]), updateCommentStatus);
 adminRouter.get("/email/:id", authMiddleware, accessManager([ "admin"]), getProfessorEmail);
 adminRouter.get("/event/professor", authMiddleware, accessManager(["admin"]), getEventProfessor);
+adminRouter.post("/watermark", authMiddleware, accessManager(["admin"]), upload.single("file"), embedName);
 
 export default adminRouter;

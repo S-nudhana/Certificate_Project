@@ -27,30 +27,30 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
-import StatisticChart from "../../components/StatisticChart";
-import { Toast } from "../../components/Toast";
+import StatisticChart from "../../components/Prof_admin/StatisticChart";
 
 import { formatDateDMY } from "../../utils/dateFormat";
 
-import { useDeviceScreen } from "../../hooks/useDeviceScreen";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import {
   userComment,
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../components/apis/user/userAPI";
+} from "../../services/apis/user/userAPI";
 
 import {
   profAddComment,
   profDeleteComment,
   profApproveEvent,
   profSendEmail,
-} from "../../components/apis/prof/profAPI";
+} from "../../services/apis/prof/profAPI";
 
 function Prof_EventDetail() {
   const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const Toast = useCustomeToast();
 
   const [eventData, setEventData] = useState([]);
   const [certificate, setCertificate] = useState("");
@@ -139,7 +139,6 @@ function Prof_EventDetail() {
     }
   };
 
-  const isMobile = useDeviceScreen();
 
   return (
     <>
@@ -177,7 +176,7 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+            <PdfViewer fileUrl={`${certificate}`}/>
             <Button
               leftIcon={<FaDownload />}
               mt={"15px"}

@@ -3,6 +3,7 @@ import { verifyToken } from "../auth/jwt.js";
 
 const createEvent = async (req, res) => {
   const { token } = req.cookies;
+  console.log("asd")
   const {
     eventName,
     eventOwner,
@@ -32,12 +33,14 @@ const createEvent = async (req, res) => {
       inputSize,
       inputY,
     ];
+    console.log(value);
     await db
       .promise()
       .query(
         "INSERT INTO `event` (`event_name`, `event_owner`, `event_startDate`, `event_endDate`, `event_thumbnail`, `event_certificate`, `event_excel`, `event_approve`, `event_adminId`, `event_emailTemplate`, `event_certificate_text_size`, `event_certificate_position_y`) VALUES (?)",
         [value]
       );
+    
     return res
       .status(201)
       .json({ success: true, message: "สร้างกิจกกรมเสร็จสิ้น" });

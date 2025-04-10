@@ -29,19 +29,19 @@ import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { Toast } from "../../components/Toast";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import { formatDateYMD } from "../../utils/dateFormat";
-import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
-import { adminUpdateEvent, getProfessor } from "../../services/apis/admin/adminAPI";
-import { userEventDataById, uploadFile, fetchFile } from "../../services/apis/user/userAPI";
+import { adminUpdateEvent, getProfessor, embedName } from "../../services/apis/admin/adminAPI";
+import { userEventDataById, uploadFile, fetchFile, fetchCertificate } from "../../services/apis/user/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams().id;
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const Toast = useCustomeToast();
 
   const [eventName, setEventName] = useState("");
   const [eventOwnerName, setEventOwnerName] = useState("");
@@ -61,6 +61,7 @@ function Admin_EditEvent() {
   const [textSize, setTextSize] = useState("");
   const [textY, setTextY] = useState("");
   const [professorList, setProfessorList] = useState([]);
+  const [templateChaged, setTemplateChanged] = useState(false);
 
   const getProfessorList = async () => {
     try {
@@ -80,6 +81,7 @@ function Admin_EditEvent() {
       setCloseDate(formatDateYMD(response.data.data.event.event_endDate));
       setThumbnailURL(await fetchFile(response.data.data.event.event_thumbnail));
       setTemplateURL(await fetchFile(response.data.data.event.event_certificate));
+      setTemplateFile(await fetchCertificate(response.data.data.event.event_certificate));
       setFinalExcel(await fetchFile(response.data.data.event.event_excel));
       setEmailTemplate(response.data.data.event.event_emailTemplate);
       setTextSize(response.data.data.event.event_certificate_text_size);
@@ -116,7 +118,7 @@ function Admin_EditEvent() {
       ) {
         const uploadedThumbnail = thumbnailFile ? await uploadFile(thumbnailFile, "upload_images") : null;
         const uploadThumbnailURL = uploadedThumbnail ? uploadedThumbnail.data.file.filePath : "";
-        const uploadedTemplate = templateFile ? uploadFile(templateFile, "upload_template") : null;
+        const uploadedTemplate = templateFile && templateChaged ? uploadFile(templateFile, "upload_template") : null;
         const uploadedTemplateURL = uploadedTemplate ? uploadedTemplate.data.file.filePath : "";
         const uploadedExcel = excelFile ? await uploadFile(excelFile, "upload_excel") : null;
         const uploadExcelURL = uploadedExcel ? uploadedExcel.data.file.filePath : "";
@@ -129,8 +131,8 @@ function Admin_EditEvent() {
           uploadedTemplateURL,
           uploadExcelURL,
           emailTemplate,
-          inputSize,
-          inputY,
+          inputSize ? inputSize : textSize,
+          inputY ? inputY : textY,
           id
         );
         if (response.status === 200) {
@@ -145,15 +147,10 @@ function Admin_EditEvent() {
 
   const handleTemplateChange = async (pdfUrl) => {
     try {
-      const size = inputSize !== null ? inputSize : textSize;
-      const yPosition = inputY !== null ? inputY : textY;
-      const modifiedPdfBytes = await sampleSetNameOnCertificate(pdfUrl, size, yPosition);
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        return setModifiedTemplateURL(modifiedPdfUrl);
-      }
+      const size = inputSize != null ? inputSize : textSize;
+      const yPosition = inputY != null ? inputY : textY;
+      const modifiedPdfBytes = await embedName(pdfUrl, size, yPosition, "upload_temp");
+      setModifiedTemplateURL(modifiedPdfBytes);
       return null;
     } catch (error) {
       console.error("Error processing PDF:", error);
@@ -183,17 +180,13 @@ function Admin_EditEvent() {
 
   const newExampleChange = async () => {
     try {
-      const modifiedPdfBytes = await sampleSetNameOnCertificate(
-        templateURL,
-        inputSize,
-        inputY
+      const modifiedPdfBytes = await embedName(
+        templateFile,
+        inputSize ? inputSize : textSize,
+        inputY ? inputY : textY,
+        "upload_temp"
       );
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        setModifiedTemplateURL(modifiedPdfUrl);
-      }
+      setModifiedTemplateURL(modifiedPdfBytes);
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -319,7 +312,10 @@ function Admin_EditEvent() {
                   <input
                     type="file"
                     accept=".pdf"
-                    onChange={handleFileChange}
+                    onChange={(e) => {
+                      handleFileChange(e);
+                      setTemplateChanged(true);
+                    }}
                   />
                 </FormControl>
                 {templateURL && (
@@ -337,7 +333,7 @@ function Admin_EditEvent() {
                     _hover={{ bgColor: "#297AA3" }}
                     onClick={() => {
                       onOpen();
-                      handleTemplateChange(templateURL);
+                      handleTemplateChange(templateFile);
                     }}
                     size={["sm", "md", "md"]}
                   >

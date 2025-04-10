@@ -3,7 +3,7 @@ import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-import { Toast } from '../../components/Toast';
+import { useCustomeToast } from '../../hooks/customeToast';
 
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
@@ -12,6 +12,7 @@ import { profSignIn } from '../../services/apis/prof/profAPI';
 
 export default function Prof_SignInPage() {
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

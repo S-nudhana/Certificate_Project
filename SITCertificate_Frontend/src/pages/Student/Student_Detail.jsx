@@ -17,9 +17,8 @@ import PdfViewer from "../../components/PdfViewer";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
-import { Toast } from "../../components/Toast";
+import { useCustomeToast } from "../../hooks/customeToast";
 
-import { useDeviceScreen } from "../../utils/useDeviceScreen";
 import { formatDateDMY } from "../../utils/dateFormat";
 
 import {
@@ -34,8 +33,7 @@ import { fetchFile } from "../../services/apis/user/userAPI";
 function Student_Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const toast = useToast();
-  const isMobile = useDeviceScreen();
+  const Toast = useCustomeToast();
 
   const [eventData, setEventData] = useState({});
   const [studentStatus, setStudentStatus] = useState();
@@ -246,7 +244,7 @@ function Student_Detail() {
               pb={"20px"}
             >
               {certificate ? (
-                <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+                <PdfViewer fileUrl={`${certificate}`} />
               ) : (
                 <Text>Loading PDF preview...</Text>
               )}

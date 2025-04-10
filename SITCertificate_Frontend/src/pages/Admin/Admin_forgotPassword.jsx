@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { Toast } from "../../components/Toast";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import {
   adminForgotPassword,
@@ -34,6 +34,7 @@ import {
 
 export default function Admin_forgotPassword() {
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -44,7 +45,7 @@ export default function Admin_forgotPassword() {
   const [pin, setPin] = useState('');
   const [emailSent, setEmailSent] = useState(false);
   const [refCode, setRefCode] = useState('');
-  
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
@@ -95,7 +96,7 @@ export default function Admin_forgotPassword() {
       console.error("confirmCreatePassword error", error);
     }
   };
-  
+
   return (
     <Flex
       minH="100vh"

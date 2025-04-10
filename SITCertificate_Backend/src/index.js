@@ -20,7 +20,6 @@ import getFile from "./controller/getFile.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-const HOST = "10.4.153.187"
 
 app.use(cors(corsOptions));
 app.use(logger);
@@ -48,10 +47,6 @@ app.use("/api/admin", adminRouter);
 app.use("/api/prof", profRouter);
 app.use("/api/student", studentRouter);
 
-app.listen(PORT, HOST, () => {
-  console.log(`Server running on HOST:${HOST} PORT:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on PORT:${PORT}`);
 });
-
-// app.listen(PORT, () => {
-//   console.log(`Server running on PORT:${PORT}`);
-// });

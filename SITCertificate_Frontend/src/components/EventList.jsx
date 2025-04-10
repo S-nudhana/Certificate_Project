@@ -1,6 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
-import Prof_AdminCard from "./Prof_AdminCard";
-import StudentCard from "./StudentCard";
+import Prof_AdminCard from "./Prof_admin/Prof_AdminCard";
+import StudentCard from "./Student/StudentCard";
 
 function EventList({ events, title, message, role }) {
     return (

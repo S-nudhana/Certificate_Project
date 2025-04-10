@@ -175,3 +175,21 @@ export const getProfessor = async () => {
     return error;
   }
 };
+
+export const embedName = async (template, inputSize, inputY, directory) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", template);
+    formData.append("inputSize", inputSize);
+    formData.append("inputY", inputY);
+    const response = await axiosInstance.post(
+      `/admin/watermark?category=${directory}`,
+      formData, {
+        responseType: "blob",
+      }
+    );
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    return error;
+  }
+};

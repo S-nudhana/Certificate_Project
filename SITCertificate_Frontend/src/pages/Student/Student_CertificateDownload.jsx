@@ -6,7 +6,6 @@ import { FaDownload } from "react-icons/fa6";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import PdfViewer from "../../components/PdfViewer";
-import { Toast } from "../../components/Toast";
 
 import {
   studentCertificate,
@@ -14,12 +13,12 @@ import {
 } from "../../services/apis/student/studentAPI";
 import { fetchCertificate, fetchFile } from "../../services/apis/user/userAPI";
 
-import { useDeviceScreen } from "../../utils/useDeviceScreen";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 function Student_CertificateDownload() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const isMobile = useDeviceScreen();
+  const Toast = useCustomeToast();
 
   const [certificate, setCertificate] = useState("");
   const [certificateRaw, setCertificateRaw] = useState("");
@@ -81,7 +80,7 @@ function Student_CertificateDownload() {
             height={"auto"}
           >
             {certificate ? (
-              <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+              <PdfViewer fileUrl={`${certificate}`} />
             ) : (
               <Text>Loading PDF preview...</Text>
             )}
