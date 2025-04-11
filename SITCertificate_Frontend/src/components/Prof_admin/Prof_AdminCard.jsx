@@ -14,7 +14,6 @@ export default function Prof_AdminCard({
   event_endDate,
   event_Id,
   event_status,
-  eventEnd,
   role
 }) {
   const navigate = useNavigate();
@@ -65,7 +64,7 @@ export default function Prof_AdminCard({
             {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
           </Text>
           <Button
-            display={event_status && role === "professor" || eventEnd  ? "none" : ""}
+            display={event_status || role === "professor"  ? "none" : ""}
             mr={"15px"}
             width="90px"
             borderRadius="40px"

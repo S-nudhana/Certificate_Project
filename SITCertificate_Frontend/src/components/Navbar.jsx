@@ -77,11 +77,11 @@ export default function Navbar() {
 
   return (
     <Box
-      bgColor="#0c2d4e"
+      bgColor="#222222"
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      p={{ base: "20px", md: "20px 50px" }}
+      p={{ base: "20px", md: "15px 50px" }}
       position="fixed"
       top="0"
       left="0"
@@ -91,18 +91,18 @@ export default function Navbar() {
       {...(shouldShowNavbar ? {} : { top: "-80px" })}
     >
       <Box cursor={"pointer"} onClick={() => { navigate("/") }}>
-        <Image src={logo} height={"38px"} />
+        <Image src={logo}  width={"180px"}/>
       </Box>
       <Flex gap={{ base: '10px', md: "30px" }}>
         <Button
           leftIcon={<FaArrowRightFromBracket />}
-          bgColor="#336699"
+          bgColor="#A62C2C"
           color="white"
           size="md"
           display={{ base: "none", md: "flex" }}
           variant="solid"
           onClick={onOpen}
-          _hover={{ bgColor: "#1f568c" }}
+          _hover={{ bgColor: "#A80324" }}
         >
           ออกจากระบบ
         </Button>
@@ -131,7 +131,7 @@ export default function Navbar() {
                 <Button
                   mr={3}
                   color="white"
-                  backgroundColor={"#AD3D3B"}
+                  backgroundColor={"#A62C2C"}
                   _hover={{ bgColor: "#A80324" }}
                   borderRadius={"30"}
                   onClick={onClose}

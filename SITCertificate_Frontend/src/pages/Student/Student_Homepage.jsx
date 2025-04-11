@@ -28,7 +28,7 @@ function Student_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"60px"} bgColor={"#0c2d4e"} />
+      <Box height={"60px"} />
       <Box minH={"75vh"}>
         <Banner />
         <Box maxWidth="1300px" mx={{ base: "5%", lg: "3%", xl: "auto" }} mb={"40px"}>

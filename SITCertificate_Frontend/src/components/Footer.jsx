@@ -7,7 +7,7 @@ import logo from "/img/SIT_logo.png";
 export default function Footer() {
     return (
         <>
-            <Box bgColor='#0c2d4e' pt={"30px"}>
+            <Box bgColor='#222222' pt={"30px"}>
                 <Box display='flex' flexDirection={{ base: "column", sm: "row" }} alignItems='center' justifyContent='space-evenly' pb='10px'>
                     <Link to="https://www.sit.kmutt.ac.th/">
                         <Image src={logo} alt="Logo" width={{ base: '300px', lg: "500px" }} height='auto' />

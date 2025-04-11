@@ -73,7 +73,7 @@ function Admin_Homepage() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"} />
+      <Box height={"60px"}/>
       <Box pb={"40px"} minHeight={"75vh"}>
         <Banner />
         <Box maxWidth="1300px" pt={"30px"} mx={{ base: "5%", lg: "3%", xl: "auto" }}>

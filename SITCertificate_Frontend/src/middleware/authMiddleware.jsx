@@ -29,7 +29,7 @@ const authMiddleware = (Component) => {
     if (loading) {
       return null;
     }
-    
+
     if (!authenticated) {
       if (pathname.startsWith("/admin")) return <Navigate to="/admin/login" replace />;
       if (pathname.startsWith("/professor")) return <Navigate to="/professor/login" replace />;
@@ -41,7 +41,10 @@ const authMiddleware = (Component) => {
     if (role === "professor" && !pathname.startsWith("/professor")) {
       return <Navigate to="/professor" replace />;
     }
-    if (role === "student" && pathname.startsWith("/admin") || pathname.startsWith("/professor")) {
+    if (
+      role === "student" &&
+      (pathname.startsWith("/admin") || pathname.startsWith("/professor"))
+    ) {
       return <Navigate to="/" replace />;
     }
     return <Component {...props} />;

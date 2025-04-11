@@ -10,6 +10,7 @@ import PdfViewer from "../../components/PdfViewer";
 import {
   studentCertificate,
   sendCertificate,
+  studentEventDataById
 } from "../../services/apis/studentAPI";
 import { fetchCertificate, fetchFile } from "../../services/apis/userAPI";
 
@@ -23,12 +24,14 @@ function Student_CertificateDownload() {
   const [certificate, setCertificate] = useState("");
   const [certificateRaw, setCertificateRaw] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [eventName, setEventName] = useState("");
 
   const getCertificate = async () => {
     let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
+      const eventData = await studentEventDataById(id);
+      setEventName(eventData.data.data.events.event_name);
       const certificateBlob = await fetchCertificate(response.data.data.certificate.student_event_generatedCertificate);
       setCertificateRaw(await fetchFile(response.data.data.certificate.student_event_generatedCertificate))
       certificateBlobUrl = URL.createObjectURL(certificateBlob);
@@ -63,7 +66,7 @@ function Student_CertificateDownload() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"} />
+      <Box height={"60px"} />
       {certificate && (
         <Box
           minH={"80vh"}
@@ -117,7 +120,7 @@ function Student_CertificateDownload() {
               variant="solid"
               as="a"
               href={`${certificateRaw}`}
-              download={"certificate.pdf"}
+              download={`${eventName}_certificate.pdf`}
             >
               ดาวน์โหลด
             </Button>

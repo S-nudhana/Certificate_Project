@@ -176,9 +176,18 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <PdfViewer fileUrl={`${certificate}`}/>
+            {certificate ? (
+              <Box width={"95%"}>
+                <PdfViewer fileUrl={`${certificate}`} />
+              </Box>
+            ) : (
+              <Box width={"100%"} height={"200px"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+                <Text>*ไม่พบไฟล์ใบประกาศนียบัตร</Text>
+              </Box>
+            )}
             <Button
               leftIcon={<FaDownload />}
+              display={certificate ? "flex" : "none"}
               mt={"15px"}
               mb={"20px"}
               width={{ base: "auto", lg: "300px" }}
@@ -191,9 +200,12 @@ function Prof_EventDetail() {
             >
               ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
             </Button>
-            <Flex gap={"10px"}>
+            <Flex gap={"10px"} alignItems={"center"}>
               <Text fontSize="18px" fontWeight={"bold"}>
                 รายชื่อผู้เข้าร่วม:
+              </Text>
+              <Text display={excel ? "none" : "flex"}>
+                ไม่พบไฟล์รายชื่อผู้เข้าร่วม
               </Text>
               <Tooltip
                 hasArrow
@@ -204,6 +216,7 @@ function Prof_EventDetail() {
                 color="black"
               >
                 <Button
+                  display={excel ? "flex" : "none"}
                   leftIcon={<PiMicrosoftExcelLogoFill />}
                   variant={"link"}
                   color={"#919191"}
@@ -224,6 +237,7 @@ function Prof_EventDetail() {
                 resize="vertical"
                 isDisabled={eventData.event_approve === 1}
                 value={eventData.event_emailTemplate}
+                disabled
               />
             </FormControl>
             <Button

@@ -132,7 +132,7 @@ function Student_Detail() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"} />
+      <Box height={"60px"} />
       {studentStatus ? (
         <Box display={{ base: "block", lg: "flex" }} minH={"80vh"}>
           <Image
