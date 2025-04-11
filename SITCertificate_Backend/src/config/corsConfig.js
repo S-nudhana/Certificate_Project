@@ -1,6 +1,8 @@
 export const corsOptions = {
-    origin: [process.env.CORS_ORIGIN_DEVELOPMENT, process.env.CORS_ORIGIN_PRODUCTION],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, 
+  origin: [
+    "http://10.4.153.187:5173",
+    process.env.CORS_ORIGIN_DEVELOPMENT,
+    process.env.CORS_ORIGIN_PRODUCTION,
+  ],
+  credentials: true,
 };

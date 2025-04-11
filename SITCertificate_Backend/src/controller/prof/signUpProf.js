@@ -23,8 +23,8 @@ const CreateProf = async (req, res) => {
     await connection.promise().query("INSERT INTO professor (professor_username, professor_fullname, professor_email ,professor_password) VALUES (?, ?, ?, ?)", values);
     return res.status(201).json({ success: true, message: "สร้างบัญชีผู้ใช้สำเร็จ" });
   } catch (error) {
-    console.log("Error:", error);
-    return res.status(500).json({ message: error });
+    console.error("Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

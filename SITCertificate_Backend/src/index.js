@@ -19,7 +19,7 @@ import getFile from "./controller/getFile.js";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors(corsOptions));
 app.use(logger);
@@ -40,13 +40,13 @@ db.connect((error) => {
   }
 });
 
-app.use("/file/", getFile);
+app.use("/file", getFile);
 app.use("/api", limiter);
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/prof", profRouter);
 app.use("/api/student", studentRouter);
 
-app.listen(port, () => {
-  console.log(`Server running on PORT:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on PORT:${PORT}`);
 });

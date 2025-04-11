@@ -6,24 +6,22 @@ import { sendMail } from "../../services/mail.js";
 const resetPassword = async (req, res) => {
   const { email, pin, password, refCode } = req.body;
   try {
-    const value = [email, refCode];
     const querry = await db
       .promise()
       .query(
         "SELECT professor_forgotpasswordPin, professor_iv FROM professor WHERE professor_email = ? AND professor_refCode = ?",
-        value
+        [email, refCode]
       );
     const professorResetPin = querry[0][0].professor_forgotpasswordPin;
     const iv = querry[0][0].professor_iv;
     const decryptedPin = decryptPin(professorResetPin, iv);
     if (decryptedPin === parseInt(pin, 10)) {
       const hashed_password = hashedPassword(password);
-      const value2 = [hashed_password, email];
       await db
         .promise()
         .query(
-          "UPDATE professor SET professor_password = ? WHERE professor_email = ?",
-          value2
+          "UPDATE professor SET professor_password = ?, professor_forgotPasswordPin = ?, professor_iv = ?, professor_refCode = ? WHERE professor_email = ?",
+          [hashed_password, "", "", "", email]
         );
       try {
         await sendMail({
@@ -46,7 +44,7 @@ const resetPassword = async (req, res) => {
     }
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ success: false, message: error });
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 export default resetPassword;

@@ -10,7 +10,6 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast,
   FormErrorMessage,
   InputGroup,
   InputRightElement,
@@ -22,6 +21,8 @@ import {
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
+import { useCustomeToast } from "../../hooks/customeToast";
+
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
@@ -29,11 +30,11 @@ import {
   profForgotPassword,
   profResetPassword,
   profSendResetPasswordEmail,
-} from "../../api/prof/profAPI";
+} from "../../services/apis/profAPI";
 
 export default function Prof_forgotPassword() {
-  const toast = useToast();
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -71,13 +72,7 @@ export default function Prof_forgotPassword() {
           setEmailSent(true);
         }
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("handleEmail error", error);
@@ -87,33 +82,15 @@ export default function Prof_forgotPassword() {
   const confirmCreatePassword = async () => {
     try {
       if (newPassword !== confirmNewPassword) {
-        toast({
-          title: "รหัสผ่านไม่ตรงกัน",
-          description: "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("รหัสผ่านไม่ตรงกัน", "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง", "error");
         return;
       }
       const res = await profResetPassword(email, pin, newPassword, refCode);
       if (res.status === 200) {
-        toast({
-          title: "เปลี่ยนรหัสผ่านสำเร็จ",
-          description: "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เปลี่ยนรหัสผ่านสำเร็จ", "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว", "success");
         navigate("/professor/login");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("confirmCreatePassword error", error);

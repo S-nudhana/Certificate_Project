@@ -9,6 +9,7 @@ import getCertificate from "../controller/student/getCertificate.js";
 import updataCertificateInfo from "../controller/student/updataCertificateInfo.js";
 import sendCertificate from "../controller/student/sendCertificate.js";
 import getCertificateGenerated from "../controller/student/getCertificateGenerated.js";
+import generateExampleCertificate from "../controller/student/generateSampleCertificate.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 import { accessManager } from "../middleware/accessManager.js";
@@ -19,6 +20,7 @@ studentRouter.post("/login", SignInStudent);
 
 studentRouter.get("/event", authMiddleware, accessManager(["student"]), getInProgressEvent);
 studentRouter.get("/event/:id", authMiddleware, accessManager(["student"]), getInProgressEventById);
+studentRouter.put("/certificate/example", authMiddleware, accessManager(["student"]), generateExampleCertificate);
 studentRouter.get("/certificate/:id", authMiddleware, accessManager(["student"]), getCertificate);
 studentRouter.get("/certificate/:id/generate", authMiddleware, accessManager(["student"]), getCertificateGenerated);
 studentRouter.get("/status/:id", authMiddleware, accessManager(["student"]), getCertificateGeneratedStatus);

@@ -4,46 +4,62 @@ import { hashedPassword } from "../auth/jwt.js";
 
 const updateApproveStatus = async (req, res) => {
   const eventId = req.params.id;
-
   try {
-    const excelQuery = await db
+    const eventQuery = await db
       .promise()
-      .query("SELECT event_excel FROM event WHERE event_Id = ?", [eventId]);
-
-    const excelUrl = excelQuery[0][0].event_excel;
-    if (!excelUrl) {
-      return res.status(400).send("No file uploaded.");
+      .query(
+        "SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_Id = ?",
+        [eventId]
+      );
+    if (
+      !eventQuery[0][0].event_excel ||
+      !eventQuery[0][0].event_certificate ||
+      !eventQuery[0][0].event_thumbnail
+    ) {
+      return res.status(200).json({
+        success: false,
+        message: "กรุณาอัพโหลดไฟล์ให้ครบถ้วน",
+      });
     }
+    const excelUrl = eventQuery[0][0].event_excel;
     const workbook = XLSX.readFile(excelUrl);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const sheetData = XLSX.utils.sheet_to_json(worksheet);
-    const emailList = sheetData.map((row) => row.email || "");
-    const mobileList = sheetData.map((row) => row.Mobile || "");
-    const hashedPasswords = mobileList.map((mobile) => hashedPassword(mobile));
-    const values = emailList.map((email, index) => [
-      email,
-      hashedPasswords[index],
-    ]);
-    const [result] = await db
-      .promise()
-      .query("INSERT INTO student (student_email, student_password) VALUES ?", [
-        values,
-      ]);
+    const userList = sheetData.map(({ email = "", Mobile = "" }) => ({
+      email: email.trim(),
+      password: hashedPassword(Mobile),
+    }));
 
-    const emails = emailList.map((email) => email.toLowerCase());
-
-    const [insertedRows] = await db
+    for (const { email, password } of userList) {
+      const [[existing]] = await db
       .promise()
-      .query("SELECT student_Id FROM student WHERE student_email IN (?)", [
-        emails,
+      .query("SELECT student_id FROM student WHERE student_email = ?", [
+        email,
       ]);
-    const studentValue = insertedRows.map((row) => [row.student_Id, eventId]);
-    await db
-      .promise()
-      .query(
-        "INSERT INTO student_event (student_event_studentId, student_event_eventId) VALUES ?",
-        [studentValue]
-      );
+      let studentId = existing ? existing.student_id : null;
+      if (!existing) {
+        const [insertResult] = await db
+          .promise()
+          .query(
+            "INSERT INTO student (student_email, student_password) VALUES (?, ?)",
+            [email, password]
+          );
+        studentId = insertResult.insertId;
+      } else {
+        const res = await db
+          .promise()
+          .query(
+            "UPDATE student SET student_password = ? WHERE student_email = ?",
+            [password, email]
+          );
+      }
+      await db
+        .promise()
+        .query(
+          "INSERT INTO student_event (student_event_eventId, student_event_studentId) VALUES (?, ?)",
+          [eventId, studentId]
+        );
+    }
     await db
       .promise()
       .query("UPDATE event SET event_approve = ? WHERE event_Id = ?", [
@@ -59,7 +75,7 @@ const updateApproveStatus = async (req, res) => {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      message: error,
+      message: "Internal server error",
     });
   }
 };

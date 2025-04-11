@@ -18,7 +18,6 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import { useParams, ScrollRestoration } from "react-router-dom";
 import { FaCheck, FaTrash, FaDownload } from "react-icons/fa6";
@@ -28,39 +27,39 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
-import DoughnutChart from "../../components/DoughnutChart";
+import StatisticChart from "../../components/Prof_admin/StatisticChart";
 
 import { formatDateDMY } from "../../utils/dateFormat";
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import {
   userComment,
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../api/user/userAPI";
+} from "../../services/apis/userAPI";
 
 import {
   profAddComment,
   profDeleteComment,
   profApproveEvent,
   profSendEmail,
-} from "../../api/prof/profAPI";
+} from "../../services/apis/profAPI";
 
 function Prof_EventDetail() {
-  const toast = useToast();
   const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const Toast = useCustomeToast();
 
   const [eventData, setEventData] = useState([]);
   const [certificate, setCertificate] = useState("");
   const [excel, setExcel] = useState("");
   const [comments, setComments] = useState([]);
-  const [newCommentDetail, setNewCommentDetail] = useState();
+  const [newCommentDetail, setNewCommentDetail] = useState("");
   const [statistic, setStatistic] = useState(false);
   const [participantsAmount, setParticipantsAmount] = useState(0);
-  const [participantsDownloadAmount, setParticipantsDownloadAmount] =
-    useState(0);
+  const [participantsDownloadAmount, setParticipantsDownloadAmount] = useState(0);
 
   const getEventData = async () => {
     try {
@@ -119,20 +118,9 @@ function Prof_EventDetail() {
       const response = await profApproveEvent(id);
       if (response.data.success) {
         getEventData();
-        toast({
-          title: "อนุมัติกิจกรรมสำเร็จ",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("อนุมัติกิจกรรมสำเร็จ", "ท่านได้อนุมัติกิจกรรมนี้แล้ว", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", response.data.message, "error");
       }
     } catch (error) {
       console.error("Approve event error:", error);
@@ -151,7 +139,6 @@ function Prof_EventDetail() {
     }
   };
 
-  const isMobile = deviceScreenCheck();
 
   return (
     <>
@@ -189,9 +176,18 @@ function Prof_EventDetail() {
             <Text fontSize="18px" fontWeight={"bold"}>
               ใบประกาศนียบัตร
             </Text>
-            <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+            {certificate ? (
+              <Box width={{base: "100%", md: "95%"}}>
+                <PdfViewer fileUrl={`${certificate}`} />
+              </Box>
+            ) : (
+              <Box width={"100%"} height={"200px"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+                <Text>*ไม่พบไฟล์ใบประกาศนียบัตร</Text>
+              </Box>
+            )}
             <Button
               leftIcon={<FaDownload />}
+              display={certificate ? "flex" : "none"}
               mt={"15px"}
               mb={"20px"}
               width={{ base: "auto", lg: "300px" }}
@@ -204,9 +200,12 @@ function Prof_EventDetail() {
             >
               ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
             </Button>
-            <Flex gap={"10px"}>
+            <Flex gap={"10px"} alignItems={"center"}>
               <Text fontSize="18px" fontWeight={"bold"}>
                 รายชื่อผู้เข้าร่วม:
+              </Text>
+              <Text display={excel ? "none" : "flex"}>
+                ไม่พบไฟล์รายชื่อผู้เข้าร่วม
               </Text>
               <Tooltip
                 hasArrow
@@ -217,6 +216,7 @@ function Prof_EventDetail() {
                 color="black"
               >
                 <Button
+                  display={excel ? "flex" : "none"}
                   leftIcon={<PiMicrosoftExcelLogoFill />}
                   variant={"link"}
                   color={"#919191"}
@@ -237,6 +237,7 @@ function Prof_EventDetail() {
                 resize="vertical"
                 isDisabled={eventData.event_approve === 1}
                 value={eventData.event_emailTemplate}
+                disabled
               />
             </FormControl>
             <Button
@@ -263,8 +264,8 @@ function Prof_EventDetail() {
                 display={comments.length === 0 ? "none" : "block"}
               >
                 {comments &&
-                  comments.map((item) => (
-                    <Card p={"20px"} mb={"20px"} variant={"outline"}>
+                  comments.map((item, key) => (
+                    <Card p={"20px"} mb={"20px"} variant={"outline"} key={key}>
                       <Flex
                         alignItems={"center"}
                         justifyContent={"space-between"}
@@ -345,45 +346,7 @@ function Prof_EventDetail() {
         </Stack>
       )}
       {statistic && (
-        <Flex
-          width={"100%"}
-          justifyContent={"center"}
-          pt={"20px"}
-          flexDir={"column"}
-        >
-          <Text
-            align={"center"}
-            fontSize={"24px"}
-            fontWeight="bold"
-            textDecor={"underline"}
-            pb={"20px"}
-          >
-            สถิติของกิจกรรม {eventData.event_name}
-          </Text>
-          <Box
-            display={{ base: "block", lg: "flex" }}
-            width={"full"}
-            justifyContent={"center"}
-            gap={"40px"}
-            p={"0 30px 30px 30px"}
-          >
-            <DoughnutChart
-              participantsAmount={participantsAmount}
-              participantsDownloadAmount={participantsDownloadAmount}
-            />
-            <Box pt={{ base: "20px", lg: "0" }} alignContent={"center"}>
-              <Text>จำนวนผู้เข้าร่วมกิจกรรม : {participantsAmount} คน</Text>
-              <Text>
-                จำนวนผู้ดาวน์โหลดใบประกาษณียบัตร : {participantsDownloadAmount}{" "}
-                คน
-              </Text>
-              <Text>
-                จำนวนผู้เข้าร่วมที่ยังไม่ดาวน์โหลดใบประกาษณียบัตร :{" "}
-                {participantsAmount - participantsDownloadAmount} คน
-              </Text>
-            </Box>
-          </Box>
-        </Flex>
+        <StatisticChart participantsAmount={participantsAmount} participantsDownloadAmount={participantsDownloadAmount} eventName={eventData.event_name} />
       )}
       <Footer />
       {isOpen && (

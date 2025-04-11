@@ -25,10 +25,12 @@ const signUpAdmin = async (req, res) => {
         "INSERT INTO admin (admin_username, admin_fullname, admin_email ,admin_password) VALUES (?, ?, ?, ?)",
         values
       );
-    return res.status(201).json({ success: true, message: "สร้างบัญชีผู้ใช้สำเร็จ" });
+    return res
+      .status(201)
+      .json({ success: true, message: "สร้างบัญชีผู้ใช้สำเร็จ" });
   } catch (error) {
-    console.log("Error:", error);
-    return res.status(500).json({ message: error });
+    console.error("Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

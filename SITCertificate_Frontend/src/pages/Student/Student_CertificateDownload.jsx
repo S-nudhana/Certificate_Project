@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, ScrollRestoration } from "react-router-dom";
-import { Box, Text, Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Text, Button, Flex } from "@chakra-ui/react";
 import { FaDownload } from "react-icons/fa6";
 
 import Navbar from "../../components/Navbar";
@@ -10,26 +10,29 @@ import PdfViewer from "../../components/PdfViewer";
 import {
   studentCertificate,
   sendCertificate,
-} from "../../api/student/studentAPI";
-import { fetchCertificate, fetchFile } from "../../api/user/userAPI";
+  studentEventDataById
+} from "../../services/apis/studentAPI";
+import { fetchCertificate, fetchFile } from "../../services/apis/userAPI";
 
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 function Student_CertificateDownload() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const toast = useToast();
-  const isMobile = deviceScreenCheck();
+  const Toast = useCustomeToast();
 
   const [certificate, setCertificate] = useState("");
   const [certificateRaw, setCertificateRaw] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [eventName, setEventName] = useState("");
 
   const getCertificate = async () => {
     let certificateBlobUrl;
     try {
       const response = await studentCertificate(id);
+      const eventData = await studentEventDataById(id);
+      setEventName(eventData.data.data.events.event_name);
+      console.log(response.data.data.certificate.student_event_generatedCertificate)
       const certificateBlob = await fetchCertificate(response.data.data.certificate.student_event_generatedCertificate);
       setCertificateRaw(await fetchFile(response.data.data.certificate.student_event_generatedCertificate))
       certificateBlobUrl = URL.createObjectURL(certificateBlob);
@@ -48,20 +51,9 @@ function Student_CertificateDownload() {
       setIsLoading(true);
       const response = await sendCertificate(id, `${certificate}`);
       if (response.status === 200) {
-        toast({
-          title: "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("ส่งใบประกาศนียบัตรสำเร็จ", "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", response.data.message, "error");
       }
       return;
     } catch (error) {
@@ -75,7 +67,7 @@ function Student_CertificateDownload() {
     <>
       <ScrollRestoration />
       <Navbar />
-      <Box height={"80px"} bgColor={"#0c2d4e"} />
+      <Box height={"60px"} />
       {certificate && (
         <Box
           minH={"80vh"}
@@ -92,7 +84,7 @@ function Student_CertificateDownload() {
             height={"auto"}
           >
             {certificate ? (
-              <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+              <PdfViewer fileUrl={`${certificate}`} />
             ) : (
               <Text>Loading PDF preview...</Text>
             )}
@@ -129,7 +121,7 @@ function Student_CertificateDownload() {
               variant="solid"
               as="a"
               href={`${certificateRaw}`}
-              download={"certificate.pdf"}
+              download={`${eventName}_certificate.pdf`}
             >
               ดาวน์โหลด
             </Button>

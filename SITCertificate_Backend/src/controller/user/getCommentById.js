@@ -12,10 +12,10 @@ const getCommentById = async (req, res) => {
       data: ({comment: data}),
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      message: error,
+      message: "Internal server error",
     });
   }
 };

@@ -27,7 +27,7 @@ const setNewComment = async(req, res) => {
             .json({ success: true, message: "เพิ่มความคิดเห็นสำเร็จ" });
     } catch (error) {
         console.error("Error:", error);
-        return res.status(400).json({ success: false, message: error });
+        return res.status(400).json({ success: false, message: "Internal server error" });
     }
 };
 export default setNewComment;

@@ -30,7 +30,7 @@ const getCertificateInfo = async (req, res) => {
     console.error("Error:", error);
     return res.status(500).json({
       success: false,
-      message: error,
+      message: "Internal server error",
     });
   }
 };

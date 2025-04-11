@@ -38,12 +38,14 @@ const createEvent = async (req, res) => {
         "INSERT INTO `event` (`event_name`, `event_owner`, `event_startDate`, `event_endDate`, `event_thumbnail`, `event_certificate`, `event_excel`, `event_approve`, `event_adminId`, `event_emailTemplate`, `event_certificate_text_size`, `event_certificate_position_y`) VALUES (?)",
         [value]
       );
+    
     return res
       .status(201)
       .json({ success: true, message: "สร้างกิจกกรมเสร็จสิ้น" });
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
 export default createEvent;

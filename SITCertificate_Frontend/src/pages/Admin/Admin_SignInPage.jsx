@@ -14,19 +14,19 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import Building from "/img/SIT_Building.png"
 import Logo from "/img/SIT_Icon.png";
 
-import { adminSignIn } from "../../api/admin/adminAPI";
+import { adminSignIn } from "../../services/apis/adminAPI";
 
 export default function Admin_SignInPage() {
-  const toast = useToast();
+  const Toast = useCustomeToast();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -52,23 +52,12 @@ export default function Admin_SignInPage() {
       const res = await adminSignIn(email, password);
       if (res.status == 201) {
         navigate("/admin/");
-        toast({
-          title: "เข้าสู่ระบบสำเร็จ",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เข้าสู่ระบบสำเร็จ", "ท่านได้เข้าสู่ระบบสำเร็จ", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
-      console.log("handleEmail error", error);
+      console.error("handleEmail error", error);
     }
   };
 

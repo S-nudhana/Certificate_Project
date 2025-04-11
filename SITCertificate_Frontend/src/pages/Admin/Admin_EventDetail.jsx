@@ -15,7 +15,6 @@ import {
   ModalBody,
   useDisclosure,
   Tooltip,
-  useToast,
   FormControl,
   FormLabel,
   Textarea,
@@ -28,29 +27,31 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import PdfViewer from "../../components/PdfViewer";
-import DoughnutChart from "../../components/DoughnutChart";
+import StatisticChart from "../../components/Prof_admin/StatisticChart";
 
 import { formatDateDMY } from "../../utils/dateFormat";
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import {
   userComment,
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../api/user/userAPI";
+} from "../../services/apis/userAPI";
 import {
   adminUpdateCommentStatus,
   adminDeleteEvent,
   adminSendEmail,
-} from "../../api/admin/adminAPI";
-import { getProfessorEmail } from "../../api/admin/adminAPI";
+} from "../../services/apis/adminAPI";
+import { getProfessorEmail } from "../../services/apis/adminAPI";
 
 export default function Admin_EventDetail() {
-  const toast = useToast();
   const { id } = useParams();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const Toast = useCustomeToast();
+
   const [eventData, setEventData] = useState([]);
   const [certificate, setCertificate] = useState("");
   const [excel, setExcel] = useState("");
@@ -139,20 +140,9 @@ export default function Admin_EventDetail() {
         commentDetail
       );
       if (response.status === 200) {
-        toast({
-          title: "ได้ส่งอีเมลแจ้งการแก้ไขเรียบร้อยแล้ว",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("ส่งอีเมลแจ้งการแก้ไขเรียบร้อย", "ได้ส่งอีเมลแจ้งการแก้ไขเรียบร้อยแล้ว", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", response.data.message, "error");
       }
       return;
     } catch (error) {
@@ -161,8 +151,6 @@ export default function Admin_EventDetail() {
       setIsLoading(false);
     }
   };
-
-  const isMobile = deviceScreenCheck();
 
   return (
     <>
@@ -199,9 +187,18 @@ export default function Admin_EventDetail() {
           <Text fontSize="18px" fontWeight={"bold"}>
             ใบประกาศนียบัตร
           </Text>
-          <PdfViewer fileUrl={`${certificate}`} isMobile={isMobile} />
+          {certificate ? (
+            <Box width={{base: "100%", md: "95%"}}>
+              <PdfViewer fileUrl={`${certificate}`} />
+            </Box>
+          ) : (
+            <Box width={"100%"} height={"200px"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+              <Text>*ไม่พบไฟล์ใบประกาศนียบัตร</Text>
+            </Box>
+          )}
           <Button
             leftIcon={<FaDownload />}
+            display={certificate ? "flex" : "none"}
             mt={"15px"}
             mb={"20px"}
             width={{ base: "auto", lg: "300px" }}
@@ -214,9 +211,12 @@ export default function Admin_EventDetail() {
           >
             ดาวน์โหลดเทมเพลทใบประกาศนียบัตร
           </Button>
-          <Flex gap={"10px"}>
+          <Flex gap={"10px"} alignItems={"center"}>
             <Text fontSize="18px" fontWeight={"bold"}>
               รายชื่อผู้เข้าร่วม:
+            </Text>
+            <Text display={excel ? "none" : "flex"}>
+              ไม่พบไฟล์รายชื่อผู้เข้าร่วม
             </Text>
             <Tooltip
               hasArrow
@@ -227,6 +227,7 @@ export default function Admin_EventDetail() {
               color="black"
             >
               <Button
+                display={excel ? "flex" : "none"}
                 leftIcon={<PiMicrosoftExcelLogoFill />}
                 variant={"link"}
                 color={"#919191"}
@@ -324,30 +325,7 @@ export default function Admin_EventDetail() {
         </Flex>
       </Stack>
       {statistic && (
-        <Flex width={"100%"} justifyContent={"center"} pt={"20px"} flexDir={"column"}>
-          <Text align={"center"} fontSize={"24px"} fontWeight="bold" textDecor={"underline"} pb={"20px"}>สถิติของกิจกรรม {eventData.event_name}</Text>
-          <Box
-            display={{ base: "block", lg: "flex" }}
-            width={"full"}
-            justifyContent={"center"}
-            gap={"40px"}
-            p={"0 30px 30px 30px"}
-          >
-            <DoughnutChart
-              participantsAmount={participantsAmount}
-              participantsDownloadAmount={participantsDownloadAmount}
-            />
-            <Box pt={{ base: "20px", lg: "0" }} alignContent={"center"}>
-              <Text>จำนวนผู้เข้าร่วมกิจกรรม : {participantsAmount} คน</Text>
-              <Text>
-                จำนวนผู้ดาวน์โหลดใบประกาษณียบัตร : {participantsDownloadAmount} คน
-              </Text>
-              <Text>
-                จำนวนผู้เข้าร่วมที่ยังไม่ดาวน์โหลดใบประกาษณียบัตร : {participantsAmount - participantsDownloadAmount} คน
-              </Text>
-            </Box>
-          </Box>
-        </Flex>
+        <StatisticChart participantsAmount={participantsAmount} participantsDownloadAmount={participantsDownloadAmount} eventName={eventData.event_name} />
       )}
       <Footer />
       {isOpen && (

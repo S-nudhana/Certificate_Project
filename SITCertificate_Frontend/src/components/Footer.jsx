@@ -7,14 +7,14 @@ import logo from "/img/SIT_logo.png";
 export default function Footer() {
     return (
         <>
-            <Box bgColor='#0c2d4e' pt={"30px"}>
-                <Box display='flex' flexDirection={{ base: "column", sm: "row" }} alignItems='center' justifyContent='space-evenly' pb='10px'>
+            <Box bgColor='#222222' pt={"20px"}>
+                <Box display='flex' flexDirection={{ base: "column", sm: "row" }} alignItems='center' justifyContent='space-evenly' >
                     <Link to="https://www.sit.kmutt.ac.th/">
                         <Image src={logo} alt="Logo" width={{ base: '300px', lg: "500px" }} height='auto' />
                     </Link>
-                    <Box color='whitesmoke' fontSize={{ xs: "12px", md: "14px", lg: '16px' }}>
+                    <Box color='whitesmoke' fontSize={{ xs: "12px", md: "14px", lg: '20px' }}>
                         <Link to="" className="text-[#c4cece]">
-                            <Box display='flex' alignItems='center' pt={{ base: '28px', md: '40px' }} transition="color 0.2s ease-in-out" _hover={{ color: 'white'}}>
+                            <Box display='flex' alignItems='center' pt={{ base: '28px', md: '30px' }} transition="color 0.2s ease-in-out" _hover={{ color: 'white'}}>
                                 <FaPhone /> <Text pl='5px'> +66 2470 9850</Text>
                             </Box>
                         </Link>
@@ -38,8 +38,8 @@ export default function Footer() {
                 <Center>
                     <Divider width="70%" mt="3" mb="2" />
                 </Center>
-                <Text display='flex' justifyContent='center' textAlign='center' mt='1%' pb='2%' color='#E0E5E5' fontSize={{ base: '9px', md: "12px", lg: "14px" }}>
-                    © 2024 School of Information Technology, King Mongkut's University of Technology Thonburi.
+                <Text display='flex' justifyContent='center' textAlign='center' py={"20px"} color='#E0E5E5' fontSize={{ base: '9px', md: "12px", lg: "14px" }}>
+                    © 2025 School of Information Technology, King Mongkut's University of Technology Thonburi.
                 </Text>
             </Box>
         </>

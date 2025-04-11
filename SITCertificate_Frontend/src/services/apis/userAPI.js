@@ -70,12 +70,14 @@ export const userHistory = async (eventName) => {
 
 export const getStatistic = async (eventId) => {
   try {
-    const response = await axiosInstance.get(`/user/statistic?eventId=${eventId}`);
+    const response = await axiosInstance.get(
+      `/user/statistic?eventId=${eventId}`
+    );
     return response;
   } catch (error) {
     return error;
   }
-}
+};
 
 export const uploadFile = async (file, category) => {
   try {
@@ -92,6 +94,9 @@ export const uploadFile = async (file, category) => {
 };
 
 export const fetchFile = async (filepath) => {
+  if (!filepath || filepath == "") {
+    return null;
+  }
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_URL}file?filepath=${filepath}`,
@@ -104,6 +109,9 @@ export const fetchFile = async (filepath) => {
 };
 
 export const fetchCertificate = async (filepath) => {
+  if (!filepath || filepath == "") {
+    return null;
+  }
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_URL}file?filepath=${filepath}`,
@@ -114,3 +122,16 @@ export const fetchCertificate = async (filepath) => {
     return error;
   }
 };
+
+export const userEmbedName = async (eventId, name, surname) => {
+  try {
+    const response = await axiosInstance.put(`/user/watermark`, {
+      eventId: eventId,
+      name: name,
+      surname: surname,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+}

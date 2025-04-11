@@ -1,6 +1,7 @@
-import axios from "axios";
 import { PDFDocument } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
+import { promises as fs } from "fs";
+import sharp from "sharp";
 
 export const fetchAndFillCertificate = async (
   pdfUrl,
@@ -11,8 +12,7 @@ export const fetchAndFillCertificate = async (
   watermark
 ) => {
   try {
-    const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-    const pdfBytes = response.data;
+    const pdfBytes = await fs.readFile(pdfUrl);
     const pdfDoc = await PDFDocument.load(pdfBytes);
     pdfDoc.registerFontkit(fontkit);
     const fontUrl =
@@ -28,15 +28,14 @@ export const fetchAndFillCertificate = async (
       width,
       height,
       certY,
-      "black"
     );
     const pngBytes = await convertSvgToPng(svgText, width, height);
     const pngImage = await pdfDoc.embedPng(pngBytes);
     page.drawImage(pngImage);
     const modifiedPdfBytes = await pdfDoc.save();
     if (watermark) {
-      const watermarkPdfBytes = await waterMark(modifiedPdfBytes);
-      return URL.createObjectURL(new Blob([watermarkPdfBytes], { type: "application/pdf" }));
+      const watermarkPdfBytes = await WaterMark(modifiedPdfBytes);
+      return watermarkPdfBytes;
     }
     return modifiedPdfBytes;
   } catch (error) {
@@ -45,7 +44,7 @@ export const fetchAndFillCertificate = async (
   }
 };
 
-export const waterMark = async (pdfBytes) => {
+export const WaterMark = async (pdfBytes) => {
   try {
     const pdfDoc = await PDFDocument.load(pdfBytes);
     pdfDoc.registerFontkit(fontkit);
@@ -53,9 +52,9 @@ export const waterMark = async (pdfBytes) => {
       "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
     const page = pdfDoc.getPages()[0];
     const text = "ตัวอย่าง";
-    const fontSize = 150;
+    const fontSize = 180;
     const { width, height } = page.getSize();
-    const certY = 50;
+    const certY = 55;
     const svgText = createTextSVG(
       text,
       fontUrl,
@@ -76,59 +75,31 @@ export const waterMark = async (pdfBytes) => {
   }
 };
 
-export const convertSvgToPng = (svgText, width, height) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const img = new Image();
-      const svgBlob = new Blob([svgText], {
-        type: "image/svg+xml;charset=utf-8",
-      });
-      const url = URL.createObjectURL(svgBlob);
-
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas");
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext("2d");
-          if (!ctx) {
-            reject(new Error("Failed to get 2D context from canvas."));
-            return;
-          }
-          ctx.drawImage(img, 0, 0);
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  resolve(reader.result);
-                  URL.revokeObjectURL(url);
-                };
-                reader.readAsArrayBuffer(blob);
-              } else {
-                reject(new Error("Canvas to Blob conversion failed."));
-              }
-            },
-            "image/png",
-            1.0
-          );
-        } catch (canvasError) {
-          reject(canvasError);
-        }
-      };
-
-      img.onerror = (error) => {
-        reject(new Error(`Image loading failed: ${error.message}`));
-      };
-
-      img.src = url;
-    } catch (error) {
-      reject(error);
-    }
-  });
+export const convertSvgToPng = async (svgText, width, height) => {
+  try {
+    const svgBuffer = Buffer.from(svgText);
+    const roundedWidth = Math.round(width);
+    const roundedHeight = Math.round(height);
+    const pngBuffer = await sharp(svgBuffer)
+      .resize(roundedWidth, roundedHeight)
+      .png()
+      .toBuffer();
+    return pngBuffer;
+  } catch (error) {
+    console.error("Error converting SVG to PNG:", error);
+    throw error;
+  }
 };
 
-export const createTextSVG = (text, fontUrl, fontSize, width, height, y, color = "black") => {
+export const createTextSVG = (
+  text,
+  fontUrl,
+  fontSize,
+  width,
+  height,
+  y,
+  color = "black"
+) => {
   try {
     return `
         <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
@@ -152,11 +123,9 @@ export const createTextSVG = (text, fontUrl, fontSize, width, height, y, color =
   }
 };
 
-
-export const sampleSetNameOnCertificate = async (pdfUrl, size, y) => {
+export const sampleSetNameOnCertificate = async (pdfPath, size, y) => {
   try {
-    const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-    const pdfBytes = response.data;
+    const pdfBytes = await fs.readFile(pdfPath);
     const pdfDoc = await PDFDocument.load(pdfBytes);
     pdfDoc.registerFontkit(fontkit);
     const fontUrl =

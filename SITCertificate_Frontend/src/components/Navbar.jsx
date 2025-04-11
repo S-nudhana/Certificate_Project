@@ -17,7 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import logo from "/img/SIT_logo.png";
 
-import { userVerifyToken, userDeleteToken } from "../api/user/userAPI";
+import { userVerifyToken, userDeleteToken } from "../services/apis/userAPI";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ export default function Navbar() {
       setShouldShowNavbar(true);
     }
     setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
+    setShouldShowNavbar(currentScrollTop < 30);
   };
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function Navbar() {
   const LogoutCheck = async () => {
     if (authStatus) {
       try {
+        await userDeleteToken();
         let redirectPath = "/login";
         if (location.pathname.startsWith("/professor") && authRole === "professor") {
           redirectPath = "/professor/login";
@@ -66,7 +68,6 @@ export default function Navbar() {
           redirectPath = "/admin/login";
         }
         window.location.href = redirectPath;
-        await userDeleteToken();
       } catch (error) {
         console.error('Logout error:', error);
       }
@@ -76,11 +77,11 @@ export default function Navbar() {
 
   return (
     <Box
-      bgColor="#0c2d4e"
+      bgColor="#222222"
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      p="20px 50px"
+      p={{ base: "20px", md: "15px 50px" }}
       position="fixed"
       top="0"
       left="0"
@@ -90,27 +91,27 @@ export default function Navbar() {
       {...(shouldShowNavbar ? {} : { top: "-80px" })}
     >
       <Box cursor={"pointer"} onClick={() => { navigate("/") }}>
-        <Image src={logo} height={"38px"} />
+        <Image src={logo}  width={"180px"}/>
       </Box>
       <Flex gap={{ base: '10px', md: "30px" }}>
         <Button
           leftIcon={<FaArrowRightFromBracket />}
-          bgColor="#336699"
+          bgColor="#A62C2C"
           color="white"
           size="md"
           display={{ base: "none", md: "flex" }}
           variant="solid"
           onClick={onOpen}
-          _hover={{ bgColor: "#1f568c" }}
+          _hover={{ bgColor: "#A80324" }}
         >
           ออกจากระบบ
         </Button>
         <IconButton
           justifyContent="center"
-          bgColor="#336699"
+          bgColor="#A62C2C"
           color="white"
           display={{ base: "flex", md: "none" }}
-          _hover={{ bgColor: "#1f568c" }}
+          _hover={{ bgColor: "#A80324" }}
           icon={<FaArrowRightFromBracket />}
           onClick={onOpen}
         />
@@ -130,7 +131,7 @@ export default function Navbar() {
                 <Button
                   mr={3}
                   color="white"
-                  backgroundColor={"#AD3D3B"}
+                  backgroundColor={"#A62C2C"}
                   _hover={{ bgColor: "#A80324" }}
                   borderRadius={"30"}
                   onClick={onClose}

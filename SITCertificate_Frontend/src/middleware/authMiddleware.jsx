@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
-import { userVerifyToken } from "../api/user/userAPI";
+import { userVerifyToken } from "../services/apis/userAPI";
 
 const authMiddleware = (Component) => {
   return (props) => {
@@ -29,7 +29,7 @@ const authMiddleware = (Component) => {
     if (loading) {
       return null;
     }
-    
+
     if (!authenticated) {
       if (pathname.startsWith("/admin")) return <Navigate to="/admin/login" replace />;
       if (pathname.startsWith("/professor")) return <Navigate to="/professor/login" replace />;
@@ -41,10 +41,11 @@ const authMiddleware = (Component) => {
     if (role === "professor" && !pathname.startsWith("/professor")) {
       return <Navigate to="/professor" replace />;
     }
-    if (role === "student") {
-      if (pathname.startsWith("/admin") || pathname.startsWith("/professor")) {
-        return <Navigate to="/" replace />;
-      }
+    if (
+      role === "student" &&
+      (pathname.startsWith("/admin") || pathname.startsWith("/professor"))
+    ) {
+      return <Navigate to="/" replace />;
     }
     return <Component {...props} />;
   };

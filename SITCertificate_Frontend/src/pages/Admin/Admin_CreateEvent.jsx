@@ -19,7 +19,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  useToast,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
@@ -28,15 +27,16 @@ import PDF from "react-pdf-watermark";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { useCustomeToast } from "../../hooks/customeToast";
 
-import { adminCreateEvent, getProfessor } from "../../api/admin/adminAPI";
-import { uploadFile } from "../../api/user/userAPI";
+import { adminCreateEvent, getProfessor } from "../../services/apis/adminAPI";
+import { uploadFile } from "../../services/apis/userAPI";
+import { embedName } from "../../services/apis/adminAPI";
 
-import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
 function Admin_CreateEvent() {
-  const toast = useToast();
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -55,6 +55,8 @@ function Admin_CreateEvent() {
   const [inputSize, setInputSize] = useState(30);
   const [inputY, setInputY] = useState(45);
   const [professorList, setProfessorList] = useState([]);
+  const [uploadedTemplatePath, setUploadedTemplatePath] = useState("");
+  const [uploadedExcelPath, setUploadedExcelPath] = useState("");
 
   const getProfessorList = async () => {
     try {
@@ -71,13 +73,8 @@ function Admin_CreateEvent() {
 
   const handleTemplateChange = async (pdfUrl) => {
     try {
-      const modifiedPdfBytes = await sampleSetNameOnCertificate(pdfUrl, 30, 46);
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        setModifiedTemplateURL(modifiedPdfUrl);
-      }
+      const modifiedPdfBytes = await embedName(pdfUrl, 30, 46, "upload_temp");
+      setModifiedTemplateURL(modifiedPdfBytes);
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -112,17 +109,13 @@ function Admin_CreateEvent() {
 
   const newExampleChange = async () => {
     try {
-      const modifiedPdfBytes = await sampleSetNameOnCertificate(
-        templateURL,
+      const modifiedPdfBytes = await embedName(
+        templateFile,
         inputSize,
-        inputY
+        inputY,
+        "upload_temp"
       );
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        setModifiedTemplateURL(modifiedPdfUrl);
-      }
+      setModifiedTemplateURL(modifiedPdfBytes);
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -135,12 +128,7 @@ function Admin_CreateEvent() {
           "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด"
         );
         setCloseDate("");
-        toast({
-          title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด กรุณากรอกข้อมูลใหม่อีกครั้ง", "วันสิ้นสุดการดาวน์โหลดต้องอยู่หลังวันเปิดให้ดาว์นโหลด", "error");
         return;
       }
       if (
@@ -148,42 +136,41 @@ function Admin_CreateEvent() {
         eventOwnerName &&
         openDate &&
         closeDate &&
-        thumbnailFile &&
-        templateFile &&
-        excelFile &&
-        emailTemplate
+        thumbnailFile
       ) {
         const uploadedThumbnail = await uploadFile(
           thumbnailFile,
           "upload_images"
         );
-        const uploadedTemplate = await uploadFile(
-          templateFile,
-          "upload_template"
-        );
-        const uploadedExcel = await uploadFile(excelFile, "upload_excel");
+        if (templateFile) {
+          const uploadedTemplate = await uploadFile(
+            templateFile,
+            "upload_template"
+          );
+          setUploadedTemplatePath(uploadedTemplate.data.file.filePath)
+        }
+        if (excelFile) {
+          const uploadedExcel = await uploadFile(excelFile, "upload_excel");
+          setUploadedExcelPath(uploadedExcel.data.file.filePath)
+        }
         const response = await adminCreateEvent(
           eventName,
           eventOwnerName,
           openDate,
           closeDate,
           uploadedThumbnail.data.file.filePath,
-          uploadedTemplate.data.file.filePath,
-          uploadedExcel.data.file.filePath,
+          uploadedTemplatePath || "",
+          uploadedExcelPath || "",
           emailTemplate,
           inputSize,
           inputY
         );
-        if (response.status === 200) {
+        if (response.status === 201) {
           navigate("/admin/");
-          toast({
-            title: "สร้างกิจกรรมสำเร็จ",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
+          Toast("สร้างกิจกรรมสำเร็จ", `สร้างกิจกรรม ${eventName} สำเร็จ`, "success");
         }
       } else {
+        Toast("เกิดข้อผิดพลาด", "กรุณากรอกข้อมูลให้ครบถ้วน", "error");
         console.error("Missing required event information.");
       }
     } catch (error) {
@@ -216,8 +203,8 @@ function Admin_CreateEvent() {
               </Stack>
               <Stack spacing={4}>
                 <FormControl id="">
-                  <FormLabel fontSize={["sm", "md", "md"]}>
-                    ชื่อกิจกรรม
+                  <FormLabel fontSize={["sm", "md", "md"]} display={"flex"}>
+                    ชื่อกิจกรรม <Text textColor={"#D2042D"}>*</Text>
                   </FormLabel>
                   <Input
                     type="text"
@@ -228,23 +215,23 @@ function Admin_CreateEvent() {
                   />
                 </FormControl>
                 <FormControl id="">
-                  <FormLabel fontSize={["sm", "md", "md"]}>
-                    ชื่อผู้จัดกิจกรรม
+                  <FormLabel fontSize={["sm", "md", "md"]} display={"flex"}>
+                    ชื่อผู้จัดกิจกรรม<Text textColor={"#D2042D"}>*</Text>
                   </FormLabel>
                   <Select placeholder="เลือกชื่อผู้จัดกิจกรรม" size={["sm", "md", "md"]} value={eventOwnerName} onChange={(e) => setEventOwnerName(e.target.value)}>
                     {professorList.map((professor) => (
                       <option key={professor.professor_fullname} value={professor.professor_fullname}>
                         {professor.professor_fullname}
                       </option>
-                      
+
                     ))}
                   </Select>
                 </FormControl>
                 <HStack w="full">
                   <Box w={"50%"}>
                     <FormControl id="">
-                      <FormLabel fontSize={["sm", "md", "md"]}>
-                        เปิดให้เริ่มดาวน์โหลด
+                      <FormLabel fontSize={["sm", "md", "md"]} display={"flex"}>
+                        เปิดให้เริ่มดาวน์โหลด<Text textColor={"#D2042D"}>*</Text>
                       </FormLabel>
                       <Input
                         placeholder="Select Date and Time"
@@ -257,8 +244,8 @@ function Admin_CreateEvent() {
                   </Box>
                   <Box w={"50%"}>
                     <FormControl id="closeDate" isInvalid={closeDateError}>
-                      <FormLabel fontSize={["sm", "md", "md"]}>
-                        สิ้นสุดการดาวน์โหลด
+                      <FormLabel fontSize={["sm", "md", "md"]} display={"flex"}>
+                        สิ้นสุดการดาวน์โหลด<Text textColor={"#D2042D"}>*</Text>
                       </FormLabel>
                       <Input
                         placeholder="Select Date and Time"
@@ -278,7 +265,7 @@ function Admin_CreateEvent() {
                     flexDir={{ base: "column", md: "row" }}
                     alignItems={{ base: "start", md: "center" }}
                   >
-                    อัปโหลดรูปปก
+                    อัปโหลดรูปปก<Text textColor={"#D2042D"}>*</Text>
                     <Text color="#D2042D" ml={1} fontSize="xs">
                       (อัปโหลดได้เฉพาะ .png หรือ .jpg เท่านั้น)
                     </Text>

@@ -19,7 +19,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  useToast,
   Tooltip,
   useDisclosure
 } from "@chakra-ui/react";
@@ -30,19 +29,19 @@ import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { useCustomeToast } from "../../hooks/customeToast";
 
 import { formatDateYMD } from "../../utils/dateFormat";
-import { sampleSetNameOnCertificate } from "../../utils/embedNameOnCertificate";
 
-import { adminUpdateEvent, getProfessor } from "../../api/admin/adminAPI";
-import { userEventDataById, uploadFile, fetchFile } from "../../api/user/userAPI";
+import { adminUpdateEvent, getProfessor, embedName } from "../../services/apis/adminAPI";
+import { userEventDataById, uploadFile, fetchFile, fetchCertificate } from "../../services/apis/userAPI";
 
 function Admin_EditEvent() {
   const id = useParams().id;
-  const toast = useToast();
   const navigate = useNavigate();
   const templateURLRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const Toast = useCustomeToast();
 
   const [eventName, setEventName] = useState("");
   const [eventOwnerName, setEventOwnerName] = useState("");
@@ -62,11 +61,11 @@ function Admin_EditEvent() {
   const [textSize, setTextSize] = useState("");
   const [textY, setTextY] = useState("");
   const [professorList, setProfessorList] = useState([]);
+  const [templateChaged, setTemplateChanged] = useState(false);
 
   const getProfessorList = async () => {
     try {
       const response = await getProfessor();
-      console.log(response)
       setProfessorList(response.data.data.professors);
     } catch (error) {
       console.error("Error getting professor list:", error);
@@ -76,13 +75,13 @@ function Admin_EditEvent() {
   const getEventData = async () => {
     try {
       const response = await userEventDataById(id);
-      console.log(response)
       setEventName(response.data.data.event.event_name);
       setEventOwnerName(response.data.data.event.event_owner);
       setOpenDate(formatDateYMD(response.data.data.event.event_startDate));
       setCloseDate(formatDateYMD(response.data.data.event.event_endDate));
       setThumbnailURL(await fetchFile(response.data.data.event.event_thumbnail));
       setTemplateURL(await fetchFile(response.data.data.event.event_certificate));
+      setTemplateFile(await fetchCertificate(response.data.data.event.event_certificate));
       setFinalExcel(await fetchFile(response.data.data.event.event_excel));
       setEmailTemplate(response.data.data.event.event_emailTemplate);
       setTextSize(response.data.data.event.event_certificate_text_size);
@@ -102,12 +101,7 @@ function Admin_EditEvent() {
       if (closeDate < openDate) {
         setCloseDateError("วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด")
         setCloseDate("");
-        toast({
-          title: "วันสิ้นสุดการดาวน์โหลดต้องมากกว่าวันเปิดให้ดาว์นโหลด",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด กรุณากรอกข้อมูลใหม่อีกครั้ง", "วันสิ้นสุดการดาวน์โหลดต้องอยู่หลังวันเปิดให้ดาว์นโหลด", "error");
         return;
       }
       if (
@@ -124,7 +118,7 @@ function Admin_EditEvent() {
       ) {
         const uploadedThumbnail = thumbnailFile ? await uploadFile(thumbnailFile, "upload_images") : null;
         const uploadThumbnailURL = uploadedThumbnail ? uploadedThumbnail.data.file.filePath : "";
-        const uploadedTemplate = templateFile ? uploadFile(templateFile, "upload_template") : null;
+        const uploadedTemplate = templateFile && templateChaged ? await uploadFile(templateFile, "upload_template") : null;
         const uploadedTemplateURL = uploadedTemplate ? uploadedTemplate.data.file.filePath : "";
         const uploadedExcel = excelFile ? await uploadFile(excelFile, "upload_excel") : null;
         const uploadExcelURL = uploadedExcel ? uploadedExcel.data.file.filePath : "";
@@ -137,18 +131,13 @@ function Admin_EditEvent() {
           uploadedTemplateURL,
           uploadExcelURL,
           emailTemplate,
-          inputSize,
-          inputY,
+          inputSize ? inputSize : textSize,
+          inputY ? inputY : textY,
           id
         );
         if (response.status === 200) {
           navigate("/admin/");
-          toast({
-            title: "แก้ไขกิจกรรมสำเร็จ",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
+          Toast("แก้ไขกิจกรรมสำเร็จ", "กำลังพาคุณกลับสู่หน้าหลัก", "success");
         }
       }
     } catch (error) {
@@ -158,16 +147,10 @@ function Admin_EditEvent() {
 
   const handleTemplateChange = async (pdfUrl) => {
     try {
-      const size = inputSize !== null ? inputSize : textSize;
-      const yPosition = inputY !== null ? inputY : textY;
-      const modifiedPdfBytes = await sampleSetNameOnCertificate(pdfUrl, size, yPosition);
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        return setModifiedTemplateURL(modifiedPdfUrl);
-      }
-      return null;
+      const size = inputSize != null ? inputSize : textSize;
+      const yPosition = inputY != null ? inputY : textY;
+      const modifiedPdfBytes = await embedName(pdfUrl, size, yPosition, "upload_temp");
+      setModifiedTemplateURL(modifiedPdfBytes);
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -196,17 +179,13 @@ function Admin_EditEvent() {
 
   const newExampleChange = async () => {
     try {
-      const modifiedPdfBytes = await sampleSetNameOnCertificate(
-        templateURL,
-        inputSize,
-        inputY
+      const modifiedPdfBytes = await embedName(
+        templateFile,
+        inputSize ? inputSize : textSize,
+        inputY ? inputY : textY,
+        "upload_temp"
       );
-      if (modifiedPdfBytes) {
-        const modifiedPdfUrl = URL.createObjectURL(
-          new Blob([modifiedPdfBytes], { type: "application/pdf" })
-        );
-        setModifiedTemplateURL(modifiedPdfUrl);
-      }
+      setModifiedTemplateURL(modifiedPdfBytes);
     } catch (error) {
       console.error("Error processing PDF:", error);
     }
@@ -332,7 +311,10 @@ function Admin_EditEvent() {
                   <input
                     type="file"
                     accept=".pdf"
-                    onChange={handleFileChange}
+                    onChange={(e) => {
+                      handleFileChange(e);
+                      setTemplateChanged(true);
+                    }}
                   />
                 </FormControl>
                 {templateURL && (
@@ -350,7 +332,7 @@ function Admin_EditEvent() {
                     _hover={{ bgColor: "#297AA3" }}
                     onClick={() => {
                       onOpen();
-                      handleTemplateChange(templateURL);
+                      handleTemplateChange(templateFile);
                     }}
                     size={["sm", "md", "md"]}
                   >
@@ -381,7 +363,8 @@ function Admin_EditEvent() {
                   />
                   <Flex gap={"10px"} pt={"2"}>
                     <Text>รายชื่อปัจจุบันในระบบ</Text>
-                    <Tooltip
+                    {finalExcel ? (
+                      <Tooltip
                       hasArrow
                       placement="right"
                       label="คลิกเพื่อดาวน์โหลด"
@@ -395,11 +378,14 @@ function Admin_EditEvent() {
                         color={"#919191"}
                         as="a"
                         href={finalExcel}
-                        download={`${finalExcel}_Excel.pdf`}
+                        download={`${eventName}_Excel.xlsx`}
                       >
                         รายชื่อ.xlsx
                       </Button>
                     </Tooltip>
+                    ) : (
+                      <Text color={"#919191"}>ไม่พบไฟล์รายชื่อในระบบ</Text>
+                    )}
                   </Flex>
 
                   <FormLabel pt={"10px"}>

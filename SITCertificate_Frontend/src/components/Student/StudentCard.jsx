@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../../api/user/userAPI";
+import { fetchFile } from "../../services/apis/userAPI";
 
 import { formatDateDMY } from "../../utils/dateFormat";
 
-export default function ProfCard({
+export default function StudentCard({
   event_thumbnail,
   event_name,
-  event_owner,
   event_startDate,
   event_endDate,
   event_Id,
@@ -28,7 +27,7 @@ export default function ProfCard({
 
   useEffect(() => {
     getFile();
-  }, []);
+  }, [])
 
   return (
     <>
@@ -53,25 +52,25 @@ export default function ProfCard({
           height={"250px"}
         />
         <Box p="30px">
-          <Text fontSize="28px" fontWeight="bold">
+          <Text fontSize="28px" fontWeight="bold" pb="5px">
             {event_name}
           </Text>
-          <Text fontWeight="bold">{event_owner}</Text>
           <Text>เปิดให้ดาว์นโหลดตั้งแต่</Text>
-          <Text pb="5px">
-            {formatDateDMY(event_startDate)} ถึง {formatDateDMY(event_endDate)}
+          <Text pb="5px" color={"black"}>
+            {formatDateDMY(event_startDate)} ถึง{" "}
+            {formatDateDMY(event_endDate)}
           </Text>
           <Button
-            width="130px"
+            width="170px"
             borderRadius="40px"
-            bgColor="#3399cc"
+            bgColor="#336699"
             color="white"
-            _hover={{ bgColor: "#297AA3" }}
+            _hover={{ bgColor: "#1f568c" }}
             onClick={() => {
-              navigate(`/professor/detail/${event_Id}`);
+              navigate(`/detail/${event_Id}`);
             }}
           >
-            ดูข้อมูลกิจกรรม
+            รับประกาศนียบัตร
           </Button>
         </Box>
       </Card>

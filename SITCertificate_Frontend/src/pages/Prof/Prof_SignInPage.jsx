@@ -1,25 +1,27 @@
 import { useState } from 'react';
-import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, IconButton, Stack, Link, Button, Heading, Text, useColorModeValue, useToast, FormErrorMessage } from "@chakra-ui/react";
+import { Flex, Box, FormControl, FormLabel, Input, InputRightElement, InputGroup, IconButton, Stack, Link, Button, Heading, Text, useColorModeValue, FormErrorMessage } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+
+import { useCustomeToast } from '../../hooks/customeToast';
 
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { profSignIn } from '../../api/prof/profAPI';
+import { profSignIn } from '../../services/apis/profAPI';
 
 export default function Prof_SignInPage() {
-  const toast = useToast();
   const navigate = useNavigate();
+  const Toast = useCustomeToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [showPassword, setShowPassword] = useState(false)
-  
+
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
-  
+
   const isFormFilled = () => email.trim() !== '' && password.trim() !== '';
   const handleClickShowPassword = () => setShowPassword(!showPassword)
 
@@ -32,24 +34,13 @@ export default function Prof_SignInPage() {
       } else {
         setEmailError('');
       }
-  
+
       const res = await profSignIn(email, password);
       if (res.status === 201) {
         navigate("/professor/");
-        toast({
-          title: "เข้าสู่ระบบสำเร็จ",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เข้าสู่ระบบสำเร็จ", "ท่านได้เข้าสู่ระบบสำเร็จ", "success");
       } else {
-        toast({
-          title: "เกิดข้อผิดพลาด",
-          description: res.response.data.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("handleEmail error", error);
@@ -61,7 +52,7 @@ export default function Prof_SignInPage() {
       handleSignIn();
     }
   };
-  
+
   return (
     <Flex minH="100vh" align="center" justify="center" bgImage={`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${Building})`} bgSize="cover" bgPosition="center">
       <Stack>

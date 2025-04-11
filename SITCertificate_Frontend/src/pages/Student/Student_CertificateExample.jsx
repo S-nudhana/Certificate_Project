@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   useParams,
   useNavigate,
@@ -23,24 +22,21 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import PdfViewer from "../../components/PdfViewer";
 
-import { uploadFile, fetchCertificate } from "../../api/user/userAPI";
+import { uploadFile, fetchCertificate } from "../../services/apis/userAPI";
 import {
   studentGenerate,
   updateStudentGenerateStatus,
   studentCertificate,
   generateStudentCertificateInfo,
-} from "../../api/student/studentAPI";
-
-import { fetchAndFillCertificate } from "../../utils/embedNameOnCertificate";
-import { deviceScreenCheck } from "../../utils/deviceScreenCheck";
+  generateExampleCertificate
+} from "../../services/apis/studentAPI";
 
 function Student_CertificateExample() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = deviceScreenCheck();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { name, surname, email } = location.state || {};  
+  const { name, surname, email } = location.state || {};
 
   const [certificate, setCertificate] = useState();
   const [pdfWatermarkUrl, setPdfWatermarkUrl] = useState(null);
@@ -48,27 +44,10 @@ function Student_CertificateExample() {
   const [certificateTextSize, setCertificateTextSize] = useState(null);
   const [eventName, setEventName] = useState(null);
 
-  const getCertificate = async () => {
-    let certificateBlobUrl;
+  const getCertificateExample = async () => {
     try {
-      const response = await studentCertificate(id);
-      const certificateBlob = await fetchCertificate(response.data.data.certificate.event_Certificate);
-      certificateBlobUrl = URL.createObjectURL(certificateBlob);
-      setCertificate(certificateBlobUrl);
-      setCertificateY(response.data.data.certificate.event_certificate_position_y);
-      setCertificateTextSize(response.data.data.certificate.event_certificate_text_size);
-      setEventName(response.data.data.certificate.event_name);
-      if (response.status === 200) {
-        const watermarkCertificate = await fetchAndFillCertificate(
-          certificateBlobUrl,
-          name,
-          surname,
-          response.data.data.certificate.event_certificate_position_y,
-          response.data.data.certificate.event_certificate_text_size,
-          true
-        );
-        setPdfWatermarkUrl(watermarkCertificate);
-      }
+      const response = await generateExampleCertificate(id, name, surname);
+      setPdfWatermarkUrl(response);
     } catch (error) {
       console.error("Error fetching certificate:", error);
     }
@@ -87,34 +66,17 @@ function Student_CertificateExample() {
   };
 
   useEffect(() => {
-    getCertificate();
+    getCertificateExample();
     getStudentGenerate();
   }, []);
 
   const handleSubmit = async () => {
     try {
-      const modifiedPdfBytes = await fetchAndFillCertificate(
-        certificate,
-        name,
-        surname,
-        certificateY,
-        certificateTextSize,
-        false,
-      );
-      const filename = `${eventName}_${name}_${surname}_certificate.pdf`;
-      const pdfFile = new File([modifiedPdfBytes], filename, {
-        type: "application/pdf",
-      });
-      const uploadPDFFile = await uploadFile(
-        pdfFile,
-        "upload_generatedCertificate"
-      );
       const response = await generateStudentCertificateInfo(
         id,
         name,
         surname,
         email,
-        uploadPDFFile.data.file.filePath
       );
       const resStatus = await updateStudentGenerateStatus(id);
       if (response.status === 200 && resStatus.status === 200) {
@@ -142,7 +104,7 @@ function Student_CertificateExample() {
         </Text>
         <Flex width={{ base: "80%", xl: "50%" }} justifyContent={"center"}>
           {pdfWatermarkUrl ? (
-            <PdfViewer fileUrl={pdfWatermarkUrl} isMobile={isMobile} />
+            <PdfViewer fileUrl={pdfWatermarkUrl}/>
           ) : (
             <Text>Loading PDF preview...</Text>
           )}
