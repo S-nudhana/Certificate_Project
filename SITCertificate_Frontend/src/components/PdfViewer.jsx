@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 import PDF from 'react-pdf-watermark';
 
-export default function PdfViewer({ fileUrl, isMobile }) {
+export default function PdfViewer({ fileUrl }) {
   return (
     <>
       {fileUrl && (

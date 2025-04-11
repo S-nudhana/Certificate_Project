@@ -190,6 +190,7 @@ function Admin_EditEvent() {
       console.error("Error processing PDF:", error);
     }
   };
+
   return (
     <>
       <ScrollRestoration />
@@ -362,7 +363,8 @@ function Admin_EditEvent() {
                   />
                   <Flex gap={"10px"} pt={"2"}>
                     <Text>รายชื่อปัจจุบันในระบบ</Text>
-                    <Tooltip
+                    {finalExcel ? (
+                      <Tooltip
                       hasArrow
                       placement="right"
                       label="คลิกเพื่อดาวน์โหลด"
@@ -376,11 +378,14 @@ function Admin_EditEvent() {
                         color={"#919191"}
                         as="a"
                         href={finalExcel}
-                        download={`${finalExcel}_Excel.pdf`}
+                        download={`${eventName}_Excel.xlsx`}
                       >
                         รายชื่อ.xlsx
                       </Button>
                     </Tooltip>
+                    ) : (
+                      <Text color={"#919191"}>ไม่พบไฟล์รายชื่อในระบบ</Text>
+                    )}
                   </Flex>
 
                   <FormLabel pt={"10px"}>

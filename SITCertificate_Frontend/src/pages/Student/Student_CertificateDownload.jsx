@@ -32,6 +32,7 @@ function Student_CertificateDownload() {
       const response = await studentCertificate(id);
       const eventData = await studentEventDataById(id);
       setEventName(eventData.data.data.events.event_name);
+      console.log(response.data.data.certificate.student_event_generatedCertificate)
       const certificateBlob = await fetchCertificate(response.data.data.certificate.student_event_generatedCertificate);
       setCertificateRaw(await fetchFile(response.data.data.certificate.student_event_generatedCertificate))
       certificateBlobUrl = URL.createObjectURL(certificateBlob);

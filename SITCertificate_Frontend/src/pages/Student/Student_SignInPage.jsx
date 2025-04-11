@@ -33,6 +33,7 @@ export default function Student_SignInPage() {
         setEmailError('');
       }
       const response = await studentSignIn(email, password);
+      console.log(response)
       if (response.status === 201) {
         navigate('/');
         Toast("เข้าสู่ระบบสำเร็จ", "ท่านได้เข้าสู่ระบบสำเร็จ", "success");

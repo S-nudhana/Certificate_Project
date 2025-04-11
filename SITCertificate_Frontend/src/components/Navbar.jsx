@@ -108,10 +108,10 @@ export default function Navbar() {
         </Button>
         <IconButton
           justifyContent="center"
-          bgColor="#336699"
+          bgColor="#A62C2C"
           color="white"
           display={{ base: "flex", md: "none" }}
-          _hover={{ bgColor: "#1f568c" }}
+          _hover={{ bgColor: "#A80324" }}
           icon={<FaArrowRightFromBracket />}
           onClick={onOpen}
         />

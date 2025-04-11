@@ -49,7 +49,9 @@ function Student_Detail() {
         navigate("/");
       }
       setEventData(response.data.data.events);
-      setThumbnailURL(await fetchFile(response.data.data.events.event_thumbnail));
+      setThumbnailURL(
+        await fetchFile(response.data.data.events.event_thumbnail)
+      );
     } catch (error) {
       console.error("Get event data error: " + error);
     }
@@ -78,7 +80,8 @@ function Student_Detail() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const isFormFilled = () => name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
+  const isFormFilled = () =>
+    name.trim() !== "" && surname.trim() !== "" && email.trim() !== "";
 
   const handleSubmit = async () => {
     try {
@@ -114,9 +117,16 @@ function Student_Detail() {
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await sendCertificate(id, `${import.meta.env.VITE_REACT_APP_URL}file/${certificateRaw}`);
+      const response = await sendCertificate(
+        id,
+        `${import.meta.env.VITE_REACT_APP_URL}file/${certificateRaw}`
+      );
       if (response.status === 200) {
-        Toast("ส่งใบประกาศนียบัตรสำเร็จ", "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว", "success");
+        Toast(
+          "ส่งใบประกาศนียบัตรสำเร็จ",
+          "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว",
+          "success"
+        );
       } else {
         Toast("เกิดข้อผิดพลาด", response.data.message, "error");
       }
@@ -147,7 +157,7 @@ function Student_Detail() {
               {eventData.event_name}
             </Text>
             <Text pt="10px" pb="20px">
-              เปิดให้ดาว์นโหลดตั้งแต่วันที่ {" "}
+              เปิดให้ดาว์นโหลดตั้งแต่วันที่{" "}
               {formatDateDMY(eventData.event_startDate)} ถึง{" "}
               {formatDateDMY(eventData.event_endDate)}
             </Text>
@@ -214,79 +224,86 @@ function Student_Detail() {
             </Box>
           </Box>
         </Box>
-      ) : <Box display={{ base: "block", lg: "flex" }}>
-        <Image
-          src={`${thumbnailURL}`}
-          width={{ base: "100%", lg: "35%" }}
-          height={{ base: "300px", lg: "100vh" }}
-          objectFit="cover"
-        ></Image>
-        <Box pl={{ base: "0", lg: "70px" }} p={{ base: "20px", md: "50px" }} width="100%">
-          <BackBTN />
-          <Text fontSize="32px" fontWeight="bold" pt="10px">
-            {eventData.event_name}
-          </Text>
-          <Text pt="10px" pb="20px">
-            เปิดให้ดาว์นโหลดตั้งแต่วันที่{" "}
-            {formatDateDMY(eventData.event_startDate)} ถึง{" "}
-            {formatDateDMY(eventData.event_endDate)}
-          </Text>
-          <Text fontSize="18px" fontWeight={"bold"}>
-            ใบประกาศนียบัตร
-          </Text>
-          <Flex
-            width={"100%"}
-            justifyContent={{ base: "center", lg: "start" }}
-          >
-            <Flex
-              width={{ base: "100%", lg: "80%" }}
-              justifyContent={{ base: "center", lg: "start" }}
-              pb={"20px"}
-            >
-              {certificate ? (
-                <PdfViewer fileUrl={`${certificate}`} />
-              ) : (
-                <Text>Loading PDF preview...</Text>
-              )}
-            </Flex>
-          </Flex>
+      ) : (
+        <Box display={{ base: "block", lg: "flex" }}>
+          <Image
+            src={`${thumbnailURL}`}
+            width={{ base: "100%", lg: "35%" }}
+            height={{ base: "200px", lg: "100vh" }}
+            objectFit="cover"
+          ></Image>
           <Box
-            display="flex"
-            justifyContent={{ base: "center", lg: "flex-start" }}
-            gap={{ base: "10px", md: "20px" }}
+            pl={{ base: "0", lg: "70px" }}
+            p={{ base: "20px", md: "50px" }}
+            width="100%"
           >
-            <Button
-              bgColor="#336699"
-              color="white"
-              fontSize={{ base: "14px", md: "16px" }}
-              borderRadius="40px"
-              _hover={{ bgColor: "#1f568c" }}
-              variant="solid"
-              onClick={() => {
-                sendCertificateToEmail();
-              }}
-              disabled={isLoading}
+            <BackBTN />
+            <Text fontSize="32px" fontWeight="bold" pt="10px">
+              {eventData.event_name}
+            </Text>
+            <Text pt="10px" pb="20px">
+              เปิดให้ดาว์นโหลดตั้งแต่วันที่{" "}
+              {formatDateDMY(eventData.event_startDate)} ถึง{" "}
+              {formatDateDMY(eventData.event_endDate)}
+            </Text>
+            <Text fontSize="18px" fontWeight={"bold"}>
+              ใบประกาศนียบัตร
+            </Text>
+            <Flex
+              width={"100%"}
+              justifyContent={{ base: "center", lg: "start" }}
             >
-              ส่งใบประกาศนียบัตรไปยังอีเมล
-            </Button>
-            <Button
-              leftIcon={<FaDownload />}
-              bgColor="#3399cc"
-              color="white"
-              fontSize={{ base: "14px", md: "16px" }}
-              borderRadius="40px"
-              _hover={{ bgColor: "#297AA3" }}
-              variant="solid"
-              as="a"
-              href={certificate}
-              download={`${eventData.event_name}_certificate.pdf`}
+              <Flex
+                width={{ base: "100%", lg: "80%" }}
+                justifyContent={{ base: "center", lg: "start" }}
+                pb={"20px"}
+              >
+                {certificate ? (
+                  <Box width={{base: "100%", lg: "90%"}}>
+                    <PdfViewer fileUrl={`${certificate}`} />
+                  </Box>
+                ) : (
+                  <Text>Loading PDF preview...</Text>
+                )}
+              </Flex>
+            </Flex>
+            <Box
+              display="flex"
+              justifyContent={{ base: "center", lg: "flex-start" }}
+              gap={{ base: "10px", md: "20px" }}
             >
-              ดาวน์โหลด
-            </Button>
+              <Button
+                bgColor="#336699"
+                color="white"
+                fontSize={{ base: "14px", md: "16px" }}
+                borderRadius="40px"
+                _hover={{ bgColor: "#1f568c" }}
+                variant="solid"
+                onClick={() => {
+                  sendCertificateToEmail();
+                }}
+                disabled={isLoading}
+              >
+                ส่งใบประกาศนียบัตรไปยังอีเมล
+              </Button>
+              <Button
+                leftIcon={<FaDownload />}
+                bgColor="#3399cc"
+                color="white"
+                fontSize={{ base: "14px", md: "16px" }}
+                borderRadius="40px"
+                _hover={{ bgColor: "#297AA3" }}
+                variant="solid"
+                as="a"
+                href={certificate}
+                download={`${eventData.event_name}_certificate.pdf`}
+              >
+                ดาวน์โหลด
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-      }
+      )}
       <Footer />
     </>
   );

@@ -28,9 +28,8 @@ import {
   updateStudentGenerateStatus,
   studentCertificate,
   generateStudentCertificateInfo,
+  generateExampleCertificate
 } from "../../services/apis/studentAPI";
-
-import { fetchAndFillCertificate } from "../../utils/embedNameOnCertificate";
 
 function Student_CertificateExample() {
   const { id } = useParams();
@@ -45,27 +44,10 @@ function Student_CertificateExample() {
   const [certificateTextSize, setCertificateTextSize] = useState(null);
   const [eventName, setEventName] = useState(null);
 
-  const getCertificate = async () => {
-    let certificateBlobUrl;
+  const getCertificateExample = async () => {
     try {
-      const response = await studentCertificate(id);
-      const certificateBlob = await fetchCertificate(response.data.data.certificate.event_Certificate);
-      certificateBlobUrl = URL.createObjectURL(certificateBlob);
-      setCertificate(certificateBlobUrl);
-      setCertificateY(response.data.data.certificate.event_certificate_position_y);
-      setCertificateTextSize(response.data.data.certificate.event_certificate_text_size);
-      setEventName(response.data.data.certificate.event_name);
-      if (response.status === 200) {
-        const watermarkCertificate = await fetchAndFillCertificate(
-          certificateBlobUrl,
-          name,
-          surname,
-          response.data.data.certificate.event_certificate_position_y,
-          response.data.data.certificate.event_certificate_text_size,
-          true
-        );
-        setPdfWatermarkUrl(watermarkCertificate);
-      }
+      const response = await generateExampleCertificate(id, name, surname);
+      setPdfWatermarkUrl(response);
     } catch (error) {
       console.error("Error fetching certificate:", error);
     }
@@ -84,34 +66,17 @@ function Student_CertificateExample() {
   };
 
   useEffect(() => {
-    getCertificate();
+    getCertificateExample();
     getStudentGenerate();
   }, []);
 
   const handleSubmit = async () => {
     try {
-      const modifiedPdfBytes = await fetchAndFillCertificate(
-        certificate,
-        name,
-        surname,
-        certificateY,
-        certificateTextSize,
-        false,
-      );
-      const filename = `${eventName}_${name}_${surname}_certificate.pdf`;
-      const pdfFile = new File([modifiedPdfBytes], filename, {
-        type: "application/pdf",
-      });
-      const uploadPDFFile = await uploadFile(
-        pdfFile,
-        "upload_generatedCertificate"
-      );
       const response = await generateStudentCertificateInfo(
         id,
         name,
         surname,
         email,
-        uploadPDFFile.data.file.filePath
       );
       const resStatus = await updateStudentGenerateStatus(id);
       if (response.status === 200 && resStatus.status === 200) {

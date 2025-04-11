@@ -72,8 +72,7 @@ export const generateStudentCertificateInfo = async (
   id,
   name,
   surname,
-  email,
-  uploadedModifiedPdf
+  email
 ) => {
   try {
     const response = await axiosInstance.put(`/student/certificate/info`, {
@@ -81,9 +80,25 @@ export const generateStudentCertificateInfo = async (
       name: name,
       surname: surname,
       email: email,
-      modifiedPdf: uploadedModifiedPdf,
     });
     return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const generateExampleCertificate = async (id, name, surname) => {
+  try {
+    const response = await axiosInstance.put(
+      `/student/certificate/example`, {
+        eventId: id,
+        name: name,
+        surname: surname,
+      }, {
+        responseType: "blob",
+      }
+    );
+    return URL.createObjectURL(response.data);
   } catch (error) {
     return error;
   }

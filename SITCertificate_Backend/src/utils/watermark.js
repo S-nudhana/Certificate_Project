@@ -1,4 +1,3 @@
-import axios from "axios";
 import { PDFDocument } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { promises as fs } from "fs";
@@ -13,8 +12,7 @@ export const fetchAndFillCertificate = async (
   watermark
 ) => {
   try {
-    const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-    const pdfBytes = response.data;
+    const pdfBytes = await fs.readFile(pdfUrl);
     const pdfDoc = await PDFDocument.load(pdfBytes);
     pdfDoc.registerFontkit(fontkit);
     const fontUrl =
@@ -30,17 +28,14 @@ export const fetchAndFillCertificate = async (
       width,
       height,
       certY,
-      "black"
     );
     const pngBytes = await convertSvgToPng(svgText, width, height);
     const pngImage = await pdfDoc.embedPng(pngBytes);
     page.drawImage(pngImage);
     const modifiedPdfBytes = await pdfDoc.save();
     if (watermark) {
-      const watermarkPdfBytes = await waterMark(modifiedPdfBytes);
-      return URL.createObjectURL(
-        new Blob([watermarkPdfBytes], { type: "application/pdf" })
-      );
+      const watermarkPdfBytes = await WaterMark(modifiedPdfBytes);
+      return watermarkPdfBytes;
     }
     return modifiedPdfBytes;
   } catch (error) {
@@ -49,7 +44,7 @@ export const fetchAndFillCertificate = async (
   }
 };
 
-export const waterMark = async (pdfBytes) => {
+export const WaterMark = async (pdfBytes) => {
   try {
     const pdfDoc = await PDFDocument.load(pdfBytes);
     pdfDoc.registerFontkit(fontkit);
@@ -57,9 +52,9 @@ export const waterMark = async (pdfBytes) => {
       "https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcd1MKVQt_So_9CdU0pqpzF-QRvzzXg.ttf";
     const page = pdfDoc.getPages()[0];
     const text = "ตัวอย่าง";
-    const fontSize = 150;
+    const fontSize = 180;
     const { width, height } = page.getSize();
-    const certY = 50;
+    const certY = 55;
     const svgText = createTextSVG(
       text,
       fontUrl,

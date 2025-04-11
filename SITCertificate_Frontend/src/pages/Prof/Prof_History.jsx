@@ -70,7 +70,7 @@ function Prof_History() {
       <Box
         width={"100%"}
         maxWidth={"1300px"}
-        px={{ base: "5%", lg: "3%", xl: "auto" }}
+        mx="auto"
         display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}
       >

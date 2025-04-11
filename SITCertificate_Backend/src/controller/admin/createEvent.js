@@ -47,4 +47,5 @@ const createEvent = async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
 export default createEvent;

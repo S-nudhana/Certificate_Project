@@ -188,7 +188,7 @@ export default function Admin_EventDetail() {
             ใบประกาศนียบัตร
           </Text>
           {certificate ? (
-            <Box width={"95%"}>
+            <Box width={{base: "100%", md: "95%"}}>
               <PdfViewer fileUrl={`${certificate}`} />
             </Box>
           ) : (
