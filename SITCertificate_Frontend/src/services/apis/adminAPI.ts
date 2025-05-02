@@ -166,7 +166,7 @@ export const adminSendEmail = async (
 
 export const adminForgotPassword = async (
   email: string
-): Promise<ApiResponse> => {
+): Promise<any> => {
   try {
     const response = await axiosInstance.post("/admin/forgotPassword", {
       email: email,
