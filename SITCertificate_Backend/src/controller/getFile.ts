@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { verifyToken } from "./auth/jwt";
-import db from "../db/connection";
 
 const getFile: (req: Request, res: Response) => void = (req, res) => {
   const filepath = req.query.filepath as string;

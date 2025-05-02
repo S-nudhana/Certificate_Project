@@ -16,7 +16,8 @@ import {
   IconButton,
   PinInput,
   PinInputField,
-  Link
+  Link,
+  Spinner,
 } from "@chakra-ui/react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +46,7 @@ const ProfForgotPassword: React.FC = () => {
   const [pin, setPin] = useState<string>('');
   const [emailSent, setEmailSent] = useState<boolean>(false);
   const [refCode, setRefCode] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -63,15 +65,20 @@ const ProfForgotPassword: React.FC = () => {
       } else {
         setEmailError("");
       }
+      setLoading(true);
       const res = await profForgotPassword(email);
       if (res.status === 200) {
         setRefCode(res.data.data.refCode);
         const response = await profSendResetPasswordEmail(email);
         if (response.status === 200) {
           setEmailSent(true);
+          setLoading(false);
+          Toast("ส่งรหัสยืนยันการเปลี่ยนรหัสผ่านไปยังอีเมลสำเร็จ", "กรุณาตรวจสอบอีเมลของคุณ", "success");
         }
+        setLoading(false);
       } else {
-        Toast("เกิดข้อผิดพลาด", res.data.message, "error");
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
+        setLoading(false);
       }
     } catch (error) {
       console.error("handleEmail error", error);
@@ -84,12 +91,15 @@ const ProfForgotPassword: React.FC = () => {
         Toast("รหัสผ่านไม่ตรงกัน", "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง", "error");
         return;
       }
+      setLoading(true);
       const res = await profResetPassword(email, pin, newPassword, refCode);
       if (res.status === 200) {
+        setLoading(false);
         Toast("เปลี่ยนรหัสผ่านสำเร็จ", "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว", "success");
         navigate("/professor/login");
       } else {
-        Toast("เกิดข้อผิดพลาด", res.data.message, "error");
+        setLoading(false);
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
     } catch (error) {
       console.error("confirmCreatePassword error", error);
@@ -230,6 +240,11 @@ const ProfForgotPassword: React.FC = () => {
           </Stack>
         </Box>
       </Stack>
+      {loading && (
+        <Box position="fixed" top="0" left="0" right="0" bottom="0" bg="rgba(0, 0, 0, 0.5)" zIndex={9999} display="flex" justifyContent="center" alignItems="center">
+          <Spinner size="xl" color="#336699" thickness="4px" />
+        </Box>
+      )}
     </Flex>
   );
 };

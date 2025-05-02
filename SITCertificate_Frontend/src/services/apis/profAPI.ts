@@ -112,7 +112,7 @@ export const profSendEmail = async (
 
 export const profForgotPassword = async (
   email: string
-): Promise<ApiResponse> => {
+): Promise<any> => {
   try {
     const response = await axiosInstance.post("/prof/forgotPassword", {
       email: email,
@@ -147,7 +147,7 @@ export const profResetPassword = async (
   pin: string,
   password: string,
   refCode: string
-): Promise<ApiResponse> => {
+): Promise<any> => {
   try {
     const response = await axiosInstance.post("/prof/resetPassword", {
       email: email,

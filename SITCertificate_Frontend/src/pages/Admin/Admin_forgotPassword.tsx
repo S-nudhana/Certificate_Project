@@ -16,6 +16,8 @@ import {
   IconButton,
   PinInput,
   PinInputField,
+  Link,
+  Spinner,
 } from "@chakra-ui/react";
 
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
@@ -41,18 +43,22 @@ const AdminForgotPassword = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setNewConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [confirmShowPassword, setConfirmShowPassword] = useState<boolean>(false);
-  const [pin, setPin] = useState<string>('');
+  const [confirmShowPassword, setConfirmShowPassword] =
+    useState<boolean>(false);
+  const [pin, setPin] = useState<string>("");
   const [emailSent, setEmailSent] = useState<boolean>(false);
-  const [refCode, setRefCode] = useState<string>('');
+  const [refCode, setRefCode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleClickConfirmShowPassword = () => setConfirmShowPassword(!confirmShowPassword);
+  const handleClickConfirmShowPassword = () =>
+    setConfirmShowPassword(!confirmShowPassword);
   const isFormFilled = () => email.trim() !== "";
-  const isFormResetPasswordFilled = () => newPassword.trim() !== "" && confirmNewPassword.trim() !== "";
+  const isFormResetPasswordFilled = () =>
+    newPassword.trim() !== "" && confirmNewPassword.trim() !== "";
 
   const handleChange = (value: string) => setPin(value);
 
@@ -65,15 +71,19 @@ const AdminForgotPassword = () => {
       } else {
         setEmailError("");
       }
+      setLoading(true);
       const res = await adminForgotPassword(email);
       if (res.status === 200) {
         setRefCode(res.data.data.refCode);
         const response = await adminSendResetPasswordEmail(email);
         if (response.status === 200) {
           setEmailSent(true);
+          setLoading(false);
+          Toast("ส่งรหัสยืนยันการเปลี่ยนรหัสผ่านไปยังอีเมลสำเร็จ", "กรุณาตรวจสอบอีเมลของคุณ", "success");
         }
       } else {
-        Toast("เกิดข้อผิดพลาด", res.data.message, "error");
+        Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
+        setLoading(false);
       }
     } catch (error) {
       console.error("handleEmail error", error);
@@ -83,14 +93,25 @@ const AdminForgotPassword = () => {
   const confirmCreatePassword = async () => {
     try {
       if (newPassword !== confirmNewPassword) {
-        Toast("รหัสผ่านไม่ตรงกัน", "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง", "error");
+        Toast(
+          "รหัสผ่านไม่ตรงกัน",
+          "โปรดตรวจสอบรหัสผ่านของคุณอีกครั้ง",
+          "error"
+        );
         return;
       }
+      setLoading(true);
       const res = await adminResetPassword(email, pin, newPassword, refCode);
       if (res.status === 200) {
+        setLoading(false);
         navigate("/admin/login");
-        Toast("เปลี่ยนรหัสผ่านสำเร็จ", "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว", "success");
+        Toast(
+          "เปลี่ยนรหัสผ่านสำเร็จ",
+          "เปลี่ยนรหัสผ่านของคุณเรียบร้อยแล้ว",
+          "success"
+        );
       } else {
+        setLoading(false);
         Toast("เกิดข้อผิดพลาด", res.data.message, "error");
       }
     } catch (error) {
@@ -147,8 +168,13 @@ const AdminForgotPassword = () => {
             </Stack>
           </Box>
           <Box display={emailSent ? "block" : "none"}>
-            <Box display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'10px'}>
-              <PinInput otp size='lg' placeholder='-' onChange={handleChange}>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap={"10px"}
+            >
+              <PinInput otp size="lg" placeholder="-" onChange={handleChange}>
                 <PinInputField />
                 <PinInputField />
                 <PinInputField />
@@ -158,9 +184,7 @@ const AdminForgotPassword = () => {
               </PinInput>
             </Box>
             <Stack align="center" spacing={5} py={5}>
-              <Text fontSize={["sm", "md", "md"]}>
-                รหัสอ้างอิง : {refCode}
-              </Text>
+              <Text fontSize={["sm", "md", "md"]}>รหัสอ้างอิง : {refCode}</Text>
               <FormControl id="password">
                 <FormLabel fontSize={["sm", "lg", "lg"]}>
                   สร้างรหัสผ่านใหม่
@@ -179,7 +203,9 @@ const AdminForgotPassword = () => {
                       _hover={{ backgroundColor: "transparent" }}
                       icon={showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       onClick={handleClickShowPassword}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                     />
                   </InputRightElement>
                 </InputGroup>
@@ -200,9 +226,13 @@ const AdminForgotPassword = () => {
                       variant={"ghost"}
                       borderLeftRadius={"0"}
                       _hover={{ backgroundColor: "transparent" }}
-                      icon={confirmShowPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                      icon={
+                        confirmShowPassword ? <FaRegEye /> : <FaRegEyeSlash />
+                      }
                       onClick={handleClickConfirmShowPassword}
-                      aria-label={confirmShowPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        confirmShowPassword ? "Hide password" : "Show password"
+                      }
                     />
                   </InputRightElement>
                 </InputGroup>
@@ -221,8 +251,40 @@ const AdminForgotPassword = () => {
               </Button>
             </Stack>
           </Box>
+          <Stack pt={6}>
+            <Text
+              display={"flex"}
+              justifyContent={"end"}
+              alignItems={"center"}
+              color={"#3399cc"}
+              onClick={() => {
+                navigate("/admin/login");
+              }}
+            >
+              <Link color={"#3399cc"} pl={"3px"}>
+                {" "}
+                กลับไปยังหน้าเข้าสู่ระบบ{" "}
+              </Link>
+            </Text>
+          </Stack>
         </Box>
       </Stack>
+      {loading && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          bg="rgba(0, 0, 0, 0.5)"
+          zIndex={9999}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Spinner size="xl" color="#336699" thickness="4px" />
+        </Box>
+      )}
     </Flex>
   );
 };
