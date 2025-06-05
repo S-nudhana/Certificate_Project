@@ -16,17 +16,9 @@ import Footer from "../../components/Footer";
 import EventList from "../../components/EventList";
 import Banner from "../../components/Banner";
 
-import { userEventData, userSearchEvent } from "../../services/apis/userAPI";
+import { userEventData, userSearchEvent } from "../../apis/userAPI";
 
-interface Event {
-  event_thumbnail: string;
-  event_name: string;
-  event_owner: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_Id: number;
-  event_approve: boolean;
-}
+import type { Event } from "../../types/prof";
 
 const Prof_Homepage = () => {
   const navigate = useNavigate();

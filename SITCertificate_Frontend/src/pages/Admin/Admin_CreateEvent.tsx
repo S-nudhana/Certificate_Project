@@ -29,9 +29,9 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useCustomeToast } from "../../hooks/customeToast";
 
-import { adminCreateEvent, getProfessor } from "../../services/apis/adminAPI";
-import { uploadFile } from "../../services/apis/userAPI";
-import { embedName } from "../../services/apis/adminAPI";
+import { adminCreateEvent, getProfessor } from "../../apis/adminAPI";
+import { uploadFile } from "../../apis/userAPI";
+import { embedName } from "../../apis/adminAPI";
 
 
 function Admin_CreateEvent() {
@@ -55,8 +55,6 @@ function Admin_CreateEvent() {
   const [inputSize, setInputSize] = useState<number>(30);
   const [inputY, setInputY] = useState<number>(45);
   const [professorList, setProfessorList] = useState<any[]>([]);
-  const [uploadedTemplatePath, setUploadedTemplatePath] = useState<string>("");
-  const [uploadedExcelPath, setUploadedExcelPath] = useState<string>("");
 
   const getProfessorList = async () => {
     try {
@@ -136,16 +134,18 @@ function Admin_CreateEvent() {
           thumbnailFile,
           "upload_images"
         );
+        let uploadedTemplatePath = "";
+        let uploadedExcelPath = "";
         if (templateFile) {
           const uploadedTemplate = await uploadFile(
             templateFile,
             "upload_template"
           );
-          setUploadedTemplatePath(uploadedTemplate.data.file.filePath)
+          uploadedTemplatePath = uploadedTemplate.data.file.filePath
         }
         if (excelFile) {
           const uploadedExcel = await uploadFile(excelFile, "upload_excel");
-          setUploadedExcelPath(uploadedExcel.data.file.filePath)
+          uploadedExcelPath = uploadedExcel.data.file.filePath
         }
         const response = await adminCreateEvent(
           eventName,
@@ -153,8 +153,8 @@ function Admin_CreateEvent() {
           openDate,
           closeDate,
           uploadedThumbnail.data.file.filePath,
-          uploadedTemplatePath || "",
-          uploadedExcelPath || "",
+          uploadedTemplatePath,
+          uploadedExcelPath,
           emailTemplate,
           inputSize,
           inputY

@@ -4,7 +4,7 @@ import { sendMail } from "../../services/mail.js";
 import { decryptPin } from "../../utils/crypto.js";
 
 const sendResetPasswordEmail = async (req: Request, res: Response): Promise<void> => {
-  const { email } = req.body;
+  const email: string = req.body.email;
 
   try {
     const [rows] = await db

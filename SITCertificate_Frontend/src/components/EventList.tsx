@@ -8,7 +8,7 @@ interface Event {
   event_owner: string;
   event_startDate: string;
   event_endDate: string;
-  event_Id: number;
+  event_id: string;
   event_approve: boolean;
 }
 
@@ -43,28 +43,28 @@ const EventList: React.FC<EventListProps> = ({ events, title, message, role }) =
         >
           {role !== "student"
             ? events.map((item, key) => (
-                <Prof_AdminCard
-                  key={key}
-                  event_thumbnail={item.event_thumbnail}
-                  event_name={item.event_name}
-                  event_owner={item.event_owner}
-                  event_startDate={item.event_startDate}
-                  event_endDate={item.event_endDate}
-                  event_Id={item.event_Id}
-                  event_status={item.event_approve || false}
-                  role={role}
-                />
-              ))
+              <Prof_AdminCard
+                key={key}
+                event_thumbnail={item.event_thumbnail}
+                event_name={item.event_name}
+                event_owner={item.event_owner}
+                event_startDate={item.event_startDate}
+                event_endDate={item.event_endDate}
+                event_id={item.event_id}
+                event_status={item.event_approve || false}
+                role={role}
+              />
+            ))
             : events.map((item, key) => (
-                <StudentCard
-                  key={key}
-                  event_thumbnail={item.event_thumbnail}
-                  event_name={item.event_name}
-                  event_startDate={item.event_startDate}
-                  event_endDate={item.event_endDate}
-                  event_Id={item.event_Id}
-                />
-              ))}
+              <StudentCard
+                key={key}
+                event_thumbnail={item.event_thumbnail}
+                event_name={item.event_name}
+                event_startDate={item.event_startDate}
+                event_endDate={item.event_endDate}
+                event_id={item.event_id}
+              />
+            ))}
         </Box>
       ) : (
         <Box display="flex" alignItems="center" justifyContent="center" height="15vh">

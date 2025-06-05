@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 import db from "../../db/connection";
-
-interface StatisticsResponse {
-  participantsAmount: number;
-  participantsDownloadAmount: number;
-}
+import type { StatisticsResponse } from "../../types/user";
 
 const getStatistics = async (req: Request, res: Response): Promise<void> => {
   const eventId = req.query.eventId as string;

@@ -1,4 +1,4 @@
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 interface ApiResponse<T = any> {
   data: T;
@@ -48,7 +48,7 @@ export const profSignUp = async (
 };
 
 export const profAddComment = async (
-  id: number,
+  id: string,
   newCommentDetail: string
 ): Promise<ApiResponse> => {
   try {
@@ -77,7 +77,7 @@ export const profDeleteComment = async (id: number): Promise<ApiResponse> => {
   }
 };
 
-export const profApproveEvent = async (id: number): Promise<ApiResponse> => {
+export const profApproveEvent = async (id: string): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.put(`/prof/event/${id}/approve`);
     return {
@@ -90,7 +90,7 @@ export const profApproveEvent = async (id: number): Promise<ApiResponse> => {
 };
 
 export const profSendEmail = async (
-  id: number,
+  id: string,
   eventName: string,
   commentDetail: string
 ): Promise<ApiResponse> => {

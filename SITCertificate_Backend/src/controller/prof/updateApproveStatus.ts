@@ -2,18 +2,19 @@ import { Request, Response } from "express";
 import db from "../../db/connection";
 import XLSX from "xlsx";
 import { hashedPassword } from "../auth/jwt";
+import { v4 as uuidv4 } from "uuid";
 
 const updateApproveStatus = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const eventId = req.params.id;
+  const eventId: string = req.params.id;
 
   try {
     const [rows] = (await db
       .promise()
       .query(
-        "SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_Id = ?",
+        "SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_id = ?",
         [eventId]
       )) as [any[], any];
 
@@ -47,21 +48,22 @@ const updateApproveStatus = async (
     for (const { email, password } of userList) {
       const [[existing]] = (await db
         .promise()
-        .query("SELECT student_id FROM student WHERE student_email = ?", [
-          email,
-        ])) as [[{ student_id: number }] | [], any];
+        .query(
+          "SELECT student_id FROM student WHERE student_email = ?",
+          [email]
+        )) as [[{ student_id: string }] | [], any];
 
-      let studentId: number;
+      let studentId: string;
 
       if (!existing) {
-        const [insertResult] = (await db
+        studentId = uuidv4();
+
+        await db
           .promise()
           .query(
-            "INSERT INTO student (student_email, student_password) VALUES (?, ?)",
-            [email, password]
-          )) as [{ insertId: number }, any];
-
-        studentId = insertResult.insertId;
+            "INSERT INTO student (student_id, student_email, student_password) VALUES (?, ?, ?)",
+            [studentId, email, password]
+          );
       } else {
         studentId = existing.student_id;
 
@@ -83,7 +85,7 @@ const updateApproveStatus = async (
 
     await db
       .promise()
-      .query("UPDATE event SET event_approve = ? WHERE event_Id = ?", [
+      .query("UPDATE event SET event_approve = ? WHERE event_id = ?", [
         1,
         eventId,
       ]);
@@ -92,14 +94,12 @@ const updateApproveStatus = async (
       success: true,
       message: "อัพเดทสถานะการอนุมัติสำเร็จ",
     });
-    return;
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
     });
-    return;
   }
 };
 

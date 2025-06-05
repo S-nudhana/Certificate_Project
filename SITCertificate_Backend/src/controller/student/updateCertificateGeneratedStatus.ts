@@ -3,22 +3,19 @@ import dotenv from "dotenv";
 import { Request, Response } from "express";
 
 import { verifyToken } from "../auth/jwt";
+import { JwtPayload } from "jsonwebtoken";
 
 dotenv.config();
-
-interface DecodedToken {
-  id: number;
-}
 
 const updateGenerateCertificate = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const eventId = parseInt(req.params.id);
+  const eventId: string = req.params.id;
   const { token } = req.cookies;
   try {
-    const userId = verifyToken(token) as unknown as DecodedToken;
-    const studentId = userId.id;
+    const id = verifyToken(token);
+    const studentId = (id as JwtPayload).id;
     await db
       .promise()
       .query(

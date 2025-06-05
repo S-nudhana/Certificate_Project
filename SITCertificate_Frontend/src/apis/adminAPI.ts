@@ -1,4 +1,4 @@
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 interface ApiResponse<T = any> {
   data: T;
@@ -81,7 +81,7 @@ export const adminCreateEvent = async (
   }
 };
 
-export const adminDeleteEvent = async (id: number): Promise<ApiResponse> => {
+export const adminDeleteEvent = async (id: string): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.delete(`/admin/event/${id}`);
     return {
@@ -104,7 +104,7 @@ export const adminUpdateEvent = async (
   emailTemplate: string,
   inputSize: number,
   inputY: number,
-  id: number
+  id: string
 ): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.put(`/admin/event`, {
@@ -218,7 +218,7 @@ export const adminResetPassword = async (
   }
 };
 
-export const getProfessorEmail = async (id: number): Promise<ApiResponse> => {
+export const getProfessorEmail = async (id: string): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.get(`/admin/email/${id}`);
     return {

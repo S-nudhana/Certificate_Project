@@ -11,14 +11,13 @@ import {
   studentCertificate,
   sendCertificate,
   studentEventDataById
-} from "../../services/apis/studentAPI";
-import { fetchCertificate, fetchFile } from "../../services/apis/userAPI";
+} from "../../apis/studentAPI";
+import { fetchCertificate } from "../../apis/userAPI";
 
 import { useCustomeToast } from "../../hooks/customeToast";
 
 function Student_CertificateDownload() {
   const { id } = useParams<{ id: string }>();
-  const numbericId = Number(id);
   const navigate = useNavigate();
   const Toast = useCustomeToast();
 
@@ -29,8 +28,8 @@ function Student_CertificateDownload() {
   const getCertificate = async () => {
     let certificateBlobUrl: string;
     try {
-      const response = await studentCertificate(numbericId);
-      const eventData = await studentEventDataById(numbericId);
+      const response = await studentCertificate(id ?? '');
+      const eventData = await studentEventDataById(id ?? '');
       setEventName(eventData.data.data.event.event_name);
       const certificateBlob = await fetchCertificate(response.data.data.certificate[0].student_event_generatedCertificate);
       if (certificateBlob) {
@@ -51,7 +50,7 @@ function Student_CertificateDownload() {
   const sendCertificateToEmail = async () => {
     try {
       setIsLoading(true);
-      const response = await sendCertificate(numbericId, `${certificate}`);
+      const response = await sendCertificate(id ?? '', `${certificate}`);
       if (response.status === 200) {
         Toast("ส่งใบประกาศนียบัตรสำเร็จ", "ได้ส่งใบประกาศนียบัตรไปทางอีเมลเรียบร้อยแล้ว", "success");
       } else {

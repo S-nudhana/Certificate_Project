@@ -7,19 +7,10 @@ import Footer from "../../components/Footer";
 import Banner from "../../components/Banner";
 import EventList from "../../components/EventList";
 
-import { studentData } from "../../services/apis/studentAPI";
+import { studentData } from "../../apis/studentAPI";
+import type { Event } from "../../types/student";
 
-interface Event {
-  event_thumbnail: string;
-  event_name: string;
-  event_owner: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_Id: number;
-  event_approve: boolean;
-}
-
-const Student_Homepage: React.FC = () => {
+function Student_Homepage() {
   const [eventData, setEventData] = useState<Event[]>([]);
   const getEventData = async (): Promise<void> => {
     try {

@@ -1,20 +1,8 @@
 import { Request, Response } from "express";
 import db from "../../db/connection.js";
-import { deleteFile } from "../deleteFile.js";
+import { deleteFile } from "../deleteFile";
 
-interface EventData {
-  eventName: string,
-  eventOwner: string,
-  openDate: string,
-  closeDate: string,
-  thumbnail: string,
-  template: string,
-  excel: string,
-  emailTemplate: string,
-  inputSize: number,
-  inputY: number,
-  eventId: number
-}
+import type { EventData } from "../../types/admin.js";
 
 const updateEventData = async (req: Request, res: Response): Promise<void> => {
   let {
@@ -29,13 +17,13 @@ const updateEventData = async (req: Request, res: Response): Promise<void> => {
     inputSize,
     inputY,
     eventId,
-  }:EventData = req.body;
+  }: EventData = req.body;
 
   try {
     const [rows] = await db
       .promise()
       .query(
-        `SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_Id = ?`,
+        `SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_id = ?`,
         [eventId]
       );
 
@@ -67,7 +55,7 @@ const updateEventData = async (req: Request, res: Response): Promise<void> => {
              event_thumbnail = ?, event_certificate = ?, event_excel = ?, 
              event_emailTemplate = ?, event_certificate_text_size = ?, 
              event_certificate_position_y = ? 
-         WHERE event_Id = ?`,
+         WHERE event_id = ?`,
         [
           eventName,
           eventOwner,

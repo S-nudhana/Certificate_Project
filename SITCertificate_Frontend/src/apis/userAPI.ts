@@ -1,4 +1,4 @@
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 import axios from "axios";
 
 interface ApiResponse<T = any> {
@@ -34,7 +34,7 @@ export const userEventData = async (): Promise<ApiResponse> => {
   }
 };
 
-export const userEventDataById = async (id: number): Promise<ApiResponse> => {
+export const userEventDataById = async (id: string): Promise<ApiResponse> => {
   try {
     return await axiosInstance.get(`/user/event/${id}`);
   } catch (error: AxiosError) {
@@ -42,7 +42,7 @@ export const userEventDataById = async (id: number): Promise<ApiResponse> => {
   }
 };
 
-export const userComment = async (id: number): Promise<ApiResponse> => {
+export const userComment = async (id: string): Promise<ApiResponse> => {
   try {
     return await axiosInstance.get(`/user/comment?id=${id}`);
   } catch (error: AxiosError) {
@@ -66,7 +66,7 @@ export const userHistory = async (eventName: string): Promise<ApiResponse> => {
   }
 };
 
-export const getStatistic = async (eventId: number): Promise<ApiResponse> => {
+export const getStatistic = async (eventId: string): Promise<ApiResponse> => {
   try {
     return await axiosInstance.get(`/user/statistic?eventId=${eventId}`);
   } catch (error: AxiosError) {

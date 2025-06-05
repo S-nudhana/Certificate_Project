@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../../services/apis/userAPI";
+import { fetchFile } from "../../apis/userAPI";
 import { formatDateDMY } from "../../utils/dateFormat";
 
 interface StudentCardProps {
@@ -10,7 +10,7 @@ interface StudentCardProps {
   event_name: string;
   event_startDate: string;
   event_endDate: string;
-  event_Id: number;
+  event_id: string;
 }
 
 export default function StudentCard({
@@ -18,7 +18,7 @@ export default function StudentCard({
   event_name,
   event_startDate,
   event_endDate,
-  event_Id,
+  event_id,
 }: StudentCardProps) {
   const navigate = useNavigate();
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -35,7 +35,6 @@ export default function StudentCard({
   useEffect(() => {
     getFile();
   }, []);
-
   return (
     <Card
       width="300px"
@@ -72,7 +71,7 @@ export default function StudentCard({
           color="white"
           _hover={{ bgColor: "#1f568c" }}
           onClick={() => {
-            navigate(`/detail/${event_Id}`);
+            navigate(`/detail/${event_id}`);
           }}
         >
           รับประกาศนียบัตร

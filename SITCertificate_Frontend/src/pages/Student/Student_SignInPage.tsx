@@ -8,9 +8,9 @@ import Logo from "/img/SIT_Icon.png";
 
 import { useCustomeToast } from '../../hooks/customeToast';
 
-import { studentSignIn } from '../../services/apis/studentAPI';
+import { studentSignIn } from '../../apis/studentAPI';
 
-const Student_SignInPage: React.FC = () => {
+function Student_SignInPage() {
   const navigate = useNavigate();
   const Toast = useCustomeToast();
 
@@ -22,7 +22,7 @@ const Student_SignInPage: React.FC = () => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = (): boolean => email.trim() !== '' && password.trim() !== '';
-  
+
   const handleClickShowPassword = (): void => setShowPassword(!showPassword);
 
   const handleSignIn = async (): Promise<void> => {
@@ -34,8 +34,8 @@ const Student_SignInPage: React.FC = () => {
       } else {
         setEmailError('');
       }
-      
-      const response = await studentSignIn(email, password);      
+
+      const response = await studentSignIn(email, password);
       if (response.status === 201) {
         navigate('/');
         Toast("เข้าสู่ระบบสำเร็จ", "ท่านได้เข้าสู่ระบบสำเร็จ", "success");

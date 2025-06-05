@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import db from "../../db/connection";
 import { compare, signToken } from "../auth/jwt";
 
+import type { AdminLoginRequest } from "../../types/admin";
+
 const SignInAdmin = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+  const { email, password }: AdminLoginRequest = req.body;
 
   try {
     const [rows] = await db

@@ -24,7 +24,7 @@ import Logo from "/img/SIT_Icon.png";
 
 import { useCustomeToast } from "../../hooks/customeToast";
 
-import { profSignUp } from "../../services/apis/profAPI";
+import { profSignUp } from "../../apis/profAPI";
 
 interface FormState {
   username: string;

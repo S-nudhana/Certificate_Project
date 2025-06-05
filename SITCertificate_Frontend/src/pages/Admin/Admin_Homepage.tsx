@@ -16,17 +16,8 @@ import Footer from "../../components/Footer";
 import Banner from "../../components/Banner";
 import EventList from "../../components/EventList";
 
-import { userEventData, userSearchEvent } from "../../services/apis/userAPI";
-
-interface Event {
-  event_thumbnail: string;
-  event_name: string;
-  event_owner: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_Id: number;
-  event_approve: boolean;
-}
+import { userEventData, userSearchEvent } from "../../apis/userAPI";
+import type { Event } from "../../types/admin";
 
 const Admin_Homepage: React.FC = () => {
   const navigate = useNavigate();

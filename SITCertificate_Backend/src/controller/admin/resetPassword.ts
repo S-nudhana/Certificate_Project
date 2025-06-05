@@ -4,13 +4,10 @@ import { hashedPassword } from "../auth/jwt";
 import { decryptPin } from "../../utils/crypto";
 import { sendMail } from "../../services/mail";
 
-interface Admin {
-  admin_forgotpasswordPin: string;
-  admin_iv: string;
-}
+import type { AdminResetPassword, AdminResetPasswordRequest } from "../../types/admin";
 
 const resetPassword = async (req: Request, res: Response): Promise<void> => {
-  const { email, pin, password, refCode } = req.body;
+  const { email, pin, password, refCode }: AdminResetPasswordRequest = req.body;
 
   try {
     const value = [email, refCode];
@@ -18,7 +15,7 @@ const resetPassword = async (req: Request, res: Response): Promise<void> => {
       .promise()
       .query("SELECT admin_forgotpasswordPin, admin_iv FROM admin WHERE admin_email = ? AND admin_refCode = ?", value);
 
-    const adminData = rows as Admin[];
+    const adminData = rows as AdminResetPassword[];
 
     if (adminData.length === 0) {
       res.status(400).json({ success: false, message: "ไม่พบข้อมูลผู้ใช้งาน" });

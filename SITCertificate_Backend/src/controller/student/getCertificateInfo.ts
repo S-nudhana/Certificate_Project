@@ -2,14 +2,10 @@ import { Request, Response } from "express";
 import db from "../../db/connection";
 import dotenv from "dotenv";
 import { verifyToken } from "../auth/jwt";
+import type { CertificateInfo } from "../../types/student";
+import { JwtPayload } from "jsonwebtoken";
 
 dotenv.config();
-
-interface Certificate {
-  student_nameOnCertificate: string;
-  student_surnameOnCertificate: string;
-  student_emailTostudent_sendCertificate: string;
-}
 
 const getCertificateInfo = async (
   req: Request,
@@ -19,8 +15,8 @@ const getCertificateInfo = async (
   const { token } = req.cookies;
 
   try {
-    const userId = verifyToken(token);
-    const studentEmail = userId.student_email;
+    const id = verifyToken(token);
+    const studentEmail = (id as JwtPayload).student_email;
 
     const value = [eventId, studentEmail];
 
@@ -31,7 +27,7 @@ const getCertificateInfo = async (
       value
     );
 
-    const certificate = rows as Certificate[];
+    const certificate = rows as CertificateInfo[];
 
     res.status(200).json({
       success: true,

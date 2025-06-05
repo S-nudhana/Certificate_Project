@@ -27,11 +27,10 @@ import {
   updateStudentGenerateStatus,
   generateStudentCertificateInfo,
   generateExampleCertificate
-} from "../../services/apis/studentAPI";
+} from "../../apis/studentAPI";
 
 function Student_CertificateExample() {
   const { id } = useParams<{ id: string }>();
-  const numbericId = Number(id);
   const navigate = useNavigate();
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,7 +40,7 @@ function Student_CertificateExample() {
 
   const getCertificateExample = async () => {
     try {
-      const response = await generateExampleCertificate(numbericId, name, surname);
+      const response = await generateExampleCertificate(id ?? '', name, surname);
       setPdfWatermarkUrl(response);
     } catch (error) {
       console.error("Error fetching certificate:", error);
@@ -50,7 +49,7 @@ function Student_CertificateExample() {
 
   const getStudentGenerate = async () => {
     try {
-      const response = await studentGenerate(numbericId);
+      const response = await studentGenerate(id ?? '');
       if (!response.data.data.status) {
         navigate(`/detail/${id}`);
       }
@@ -67,12 +66,12 @@ function Student_CertificateExample() {
   const handleSubmit = async () => {
     try {
       const response = await generateStudentCertificateInfo(
-        numbericId,
+        id ?? '',
         name,
         surname,
         email,
       );
-      const resStatus = await updateStudentGenerateStatus(numbericId);
+      const resStatus = await updateStudentGenerateStatus(id ?? '');
       if (response.status === 200 && resStatus.status === 200) {
         navigate(`/download/${id}`);
       }

@@ -13,7 +13,7 @@ import getStatistics from "../controller/user/getStatistics";
 import authMiddleware from "../middleware/authMiddleware";
 import { accessManager } from "../middleware/accessManager";
 
-import { upload } from "../config/multerConfig";
+import { upload } from "../config/multer.config";
 
 const userRouter = express.Router();
 

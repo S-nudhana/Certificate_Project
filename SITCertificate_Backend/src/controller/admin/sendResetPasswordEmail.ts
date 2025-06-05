@@ -3,24 +3,20 @@ import db from "../../db/connection.js";
 import { decryptPin } from "../../utils/crypto";
 import { sendMail } from "../../services/mail";
 
-interface Admin {
-  admin_forgotpasswordPin: string;
-  admin_iv: string;
-  admin_refCode: string;
-}
+import type { AdminResetPassword } from "../../types/admin.js";
 
 const sendResetPasswordEmail = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { email } = req.body;
+  const email: string = req.body.email;
 
   try {
     const value = [email];
     const [rows] = await db
       .promise()
       .query("SELECT admin_forgotpasswordPin, admin_iv, admin_refCode FROM admin WHERE admin_email = ?", value);
-    const adminData = rows as Admin[];
+    const adminData = rows as AdminResetPassword[];
     if (adminData.length === 0) {
       res.status(400).json({ success: false, message: "ข้อมูลไม่ครบถ้วน" });
       return;

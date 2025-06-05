@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db/connection";
 import { verifyToken } from "../auth/jwt";
@@ -12,11 +13,7 @@ const sendEmail = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const Id = verifyToken(token);
-    const profId =
-      typeof Id !== "string" && "professor_id" in Id
-        ? parseInt(Id.professor_id)
-        : null;
-
+    const profId = (Id as JwtPayload).prof_id;
     if (profId === null) {
       res
         .status(400)
@@ -28,7 +25,7 @@ const sendEmail = async (req: Request, res: Response): Promise<void> => {
       .promise()
       .query(
         `SELECT admin_email FROM admin WHERE admin_Id IN (SELECT event_adminId from event WHERE event_Id = ?)`,
-        [parseInt(id)]
+        [id]
       )) as [Array<{ admin_email: string }>, any];
 
     if (adminRows.length === 0) {

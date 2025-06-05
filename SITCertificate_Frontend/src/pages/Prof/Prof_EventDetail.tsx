@@ -37,36 +37,19 @@ import {
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../services/apis/userAPI";
+} from "../../apis/userAPI";
 
 import {
   profAddComment,
   profDeleteComment,
   profApproveEvent,
   profSendEmail,
-} from "../../services/apis/profAPI";
+} from "../../apis/profAPI";
 
-interface CommentType {
-  comment_Id: number;
-  comment_username: string;
-  comment_detail: string;
-  comment_status: boolean;
-}
-
-interface EventDataType {
-  event_name: string;
-  event_owner: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_approve: number;
-  event_certificate: string;
-  event_excel: string;
-  event_emailTemplate: string;
-}
+import type { EventDataType, CommentType } from "../../types/prof";
 
 function Prof_EventDetail() {
   const { id } = useParams<{ id: string }>();
-  const numbericId = Number(id);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const Toast = useCustomeToast();
 
@@ -77,23 +60,18 @@ function Prof_EventDetail() {
   const [newCommentDetail, setNewCommentDetail] = useState<string>("");
   const [statistic, setStatistic] = useState<boolean>(false);
   const [participantsAmount, setParticipantsAmount] = useState<number>(0);
-  const [participantsDownloadAmount, setParticipantsDownloadAmount] =
-    useState<number>(0);
-
+  const [participantsDownloadAmount, setParticipantsDownloadAmount] = useState<number>(0);
   const getEventData = async () => {
     try {
-      const response = await userEventDataById(numbericId);
-      const data = response.data.data;
-      setEventData(data.event);
-      setStatistic(data.statistic);
-      setCertificate((await fetchFile(data.event.event_certificate)) || "");
-      setExcel((await fetchFile(data.event.event_excel)) || "");
-      if (!data.statistic) {
-        const response = await getStatistic(numbericId);
+      const response = await userEventDataById(id ?? "");
+      setEventData(response.data.data.event);
+      setStatistic(response.data.data.statistic);
+      setCertificate((await fetchFile(response.data.data.event.event_certificate)) || "");
+      setExcel((await fetchFile(response.data.data.event.event_excel)) || "");
+      if (!statistic) {
+        const response = await getStatistic(id ?? "");
         setParticipantsAmount(response.data.data.participantsAmount);
-        setParticipantsDownloadAmount(
-          response.data.data.participantsDownloadAmount
-        );
+        setParticipantsDownloadAmount(response.data.data.participantsDownloadAmount);
       }
     } catch (error) {
       console.error("Get event data error:", error);
@@ -102,7 +80,7 @@ function Prof_EventDetail() {
 
   const getComment = async () => {
     try {
-      const response = await userComment(numbericId);
+      const response = await userComment(id ?? "");
       setComments(response.data.data.comment);
     } catch (error) {
       console.error("Get comment error:", error);
@@ -116,12 +94,12 @@ function Prof_EventDetail() {
 
   const postComment = async () => {
     try {
-      const response = await profAddComment(numbericId, newCommentDetail);
+      const response = await profAddComment(id ?? '', newCommentDetail);
       if (response.data.success) {
         getComment();
         setNewCommentDetail("");
         const response = await profSendEmail(
-          numbericId,
+          id ?? '',
           eventData?.event_name || "",
           newCommentDetail
         );
@@ -134,7 +112,7 @@ function Prof_EventDetail() {
 
   const approveEvent = async () => {
     try {
-      const response = await profApproveEvent(numbericId);
+      const response = await profApproveEvent(id ?? '');
       if (response.data.success) {
         getEventData();
         Toast("อนุมัติกิจกรรมสำเร็จ", "ท่านได้อนุมัติกิจกรรมนี้แล้ว", "success");
@@ -195,7 +173,7 @@ function Prof_EventDetail() {
               ใบประกาศนียบัตร
             </Text>
             {certificate ? (
-              <Box width={{base: "100%", md: "95%"}}>
+              <Box width={{ base: "100%", md: "95%" }}>
                 <PdfViewer fileUrl={`${certificate}`} />
               </Box>
             ) : (
@@ -364,7 +342,7 @@ function Prof_EventDetail() {
         </Stack>
       )}
       {statistic && (
-        <StatisticChart participantsAmount={participantsAmount} participantsDownloadAmount={participantsDownloadAmount} eventName={eventData?.event_name} />
+        <StatisticChart participantsAmount={participantsAmount} participantsDownloadAmount={participantsDownloadAmount} eventName={eventData?.event_name ?? ""} />
       )}
       <Footer />
       {isOpen && (

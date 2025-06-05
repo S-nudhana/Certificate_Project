@@ -5,16 +5,10 @@ import dotenv from "dotenv";
 import db from "../../db/connection";
 import { fetchAndFillCertificate } from "../../utils/watermark";
 import { verifyToken } from "../auth/jwt.js";
+import type { CertificateRequestBody } from "../../types/student";
+import { JwtPayload } from "jsonwebtoken";
 
 dotenv.config();
-
-interface CertificateRequestBody {
-  eventId: string;
-  name: string;
-  surname: string;
-  email: string;
-  modifiedPdf?: string;
-}
 
 interface DecodedToken {
   id: number;
@@ -28,8 +22,8 @@ const updateCertificateInformation = async (
   const { token } = req.cookies;
 
   try {
-    const userId = verifyToken(token) as unknown as DecodedToken;
-    const studentId = userId.id;
+    const id = verifyToken(token);
+    const studentId = (id as JwtPayload).id;
 
     const [rows] = await db
       .promise()
@@ -70,7 +64,7 @@ const updateCertificateInformation = async (
       .promise()
       .query(
         "UPDATE student_event SET student_event_nameOnCertificate = ?, student_event_surnameOnCertificate = ?, student_event_mailToSendCertificate = ?, student_event_generatedCertificate = ? WHERE student_event_eventId = ? AND student_event_studentId = ?",
-        [name, surname, email, outputPath, parseInt(eventId), studentId]
+        [name, surname, email, outputPath, eventId, studentId]
       );
 
     res.status(200).json({

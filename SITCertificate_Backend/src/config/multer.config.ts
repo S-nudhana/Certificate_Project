@@ -11,8 +11,8 @@ const storage: StorageEngine = multer.diskStorage({
     const token = req.cookies.token;
     const decoded = verifyToken(token);
 
-    if (decoded.role === "student") {
-      cb(null, `${Date.now()}_${decoded.id}.pdf`);
+    if (typeof decoded === "object" && decoded !== null && "role" in decoded && decoded.role === "student") {
+      cb(null, `${Date.now()}_${(decoded as any).id}.pdf`);
     } else {
       cb(null, `${Date.now()}_${file.originalname}`);
     }

@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { verifyToken } from "./auth/jwt";
 
 const getFile: (req: Request, res: Response) => void = (req, res) => {
-  const filepath = req.query.filepath as string;
+  const filepath = req.query.filepath;
   const token = req.cookies.token;
   const referer = req.headers.referer || req.headers.origin;
-  const allowedOrigins = process.env.CORS_ORIGIN;
+  const allowedOrigins = process.env.CORS_ORIGIN_DEVELOPMENT;
   try {
     if (!token) {
       return res.status(401).json({
@@ -18,7 +18,6 @@ const getFile: (req: Request, res: Response) => void = (req, res) => {
         message: "Direct access to this file is not allowed.",
       });
     }
-
     res.sendFile(`${filepath}`, { root: "./" });
   } catch (error) {
     console.error("Error processing file request:", error);

@@ -1,4 +1,4 @@
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 interface ApiResponse<T = any> {
   data: T;
@@ -23,7 +23,7 @@ export const studentSignIn = async (
 };
 
 export const updateStudentGenerateStatus = async (
-  id: number
+  id: string
 ): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.put(`/student/status/${id}/update`);
@@ -33,7 +33,7 @@ export const updateStudentGenerateStatus = async (
   }
 };
 
-export const studentGenerate = async (id: number): Promise<ApiResponse> => {
+export const studentGenerate = async (id: string): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.get(`/student/status/${id}`);
     return response;
@@ -42,7 +42,7 @@ export const studentGenerate = async (id: number): Promise<ApiResponse> => {
   }
 };
 
-export const studentEventDataById = async (id: number): Promise<ApiResponse> => {
+export const studentEventDataById = async (id: string): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.get(`/student/event/${id}`);
     return response;
@@ -60,7 +60,7 @@ export const studentData = async (): Promise<ApiResponse> => {
   }
 };
 
-export const studentCertificate = async (id: number): Promise<ApiResponse> => {
+export const studentCertificate = async (id: string): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.get(`/student/certificate/${id}`);
     return response;
@@ -70,7 +70,7 @@ export const studentCertificate = async (id: number): Promise<ApiResponse> => {
 };
 
 export const getGeneratedCertificate = async (
-  id: number
+  id: string
 ): Promise<ApiResponse> => {
   try {
     const response = await axiosInstance.get(
@@ -83,7 +83,7 @@ export const getGeneratedCertificate = async (
 };
 
 export const generateStudentCertificateInfo = async (
-  id: number,
+  id: string,
   name: string,
   surname: string,
   email: string
@@ -102,7 +102,7 @@ export const generateStudentCertificateInfo = async (
 };
 
 export const generateExampleCertificate = async (
-  id: number,
+  id: string,
   name: string,
   surname: string
 ): Promise<string | any> => {
@@ -125,7 +125,7 @@ export const generateExampleCertificate = async (
 };
 
 export const sendCertificate = async (
-  id: number,
+  id: string,
   file: string
 ): Promise<ApiResponse> => {
   try {

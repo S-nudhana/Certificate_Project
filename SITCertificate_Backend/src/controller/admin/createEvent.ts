@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import db from "../../db/connection.js";
 import { verifyToken } from "../auth/jwt.js";
+import { v4 as uuidv4 } from "uuid";
+
+import type { AdminCreateEventRequest } from "../../types/admin.js";
 
 const createEvent = async (req: Request, res: Response): Promise<void> => {
   const { token } = req.cookies;
@@ -16,15 +19,12 @@ const createEvent = async (req: Request, res: Response): Promise<void> => {
     emailTemplate,
     inputSize,
     inputY,
-  } = req.body;
-
+  }: AdminCreateEventRequest = req.body;
   try {
     const id = verifyToken(token);
-    if (typeof id !== "object" || !("admin_id" in id)) {
-      throw new Error("Invalid token payload");
-    }
     const adminId = (id as JwtPayload).admin_id;
     const value = [
+      uuidv4(),
       eventName,
       eventOwner,
       openDate,
@@ -41,7 +41,7 @@ const createEvent = async (req: Request, res: Response): Promise<void> => {
     await db
       .promise()
       .query(
-        "INSERT INTO `event` (`event_name`, `event_owner`, `event_startDate`, `event_endDate`, `event_thumbnail`, `event_certificate`, `event_excel`, `event_approve`, `event_adminId`, `event_emailTemplate`, `event_certificate_text_size`, `event_certificate_position_y`) VALUES (?)",
+        "INSERT INTO `event` (`event_id`, `event_name`, `event_owner`, `event_startDate`, `event_endDate`, `event_thumbnail`, `event_certificate`, `event_excel`, `event_approve`, `event_adminId`, `event_emailTemplate`, `event_certificate_text_size`, `event_certificate_position_y`) VALUES (?)",
         [value]
       );
     res.status(201).json({ success: true, message: "สร้างกิจกรรมเสร็จสิ้น" });

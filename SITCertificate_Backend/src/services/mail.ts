@@ -1,4 +1,4 @@
-import { transporter } from "../config/transporterConfig";
+import { transporter } from "../config/transporter.config";
 import { SentMessageInfo } from "nodemailer";
 
 interface MailOptions {

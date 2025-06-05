@@ -3,7 +3,7 @@ import db from "../../db/connection";
 import { encryptPin } from "../../utils/crypto";
 
 const setPinForgotPassword = async (req: Request, res: Response): Promise<void> => {
-  const { email } = req.body;
+  const email: string = req.body.email;
 
   try {
     const [rows]: any = await db

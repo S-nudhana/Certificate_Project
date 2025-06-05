@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Image, Box, Text, Button } from "@chakra-ui/react";
 
-import { fetchFile } from "../../services/apis/userAPI";
+import { fetchFile } from "../../apis/userAPI";
 import { formatDateDMY } from "../../utils/dateFormat";
 
 interface ProfAdminCardProps {
@@ -11,7 +11,7 @@ interface ProfAdminCardProps {
   event_owner: string;
   event_startDate: string;
   event_endDate: string;
-  event_Id: number;
+  event_id: string;
   event_status: boolean;
   role: string;
 }
@@ -22,7 +22,7 @@ export default function Prof_AdminCard({
   event_owner,
   event_startDate,
   event_endDate,
-  event_Id,
+  event_id,
   event_status,
   role,
 }: ProfAdminCardProps) {
@@ -82,7 +82,7 @@ export default function Prof_AdminCard({
           color="white"
           _hover={{ bgColor: "#1f568c" }}
           onClick={() => {
-            navigate(`/${role}/editEvent/${event_Id}`);
+            navigate(`/${role}/editEvent/${event_id}`);
           }}
         >
           แก้ไข
@@ -94,7 +94,7 @@ export default function Prof_AdminCard({
           color="white"
           _hover={{ bgColor: "#297AA3" }}
           onClick={() => {
-            navigate(`/${role}/detail/${event_Id}`);
+            navigate(`/${role}/detail/${event_id}`);
           }}
         >
           ดูข้อมูลกิจกรรม

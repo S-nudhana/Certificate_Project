@@ -1,24 +1,25 @@
 import { Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 import db from "../../db/connection.js";
 import dotenv from "dotenv";
 import { verifyToken } from "../auth/jwt.js";
 
+import type { ProfCreateComment } from "../../types/prof.js";
+
 dotenv.config();
 
 const setNewComment = async (req: Request, res: Response): Promise<void> => {
-  const { eventId, detail } = req.body;
+  const { eventId, detail }: ProfCreateComment = req.body;
   const { token } = req.cookies;
 
   try {
-    const userId = verifyToken(token);
-    if (typeof userId !== "object" || !("professor_id" in userId)) {
-      throw new Error("Invalid token payload");
-    }
+    const id = verifyToken(token);
+    const userId = (id as JwtPayload).professor_id;
     const [rows] = await db
       .promise()
       .query(
         "SELECT professor_userName FROM professor WHERE professor_id = ?",
-        [userId.professor_id]
+        [userId]
       );
 
     const username = (rows as any)[0]?.professor_userName;

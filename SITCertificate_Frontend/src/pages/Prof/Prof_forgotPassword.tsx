@@ -31,7 +31,7 @@ import {
   profForgotPassword,
   profResetPassword,
   profSendResetPasswordEmail,
-} from "../../services/apis/profAPI";
+} from "../../apis/profAPI";
 
 const ProfForgotPassword: React.FC = () => {
   const navigate = useNavigate();
