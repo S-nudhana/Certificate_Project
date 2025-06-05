@@ -2,20 +2,16 @@ import { Request, Response } from 'express';
 import db from "../../db/connection.js";
 import { deleteFile } from "../deleteFile";
 
-interface EventRecord {
-  event_thumbnail: string | null;
-  event_certificate: string | null;
-  event_excel: string | null;
-}
+import type { EventRecord } from "../../types/admin";
 
 const deleteEvent = async (req: Request, res: Response): Promise<void> => {
   const id: string = req.params.id;
-  
+
   try {
     const [rows] = await db
       .promise()
       .query(
-        `SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_Id = ?`,
+        `SELECT event_thumbnail, event_certificate, event_excel FROM event WHERE event_id = ?`,
         [id]
       );
 
@@ -44,7 +40,7 @@ const deleteEvent = async (req: Request, res: Response): Promise<void> => {
     await db
       .promise()
       .query(`DELETE FROM student_event WHERE student_event_eventId = ?`, [id]);
-    await db.promise().query(`DELETE FROM event WHERE event_Id = ?`, [id]);
+    await db.promise().query(`DELETE FROM event WHERE event_id = ?`, [id]);
     res.status(200).json({
       success: true,
       message: "Event deleted successfully",

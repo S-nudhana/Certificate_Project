@@ -17,7 +17,7 @@ import embedName from "../controller/admin/embedName";
 import authMiddleware from "../middleware/authMiddleware";
 import { accessManager } from "../middleware/accessManager";
 
-import { upload } from "../config/multerConfig";
+import { upload } from "../config/multer.config";
 
 const adminRouter = express.Router();
 
@@ -32,7 +32,7 @@ adminRouter.post("/event", authMiddleware, accessManager(["admin"]), createEvent
 adminRouter.put("/event", authMiddleware, accessManager(["admin"]), updateEvent);
 adminRouter.delete("/event/:id", authMiddleware, accessManager(["admin"]), deleteEvent);
 adminRouter.put("/comment/:id/status", authMiddleware, accessManager(["admin"]), updateCommentStatus);
-adminRouter.get("/email/:id", authMiddleware, accessManager([ "admin"]), getProfessorEmail);
+adminRouter.get("/email/:id", authMiddleware, accessManager(["admin"]), getProfessorEmail);
 adminRouter.get("/event/professor", authMiddleware, accessManager(["admin"]), getEventProfessor);
 adminRouter.post("/watermark", authMiddleware, accessManager(["admin"]), upload.single("file"), embedName);
 

@@ -33,8 +33,8 @@ import { useCustomeToast } from "../../hooks/customeToast";
 
 import { formatDateYMD } from "../../utils/dateFormat";
 
-import { adminUpdateEvent, getProfessor, embedName } from "../../services/apis/adminAPI";
-import { userEventDataById, uploadFile, fetchFile, fetchCertificate } from "../../services/apis/userAPI";
+import { adminUpdateEvent, getProfessor, embedName } from "../../apis/adminAPI";
+import { userEventDataById, uploadFile, fetchFile, fetchCertificate } from "../../apis/userAPI";
 
 interface Professor {
   professor_fullname: string;
@@ -42,7 +42,6 @@ interface Professor {
 
 function Admin_EditEvent() {
   const { id } = useParams<{ id: string }>();
-  const numericId = Number(id);
   const navigate = useNavigate();
   const templateURLRef = useRef<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -80,7 +79,7 @@ function Admin_EditEvent() {
 
   const getEventData = async () => {
     try {
-      const response = await userEventDataById(numericId);
+      const response = await userEventDataById(id ?? "");
       setEventName(response.data.data.event.event_name);
       setEventOwnerName(response.data.data.event.event_owner);
       setOpenDate(formatDateYMD(response.data.data.event.event_startDate));
@@ -144,7 +143,7 @@ function Admin_EditEvent() {
           emailTemplate || "",
           inputSize ? Number(inputSize) : Number(textSize),
           inputY ? Number(inputY) : Number(textY),
-          numericId
+          id ?? '0'
         );
         if (response.status === 200) {
           navigate("/admin/");
@@ -168,19 +167,19 @@ function Admin_EditEvent() {
   };
 
   const handleFileChange = (e): void => {
-      if (e.target.files) {
-        const file = e.target.files[0] as File;
-        if (file) {
-          if (templateURLRef.current) {
-            URL.revokeObjectURL(templateURLRef.current);
-          }
-          const newUrl = URL.createObjectURL(file);
-          setTemplateFile(file);
-          setTemplateURL(newUrl);
-          templateURLRef.current = newUrl;
+    if (e.target.files) {
+      const file = e.target.files[0] as File;
+      if (file) {
+        if (templateURLRef.current) {
+          URL.revokeObjectURL(templateURLRef.current);
         }
+        const newUrl = URL.createObjectURL(file);
+        setTemplateFile(file);
+        setTemplateURL(newUrl);
+        templateURLRef.current = newUrl;
       }
-    };
+    }
+  };
 
   const handleSizeChange = (e) => {
     setInputSize(e.target.value);
@@ -379,24 +378,24 @@ function Admin_EditEvent() {
                     <Text>รายชื่อปัจจุบันในระบบ</Text>
                     {finalExcel ? (
                       <Tooltip
-                      hasArrow
-                      placement="right"
-                      label="คลิกเพื่อดาวน์โหลด"
-                      bg="gray.100"
-                      p={"5px"}
-                      color="black"
-                    >
-                      <Button
-                        leftIcon={<PiMicrosoftExcelLogoFill />}
-                        variant={"link"}
-                        color={"#919191"}
-                        as="a"
-                        href={finalExcel}
-                        download={`${eventName}_Excel.xlsx`}
+                        hasArrow
+                        placement="right"
+                        label="คลิกเพื่อดาวน์โหลด"
+                        bg="gray.100"
+                        p={"5px"}
+                        color="black"
                       >
-                        รายชื่อ.xlsx
-                      </Button>
-                    </Tooltip>
+                        <Button
+                          leftIcon={<PiMicrosoftExcelLogoFill />}
+                          variant={"link"}
+                          color={"#919191"}
+                          as="a"
+                          href={finalExcel}
+                          download={`${eventName}_Excel.xlsx`}
+                        >
+                          รายชื่อ.xlsx
+                        </Button>
+                      </Tooltip>
                     ) : (
                       <Text color={"#919191"}>ไม่พบไฟล์รายชื่อในระบบ</Text>
                     )}

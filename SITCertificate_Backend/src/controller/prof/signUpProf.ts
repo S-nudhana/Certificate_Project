@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import connection from "../../db/connection";
 import { hashedPassword } from "../auth/jwt";
+import { v4 as uuidv4 } from "uuid";
+
+import type { ProfRegisterRequest } from "../../types/prof";
 
 const CreateProf = async (req: Request, res: Response): Promise<void> => {
-  const { username, fullname, email, password } = req.body;
+  const { username, fullname, email, password }: ProfRegisterRequest = req.body;
 
   try {
     if (!username || !fullname || !email || !password) {
@@ -23,10 +26,10 @@ const CreateProf = async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashed_password = hashedPassword(password);
-    const values = [username, fullname, email, hashed_password];
+    const values = [uuidv4(), username, fullname, email, hashed_password];
 
     await connection.promise().query(
-      "INSERT INTO professor (professor_username, professor_fullname, professor_email, professor_password) VALUES (?, ?, ?, ?)",
+      "INSERT INTO professor (professor_id, professor_username, professor_fullname, professor_email, professor_password) VALUES (?, ?, ?, ?, ?)",
       values
     );
     res.status(201).json({ success: true, message: "สร้างบัญชีผู้ใช้สำเร็จ" })

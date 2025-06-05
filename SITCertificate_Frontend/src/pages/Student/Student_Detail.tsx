@@ -27,19 +27,12 @@ import {
   studentEventDataById,
   generateStudentCertificateInfo,
   sendCertificate,
-} from "../../services/apis/studentAPI";
-import { fetchFile } from "../../services/apis/userAPI";
+} from "../../apis/studentAPI";
+import { fetchFile } from "../../apis/userAPI";
+import type { EventData } from "../../types/student";
 
-interface EventData {
-  event_name: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_thumbnail: string;
-}
-  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 function Student_Detail() {
   const { id } = useParams<{ id: string }>();
-  const numericId = Number(id);
   const navigate = useNavigate();
   const Toast = useCustomeToast();
 
@@ -54,7 +47,7 @@ function Student_Detail() {
 
   const getEventData = async () => {
     try {
-      const response = await studentEventDataById(numericId);
+      const response = await studentEventDataById(id ?? '0');
       if (!response.data.success) {
         navigate("/");
       }
@@ -66,13 +59,13 @@ function Student_Detail() {
       console.error("Get event data error: " + error);
     }
   };
-  
+
   const getStudentGenerate = async () => {
     try {
-      const response = await studentGenerate(numericId);
+      const response = await studentGenerate(id ?? '0');
       setStudentStatus(response.data.data.status);
       if (response.data.success) {
-        const res = await getGeneratedCertificate(numericId);
+        const res = await getGeneratedCertificate(id ?? '0');
         setCertificateRaw(res.data.data.certificate);
         const fetchedCertificate = await fetchFile(res.data.data.certificate);
         setCertificate(fetchedCertificate ?? "");
@@ -105,13 +98,13 @@ function Student_Detail() {
         setEmailError("");
       }
       const response = await generateStudentCertificateInfo(
-        numericId,
+        id ?? '0',
         name,
         surname,
         email
       );
       if (response.status === 200) {
-        navigate(`/certificate/${numericId}`, {
+        navigate(`/certificate/${id}`, {
           state: {
             certificateData: response.data.data,
             name,
@@ -130,7 +123,7 @@ function Student_Detail() {
     try {
       setIsLoading(true);
       const response = await sendCertificate(
-        numericId,
+        id ?? '0',
         `${import.meta.env.VITE_REACT_APP_URL}file/${certificateRaw}`
       );
       if (response.status === 200) {

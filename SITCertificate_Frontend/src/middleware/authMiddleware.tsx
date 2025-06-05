@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, Location } from "react-router-dom";
-import { userVerifyToken } from "../services/apis/userAPI";
+import { userVerifyToken } from "../apis/userAPI";
 
 interface AuthMiddlewareProps {
   [key: string]: any;

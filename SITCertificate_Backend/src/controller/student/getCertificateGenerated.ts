@@ -2,23 +2,22 @@ import { Request, Response } from "express";
 import db from "../../db/connection";
 import dotenv from "dotenv";
 import { verifyToken } from "../auth/jwt";
+import { JwtPayload } from "jsonwebtoken";
+import type { StudentGenerateCertificate } from "../../types/student";
+
 
 dotenv.config();
-
-interface StudentEvent {
-  student_event_generatedCertificate: boolean;
-}
 
 const getCertificateGenerated = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const eventId = req.params.id;
+  const eventId: string = req.params.id;
   const { token } = req.cookies;
 
   try {
-    const userId = verifyToken(token);
-    const studentId = userId.id;
+    const id = verifyToken(token);
+    const studentId = (id as JwtPayload).id;
     const certificateQuery = await db.promise().query(
       `SELECT student_event_generatedCertificate
       FROM student_event
@@ -26,7 +25,7 @@ const getCertificateGenerated = async (
       [eventId, studentId]
     );
 
-    const certificate = (certificateQuery[0] as StudentEvent[])[0]
+    const certificate = (certificateQuery[0] as StudentGenerateCertificate[])[0]
       ?.student_event_generatedCertificate;
     res.status(200).json({
       success: true,

@@ -1,24 +1,22 @@
 import { Request, Response } from "express";
 import db from "../../db/connection";
 
-interface Professor {
-  professor_email: string;
-}
+import type { ProfessorEmail } from "../../types/admin";
 
 const getProfessorEmail = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const eventId = req.params.id;
+  const eventId: string = req.params.id;
 
   try {
     const [rows] = await db
       .promise()
       .query(
-        `SELECT professor_email FROM professor WHERE professor_fullname IN (SELECT event_owner FROM event WHERE event_Id = ?)`,
+        `SELECT professor_email FROM professor WHERE professor_fullname IN (SELECT event_owner FROM event WHERE event_id = ?)`,
         [eventId]
       );
-    const professorData = rows as Professor[];
+    const professorData = rows as ProfessorEmail[];
 
     if (professorData.length === 0) {
       res.status(404).json({

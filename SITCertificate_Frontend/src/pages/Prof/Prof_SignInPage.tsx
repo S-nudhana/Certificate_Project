@@ -24,7 +24,7 @@ import { useCustomeToast } from "../../hooks/customeToast";
 import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
-import { profSignIn } from "../../services/apis/profAPI";
+import { profSignIn } from "../../apis/profAPI";
 
 export default function Prof_SignInPage() {
   const navigate = useNavigate();

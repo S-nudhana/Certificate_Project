@@ -5,14 +5,11 @@ import { deleteFile } from '../deleteFile.js';
 import { fetchAndFillCertificate } from "../../utils/watermark.js";
 import db from "../../db/connection.js";
 
+import type { StudentGenerateExample } from '../../types/student';
+
 const generateExampleCertificate = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { eventId, name, surname } = req.body as {
-      eventId: number;
-      name: string;
-      surname: string;
-    };
-
+    const { eventId, name, surname }: StudentGenerateExample = req.body;
     const [rows] = await db.promise().query(
       "SELECT event_name, event_certificate, event_certificate_text_size, event_certificate_position_y FROM event WHERE event_id = ?",
       [eventId]

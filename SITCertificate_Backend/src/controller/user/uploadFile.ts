@@ -3,8 +3,8 @@ import { Request, Response } from "express";
 const uploadFile = async (req: Request, res: Response): Promise<void> => {
   try {
     if (req.file) {
-      const filePath = req.file.path;
-      const fileName = req.file.filename;
+      const filePath: string = req.file.path;
+      const fileName: string = req.file.filename;
       res.status(200).json({
         success: true,
         message: "File uploaded successfully",

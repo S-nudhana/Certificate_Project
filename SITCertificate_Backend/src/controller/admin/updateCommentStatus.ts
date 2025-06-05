@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import db from "../../db/connection";
 
 const updateCommentStatus = async (req: Request, res: Response): Promise<void> => {
-  const commentId:number = parseInt(req.params.id);
+  const commentId: number = parseInt(req.params.id);
   try {
     const [rows] = await db
       .promise()

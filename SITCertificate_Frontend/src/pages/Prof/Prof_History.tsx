@@ -15,17 +15,9 @@ import Footer from "../../components/Footer";
 import BackBTN from "../../components/BackBTN";
 import Prof_AdminCard from "../../components/Prof_admin/Prof_AdminCard";
 
-import { userHistory } from "../../services/apis/userAPI";
+import { userHistory } from "../../apis/userAPI";
 
-interface HistoryData {
-  event_thumbnail: string;
-  event_name: string;
-  event_owner: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_Id: number;
-  event_approve: boolean;
-}
+import type { HistoryData } from "../../types/prof";
 
 function Prof_History() {
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
@@ -74,7 +66,7 @@ function Prof_History() {
         pb={"10px"}
         maxWidth="1300px"
         mx={{ base: "0", lg: "3%", xl: "auto" }}
-        px={{base: "5%", lg: "0"}}
+        px={{ base: "5%", lg: "0" }}
       >
         <BackBTN />
       </Box>
@@ -82,7 +74,7 @@ function Prof_History() {
         width={"100%"}
         maxWidth={"1300px"}
         mx={{ base: "0", lg: "3%", xl: "auto" }}
-        px={{base: "5%", lg: "0"}}
+        px={{ base: "5%", lg: "0" }}
         display={{ base: "block", md: "flex" }}
         justifyContent={"space-between"}
       >
@@ -139,7 +131,7 @@ function Prof_History() {
                   event_owner={item.event_owner}
                   event_startDate={item.event_startDate}
                   event_endDate={item.event_endDate}
-                  event_Id={item.event_Id}
+                  event_id={item.event_id}
                   event_status={item.event_approve}
                   role={"professor"}
                 />

@@ -1,20 +1,18 @@
-services:
-  frontend:
-    build:
-      context: ./SITCertificate_Frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
+version: '3.8'
 
+services:
   backend:
-    build:
-      context: ./SITCertificate_Backend
-      dockerfile: Dockerfile
+    build: ./SITCertificate_Backend
+    container_name: bun-backend
+    ports:
+      - "5000:5000"
+    restart: always
+
+  frontend:
+    build: ./SITCertificate_Frontend
+    container_name: bun-frontend
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=production
-    env_file:
-      - ./SITCertificate_Backend/.env
+    restart: always
+    depends_on:
+      - backend

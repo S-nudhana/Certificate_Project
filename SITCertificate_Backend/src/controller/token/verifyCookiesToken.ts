@@ -1,6 +1,7 @@
 import { verifyToken } from "../auth/jwt";
 import db from "../../db/connection";
 import { Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 
 const verifyCookiesToken = async (
   req: Request,
@@ -13,7 +14,7 @@ const verifyCookiesToken = async (
   }
   try {
     const decodeToken = verifyToken(token);
-    const role = typeof decodeToken !== "string" ? decodeToken.role : undefined;
+    const role = (decodeToken as JwtPayload).role;
     let userId, table, column;
     switch (role) {
       case "admin":

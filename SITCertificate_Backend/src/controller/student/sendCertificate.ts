@@ -5,23 +5,23 @@ import fs from "fs";
 import path from "path";
 
 import { verifyToken } from "../auth/jwt";
-import { transporter } from "../../config/transporterConfig";
+import { transporter } from "../../config/transporter.config";
+import { JwtPayload } from "jsonwebtoken";
 
 dotenv.config();
 
 const sendCertificate = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.body;
+  const eventId: string = req.body.id;
   const { token } = req.cookies;
 
   try {
     const user = verifyToken(token);
-    const studentId = typeof user !== "string" && user.id ? user.id : null;
+    const studentId = (user as JwtPayload).id;
 
     if (!studentId) {
       res.status(401).json({ success: false, message: "Unauthorized" });
       return;
     }
-    const eventId = parseInt(id, 10);
 
     const [studentRows] = await db
       .promise()
@@ -50,7 +50,7 @@ const sendCertificate = async (req: Request, res: Response): Promise<void> => {
     const [eventRows] = await db
       .promise()
       .query(
-        `SELECT event_name, event_emailTemplate FROM event WHERE event_Id = ?`,
+        `SELECT event_name, event_emailTemplate FROM event WHERE event_id = ?`,
         [eventId]
       );
 

@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 import db from "../../db/connection";
 import { compare, signToken } from "../auth/jwt";
+import { StudentLoginRequest } from "../../types/student";
 
 interface StudentTokenData {
   student_email: string;
   role: string;
-  id: number;
+  id: string;
 }
 
 const SignInStudent = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+  const { email, password }: StudentLoginRequest = req.body;
 
   try {
     const [rows] = await db
@@ -22,7 +23,7 @@ const SignInStudent = async (req: Request, res: Response): Promise<void> => {
     const user = rows as {
       student_email: string;
       student_password: string;
-      student_Id: number;
+      student_Id: string;
     }[];
 
     if (user.length < 1) {

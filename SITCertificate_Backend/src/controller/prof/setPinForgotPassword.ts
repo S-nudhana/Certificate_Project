@@ -6,7 +6,7 @@ const setPinForgotPassword = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { email } = req.body;
+  const email = req.body.email;
 
   try {
     const [rows] = (await db

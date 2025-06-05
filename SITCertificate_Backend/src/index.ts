@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 
 import db from "./db/connection";
-import { corsOptions } from "./config/corsConfig";
+import { corsOptions } from "./config/cors.config";
 import { limiter } from "./middleware/limiter";
 import { logger } from "./middleware/logger";
 
@@ -38,11 +38,11 @@ db.connect((error: Error | null) => {
   }
 });
 app.get("/file", getFile);
-app.use("/api", limiter);
-app.use("/api/user", userRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/prof", profRouter);
-app.use("/api/student", studentRouter);
+app.use("*", limiter);
+app.use("/user", userRouter);
+app.use("/admin", adminRouter);
+app.use("/prof", profRouter);
+app.use("/student", studentRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on PORT:${PORT}`);

@@ -38,35 +38,18 @@ import {
   userEventDataById,
   fetchFile,
   getStatistic,
-} from "../../services/apis/userAPI";
+} from "../../apis/userAPI";
 import {
   adminUpdateCommentStatus,
   adminDeleteEvent,
   adminSendEmail,
-} from "../../services/apis/adminAPI";
-import { getProfessorEmail } from "../../services/apis/adminAPI";
+} from "../../apis/adminAPI";
+import { getProfessorEmail } from "../../apis/adminAPI";
 
-interface EventData {
-  event_name: string;
-  event_owner: string;
-  event_startDate: string;
-  event_endDate: string;
-  event_approve: number;
-  event_certificate: string;
-  event_excel: string;
-  event_emailTemplate: string;
-}
-
-interface Comment {
-  comment_Id: number;
-  comment_username: string;
-  comment_detail: string;
-  comment_status: boolean;
-}
+import type { EventData, Comment } from "../../types/admin";
 
 export default function Admin_EventDetail() {
   const { id } = useParams<{ id: string }>();
-  const numbericId = Number(id);
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const Toast = useCustomeToast();
@@ -83,13 +66,13 @@ export default function Admin_EventDetail() {
 
   const getEventData = async () => {
     try {
-      const response = await userEventDataById(numbericId);
+      const response = await userEventDataById(id ?? "");
       setEventData(response.data.data.event);
       setStatistic(response.data.data.statistic);
       setCertificate((await fetchFile(response.data.data.event.event_certificate)) || "");
       setExcel((await fetchFile(response.data.data.event.event_excel)) || "");
       if (!statistic) {
-        const response = await getStatistic(numbericId);
+        const response = await getStatistic(id ?? "");
         setParticipantsAmount(response.data.data.participantsAmount);
         setParticipantsDownloadAmount(response.data.data.participantsDownloadAmount);
       }
@@ -100,7 +83,7 @@ export default function Admin_EventDetail() {
 
   const getReceiverEmail = async () => {
     try {
-      const response = await getProfessorEmail(numbericId);
+      const response = await getProfessorEmail(id ?? "");
       if (response.status === 200) {
         setReceiver(response.data.data.professorEmail.professor_email);
       }
@@ -111,7 +94,7 @@ export default function Admin_EventDetail() {
 
   const getComment = async () => {
     try {
-      const response = await userComment(numbericId);
+      const response = await userComment(id ?? "");
       setComments(response.data.data.comment);
     } catch (error) {
       console.error("Error getting comment:", error);
@@ -140,7 +123,7 @@ export default function Admin_EventDetail() {
 
   const deleteEvent = async () => {
     try {
-      const response = await adminDeleteEvent(numbericId);
+      const response = await adminDeleteEvent(id ?? "");
       if (response.status === 200) {
         onClose();
         navigate("/admin/");
@@ -207,7 +190,7 @@ export default function Admin_EventDetail() {
             ใบประกาศนียบัตร
           </Text>
           {certificate ? (
-            <Box width={{base: "100%", md: "95%"}}>
+            <Box width={{ base: "100%", md: "95%" }}>
               <PdfViewer fileUrl={`${certificate}`} />
             </Box>
           ) : (
@@ -316,7 +299,7 @@ export default function Admin_EventDetail() {
         </Flex>
       </Stack>
       {statistic && (
-        <StatisticChart participantsAmount={participantsAmount} participantsDownloadAmount={participantsDownloadAmount} eventName={eventData?.event_name} />
+        <StatisticChart participantsAmount={participantsAmount} participantsDownloadAmount={participantsDownloadAmount} eventName={eventData?.event_name ?? ""} />
       )}
       <Footer />
       {isOpen && (

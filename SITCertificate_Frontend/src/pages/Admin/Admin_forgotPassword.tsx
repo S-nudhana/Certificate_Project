@@ -32,7 +32,7 @@ import {
   adminForgotPassword,
   adminResetPassword,
   adminSendResetPasswordEmail,
-} from "../../services/apis/adminAPI";
+} from "../../apis/adminAPI";
 
 const AdminForgotPassword = () => {
   const navigate = useNavigate();

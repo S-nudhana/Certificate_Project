@@ -23,7 +23,7 @@ import Building from "/img/SIT_Building.png";
 import Logo from "/img/SIT_Icon.png";
 
 import { useCustomeToast } from "../../hooks/customeToast";
-import { adminSignUp } from "../../services/apis/adminAPI";
+import { adminSignUp } from "../../apis/adminAPI";
 
 export default function Admin_SignUpPage() {
   const navigate = useNavigate();

@@ -1,0 +1,12 @@
+FROM oven/bun:latest
+
+WORKDIR /app
+COPY . .
+
+RUN bun install
+RUN bun run build
+
+RUN bun add serve
+CMD ["bun", "run", "serve", "--port", "3000", "--single", "dist"]
+
+EXPOSE 3000

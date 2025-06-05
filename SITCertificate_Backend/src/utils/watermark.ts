@@ -33,10 +33,13 @@ export const fetchAndFillCertificate = async (
 
     if (watermark) {
       const watermarkPdfBytes = await WaterMark(modifiedPdfBytes);
-      return watermarkPdfBytes;
+      if (watermarkPdfBytes === null) {
+        return null;
+      }
+      return Buffer.from(watermarkPdfBytes);
     }
 
-    return modifiedPdfBytes;
+    return Buffer.from(modifiedPdfBytes);
   } catch (error) {
     console.error("Error processing PDF:", error);
     return null;
@@ -63,7 +66,7 @@ export const WaterMark = async (pdfBytes: Uint8Array): Promise<Buffer | null> =>
 
     page.drawImage(pngImage);
     const modifiedPdfBytes = await pdfDoc.save();
-    return modifiedPdfBytes;
+    return Buffer.from(modifiedPdfBytes);
   } catch (error) {
     console.error("Error adding watermark:", error);
     return null;
@@ -139,7 +142,7 @@ export const sampleSetNameOnCertificate = async (
 
     page.drawImage(pngImage);
     const modifiedPdfBytes = await pdfDoc.save();
-    return modifiedPdfBytes;
+    return Buffer.from(modifiedPdfBytes);
   } catch (error) {
     console.error("Error setting sample name:", error);
     return null;
