@@ -1,18 +1,18 @@
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
 export const compare = (password: string, querryPassword: string) => {
-    return bcrypt.compareSync(password, querryPassword);
+    return bcryptjs.compareSync(password, querryPassword);
 };
 
 export const hashedPassword = (password: string) => {
     if (!process.env.SALT) {
         throw new Error("SALT is not defined in environment variables");
     }
-    const salt = bcrypt.genSaltSync(parseInt(process.env.SALT, 10));
-    return bcrypt.hashSync(password, salt);
+    const saltRounds = parseInt(process.env.SALT, 10);
+    return bcryptjs.hashSync(password, saltRounds);
 };
 
 export const signToken = (tokenData:string) => {

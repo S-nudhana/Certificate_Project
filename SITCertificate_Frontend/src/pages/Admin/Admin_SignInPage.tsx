@@ -34,8 +34,8 @@ function Admin_SignInPage() {
   const [emailError, setEmailError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = (): boolean => email.trim() !== "" && password.trim() !== "";
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);

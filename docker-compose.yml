@@ -1,18 +1,46 @@
-version: '3.8'
-
 services:
-  backend:
-    build: ./SITCertificate_Backend
-    container_name: bun-backend
-    ports:
-      - "5000:5000"
-    restart: always
-
   frontend:
-    build: ./SITCertificate_Frontend
-    container_name: bun-frontend
+    build:
+      context: ./SITCertificate_Frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend
     ports:
       - "3000:3000"
-    restart: always
+    environment:
+      - NODE_ENV=production
     depends_on:
       - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./SITCertificate_Backend
+      dockerfile: Dockerfile
+    container_name: node-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    networks:
+      - app-network
+
+  nginx:
+   image: nginx:alpine
+   container_name: nginx-proxy
+   ports:
+     - "80:80"
+     - "443:443"
+   volumes:
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+     - ./nginx/ssl:/etc/nginx/ssl:ro
+   depends_on:
+     - frontend
+     - backend
+   networks:
+     - app-network
+
+networks:
+  app-network:
+    driver: bridge

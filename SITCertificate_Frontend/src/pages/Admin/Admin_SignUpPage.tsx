@@ -40,8 +40,8 @@ export default function Admin_SignUpPage() {
   const [confirmShowPassword, setConfirmShowPassword] =
     useState<boolean>(false);
 
-  // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = (): boolean =>
     username.trim() !== "" &&

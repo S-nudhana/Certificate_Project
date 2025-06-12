@@ -13,7 +13,6 @@ const embedName = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "No file uploaded" });
       return;
     }
-
     const filePath = pdfFile.path;
     const pdfBytes = await sampleSetNameOnCertificate(filePath, inputSize, inputY);
 

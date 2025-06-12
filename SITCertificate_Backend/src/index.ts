@@ -18,10 +18,12 @@ import getFile from "./controller/getFile";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-app.use(cors(corsOptions));
+const PORT = process.env.PORT || 5000;
 app.use(logger);
-app.use(helmet());
+app.use(
+  helmet()
+);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -33,12 +35,15 @@ db.connect((error: Error | null) => {
     console.log("Connected to the database");
   }
 });
-app.get("/file", getFile);
 app.use("*", limiter);
-app.use("/user", userRouter);
-app.use("/admin", adminRouter);
-app.use("/prof", profRouter);
-app.use("/student", studentRouter);
+app.get('/api/test', (req, res) => {
+  res.status(200).json({ message: 'Test API workingggg!' });
+});
+app.get('/api/file', getFile);
+app.use('/api/user', userRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/prof', profRouter);
+app.use('/api/student', studentRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on PORT:${PORT}`);

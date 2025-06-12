@@ -4,6 +4,7 @@
   "type": "module",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^3.0.0",
     "@types/bun": "latest",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
@@ -16,9 +17,11 @@
     "ts-node": "^10.9.2"
   },
   "scripts": {
-    "dev": "bun --watch src/index.ts",
-    "build": "bun run tsc",
-    "start": "bun run dist/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "build:tsc": "tsc",
+    "start": "bun run dist/index.js",
+    "test": "bun test"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
@@ -27,7 +30,7 @@
     "@pdf-lib/fontkit": "^1.1.1",
     "@types/cookie-parser": "^1.4.8",
     "axios": "^1.7.4",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "canvas": "^2.11.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

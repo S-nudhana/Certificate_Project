@@ -3,8 +3,8 @@ import { Request, Response } from "express";
 const deleteToken = async (req: Request, res: Response): Promise<void> => {
   try {
     res.clearCookie("token", {
-      // httpOnly: true,
-      // secure: true,
+      httpOnly: true,
+      secure: true,
       path: "/",
     });
     res.status(200).json({ success: true, message: "Logout successful" });

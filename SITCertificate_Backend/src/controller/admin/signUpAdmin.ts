@@ -12,6 +12,12 @@ const signUpAdmin = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบทุกช่อง" });
       return;
     }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+
+    if (!email || !emailRegex.test(email)) {
+      res.status(400).json({ message: 'Invalid email format' });
+      return;
+    }
 
     const [users] = await db
       .promise()
