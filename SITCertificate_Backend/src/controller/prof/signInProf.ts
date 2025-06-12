@@ -8,32 +8,33 @@ const SignInProf = async (req: Request, res: Response): Promise<void> => {
   const { email, password }: ProfLoginRequest = req.body;
 
   try {
-    const [rows] = await db
-      .promise()
-      .query(
-        "SELECT professor_Id, professor_password FROM professor WHERE professor_email = ?",
-        [email]
-      ) as [any[], any];
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
 
-    if (rows.length !== 1) {
+    if (!email || !emailRegex.test(email)) {
+      res.status(400).json({ message: 'Invalid email format' });
+      return;
+    }
+    const [rows] = await db.promise().query("SELECT professor_id, professor_password FROM professor WHERE professor_email = ?",[email]) as [any[], any];
+    const user = rows as { professor_id: string; professor_password: string }[];
+    if (user.length !== 1) {
       res.status(500).json({ message: "ไม่พบบัญชีนี้ในระบบ" })
-      return; 
+      return;
     }
 
-    const compared = compare(password, rows[0].professor_password);
-    if (!compared) {
-      res.status(500).json({ message: "รหัสผ่านไม่ถูกต้อง" })
-      return; 
+    const isPasswordCorrect = compare(password, user[0].professor_password);
+    if (!isPasswordCorrect) {
+      res.status(400).json({ success: false, message: "รหัสผ่านไม่ถูกต้อง" });
+      return;
     }
 
     const tokenData = {
-      professor_id: rows[0].professor_Id,
+      professor_id: rows[0].professor_id,
       role: "professor",
     };
 
     const signedToken = signToken(JSON.stringify(tokenData));
 
-    const cookieOptions: { httpOnly: boolean; maxAge: number; expires: Date; secure: boolean } = {
+    const cookieOptions = {
       httpOnly: true,
       maxAge: 3 * 60 * 60 * 1000,
       expires: new Date(Date.now() + 15 * 60 * 1000),

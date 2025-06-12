@@ -52,8 +52,8 @@ function Admin_CreateEvent() {
   const [excelFile, setExcelFile] = useState<File | null>(null);
   const [emailTemplate, setEmailTemplate] = useState<string>("");
   const [modifiedTemplateURL, setModifiedTemplateURL] = useState<string>("");
-  const [inputSize, setInputSize] = useState<number>(30);
-  const [inputY, setInputY] = useState<number>(45);
+  const [inputSize, setInputSize] = useState<number | null>();
+  const [inputY, setInputY] = useState<number | null>();
   const [professorList, setProfessorList] = useState<any[]>([]);
 
   const getProfessorList = async () => {
@@ -103,8 +103,8 @@ function Admin_CreateEvent() {
     try {
       const modifiedPdfBytes = await embedName(
         templateFile as File,
-        inputSize,
-        inputY,
+        inputSize ?? 30,
+        inputY ?? 45,
         "upload_temp"
       );
       setModifiedTemplateURL(modifiedPdfBytes.data);
@@ -156,8 +156,8 @@ function Admin_CreateEvent() {
           uploadedTemplatePath,
           uploadedExcelPath,
           emailTemplate,
-          inputSize,
-          inputY
+          inputSize ?? 30,
+          inputY ?? 45
         );
         if (response.status === 201) {
           navigate("/admin/");
@@ -410,7 +410,7 @@ function Admin_CreateEvent() {
                   <Input
                     placeholder="30"
                     variant="outline"
-                    value={inputSize}
+                    value={inputSize ?? ""}
                     type="number"
                     onChange={handleSizeChange}
                   />
@@ -420,7 +420,7 @@ function Admin_CreateEvent() {
                   <Input
                     placeholder="45"
                     variant="outline"
-                    value={inputY}
+                    value={inputY ?? ""}
                     type="number"
                     onChange={handleYChange}
                   />

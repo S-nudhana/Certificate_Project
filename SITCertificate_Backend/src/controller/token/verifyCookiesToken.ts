@@ -22,21 +22,21 @@ const verifyCookiesToken = async (
           userId = decodeToken.admin_id;
         }
         table = "admin";
-        column = "admin_Id";
+        column = "admin_id";
         break;
       case "professor":
         if (typeof decodeToken !== "string") {
           userId = decodeToken.professor_id;
         }
         table = "professor";
-        column = "professor_Id";
+        column = "professor_id";
         break;
       case "student":
         if (typeof decodeToken !== "string") {
           userId = decodeToken.id;
         }
         table = "student";
-        column = "student_Id";
+        column = "student_id";
         break;
       default:
         res.status(200).json({ data: { authenticated: false } });

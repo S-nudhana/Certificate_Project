@@ -10,10 +10,6 @@ import { JwtPayload } from "jsonwebtoken";
 
 dotenv.config();
 
-interface DecodedToken {
-  id: number;
-}
-
 const updateCertificateInformation = async (
   req: Request<{}, {}, CertificateRequestBody>,
   res: Response

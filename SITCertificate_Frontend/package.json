@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "bun run vite --host",
-    "build": "tsc && bun run vite build",
+    "start":"bun run --watch src/main.tsx",
+    "build": "vite build",
+    "test":"bun test",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -37,7 +39,8 @@
     "react-pdf": "^9.1.1",
     "react-pdf-watermark": "^1.0.6",
     "react-router-dom": "^6.23.1",
-    "svg-to-png": "^4.0.0"
+    "svg-to-png": "^4.0.0",
+    "vite": "^5.2.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.2",

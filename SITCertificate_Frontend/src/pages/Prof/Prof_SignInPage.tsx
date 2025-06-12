@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, KeyboardEvent } from "react";
 import {
   Flex,
   Box,
@@ -35,8 +35,8 @@ export default function Prof_SignInPage() {
   const [emailError, setEmailError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  // const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@sit.kmutt.ac.th$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const isFormFilled = () => email.trim() !== "" && password.trim() !== "";
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -58,12 +58,13 @@ export default function Prof_SignInPage() {
       } else {
         Toast("เกิดข้อผิดพลาด", res.response.data.message, "error");
       }
-    } catch (error) {
-      console.error("handleEmail error", error);
+    } catch (error: any) {
+      console.error("handleSignIn error", error);
+      Toast("ข้อผิดพลาด", error?.response?.data?.message || "ไม่สามารถเข้าสู่ระบบได้", "error");
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSignIn();
     }
